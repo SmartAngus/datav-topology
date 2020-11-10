@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo, Fragment } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, Fragment, CSSProperties } from 'react'
 import { Topology, registerNode,Options } from '../../topology/core';
 import { register as registerChart } from '../../topology/chart-diagram';
 import {
@@ -87,6 +87,7 @@ import SystemComponent from './LeftAreaComponent/SystemComponent';
 import MyComponent from './LeftAreaComponent/MyComponent';
 
 import './index.css';
+import CanvasContextMenu from '../canvasContextMenu'
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas;
@@ -98,6 +99,18 @@ export const EditorLayout = ({ history }) => {
     nodes: null,
     // locked: data.locked
   });
+
+  // 是否显示右键菜单
+  const [showContextmenu,setShowContextmenu]=useState(false)
+
+  const [contextmenu,setContextmenu]=useState({
+    position: 'fixed',
+    zIndex: '10',
+    display: 'none',
+    left: '',
+    top: '',
+    bottom: ''
+  })
 
   const [isLoadCanvas, setIsLoadCanvas] = useState(false);
 
@@ -322,6 +335,7 @@ export const EditorLayout = ({ history }) => {
    */
 
   const onMessage = (event, data) => {
+    console.log("onMessage",event)
     switch (event) {
       case 'node': // 节点
       case 'addNode':
@@ -352,6 +366,16 @@ export const EditorLayout = ({ history }) => {
           // locked: null
         });
         break;
+      case 'rotated':
+      case 'resizePens':
+      case 'move':
+        setSelected(Object.assign({},{
+          node: data[0],
+          line: null,
+          multi: false,
+          nodes: null,
+        }));
+        break;
       default:
         break;
     }
@@ -362,6 +386,7 @@ export const EditorLayout = ({ history }) => {
    */
 
   const rightAreaConfig = useMemo(() => {
+    console.log("selected==",selected)
     return {
       node: selected && (
         <NodeComponent
@@ -394,11 +419,32 @@ export const EditorLayout = ({ history }) => {
   const renderHeader = useMemo(() => {
     if (isLoadCanvas) return <Header canvas={canvas} history={history} />;
   }, [isLoadCanvas, history]);
-  //
-  const hanleContextMenu = (event)=>{
+  // 右键菜单
+  const handleContextMenu = (event)=>{
+    console.log(event)
     event.preventDefault()
     event.stopPropagation()
+    if (event.clientY + 360 < document.body.clientHeight) {
+      setContextmenu({
+        position: 'fixed',
+        zIndex: '10',
+        display: 'block',
+        left: event.clientX + 'px',
+        top: event.clientY + 'px',
+        bottom: ''
+      });
+    } else {
+      setContextmenu({
+        position: 'fixed',
+        zIndex: '10',
+        display: 'block',
+        left: event.clientX + 'px',
+        top: '',
+        bottom: document.body.clientHeight - event.clientY + 'px'
+      });
+    }
   }
+  const renderContextMenu= <div style={contextmenu as CSSProperties} ><CanvasContextMenu data={selected} canvas={canvas} /></div>
   return (
     <Fragment>
       {renderHeader}
@@ -414,13 +460,12 @@ export const EditorLayout = ({ history }) => {
           </Tabs>
         </div>
         <div className="full">
-          <div style={{height:2000,width:3000,display: "flex",
-            alignItems: "center",
-            justifyContent: "center"}}>
-            <div id="topology-canvas" style={{ height: 768, width: 1366,background:"#ccc", }} onContextMenu={hanleContextMenu} />
+          <div>
+            <div id="topology-canvas" style={{ height: 768, width: 1366,background:"#ccc", }} onContextMenu={handleContextMenu} />
           </div>
         </div>
         <div className="props">{renderRightArea}</div>
+        {renderContextMenu}
       </div>
     </Fragment>
   );

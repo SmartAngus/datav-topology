@@ -4,6 +4,7 @@ import { Form, InputNumber, Tabs, Collapse, Row, Col, Input, Select, Tag } from 
 import EventComponent from './EventComponent';
 import {FormProps} from 'antd/lib/form/Form';
 import './index.css';
+import ColorPicker from '../../../common/ColorPicker'
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -14,50 +15,70 @@ interface ICanvasProps extends FormProps {
   onEventValueChange: any
 }
 const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEventValueChange }) => {
-  const [form] = Form.useForm()
+
+  const [formPos] = Form.useForm()
+  const [formStyle] = Form.useForm()
+  const [formFont] = Form.useForm()
   const { x, y, width, height } = data?.node?.rect || {};
   const { rotate, lineWidth, strokeStyle, dash, text, id } = data?.node || {};
   const { color, fontSize, fontFamily } = data?.node?.font || {};
   const extraFields = data.node.data; // 用户自定义数据片段
-
   useEffect(() => {
+    formPos.setFieldsValue({ x, y, width, height,rotate });
+  }, [x, y, width, height,rotate])
 
-  }, [form])
-
+  // 字段值更新时触发的回掉
+  const handleValuesChange = (changedValues, allValues)=>{
+    console.log("handleValuesChange",changedValues)
+    onFormValueChange&&onFormValueChange(changedValues)
+  }
+  //
+  const handleFieldsChange=(changedValues, allValues)=>{
+    //console.log("handleFieldsChange")
+  }
+  //
+  const handleFinish=()=>{
+    //console.log("handleFinish")
+  }
   /**
   * 渲染位置和大小的表单
   */
 
   const renderForm = useMemo(() => {
-    return <Form>
+    return (
+      <Form form={formPos}
+             onValuesChange={handleValuesChange}
+             onFieldsChange={handleFieldsChange}
+             onFinish={handleFinish}
+      >
       <Row>
         <Col span={12}>
-          <Form.Item label="X(px)">
+          <Form.Item name="x" label="X(px)">
            <InputNumber />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Y(px)">
+          <Form.Item name="y" label="Y(px)">
             <InputNumber />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="宽(px)" >
+          <Form.Item name="width" label="宽(px)" >
            <InputNumber />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="高(px)">
+          <Form.Item name="height" label="高(px)">
             <InputNumber />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="角度(deg)">
+          <Form.Item name="rotate" label="角度(deg)">
             <InputNumber />
           </Form.Item>
         </Col>
       </Row>
-    </Form>
+    </Form>)
   }, [x, y, width, height, rotate]);
 
   /**
@@ -65,11 +86,12 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
   */
 
   const renderStyleForm = useMemo(() => {
-    return <Form form={form}>
+    return <Form form={formStyle}>
       <Row>
         <Col span={24}>
           <Form.Item label="线条颜色">
             <Input type="color" />
+            <ColorPicker/>
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -96,7 +118,7 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
   */
 
   const renderFontForm = useMemo(() => {
-    return <Form form={form}>
+    return <Form form={formFont}>
       <Col span={24}>
         <Form.Item label="字体颜色">
           <Input type="color" />

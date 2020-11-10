@@ -18,6 +18,6 @@
     "noUnusedParameters": false,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src"],
+  "include": ["src","typed-css.d.ts"],
   "exclude": ["node_modules", "dist", "example"]
 }
