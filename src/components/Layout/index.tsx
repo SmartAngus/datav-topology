@@ -383,6 +383,8 @@ const Layout = ({ history }) => {
 
   const renderRightArea = useMemo(() => {
     let _component = rightAreaConfig.default;
+    console.log(selected)
+    console.log(rightAreaConfig)
     Object.keys(rightAreaConfig).forEach((item) => {
       if (selected[item]) {
         _component = rightAreaConfig[item];
