@@ -4,31 +4,24 @@ import './index.css';
 import MQTTComponent from './MQTTComponent';
 import LayoutComponent from './LayoutComponent';
 import { canvas } from '../../index';
-import { FormComponentProps } from 'antd/lib/form/Form'
+import { FormProps } from 'antd/lib/form/Form'
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 const { TextArea } = Input;
-interface ICanvasProps extends FormComponentProps {
+interface ICanvasProps extends FormProps {
   data?: any
   onFormValueChange?: any
   onEventValueChange?: any
 }
-const CanvasProps = ({ data, form: { getFieldDecorator }, form }) => {
+const BackgroundCanvasProps:React.FC<ICanvasProps> = ({ data }) => {
+  const [form]=Form.useForm()
   const { bkColor, bkImage } = data.data;
   const [wsAddress, setWsAddress] = useState('ws://123.207.136.134:9010/ajaxchattest');
 
   console.log(canvas.layout);
 
   useEffect(() => {
-    form.validateFields((err, value) => {
-      if (err) return;
-      data.clearBkImg();
-      data.data.bkColor = value.bkColor;
-      data.data.bkImage = value.bkImage;
-      data.render();
-      form.resetFields();
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [form]);
 
   /**
@@ -45,23 +38,16 @@ const CanvasProps = ({ data, form: { getFieldDecorator }, form }) => {
         <Row>
           <Col span={24}>
             <Form.Item label="背景颜色">
-              {getFieldDecorator('bkColor', {
-                initialValue: bkColor
-              })(<Input type="color" />)}
+             <Input type="color" />
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item label="背景图片">
-              {getFieldDecorator('bkImage', {
-                initialValue: bkImage
-              })(<TextArea placeholder="请输入图片的地址" />)}
+              <TextArea placeholder="请输入图片的地址" />
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item label="背景网格">
-              {getFieldDecorator('grid', {
-                initialValue: true
-              })(
                 <Switch
                   checkedChildren="开"
                   unCheckedChildren="关"
@@ -70,13 +56,12 @@ const CanvasProps = ({ data, form: { getFieldDecorator }, form }) => {
                     canvas.showGrid(e);
                   }}
                 />
-              )}
             </Form.Item>
           </Col>
         </Row>
       </Form>
     );
-  }, [bkColor, bkImage, getFieldDecorator]);
+  }, [bkColor, bkImage]);
 
   /**
    * 发起websocket连接
@@ -129,4 +114,4 @@ const CanvasProps = ({ data, form: { getFieldDecorator }, form }) => {
   );
 };
 
-export default Form.create<ICanvasProps>()(CanvasProps);
+export default BackgroundCanvasProps;

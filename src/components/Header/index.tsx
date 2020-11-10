@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Icon, Button, Tag, Popover } from 'antd';
+import { Menu, Button, Tag, Popover } from 'antd';
 import * as FileSaver from 'file-saver';
 import './index.css';
 const ButtonGroup = Button.Group;
@@ -289,7 +289,6 @@ const Header = ({ canvas, history }) => {
         <SubMenu
           title={
             <span className="submenu-title-wrapper">
-              <Icon type="file" />
               文件
             </span>
           }
@@ -305,7 +304,6 @@ const Header = ({ canvas, history }) => {
         <SubMenu
           title={
             <span className="submenu-title-wrapper">
-              <Icon type="edit" />
               编辑
             </span>
           }
@@ -321,7 +319,6 @@ const Header = ({ canvas, history }) => {
         <SubMenu
           title={
             <span className="submenu-title-wrapper">
-              <Icon type="global" />
               社区
             </span>
           }
@@ -348,23 +345,21 @@ const Header = ({ canvas, history }) => {
         </Popover>
 
         <Button onClick={() => onHandleSelect({ key: 'preview' })}>
-          <Icon type="eye" />
           预览
         </Button>
         {
           isLock ? <Button onClick={() => { setIsLock(false); canvas.lock(0) }}>
-            <Icon type="unlock" />
           解锁
         </Button> : <Button onClick={() => { setIsLock(true); canvas.lock(2) }}>
-              <Icon type="lock" />
+
           锁定
         </Button>
         }
         <Button onClick={() => scaleZoomOut()}>
-          <Icon type="plus" />
+          +
         </Button>
         <Button onClick={() => scaleZoomIn()} >
-          <Icon type="minus" />
+          -
         </Button>
       </ButtonGroup>
     </div>

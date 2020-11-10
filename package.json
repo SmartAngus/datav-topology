@@ -61,7 +61,7 @@
     "dist"
   ],
   "dependencies": {
-    "antd": "3.26.18",
+    "antd": "^4.8.2",
     "axios": "^0.21.0",
     "file-saver": "^2.0.2",
     "mitt": "^2.1.0"

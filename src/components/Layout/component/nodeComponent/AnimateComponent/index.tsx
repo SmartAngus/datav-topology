@@ -5,7 +5,8 @@ import { canvas } from '../../../index';
 import { useEffect } from 'react';
 
 const { Panel } = Collapse;
-const Page = ({ canvasData, form: { getFieldDecorator } }) => {
+const Page = ({ canvasData }) => {
+  const [form]=Form.useForm()
   const node = canvasData.node;
 
   const onHandleStyleSelectChange = (e) => {
@@ -57,12 +58,9 @@ const Page = ({ canvasData, form: { getFieldDecorator } }) => {
 
   const renderAnimateForm = () => {
     return (
-      <Form>
+      <Form form={form}>
         <Col span={24}>
           <Form.Item label="特效">
-            {getFieldDecorator('style', {
-              initialValue: void 0
-            })(
               <Select onSelect={(e) => onHandleStyleSelectChange(e)}>
                 <Select.Option value="upDown" key="topDown">
                   上下跳动
@@ -74,20 +72,15 @@ const Page = ({ canvasData, form: { getFieldDecorator } }) => {
                   心跳
                 </Select.Option>
               </Select>
-            )}
           </Form.Item>
         </Col>
         <Col span={24}>
           <Form.Item label="播放">
-            {getFieldDecorator('start', {
-              initialValue: void 0
-            })(
               <Switch
                 checkedChildren="开"
                 unCheckedChildren="关"
                 onChange={(e) => onHandleSwitchChange(e)}
               />
-            )}
           </Form.Item>
         </Col>
       </Form>
@@ -105,4 +98,4 @@ const Page = ({ canvasData, form: { getFieldDecorator } }) => {
   );
 };
 
-export default Form.create()(Page);
+export default Page;

@@ -90,7 +90,7 @@ import './index.css';
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas;
-const Layout = ({ history }) => {
+export const EditorLayout = ({ history }) => {
   const [selected, setSelected] = useState({
     node: null,
     line: null,
@@ -426,4 +426,4 @@ const Layout = ({ history }) => {
   );
 };
 
-export default Layout;
+

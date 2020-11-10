@@ -1,22 +1,21 @@
 import React, { useState, useMemo } from 'react';
-import { Button, Collapse, Select, Col, Form, Input, Icon } from 'antd';
+import { Button, Collapse, Select, Col, Form, Input } from 'antd';
 import { useCallback } from 'react';
 import './index.css';
 import { useEffect } from 'react';
-import { FormComponentProps } from 'antd/lib/form/Form'
+import { FormProps } from 'antd/lib/form/Form'
 const { TextArea } = Input;
 const { Panel } = Collapse;
-interface IPageProps extends FormComponentProps {
+interface IPageProps extends FormProps {
   canvasData?: any
   onFormValueChange?: any
   onEventValueChange?: any
 }
 const Page = ({
-  form: { getFieldDecorator, validateFields, resetFields },
   onEventValueChange,
   canvasData
 }) => {
-
+  const [form] = Form.useForm()
   const [eventData, setEventData] = useState(canvasData.node.events);
 
   useEffect(() => {
@@ -36,14 +35,14 @@ const Page = ({
   const onHandleEventTypeChange = (e, idx) => {
     const data = [...eventData];
     data[idx].type = e;
-    resetFields();
+    // resetFields();
     setEventData(data);
   };
 
   const onHandleSelectEvent = (e, idx) => {
     const data = [...eventData];
     data[idx].action = e;
-    resetFields();
+    // resetFields();
     setEventData(data);
   };
 
@@ -54,12 +53,9 @@ const Page = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const renderFontForm = (item, idx) => {
     return (
-      <Form>
+      <Form form={form}>
         <Col span={24}>
           <Form.Item label="事件类型">
-            {getFieldDecorator(`eventType${idx}`, {
-              initialValue: item.type || void 0
-            })(
               <Select
                 placeholder="请选择事件类型"
                 onSelect={(value) => onHandleEventTypeChange(value, idx)}
@@ -69,7 +65,6 @@ const Page = ({
                 <Select.Option value="2">webSocket事件</Select.Option>
                 <Select.Option value="3">MQTT</Select.Option>
               </Select>
-            )}
           </Form.Item>
         </Col>
         {renderFormByEventType(item, idx)}
@@ -87,9 +82,6 @@ const Page = ({
         <React.Fragment>
           <Col span={24}>
             <Form.Item label="事件行为">
-              {getFieldDecorator(`event${idx}`, {
-                initialValue: item.action || void 0
-              })(
                 <Select
                   placeholder="请选择事件行为"
                   onSelect={(value) => onHandleSelectEvent(value, idx)}
@@ -100,7 +92,6 @@ const Page = ({
                   <Select.Option value="3">执行window下的全局函数</Select.Option>
                   <Select.Option value="4">更新属性数据</Select.Option>
                 </Select>
-              )}
             </Form.Item>
           </Col>
           {renderFormByEvent(item, idx)}
@@ -118,9 +109,7 @@ const Page = ({
             <Col span={24}>
               {
                 <Form.Item label="消息名">
-                  {getFieldDecorator(`name${idx}`, {
-                    initialValue: item.name || void 0
-                  })(<Input placeholder="请输入自定义消息名" />)}
+                  <Input placeholder="请输入自定义消息名" />
                 </Form.Item>
               }
             </Col>
@@ -132,9 +121,7 @@ const Page = ({
           <React.Fragment>
             <Form.Item label="Topic">
               <Col span={24}>
-                {getFieldDecorator(`name${idx}`, {
-                  initialValue: item.name || void 0
-                })(<Input placeholder="请输入Topic/subtopic" />)}
+                <Input placeholder="请输入Topic/subtopic" />
               </Col>
             </Form.Item>
             {renderCommonForm()}
@@ -156,21 +143,15 @@ const Page = ({
           <React.Fragment>
             <Col span={24}>
               <Form.Item label="链接地址">
-                {getFieldDecorator(`code${idx}`, {
-                  initialValue: item.value || void 0
-                })(
                   <Input
                     placeholder="请输入链接地址"
                     onChange={(e) => onHandleCodeChange(e, idx)}
                   />
-                )}
               </Form.Item>
             </Col>
             <Col span={24}>
               <Form.Item label="参数值">
-                {getFieldDecorator(`params${idx}`, {
-                  initialValue: item.params || '_black'
-                })(<Input placeholder="_black" />)}
+                <Input placeholder="_black" />
               </Form.Item>
             </Col>
           </React.Fragment>
@@ -179,15 +160,11 @@ const Page = ({
         return (
           <Col span={24}>
             <Form.Item label="自定义代码">
-              {getFieldDecorator(`code${idx}`, {
-                initialValue: item.value || void 0
-              })(
                 <TextArea
                   placeholder="请输入自定义代码"
                   onChange={(e) => onHandleCodeChange(e, idx)}
                   rows={10}
                 />
-              )}
             </Form.Item>
           </Col>
         );
@@ -201,19 +178,19 @@ const Page = ({
    */
 
   const onHandleCodeChange = (e, idx) => {
-    validateFields((err, value) => {
-      if (err) return;
-      eventData[idx] = {
-        type: null,
-        action: null,
-        value: null
-      };
-      eventData[idx].type = +value[`eventType${idx}`];
-      eventData[idx].action = +value[`event${idx}`];
-      eventData[idx].value = e.target.value;
-      eventData[idx].params = value[`params${idx}`] || '';
-      onEventValueChange(eventData);
-    });
+    // validateFields((err, value) => {
+    //   if (err) return;
+    //   eventData[idx] = {
+    //     type: null,
+    //     action: null,
+    //     value: null
+    //   };
+    //   eventData[idx].type = +value[`eventType${idx}`];
+    //   eventData[idx].action = +value[`event${idx}`];
+    //   eventData[idx].value = e.target.value;
+    //   eventData[idx].params = value[`params${idx}`] || '';
+    //   onEventValueChange(eventData);
+    // });
   };
 
   /**
@@ -224,10 +201,10 @@ const Page = ({
     (idx) => {
       const data = [...eventData];
       delete data[idx];
-      resetFields();
+      // resetFields();
       setEventData(data.filter(Boolean));
     },
-    [eventData, resetFields]
+    [eventData]
   );
 
   /**
@@ -243,10 +220,10 @@ const Page = ({
           .map((item, index) => (
             <Panel
               header={
-                <div>
+                <a>
                   {`自定义事件${index + 1}`}{' '}
-                  <Icon onClick={() => onHandleDeleteItem(index)} type="delete" />
-                </div>
+                  <span onClick={() => onHandleDeleteItem(index)}  >delete</span>
+                </a>
               }
               key={index}
             >
@@ -267,4 +244,4 @@ const Page = ({
   );
 };
 
-export default Form.create<IPageProps>()(Page);
+export default Page;
