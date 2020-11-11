@@ -129,18 +129,18 @@ export const EditorLayout = ({ history }) => {
     }
 
     if (history.location.state && history.location.state.from === '/preview') {
-      confirm({
-        title: '是否要保存预览前的数据?',
-        okText: '保存',
-        cancelText: '取消',
-        onOk() {
-          // history.location.state.data.locked = 0;
-          canvas.open(history.location.state.data);
-        },
-        onCancel() {
-          getNodeData();
-        }
-      });
+      // confirm({
+      //   title: '是否要保存预览前的数据?',
+      //   okText: '保存',
+      //   cancelText: '取消',
+      //   onOk() {
+      //     // history.location.state.data.locked = 0;
+      //     canvas.open(history.location.state.data);
+      //   },
+      //   onCancel() {
+      //     getNodeData();
+      //   }
+      // });
     } else {
       if (history.location?.state?.id) {
         getNodeData();
@@ -422,6 +422,7 @@ export const EditorLayout = ({ history }) => {
   // 右键菜单
   const handleContextMenu = (event)=>{
     console.log(event)
+    setShowContextmenu(showContextmenu)
     event.preventDefault()
     event.stopPropagation()
     if (event.clientY + 360 < document.body.clientHeight) {
@@ -465,7 +466,7 @@ export const EditorLayout = ({ history }) => {
           </div>
         </div>
         <div className="props">{renderRightArea}</div>
-        {renderContextMenu}
+        {showContextmenu&&renderContextMenu}
       </div>
     </Fragment>
   );
