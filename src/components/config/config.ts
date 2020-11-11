@@ -1,5 +1,22 @@
 export const Tools = [
   {
+    group: '通用组件',
+    children: [
+      {
+        name: 'timer',
+        icon: 'icon-triangle',
+        data: {
+          text: '1970-01-01 00:00:00',
+          rect: {
+            width: 100,
+            height: 100
+          },
+          name: 'biciTimer'
+        }
+      }
+    ]
+  },
+  {
     group: '自定义图片',
     children: [
       {

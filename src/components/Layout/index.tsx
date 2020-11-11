@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, useMemo, Fragment, CSSProperties } from 'react'
-import { Topology, registerNode,Options } from '../../topology/core';
-import { register as registerChart } from '../../topology/chart-diagram';
+import { Topology, registerNode,Options,Node } from '../../topology/core';
+import { register as registerChart,echartsObjs } from '../../topology/chart-diagram';
+import { register as registerBiciComp } from '../../topology/bici-diagram';
 import {
   flowData,
   flowDataAnchors,
@@ -91,6 +92,12 @@ import CanvasContextMenu from '../canvasContextMenu'
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas;
+
+/**
+ * 编辑器画布
+ * @param history
+ * @constructor
+ */
 export const EditorLayout = ({ history }) => {
   const [selected, setSelected] = useState({
     node: null,
@@ -129,18 +136,18 @@ export const EditorLayout = ({ history }) => {
     }
 
     if (history.location.state && history.location.state.from === '/preview') {
-      // confirm({
-      //   title: '是否要保存预览前的数据?',
-      //   okText: '保存',
-      //   cancelText: '取消',
-      //   onOk() {
-      //     // history.location.state.data.locked = 0;
-      //     canvas.open(history.location.state.data);
-      //   },
-      //   onCancel() {
-      //     getNodeData();
-      //   }
-      // });
+      confirm({
+        title: '是否要保存预览前的数据?',
+        okText: '保存',
+        cancelText: '取消',
+        onOk() {
+          // history.location.state.data.locked = 0;
+          canvas.open(history.location.state.data);
+        },
+        onCancel() {
+          getNodeData();
+        }
+      });
     } else {
       if (history.location?.state?.id) {
         getNodeData();
@@ -155,6 +162,7 @@ export const EditorLayout = ({ history }) => {
 
   const canvasRegister = () => {
     registerChart();
+    registerBiciComp()
     registerNode('flowData', flowData, flowDataAnchors, flowDataIconRect, flowDataTextRect);
     registerNode(
       'flowSubprocess',
@@ -272,6 +280,8 @@ export const EditorLayout = ({ history }) => {
           data
         }
       };
+      console.log("changedValues==",changedValues)
+
       if (changedValues.node) {
         // 遍历查找修改的属性，赋值给原始Node
         for (const key in changedValues.node) {
@@ -336,6 +346,7 @@ export const EditorLayout = ({ history }) => {
 
   const onMessage = (event, data) => {
     console.log("onMessage",event)
+    const node = data;
     switch (event) {
       case 'node': // 节点
       case 'addNode':
@@ -367,13 +378,29 @@ export const EditorLayout = ({ history }) => {
         });
         break;
       case 'rotated':
-      case 'resizePens':
       case 'move':
+        setSelected(Object.assign({},{
+          ...selected,
+          node: data[0],
+        }));
+        break;
+      case 'resizePens':
+        setSelected(Object.assign({},{
+          ...selected,
+          node: data[0],
+        }));
+        // 重新绘制图表
+        if(node.name=='echarts'){
+          const chart = echartsObjs[node.id].chart
+          chart.setOption(data.data.echarts.option,true)
+        }
+        break;
+      case 'multi':
         setSelected(Object.assign({},{
           node: data[0],
           line: null,
-          multi: false,
-          nodes: null,
+          multi: true,
+          nodes: data,
         }));
         break;
       default:
@@ -422,7 +449,7 @@ export const EditorLayout = ({ history }) => {
   // 右键菜单
   const handleContextMenu = (event)=>{
     console.log(event)
-    setShowContextmenu(showContextmenu)
+    setShowContextmenu(!showContextmenu)
     event.preventDefault()
     event.stopPropagation()
     if (event.clientY + 360 < document.body.clientHeight) {

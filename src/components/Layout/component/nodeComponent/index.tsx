@@ -5,10 +5,13 @@ import EventComponent from './EventComponent';
 import {FormProps} from 'antd/lib/form/Form';
 import './index.css';
 import ColorPicker from '../../../common/ColorPicker'
+import {canvas} from '../../index'
+
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 const { Option } = Select;
 const { TextArea } = Input;
+
 interface ICanvasProps extends FormProps {
   data?: any
   onFormValueChange?: any
@@ -16,21 +19,20 @@ interface ICanvasProps extends FormProps {
 }
 const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEventValueChange }) => {
 
-  const [formPos] = Form.useForm()
-  const [formStyle] = Form.useForm()
-  const [formFont] = Form.useForm()
+  const [form]=Form.useForm()
+
   const { x, y, width, height } = data?.node?.rect || {};
   const { rotate, lineWidth, strokeStyle, dash, text, id } = data?.node || {};
   const { color, fontSize, fontFamily } = data?.node?.font || {};
   const extraFields = data.node.data; // 用户自定义数据片段
   useEffect(() => {
-    formPos.setFieldsValue({ x, y, width, height,rotate });
-  }, [x, y, width, height,rotate])
+    form.setFieldsValue({ x, y, width, height,rotate,lineWidth, strokeStyle, dash,color, fontSize, fontFamily, text });
+  }, [x, y, width, height,rotate,text,lineWidth, strokeStyle, dash,color, fontSize, fontFamily, text])
+
 
   // 字段值更新时触发的回掉
   const handleValuesChange = (changedValues, allValues)=>{
-    console.log("handleValuesChange",changedValues)
-    onFormValueChange&&onFormValueChange(changedValues)
+    onFormValueChange&&onFormValueChange(allValues)
   }
   //
   const handleFieldsChange=(changedValues, allValues)=>{
@@ -46,7 +48,7 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
 
   const renderForm = useMemo(() => {
     return (
-      <Form form={formPos}
+      <Form form={form}
              onValuesChange={handleValuesChange}
              onFieldsChange={handleFieldsChange}
              onFinish={handleFinish}
@@ -86,16 +88,19 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
   */
 
   const renderStyleForm = useMemo(() => {
-    return <Form form={formStyle}>
+    return <Form form={form}
+                 onValuesChange={handleValuesChange}
+                 onFieldsChange={handleFieldsChange}
+                 onFinish={handleFinish}
+    >
       <Row>
         <Col span={24}>
-          <Form.Item label="线条颜色">
+          <Form.Item name="strokeStyle" label="线条颜色">
             <Input type="color" />
-            <ColorPicker/>
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="线条样式">
+          <Form.Item name="dash" label="线条样式">
               <Select style={{ width: '95%' }}>
                 <Option value={0}>_________</Option>
                 <Option value={1}>---------</Option>
@@ -105,7 +110,7 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="线条宽度">
+          <Form.Item name="lineWidth" label="线条宽度">
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
         </Col>
@@ -118,24 +123,28 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
   */
 
   const renderFontForm = useMemo(() => {
-    return <Form form={formFont}>
+    return <Form form={form}
+                 onValuesChange={handleValuesChange}
+                 onFieldsChange={handleFieldsChange}
+                 onFinish={handleFinish}
+    >
       <Col span={24}>
-        <Form.Item label="字体颜色">
+        <Form.Item name="color" label="字体颜色">
           <Input type="color" />
         </Form.Item>
       </Col>
       <Col span={12}>
-        <Form.Item label="字体类型">
+        <Form.Item name="fontFamily" label="字体类型">
           <Input />
         </Form.Item>
       </Col>
       <Col span={11} offset={1}>
-        <Form.Item label="字体大小">
+        <Form.Item name="fontSize" label="字体大小">
           <InputNumber />
         </Form.Item>
       </Col>
       <Col span={24}>
-        <Form.Item label="内容">
+        <Form.Item name="text" label="内容">
          <TextArea />
         </Form.Item>
       </Col>
