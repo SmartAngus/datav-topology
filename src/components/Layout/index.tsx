@@ -300,6 +300,17 @@ export const EditorLayout = ({ history }) => {
     },
     [selected]
   );
+  /*当自定义的属性发生变化时*/
+  const onHandlePropertyFormValueChange = useCallback(
+    (value)=>{
+      // 只能两层嵌套，后期需要更改，如果有多层的话
+      for(const key in value){
+        if(key.indexOf(".")>0){
+          const k = key.split(".");
+          selected.node.property[k[0]][k[1]]=value[key]
+        }
+      }
+  },[selected])
 
   const onEventValueChange = useCallback(
     (value) => {
@@ -350,6 +361,7 @@ export const EditorLayout = ({ history }) => {
     switch (event) {
       case 'node': // 节点
       case 'addNode':
+        console.log("addNode:",data)
         setSelected({
           node: data,
           line: null,
@@ -420,6 +432,7 @@ export const EditorLayout = ({ history }) => {
           data={selected}
           onFormValueChange={onHandleFormValueChange}
           onEventValueChange={onEventValueChange}
+          onPropertyFormValueChange={onHandlePropertyFormValueChange}
         />
       ), // 渲染Node节点类型的组件
       line: selected && (

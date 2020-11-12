@@ -47,6 +47,27 @@ export function echarts(ctx: CanvasRenderingContext2D, node: Node) {
   if (!node.elementRendered) {
     // 初始化时，等待父div先渲染完成，避免初始图表控件太大。
     setTimeout(() => {
+      const index = new WebSocket("ws://localhost/websocket/23");
+      //打开事件
+      index.onopen = function() {
+        console.log("Socket 已打开");
+        index.send("这是来自客户端的消息" + location.href + new Date());
+      };
+      //获得消息事件
+      index.onmessage = function(msg) {
+        console.log("返回消息")
+        console.log(msg.data);
+        //发现消息进入    开始处理前端触发逻辑
+      };
+      //关闭事件
+      index.onclose = function() {
+        console.log("Socket已关闭");
+      };
+      //发生了错误事件
+      index.onerror = function() {
+        alert("Socket发生了错误");
+        //此时可以尝试刷新页面
+      }
       echartsObjs[node.id].chart.setOption(node.data.echarts.option);
       echartsObjs[node.id].chart.resize();
       node.elementRendered = true;

@@ -28,6 +28,9 @@ export class Node extends Pen {
   iconSize: number;
   iconColor: string;
 
+  // 额外单个组件的属性 json对象
+  property:any;
+
   image: string;
   lastImage: string;
   imgNaturalWidth: number;
@@ -91,6 +94,7 @@ export class Node extends Pen {
   // 外部dom是否已经渲染。当需要重绘时，设置为false（用于第三方库辅助变量）
   elementRendered: boolean;
 
+
   constructor(json: any, noChild = false) {
     super(json);
 
@@ -105,6 +109,8 @@ export class Node extends Pen {
     this.iconFamily = json.iconFamily;
     this.iconSize = +json.iconSize;
     this.iconColor = json.iconColor;
+
+    this.property = json.property;
 
     this.image = json.image;
     if (json.imgNaturalWidth) {

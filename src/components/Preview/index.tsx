@@ -11,6 +11,7 @@ const Preview = ({ history }) => {
     };
     canvas = new Topology('topology-canvas-preview', canvasOptions);
     history.location.state.data.locked = 1;
+    console.log("history.location.state.data",history.location.state.data)
     canvas.open(history.location.state.data);
   }, [history.location.state.data]);
 

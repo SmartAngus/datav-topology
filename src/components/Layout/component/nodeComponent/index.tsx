@@ -1,5 +1,5 @@
-import React, { useMemo, useEffect } from 'react';
-import { Form, InputNumber, Tabs, Collapse, Row, Col, Input, Select, Tag } from 'antd';
+import React, { useMemo, useEffect, useState } from 'react'
+import { Form, InputNumber, Tabs, Collapse, Row, Col, Input, Select, Tag,Checkbox } from 'antd';
 // import AnimateComponent from './AnimateComponent';
 import EventComponent from './EventComponent';
 import {FormProps} from 'antd/lib/form/Form';
@@ -15,24 +15,41 @@ const { TextArea } = Input;
 interface ICanvasProps extends FormProps {
   data?: any
   onFormValueChange?: any
+  onPropertyFormValueChange?: any
   onEventValueChange: any
 }
-const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEventValueChange }) => {
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
+const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEventValueChange,onPropertyFormValueChange }) => {
 
   const [form]=Form.useForm()
+  const [propertyForm] = Form.useForm()
+  const [baseAllValues,setBaseAllValues] = useState({...data?.node})
 
   const { x, y, width, height } = data?.node?.rect || {};
-  const { rotate, lineWidth, strokeStyle, dash, text, id } = data?.node || {};
+  const { rotate, lineWidth, strokeStyle, dash, text, id,name } = data?.node || {};
   const { color, fontSize, fontFamily } = data?.node?.font || {};
+  const { property } = data?.node?.property||{}
   const extraFields = data.node.data; // 用户自定义数据片段
   useEffect(() => {
-    form.setFieldsValue({ x, y, width, height,rotate,lineWidth, strokeStyle, dash,color, fontSize, fontFamily, text });
+    form.setFieldsValue({
+      x, y, width, height,rotate,lineWidth, strokeStyle,
+      dash,color, fontSize, fontFamily, text
+    });
   }, [x, y, width, height,rotate,text,lineWidth, strokeStyle, dash,color, fontSize, fontFamily, text])
 
 
   // 字段值更新时触发的回掉
   const handleValuesChange = (changedValues, allValues)=>{
     onFormValueChange&&onFormValueChange(allValues)
+  }
+  const handlePropertyValuesChange = (changedValues, allValues)=>{
+    onPropertyFormValueChange&&onPropertyFormValueChange(allValues)
   }
   //
   const handleFieldsChange=(changedValues, allValues)=>{
@@ -41,6 +58,10 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
   //
   const handleFinish=()=>{
     //console.log("handleFinish")
+  }
+  // 设置日期格式
+  const onSetBiciTimerDataFmt=()=>{
+
   }
   /**
   * 渲染位置和大小的表单
@@ -168,6 +189,52 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
       </Col>
     </Form>
   }, [id]);
+  /**
+   * 渲染时间组件的属性设置
+   */
+  const renderBiciTimerDataForm = useMemo(() => {
+    return <Panel header="时间格式" key="4">
+    <Form form={propertyForm}
+          onValuesChange={handlePropertyValuesChange}>
+      <Col span={8}>
+        <Form.Item  name="date.show" valuePropName="checked">
+          <Checkbox>日期</Checkbox>
+        </Form.Item>
+      </Col>
+      <Col span={16}>
+        <Form.Item name="date.format" rules={[{ required: true }]}>
+          <Select
+            placeholder="设置日期格式"
+            onChange={onSetBiciTimerDataFmt}
+            allowClear
+          >
+            <Option value="male">male</Option>
+            <Option value="female">female</Option>
+            <Option value="other">other</Option>
+          </Select>
+        </Form.Item>
+      </Col>
+      <Col span={8}>
+        <Form.Item  name="time.show" valuePropName="checked">
+          <Checkbox>时间</Checkbox>
+        </Form.Item>
+      </Col>
+      <Col span={16}>
+        <Form.Item name="time.format" rules={[{ required: true }]}>
+          <Select
+            placeholder="设置日期格式"
+            onChange={onSetBiciTimerDataFmt}
+            allowClear
+          >
+            <Option value="male">male</Option>
+            <Option value="female">female</Option>
+            <Option value="other">other</Option>
+          </Select>
+        </Form.Item>
+      </Col>
+    </Form>
+    </Panel>
+  }, [property])
 
 
   /**
@@ -204,6 +271,10 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
                 renderFontForm
               }
             </Panel>
+            {/** 渲染时间组件属性 */}
+            {
+              name==="biciTimer"&&renderBiciTimerDataForm
+            }
           </Collapse>
         </TabPane>
         <TabPane tab="数据" key="2" style={{ margin: 0 }}>

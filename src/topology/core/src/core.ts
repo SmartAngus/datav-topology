@@ -376,6 +376,7 @@ export class Topology {
   }
 
   addNode(node: Node | any, focus = false) {
+    console.log("...addNode",this.data)
     if (!drawNodeFns[node.name]) {
       return null;
     }

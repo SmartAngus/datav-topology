@@ -4,6 +4,7 @@ export function biciTimerIconRect(node: Node) {
 }
 
 export function biciTimerTextRect(node: Node) {
+  console.log("biciTimerTextRect===",node)
   const w = (node.rect.width * 5) / 7;
   const h = (node.rect.height * 5) / 7;
   node.textRect = new Rect(node.rect.x + (node.rect.width - w) / 2, node.rect.y + (node.rect.height - h) / 2, w, h);

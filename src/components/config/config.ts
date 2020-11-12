@@ -11,7 +11,19 @@ export const Tools = [
             width: 100,
             height: 100
           },
-          name: 'biciTimer'
+          name: 'biciTimer',
+          elementRendered:false,
+          property:{
+            date:{
+              show:true,
+              format:'lll'
+            },
+            time:{
+              show:true,
+              format:'lll'
+            }
+          },
+          iconColor:'#ccc'
         }
       }
     ]
@@ -271,7 +283,7 @@ export const Tools = [
           paddingTop: 10,
           paddingBottom: 10,
           strokeStyle: 'transparent',
-          name: 'div'
+          name: 'div',
         }
       }
     ]
