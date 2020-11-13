@@ -25,6 +25,20 @@ export const Tools = [
           },
           iconColor:'#ccc'
         }
+      },
+      {
+        name: 'varer',
+        icon: 'icon-triangle',
+        data: {
+          text: '00:00:00',
+          rect: {
+            width: 100,
+            height: 100
+          },
+          name: 'biciVarer',
+          elementRendered:false,
+          iconColor:'#ccc'
+        }
       }
     ]
   },
@@ -41,7 +55,7 @@ export const Tools = [
             height: 100
           },
           name: 'image',
-          image: require('./agv.jpg')
+          image: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
         }
       },
       {

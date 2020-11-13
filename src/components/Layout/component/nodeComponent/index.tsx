@@ -6,6 +6,7 @@ import {FormProps} from 'antd/lib/form/Form';
 import './index.css';
 import ColorPicker from '../../../common/ColorPicker'
 import {canvas} from '../../index'
+import AnimateComponent from './AnimateComponent'
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -295,7 +296,7 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
           <EventComponent canvasData={data} onEventValueChange={onEventValueChange} />
         </TabPane>
         <TabPane tab="动效" key="4" style={{ margin: 0 }}>
-          {/* <AnimateComponent canvasData={data} /> */}
+          <AnimateComponent canvasData={data} />
           待开发...
         </TabPane>
         <TabPane tab="结构" key="5" style={{ margin: 0 }}>

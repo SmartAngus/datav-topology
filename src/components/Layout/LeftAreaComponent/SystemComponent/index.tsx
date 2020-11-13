@@ -1,4 +1,6 @@
 import React from 'react';
+import IndustrialLibraryUpload from '../../../common/IndustrialLibraryUpload'
+
 
 const Layout = ({ Tools, onDrag }) => {
   return Tools.map((item, index) => (
@@ -19,6 +21,9 @@ const Layout = ({ Tools, onDrag }) => {
             </a>
           );
         })}
+        {
+            item.group=="自定义图片"? <IndustrialLibraryUpload/> :''
+        }
       </div>
     </div>
   ));

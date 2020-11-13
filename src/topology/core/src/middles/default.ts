@@ -255,6 +255,7 @@ export function registerNode(
   if (drawNodeFns[name] && !force) {
     return false;
   }
+  console.log("registerNode---")
 
   drawNodeFns[name] = drawFn;
   anchorsFns[name] = anchorsFn;

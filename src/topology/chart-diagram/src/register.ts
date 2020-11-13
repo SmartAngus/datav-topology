@@ -9,6 +9,16 @@ export function register(_echarts?: any) {
       null,
       true
     );
+    // loadJS(
+    //   'https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js',
+    //   null,
+    //   true
+    // );
+    // loadJS(
+    //   'http://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js',
+    //   null,
+    //   true
+    // );
   }
   registerNode('echarts', echarts, null, null, null);
 }

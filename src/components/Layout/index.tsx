@@ -126,6 +126,8 @@ export const EditorLayout = ({ history }) => {
       rotateCursor: '/rotate.cur',
       // locked: 0,
       autoExpandDistance:0,
+      viewPadding:[100],
+      autoAnchor:false,
     };
     canvasOptions.on = onMessage;
     canvasRegister();

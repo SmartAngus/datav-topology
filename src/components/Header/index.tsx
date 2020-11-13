@@ -121,7 +121,6 @@ const Header = ({ canvas, history }) => {
         break;
       case 'preview':
         let reader = new FileReader();
-        console.log(canvas.data);
         const result = new Blob([JSON.stringify(canvas.data)], { type: 'text/plain;charset=utf-8' });
         reader.readAsText(result, 'text/plain;charset=utf-8');
         reader.onload = (e) => {

@@ -5,9 +5,10 @@ import { canvas } from '../../../index';
 import { useEffect } from 'react';
 
 const { Panel } = Collapse;
-const Page = ({ canvasData }) => {
+const AnimateComponent = ({ canvasData }) => {
   const [form]=Form.useForm()
   const node = canvasData.node;
+
 
   const onHandleStyleSelectChange = (e) => {
     switch (e) {
@@ -22,7 +23,6 @@ const Page = ({ canvasData }) => {
           linear: true,
           state: node
         });
-
         node.animateFrames.push({
           duration: 100,
           linear: true,
@@ -34,6 +34,7 @@ const Page = ({ canvasData }) => {
           linear: true,
           state: Node.cloneState(node)
         });
+
 
         node.animateStart = Date.now();
         break;
@@ -98,4 +99,4 @@ const Page = ({ canvasData }) => {
   );
 };
 
-export default Page;
+export default AnimateComponent;
