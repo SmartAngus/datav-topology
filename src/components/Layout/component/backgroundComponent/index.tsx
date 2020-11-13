@@ -69,6 +69,35 @@ const BackgroundCanvasProps:React.FC<ICanvasProps> = ({ data }) => {
 
   const onHandleConnectWS = () => {
     canvas.openSocket(wsAddress);
+    console.log("onHandleConnectWS",wsAddress)
+    canvas.socket.onmessage=(a)=>{
+      console.log("sssss")
+    }
+    // const index = new WebSocket(wsAddress);
+    // //打开事件
+    // index.onopen = function() {
+    //   console.log("Socket 已打开");
+    //
+    //   index.send(JSON.stringify({
+    //     qtDataList: [{id: "6413f3a606754c31987ec584ed56d5b7", type: 2},{id: "b32723eaebfe48aaa0f85970c3a39036", type: 2}],
+    //     subscribe: true
+    //   }));
+    // };
+    // //获得消息事件
+    // index.onmessage = function(msg) {
+    //   console.log("返回消息")
+    //   console.log(msg);
+    //   //发现消息进入    开始处理前端触发逻辑
+    // };
+    // //关闭事件
+    // index.onclose = function() {
+    //   console.log("Socket已关闭");
+    // };
+    // //发生了错误事件
+    // index.onerror = function() {
+    //   alert("Socket发生了错误");
+    //   //此时可以尝试刷新页面
+    // }
   };
 
   return (

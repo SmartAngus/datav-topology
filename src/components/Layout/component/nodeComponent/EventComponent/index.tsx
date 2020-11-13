@@ -34,6 +34,7 @@ const Page = ({
 
   const onHandleEventTypeChange = (e, idx) => {
     const data = [...eventData];
+    console.log("onHandleEventTypeChange==",data)
     data[idx].type = e;
     // resetFields();
     setEventData(data);

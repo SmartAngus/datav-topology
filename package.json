@@ -62,6 +62,7 @@
   ],
   "dependencies": {
     "@stomp/stompjs": "^6.0.0",
+    "ahooks": "^2.9.1",
     "antd": "^4.8.2",
     "axios": "^0.21.0",
     "file-saver": "^2.0.2",

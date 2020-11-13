@@ -158,6 +158,11 @@ export const EditorLayout = ({ history }) => {
     setIsLoadCanvas(true);
   }, [history]);
 
+  useEffect(()=>{
+      console.log("isLoadCanvas==",isLoadCanvas)
+    console.log(canvas.data)
+  },[])
+
   /**
    * 注册图形库
    */
@@ -321,6 +326,7 @@ export const EditorLayout = ({ history }) => {
     },
     [selected]
   );
+
 
   /**
    * 当线条表单数据变化时, 重新渲染canvas
