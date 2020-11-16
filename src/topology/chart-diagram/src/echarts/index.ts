@@ -57,9 +57,7 @@ export function echarts(ctx: CanvasRenderingContext2D, node: Node) {
         var socket = new WebSocket('ws://localhost/gs-guide-websocket');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
-          console.log('Connected: ' + frame);
           stompClient.subscribe('http://localhost/app/topic/greetings', function (greeting) {
-            console.log(JSON.parse(greeting.body).content);
           });
         });
       }
@@ -68,7 +66,6 @@ export function echarts(ctx: CanvasRenderingContext2D, node: Node) {
         if (stompClient !== null) {
           stompClient.disconnect();
         }
-        console.log("Disconnected");
       }
 
       function sendName() {

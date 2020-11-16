@@ -1,6 +1,16 @@
-import React, { useEffect, useState, useCallback, useMemo, Fragment, CSSProperties } from 'react'
-import { Topology, registerNode,Options,Node } from '../../topology/core';
-import { register as registerChart,echartsObjs } from '../../topology/chart-diagram';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  CSSProperties,
+  useRef,
+} from 'react';
+import { Topology, registerNode, Options, Node } from '../../topology/core';
+import {
+  register as registerChart,
+  echartsObjs,
+} from '../../topology/chart-diagram';
 import { register as registerBiciComp } from '../../topology/bici-diagram';
 import {
   flowData,
@@ -38,7 +48,7 @@ import {
   flowParallel,
   flowParallelAnchors,
   flowComment,
-  flowCommentAnchors
+  flowCommentAnchors,
 } from '../../topology/flow-diagram';
 
 import {
@@ -55,7 +65,7 @@ import {
   forkHAnchors,
   forkIconRect,
   forkTextRect,
-  forkVAnchors
+  forkVAnchors,
 } from '../../topology/activity-diagram';
 
 import {
@@ -64,7 +74,7 @@ import {
   simpleClassTextRect,
   interfaceClass,
   interfaceClassIconRect,
-  interfaceClassTextRect
+  interfaceClassTextRect,
 } from '../../topology/class-diagram';
 
 import {
@@ -75,7 +85,7 @@ import {
   sequenceFocus,
   sequenceFocusAnchors,
   sequenceFocusIconRect,
-  sequenceFocusTextRect
+  sequenceFocusTextRect,
 } from '../../topology/sequence-diagram';
 import { Modal, Tabs } from 'antd';
 import { Tools } from '../config/config';
@@ -88,7 +98,7 @@ import SystemComponent from './LeftAreaComponent/SystemComponent';
 import MyComponent from './LeftAreaComponent/MyComponent';
 
 import './index.css';
-import CanvasContextMenu from '../canvasContextMenu'
+import CanvasContextMenu from '../canvasContextMenu';
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas;
@@ -99,6 +109,9 @@ export let canvas;
  * @constructor
  */
 export const EditorLayout = ({ history }) => {
+  const layoutRef = useRef();
+
+
   const [selected, setSelected] = useState({
     node: null,
     line: null,
@@ -108,26 +121,29 @@ export const EditorLayout = ({ history }) => {
   });
 
   // 是否显示右键菜单
-  const [showContextmenu,setShowContextmenu]=useState(false)
+  const [showContextmenu, setShowContextmenu] = useState(false);
 
-  const [contextmenu,setContextmenu]=useState({
+  const [contextmenu, setContextmenu] = useState({
     position: 'fixed',
     zIndex: '10',
     display: 'none',
     left: '',
     top: '',
-    bottom: ''
-  })
+    bottom: '',
+  });
 
   const [isLoadCanvas, setIsLoadCanvas] = useState(false);
 
   useEffect(() => {
-    const canvasOptions:Options = {
+    console.log('ref type>>>', typeof layoutRef);
+
+    const canvasOptions: Options = {
       rotateCursor: '/rotate.cur',
       // locked: 0,
-      autoExpandDistance:0,
-      viewPadding:[100],
-      autoAnchor:false,
+      autoExpandDistance: 0,
+      viewPadding: [100],
+      autoAnchor: false,
+      cacheLen: 50,
     };
     canvasOptions.on = onMessage;
     canvasRegister();
@@ -148,7 +164,7 @@ export const EditorLayout = ({ history }) => {
         },
         onCancel() {
           getNodeData();
-        }
+        },
       });
     } else {
       if (history.location?.state?.id) {
@@ -158,10 +174,7 @@ export const EditorLayout = ({ history }) => {
     setIsLoadCanvas(true);
   }, [history]);
 
-  useEffect(()=>{
-      console.log("isLoadCanvas==",isLoadCanvas)
-    console.log(canvas.data)
-  },[])
+  useEffect(() => {}, []);
 
   /**
    * 注册图形库
@@ -169,8 +182,14 @@ export const EditorLayout = ({ history }) => {
 
   const canvasRegister = () => {
     registerChart();
-    registerBiciComp()
-    registerNode('flowData', flowData, flowDataAnchors, flowDataIconRect, flowDataTextRect);
+    registerBiciComp();
+    registerNode(
+      'flowData',
+      flowData,
+      flowDataAnchors,
+      flowDataIconRect,
+      flowDataTextRect
+    );
     registerNode(
       'flowSubprocess',
       flowSubprocess,
@@ -200,7 +219,13 @@ export const EditorLayout = ({ history }) => {
       flowExternStorageIconRect,
       flowExternStorageTextRect
     );
-    registerNode('flowQueue', flowQueue, null, flowQueueIconRect, flowQueueTextRect);
+    registerNode(
+      'flowQueue',
+      flowQueue,
+      null,
+      flowQueueIconRect,
+      flowQueueTextRect
+    );
     registerNode(
       'flowManually',
       flowManually,
@@ -226,13 +251,31 @@ export const EditorLayout = ({ history }) => {
       activityFinalIconRect,
       activityFinalTextRect
     );
-    registerNode('swimlaneV', swimlaneV, null, swimlaneVIconRect, swimlaneVTextRect);
-    registerNode('swimlaneH', swimlaneH, null, swimlaneHIconRect, swimlaneHTextRect);
+    registerNode(
+      'swimlaneV',
+      swimlaneV,
+      null,
+      swimlaneVIconRect,
+      swimlaneVTextRect
+    );
+    registerNode(
+      'swimlaneH',
+      swimlaneH,
+      null,
+      swimlaneHIconRect,
+      swimlaneHTextRect
+    );
     registerNode('forkH', fork, forkHAnchors, forkIconRect, forkTextRect);
     registerNode('forkV', fork, forkVAnchors, forkIconRect, forkTextRect);
 
     // class
-    registerNode('simpleClass', simpleClass, null, simpleClassIconRect, simpleClassTextRect);
+    registerNode(
+      'simpleClass',
+      simpleClass,
+      null,
+      simpleClassIconRect,
+      simpleClassTextRect
+    );
     registerNode(
       'interfaceClass',
       interfaceClass,
@@ -242,7 +285,13 @@ export const EditorLayout = ({ history }) => {
     );
 
     // sequence
-    registerNode('lifeline', lifeline, lifelineAnchors, lifelineIconRect, lifelineTextRect);
+    registerNode(
+      'lifeline',
+      lifeline,
+      lifelineAnchors,
+      lifelineIconRect,
+      lifelineTextRect
+    );
     registerNode(
       'sequenceFocus',
       sequenceFocus,
@@ -284,10 +333,9 @@ export const EditorLayout = ({ history }) => {
           strokeStyle,
           dash,
           text,
-          data
-        }
+          data,
+        },
       };
-      console.log("changedValues==",changedValues)
 
       if (changedValues.node) {
         // 遍历查找修改的属性，赋值给原始Node
@@ -309,15 +357,17 @@ export const EditorLayout = ({ history }) => {
   );
   /*当自定义的属性发生变化时*/
   const onHandlePropertyFormValueChange = useCallback(
-    (value)=>{
+    (value) => {
       // 只能两层嵌套，后期需要更改，如果有多层的话
-      for(const key in value){
-        if(key.indexOf(".")>0){
-          const k = key.split(".");
-          selected.node.property[k[0]][k[1]]=value[key]
+      for (const key in value) {
+        if (key.indexOf('.') > 0) {
+          const k = key.split('.');
+          selected.node.property[k[0]][k[1]] = value[key];
         }
       }
-  },[selected])
+    },
+    [selected]
+  );
 
   const onEventValueChange = useCallback(
     (value) => {
@@ -327,7 +377,6 @@ export const EditorLayout = ({ history }) => {
     [selected]
   );
 
-
   /**
    * 当线条表单数据变化时, 重新渲染canvas
    * @params {object} value - 图形的宽度,高度, x, y等等
@@ -335,9 +384,25 @@ export const EditorLayout = ({ history }) => {
 
   const onHandleLineFormValueChange = useCallback(
     (value) => {
-      const { dash, lineWidth, strokeStyle, name, fromArrow, toArrow, ...other } = value;
+      const {
+        dash,
+        lineWidth,
+        strokeStyle,
+        name,
+        fromArrow,
+        toArrow,
+        ...other
+      } = value;
       const changedValues = {
-        line: { rect: other, lineWidth, dash, strokeStyle, name, fromArrow, toArrow }
+        line: {
+          rect: other,
+          lineWidth,
+          dash,
+          strokeStyle,
+          name,
+          fromArrow,
+          toArrow,
+        },
       };
       if (changedValues.line) {
         // 遍历查找修改的属性，赋值给原始line
@@ -364,12 +429,10 @@ export const EditorLayout = ({ history }) => {
    */
 
   const onMessage = (event, data) => {
-    console.log("onMessage",event)
     const node = data;
     switch (event) {
       case 'node': // 节点
       case 'addNode':
-        console.log("addNode:",data)
         setSelected({
           node: data,
           line: null,
@@ -399,29 +462,44 @@ export const EditorLayout = ({ history }) => {
         break;
       case 'rotated':
       case 'move':
-        setSelected(Object.assign({},{
-          ...selected,
-          node: data[0],
-        }));
+        setSelected(
+          Object.assign(
+            {},
+            {
+              ...selected,
+              node: data[0],
+            }
+          )
+        );
         break;
       case 'resizePens':
-        setSelected(Object.assign({},{
-          ...selected,
-          node: data[0],
-        }));
+        setSelected(
+          Object.assign(
+            {},
+            {
+              ...selected,
+              node: data[0],
+            }
+          )
+        );
         // 重新绘制图表
-        if(node.name=='echarts'){
-          const chart = echartsObjs[node.id].chart
-          chart.setOption(data.data.echarts.option,true)
+        if (node.name == 'echarts') {
+          const chart = echartsObjs[node.id].chart;
+          chart.setOption(data.data.echarts.option, true);
         }
         break;
       case 'multi':
-        setSelected(Object.assign({},{
-          node: data[0],
-          line: null,
-          multi: true,
-          nodes: data,
-        }));
+        setSelected(
+          Object.assign(
+            {},
+            {
+              node: data[0],
+              line: null,
+              multi: true,
+              nodes: data,
+            }
+          )
+        );
         break;
       default:
         break;
@@ -433,7 +511,6 @@ export const EditorLayout = ({ history }) => {
    */
 
   const rightAreaConfig = useMemo(() => {
-    console.log("selected==",selected)
     return {
       node: selected && (
         <NodeComponent
@@ -444,11 +521,19 @@ export const EditorLayout = ({ history }) => {
         />
       ), // 渲染Node节点类型的组件
       line: selected && (
-        <LineComponent data={selected} onFormValueChange={onHandleLineFormValueChange} />
+        <LineComponent
+          data={selected}
+          onFormValueChange={onHandleLineFormValueChange}
+        />
       ), // 渲染线条类型的组件
-      default: canvas && <BackgroundComponent data={canvas} /> // 渲染画布背景的组件
+      default: canvas && <BackgroundComponent data={canvas} />, // 渲染画布背景的组件
     };
-  }, [selected, onHandleFormValueChange, onHandleLineFormValueChange, onEventValueChange]);
+  }, [
+    selected,
+    onHandleFormValueChange,
+    onHandleLineFormValueChange,
+    onEventValueChange,
+  ]);
 
   /**
    * 渲染画布右侧区域操作栏
@@ -456,7 +541,6 @@ export const EditorLayout = ({ history }) => {
 
   const renderRightArea = useMemo(() => {
     let _component = rightAreaConfig.default;
-    console.log(rightAreaConfig)
     Object.keys(rightAreaConfig).forEach((item) => {
       if (selected[item]) {
         _component = rightAreaConfig[item];
@@ -466,14 +550,14 @@ export const EditorLayout = ({ history }) => {
   }, [selected, rightAreaConfig]);
   // 渲染头部
   const renderHeader = useMemo(() => {
-    if (isLoadCanvas) return <Header canvas={canvas} history={history} />;
-  }, [isLoadCanvas, history]);
+    if (isLoadCanvas)
+      return <Header canvas={canvas} history={history} rootRef={layoutRef} />;
+  }, [isLoadCanvas, history, layoutRef]);
   // 右键菜单
-  const handleContextMenu = (event)=>{
-    console.log(event)
-    setShowContextmenu(!showContextmenu)
-    event.preventDefault()
-    event.stopPropagation()
+  const handleContextMenu = (event) => {
+    setShowContextmenu(!showContextmenu);
+    event.preventDefault();
+    event.stopPropagation();
     if (event.clientY + 360 < document.body.clientHeight) {
       setContextmenu({
         position: 'fixed',
@@ -481,7 +565,7 @@ export const EditorLayout = ({ history }) => {
         display: 'block',
         left: event.clientX + 'px',
         top: event.clientY + 'px',
-        bottom: ''
+        bottom: '',
       });
     } else {
       setContextmenu({
@@ -490,35 +574,41 @@ export const EditorLayout = ({ history }) => {
         display: 'block',
         left: event.clientX + 'px',
         top: '',
-        bottom: document.body.clientHeight - event.clientY + 'px'
+        bottom: document.body.clientHeight - event.clientY + 'px',
       });
     }
-  }
-  const renderContextMenu= <div style={contextmenu as CSSProperties} ><CanvasContextMenu data={selected} canvas={canvas} /></div>
+  };
+  const renderContextMenu = (
+    <div style={contextmenu as CSSProperties}>
+      <CanvasContextMenu data={selected} canvas={canvas} />
+    </div>
+  );
   return (
-    <Fragment>
+    <div ref={layoutRef}>
       {renderHeader}
       <div className="page">
         <div className="tool">
           <Tabs defaultActiveKey="1">
-          <TabPane tab="系统组件" key="1" style={{ margin: 0 }}>
-            <SystemComponent onDrag={onDrag} Tools={Tools} />
-          </TabPane>
-          <TabPane tab="我的图片" key="2" style={{ margin: 0 }}>
-            <MyComponent />
-          </TabPane>
+            <TabPane tab="系统组件" key="1" style={{ margin: 0 }}>
+              <SystemComponent onDrag={onDrag} Tools={Tools} />
+            </TabPane>
+            <TabPane tab="我的图片" key="2" style={{ margin: 0 }}>
+              <MyComponent />
+            </TabPane>
           </Tabs>
         </div>
         <div className="full">
           <div>
-            <div id="topology-canvas" style={{ height: 768, width: 1366,background:"#fff", }} onContextMenu={handleContextMenu} />
+            <div
+              id="topology-canvas"
+              style={{ height: 768, width: 1366, background: '#fff' }}
+              onContextMenu={handleContextMenu}
+            />
           </div>
         </div>
         <div className="props">{renderRightArea}</div>
-        {showContextmenu&&renderContextMenu}
+        {showContextmenu && renderContextMenu}
       </div>
-    </Fragment>
+    </div>
   );
 };
-
-

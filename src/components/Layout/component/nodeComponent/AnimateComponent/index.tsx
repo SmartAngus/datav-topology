@@ -14,7 +14,6 @@ const AnimateComponent = ({ canvasData }) => {
     switch (e) {
       case 'upDown':
 
-      console.log(node);
         node.rect.y -= 10;
         node.rect.ey -= 10;
 
@@ -50,7 +49,6 @@ const AnimateComponent = ({ canvasData }) => {
   };
 
   const onHandleSwitchChange = (e) => {
-    console.log(e);
     if (e) {
       node.animateStart = node.animateStart ? Date.now() : 0;
       canvas.animate();

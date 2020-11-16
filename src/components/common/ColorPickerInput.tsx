@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Select, Button } from 'antd';
-import ColorPicker from './ColorPicker'
+import ColorPicker from './ColorPicker/ColorPicker'
 
 const { Option } = Select;
 

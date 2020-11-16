@@ -75,8 +75,6 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
   }
 
   render() {
-    console.log("context menu")
-    console.log(this.props.data)
     return (
       <div className={styles.menus}>
         <div>

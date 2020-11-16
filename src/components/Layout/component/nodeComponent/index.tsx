@@ -4,7 +4,7 @@ import { Form, InputNumber, Tabs, Collapse, Row, Col, Input, Select, Tag,Checkbo
 import EventComponent from './EventComponent';
 import {FormProps} from 'antd/lib/form/Form';
 import './index.css';
-import ColorPicker from '../../../common/ColorPicker'
+import ColorPicker from '../../../common/ColorPicker/ColorPicker'
 import {canvas} from '../../index'
 import AnimateComponent from './AnimateComponent'
 

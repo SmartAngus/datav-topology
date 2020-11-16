@@ -3,29 +3,39 @@ import { Topology } from '../../topology/core';
 import { History } from 'history';
 import { Button, Menu, Popover, Tag, Space } from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { useFullscreen } from 'ahooks';
+import { BasicTarget } from 'ahooks/lib/utils/dom';
 import CustomIcon from '../config/iconConfig';
 import styles from './index.module.scss';
 
 interface HeaderProps {
-  canvas: Topology;
-  history: History;
+  canvas?: Topology;
+  history?: History;
+  rootRef?: BasicTarget<HTMLElement>;
 }
 
 const ButtonGroup = Button.Group;
 
-const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
+const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
+  const { canvas, history, rootRef } = props;
+
+  const [isFullscreen, { toggleFull }] = useFullscreen(rootRef);
   const [scaleNumber, setScaleNumber] = useState(1); // 缩放的基数
 
   const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
 
   const handleSave = () => {
-    console.log('save');
+    console.log('canvas>>>', canvas);
     // FileSaver.saveAs(
     //   new Blob([JSON.stringify(canvas.data)], {
     //     type: 'text/plain;charset=utf-8',
     //   }),
     //   `le5le.topology.json`
     // );
+    const saveData = new Blob([JSON.stringify(canvas.data)], {
+      type: 'text/plain;charset=utf-8',
+    });
+    console.log('save data>>>', saveData.text());
   };
 
   /**
@@ -153,10 +163,10 @@ const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
         <CustomIcon type="icon-exit" />
         <span>退出</span>
       </a>
-      <a className={styles.toolItem}>
+      {/* <a className={styles.toolItem}>
         <CustomIcon type="icon-lianxian_icon" />
         <span>连线</span>
-      </a>
+      </a> */}
       <a className={styles.toolItem} onClick={() => canvas.cut()}>
         <CustomIcon type="icon-jianqie" />
         <span>剪切</span>
@@ -165,10 +175,7 @@ const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
         <CustomIcon type="icon-fuzhi" />
         <span>复制</span>
       </a>
-      <a
-        className={styles.toolItem}
-        onClick={() => canvas.paste()}
-      >
+      <a className={styles.toolItem} onClick={() => canvas.paste()}>
         <CustomIcon type="icon-niantie" />
         <span>粘贴</span>
       </a>
@@ -176,10 +183,7 @@ const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
         <CustomIcon type="icon-chexiao" />
         <span>撤销</span>
       </a>
-      <a
-        className={styles.toolItem}
-        onClick={() => canvas.redo()}
-      >
+      <a className={styles.toolItem} onClick={() => canvas.redo()}>
         <CustomIcon type="icon-icon_huifu" />
         <span>恢复</span>
       </a>
@@ -195,10 +199,7 @@ const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
         <CustomIcon type="icon-ziyuan" />
         <span>前置一层</span>
       </a>
-      <a
-        className={styles.toolItem}
-        onClick={() => nodePanelLevel('top')}
-      >
+      <a className={styles.toolItem} onClick={() => nodePanelLevel('top')}>
         <CustomIcon type="icon-ziyuan" />
         <span>置于顶层</span>
       </a>
@@ -206,10 +207,7 @@ const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
         <CustomIcon type="icon-jianlizuhe" />
         <span>编组</span>
       </a>
-      <a
-        className={styles.toolItem}
-        onClick={() => handleCombine('unCombo')}
-      >
+      <a className={styles.toolItem} onClick={() => handleCombine('unCombo')}>
         <CustomIcon type="icon-quxiaozuhe" />
         <span>解组</span>
       </a>
@@ -252,9 +250,13 @@ const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
           onClick={() => scaleZoomOut()}
         />
       </a>
-      <a className={styles.toolItem} style={{ margin: '0 30px' }}>
+      <a
+        className={styles.toolItem}
+        style={{ margin: '0 30px' }}
+        onClick={toggleFull}
+      >
         <CustomIcon type="icon-quanping" />
-        <span>全屏</span>
+        <span>{isFullscreen ? '退出全屏' : '全屏'}</span>
       </a>
       <a style={{ lineHeight: '48px', marginRight: 30 }}>
         <CustomIcon type="icon-peizhi-" />

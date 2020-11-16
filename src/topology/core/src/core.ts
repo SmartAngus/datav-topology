@@ -1,7 +1,13 @@
 import { Store, Observer } from '../../le5le-store';
 // https://github.com/developit/mitt
 import { default as mitt, Emitter, EventType, Handler } from 'mitt';
-import { Options, KeyType, KeydownType, DefalutOptions, Padding } from './options';
+import {
+  Options,
+  KeyType,
+  KeydownType,
+  DefalutOptions,
+  Padding,
+} from './options';
 import { Pen, PenType } from './models/pen';
 import { Node } from './models/node';
 import { Point } from './models/point';
@@ -23,7 +29,7 @@ import { formatPadding } from './utils/padding';
 import { Socket } from './socket';
 import { MQTT } from './mqtt';
 import { Direction } from './models';
-import { canvas } from '../../../components/Layout'
+import { canvas } from '../../../components/Layout';
 
 const resizeCursors = ['nw-resize', 'ne-resize', 'se-resize', 'sw-resize'];
 enum MoveInType {
@@ -150,11 +156,17 @@ export class Topology {
         return;
       }
       try {
-        const json = event.dataTransfer.getData('Topology') || event.dataTransfer.getData('Text');
+        const json =
+          event.dataTransfer.getData('Topology') ||
+          event.dataTransfer.getData('Text');
         if (!json) return;
         const obj = JSON.parse(json);
         event.preventDefault();
-        this.dropNodes(Array.isArray(obj) ? obj : [obj], event.offsetX, event.offsetY);
+        this.dropNodes(
+          Array.isArray(obj) ? obj : [obj],
+          event.offsetX,
+          event.offsetY
+        );
       } catch {}
     };
     this.subcribe = Store.subscribe(this.generateStoreKey('LT:render'), () => {
@@ -163,36 +175,48 @@ export class Topology {
     this.subcribeRender = Store.subscribe('LT:render', () => {
       this.render();
     });
-    this.subcribeImage = Store.subscribe(this.generateStoreKey('LT:imageLoaded'), () => {
-      if (this.imageTimer) {
-        clearTimeout(this.imageTimer);
+    this.subcribeImage = Store.subscribe(
+      this.generateStoreKey('LT:imageLoaded'),
+      () => {
+        if (this.imageTimer) {
+          clearTimeout(this.imageTimer);
+        }
+        this.imageTimer = setTimeout(() => {
+          this.render();
+        }, 100);
       }
-      this.imageTimer = setTimeout(() => {
-        this.render();
-      }, 100);
-    });
-    this.subcribeAnimateMoved = Store.subscribe(this.generateStoreKey('LT:rectChanged'), (e: any) => {
-      this.activeLayer.updateLines(this.data.pens);
-    });
-    this.subcribeMediaEnd = Store.subscribe(this.generateStoreKey('mediaEnd'), (node: Node) => {
-      if (node.nextPlay) {
-        this.animateLayer.readyPlay(node.nextPlay);
-        this.animateLayer.animate();
+    );
+    this.subcribeAnimateMoved = Store.subscribe(
+      this.generateStoreKey('LT:rectChanged'),
+      (e: any) => {
+        this.activeLayer.updateLines(this.data.pens);
       }
-      this.dispatch('mediaEnd', node);
-    });
-    this.subcribeAnimateEnd = Store.subscribe(this.generateStoreKey('animateEnd'), (e: any) => {
-      if (!e) {
-        return;
+    );
+    this.subcribeMediaEnd = Store.subscribe(
+      this.generateStoreKey('mediaEnd'),
+      (node: Node) => {
+        if (node.nextPlay) {
+          this.animateLayer.readyPlay(node.nextPlay);
+          this.animateLayer.animate();
+        }
+        this.dispatch('mediaEnd', node);
       }
-      switch (e.type) {
-        case 'node':
-          this.offscreen.render();
-          break;
+    );
+    this.subcribeAnimateEnd = Store.subscribe(
+      this.generateStoreKey('animateEnd'),
+      (e: any) => {
+        if (!e) {
+          return;
+        }
+        switch (e.type) {
+          case 'node':
+            this.offscreen.render();
+            break;
+        }
+        this.divLayer.playNext(e.data.nextAnimate);
+        this.dispatch('animateEnd', e);
       }
-      this.divLayer.playNext(e.data.nextAnimate);
-      this.dispatch('animateEnd', e);
-    });
+    );
 
     this.divLayer.canvas.onmousemove = this.onMouseMove;
     this.divLayer.canvas.onmousedown = this.onmousedown;
@@ -326,7 +350,10 @@ export class Topology {
               name: 'line',
               from: new Point(json.rect.x, json.rect.y),
               fromArrow: this.data.fromArrow,
-              to: new Point(json.rect.x + json.rect.width, json.rect.y + json.rect.height),
+              to: new Point(
+                json.rect.x + json.rect.width,
+                json.rect.y + json.rect.height
+              ),
               toArrow: this.data.toArrow,
               strokeStyle: this.options.color,
             },
@@ -377,7 +404,6 @@ export class Topology {
   }
 
   addNode(node: Node | any, focus = false) {
-    console.log("...addNode",this.data)
     if (!drawNodeFns[node.name]) {
       return null;
     }
@@ -533,13 +559,17 @@ export class Topology {
     this.closeSocket();
     if (url || this.data.websocket) {
       this.socket = new Socket(url || this.data.websocket, this.data);
-      console.log("openSocket",this.socket)
-      this.socket.socket.onopen=()=>{
-        console.log("socket open")
-        canvas.socket.send(JSON.stringify({
-          qtDataList: [{id: "6413f3a606754c31987ec584ed56d5b7", type: 2},{id: "b32723eaebfe48aaa0f85970c3a39036", type: 2}],
-          subscribe: true
-        }))}
+      this.socket.socket.onopen = () => {
+        canvas.socket.send(
+          JSON.stringify({
+            qtDataList: [
+              { id: '6413f3a606754c31987ec584ed56d5b7', type: 2 },
+              { id: 'b32723eaebfe48aaa0f85970c3a39036', type: 2 },
+            ],
+            subscribe: true,
+          })
+        );
+      };
     }
   }
 
@@ -552,7 +582,12 @@ export class Topology {
   openMqtt(url?: string, options?: any) {
     this.closeMqtt();
     if (url || this.data.mqttUrl) {
-      this.mqtt = new MQTT(url || this.data.mqttUrl, options || this.data.mqttOptions, this.data.mqttTopics, this.data);
+      this.mqtt = new MQTT(
+        url || this.data.mqttUrl,
+        options || this.data.mqttOptions,
+        this.data.mqttTopics,
+        this.data
+      );
     }
   }
 
@@ -631,12 +666,20 @@ export class Topology {
       }
       if (b) {
         const canvasPos = this.divLayer.canvas.getBoundingClientRect() as DOMRect;
-        this.translate(e.x - this.mouseDown.x - canvasPos.x, e.y - this.mouseDown.y - canvasPos.y, true);
+        this.translate(
+          e.x - this.mouseDown.x - canvasPos.x,
+          e.y - this.mouseDown.y - canvasPos.y,
+          true
+        );
         return false;
       }
     }
 
-    if (this.data.locked && this.mouseDown && this.moveIn.type !== MoveInType.None) {
+    if (
+      this.data.locked &&
+      this.mouseDown &&
+      this.moveIn.type !== MoveInType.None
+    ) {
       return;
     }
 
@@ -672,7 +715,10 @@ export class Topology {
           }
         }
 
-        if (this.moveIn.hoverLine !== this.lastHoverLine && !this.moveIn.hoverNode) {
+        if (
+          this.moveIn.hoverLine !== this.lastHoverLine &&
+          !this.moveIn.hoverNode
+        ) {
           if (this.lastHoverLine) {
             this.dispatch('moveOutLine', this.lastHoverLine);
             this.hideTip();
@@ -703,8 +749,10 @@ export class Topology {
       }
 
       // Move out parent element.
-      const moveOutX = pos.x + 50 > this.parentElem.clientWidth + this.parentElem.scrollLeft;
-      const moveOutY = pos.y + 50 > this.parentElem.clientHeight + this.parentElem.scrollTop;
+      const moveOutX =
+        pos.x + 50 > this.parentElem.clientWidth + this.parentElem.scrollLeft;
+      const moveOutY =
+        pos.y + 50 > this.parentElem.clientHeight + this.parentElem.scrollTop;
       if (!this.options.disableMoveOutParent && (moveOutX || moveOutY)) {
         this.dispatch('moveOutParent', pos);
 
@@ -756,13 +804,24 @@ export class Topology {
           const x = pos.x - this.mouseDown.x;
           const y = pos.y - this.mouseDown.y;
           if (x || y) {
-            const offset = this.getDockPos(x, y, e.ctrlKey || e.shiftKey || e.altKey);
-            this.activeLayer.move(offset.x ? offset.x : x, offset.y ? offset.y : y);
+            const offset = this.getDockPos(
+              x,
+              y,
+              e.ctrlKey || e.shiftKey || e.altKey
+            );
+            this.activeLayer.move(
+              offset.x ? offset.x : x,
+              offset.y ? offset.y : y
+            );
             this.needCache = true;
           }
           break;
         case MoveInType.ResizeCP:
-          this.activeLayer.resize(this.moveIn.activeAnchorIndex, this.mouseDown, pos);
+          this.activeLayer.resize(
+            this.moveIn.activeAnchorIndex,
+            this.mouseDown,
+            pos
+          );
           this.dispatch('resizePens', this.activeLayer.pens);
           this.needCache = true;
           break;
@@ -789,17 +848,28 @@ export class Topology {
           this.needCache = true;
           break;
         case MoveInType.LineControlPoint:
-          this.moveIn.hoverLine.controlPoints[this.moveIn.lineControlPoint.id].x = pos.x;
-          this.moveIn.hoverLine.controlPoints[this.moveIn.lineControlPoint.id].y = pos.y;
+          this.moveIn.hoverLine.controlPoints[
+            this.moveIn.lineControlPoint.id
+          ].x = pos.x;
+          this.moveIn.hoverLine.controlPoints[
+            this.moveIn.lineControlPoint.id
+          ].y = pos.y;
           this.moveIn.hoverLine.textRect = null;
-          if (drawLineFns[this.moveIn.hoverLine.name] && drawLineFns[this.moveIn.hoverLine.name].dockControlPointFn) {
+          if (
+            drawLineFns[this.moveIn.hoverLine.name] &&
+            drawLineFns[this.moveIn.hoverLine.name].dockControlPointFn
+          ) {
             drawLineFns[this.moveIn.hoverLine.name].dockControlPointFn(
-              this.moveIn.hoverLine.controlPoints[this.moveIn.lineControlPoint.id],
+              this.moveIn.hoverLine.controlPoints[
+                this.moveIn.lineControlPoint.id
+              ],
               this.moveIn.hoverLine
             );
           }
           this.needCache = true;
-          Store.set(this.generateStoreKey('LT:updateLines'), [this.moveIn.hoverLine]);
+          Store.set(this.generateStoreKey('LT:updateLines'), [
+            this.moveIn.hoverLine,
+          ]);
           break;
         case MoveInType.Rotate:
           if (this.activeLayer.pens.length) {
@@ -867,22 +937,32 @@ export class Topology {
         this.hoverLayer.line = this.addLine({
           name: this.data.lineName,
           from: new Point(
-            this.moveIn.hoverNode.rotatedAnchors[this.moveIn.hoverAnchorIndex].x,
-            this.moveIn.hoverNode.rotatedAnchors[this.moveIn.hoverAnchorIndex].y,
-            this.moveIn.hoverNode.rotatedAnchors[this.moveIn.hoverAnchorIndex].direction,
+            this.moveIn.hoverNode.rotatedAnchors[
+              this.moveIn.hoverAnchorIndex
+            ].x,
+            this.moveIn.hoverNode.rotatedAnchors[
+              this.moveIn.hoverAnchorIndex
+            ].y,
+            this.moveIn.hoverNode.rotatedAnchors[
+              this.moveIn.hoverAnchorIndex
+            ].direction,
             this.moveIn.hoverAnchorIndex,
             this.moveIn.hoverNode.id
           ),
           fromArrow: this.data.fromArrow,
           to: new Point(
-            this.moveIn.hoverNode.rotatedAnchors[this.moveIn.hoverAnchorIndex].x,
+            this.moveIn.hoverNode.rotatedAnchors[
+              this.moveIn.hoverAnchorIndex
+            ].x,
             this.moveIn.hoverNode.rotatedAnchors[this.moveIn.hoverAnchorIndex].y
           ),
           toArrow: this.data.toArrow,
           strokeStyle: this.options.color,
         });
         this.dispatch('anchor', {
-          anchor: this.moveIn.hoverNode.rotatedAnchors[this.moveIn.hoverAnchorIndex],
+          anchor: this.moveIn.hoverNode.rotatedAnchors[
+            this.moveIn.hoverAnchorIndex
+          ],
           anchorIndex: this.moveIn.hoverAnchorIndex,
           node: this.moveIn.hoverNode,
           line: this.hoverLayer.line,
@@ -900,7 +980,10 @@ export class Topology {
             this.moveIn.hoverNode.id
           ),
           fromArrow: this.data.fromArrow,
-          to: new Point(this.moveIn.hoverNode.rect.center.x, this.moveIn.hoverNode.rect.center.y),
+          to: new Point(
+            this.moveIn.hoverNode.rect.center.x,
+            this.moveIn.hoverNode.rect.center.y
+          ),
           toArrow: this.data.toArrow,
           strokeStyle: this.options.color,
         });
@@ -914,7 +997,10 @@ export class Topology {
         }
 
         if (e.ctrlKey || e.shiftKey) {
-          if (this.moveIn.hoverNode && this.activeLayer.hasInAll(this.moveIn.hoverNode)) {
+          if (
+            this.moveIn.hoverNode &&
+            this.activeLayer.hasInAll(this.moveIn.hoverNode)
+          ) {
             this.activeLayer.setPens([this.moveIn.hoverNode]);
             this.dispatch('node', this.moveIn.hoverNode);
           } else if (!this.activeLayer.has(this.moveIn.activeNode)) {
@@ -969,9 +1055,17 @@ export class Topology {
 
       if (this.activeLayer.pens && this.activeLayer.pens.length > 1) {
         this.dispatch('multi', this.activeLayer.pens);
-      } else if (this.activeLayer.pens && this.activeLayer.pens[0] && this.activeLayer.pens[0].type === PenType.Line) {
+      } else if (
+        this.activeLayer.pens &&
+        this.activeLayer.pens[0] &&
+        this.activeLayer.pens[0].type === PenType.Line
+      ) {
         this.dispatch('line', this.activeLayer.pens[0]);
-      } else if (this.activeLayer.pens && this.activeLayer.pens[0] && this.activeLayer.pens[0].type === PenType.Node) {
+      } else if (
+        this.activeLayer.pens &&
+        this.activeLayer.pens[0] &&
+        this.activeLayer.pens[0].type === PenType.Node
+      ) {
         this.dispatch('node', this.activeLayer.pens[0]);
       }
     } else {
@@ -994,7 +1088,9 @@ export class Topology {
                 willAddLine = lines.length <= 1;
               }
             } else {
-              willAddLine = !this.options.disableEmptyLine && !this.hoverLayer.line.disableEmptyLine;
+              willAddLine =
+                !this.options.disableEmptyLine &&
+                !this.hoverLayer.line.disableEmptyLine;
             }
 
             if (willAddLine) {
@@ -1019,13 +1115,17 @@ export class Topology {
           break;
 
         case MoveInType.LineControlPoint:
-          Store.set(this.generateStoreKey('pts-') + this.moveIn.hoverLine.id, null);
+          Store.set(
+            this.generateStoreKey('pts-') + this.moveIn.hoverLine.id,
+            null
+          );
           break;
 
         case MoveInType.LineFrom:
         case MoveInType.LineTo:
           if (
-            (this.hoverLayer.line.disableEmptyLine || this.options.disableEmptyLine) &&
+            (this.hoverLayer.line.disableEmptyLine ||
+              this.options.disableEmptyLine) &&
             (!this.hoverLayer.line.from.id || !this.hoverLayer.line.to.id)
           ) {
             this.needCache = true;
@@ -1050,7 +1150,11 @@ export class Topology {
     if (this.moveIn.hoverNode) {
       this.dispatch('dblclick', this.moveIn.hoverNode);
 
-      if (this.moveIn.hoverNode.getTextRect().hit(new Point(e.x - canvasPos.x, e.y - canvasPos.y))) {
+      if (
+        this.moveIn.hoverNode
+          .getTextRect()
+          .hit(new Point(e.x - canvasPos.x, e.y - canvasPos.y))
+      ) {
         this.showInput(this.moveIn.hoverNode);
       }
 
@@ -1060,7 +1164,9 @@ export class Topology {
 
       if (
         !this.moveIn.hoverLine.text ||
-        this.moveIn.hoverLine.getTextRect().hit(new Point(e.x - canvasPos.x, e.y - canvasPos.y))
+        this.moveIn.hoverLine
+          .getTextRect()
+          .hit(new Point(e.x - canvasPos.x, e.y - canvasPos.y))
       ) {
         this.showInput(this.moveIn.hoverLine);
       }
@@ -1069,6 +1175,7 @@ export class Topology {
     }
   };
 
+  // 快捷键设置
   private onkeydown = (key: KeyboardEvent) => {
     if (
       this.data.locked ||
@@ -1184,15 +1291,24 @@ export class Topology {
       this.moveIn.type = MoveInType.Rotate;
 
       const cursor = this.options.rotateCursor;
-      this.divLayer.canvas.style.cursor = cursor.includes('/') ? `url("${cursor}"), auto` : cursor;
+      this.divLayer.canvas.style.cursor = cursor.includes('/')
+        ? `url("${cursor}"), auto`
+        : cursor;
       return;
     }
 
-    if (this.activeLayer.pens.length > 1 && pointInRect(pt, this.activeLayer.sizeCPs)) {
+    if (
+      this.activeLayer.pens.length > 1 &&
+      pointInRect(pt, this.activeLayer.sizeCPs)
+    ) {
       this.moveIn.type = MoveInType.Nodes;
     }
 
-    if (!this.data.locked && !this.activeLayer.locked() && !this.options.hideSizeCP) {
+    if (
+      !this.data.locked &&
+      !this.activeLayer.locked() &&
+      !this.options.hideSizeCP
+    ) {
       if (
         this.activeLayer.pens.length > 1 ||
         (!this.activeLayer.pens[0].type && !this.activeLayer.pens[0].hideSizeCP)
@@ -1233,13 +1349,19 @@ export class Topology {
     const len = this.data.pens.length;
     let inLine: Pen;
     for (let i = len - 1; i > -1; --i) {
-      if (this.data.pens[i].type === PenType.Node && this.inNode(pt, this.data.pens[i] as Node)) {
+      if (
+        this.data.pens[i].type === PenType.Node &&
+        this.inNode(pt, this.data.pens[i] as Node)
+      ) {
         // @ts-ignore
         if (inLine && this.moveIn.type !== MoveInType.HoverAnchors) {
           this.inLine(pt, inLine as Line);
         }
         return;
-      } else if (this.data.pens[i].type === PenType.Line && this.inLine(pt, this.data.pens[i] as Line)) {
+      } else if (
+        this.data.pens[i].type === PenType.Line &&
+        this.inLine(pt, this.data.pens[i] as Line)
+      ) {
         // 优先判断是否在节点锚点上
         inLine = this.data.pens[i];
       }
@@ -1273,7 +1395,11 @@ export class Topology {
   }
 
   inNode(pt: Point, node: Node, inChild = false) {
-    if (this.data.locked === Lock.NoEvent || !node.visible || node.locked === Lock.NoEvent) {
+    if (
+      this.data.locked === Lock.NoEvent ||
+      !node.visible ||
+      node.locked === Lock.NoEvent
+    ) {
       return null;
     }
 
@@ -1307,11 +1433,19 @@ export class Topology {
       if (
         !this.data.locked &&
         !node.locked &&
-        !(this.options.hideAnchor || node.hideAnchor || node.rect.width < 20 || node.rect.height < 20)
+        !(
+          this.options.hideAnchor ||
+          node.hideAnchor ||
+          node.rect.width < 20 ||
+          node.rect.height < 20
+        )
       ) {
         for (let j = 0; j < node.rotatedAnchors.length; ++j) {
           if (node.rotatedAnchors[j].hit(pt, this.options.anchorSize)) {
-            if (!this.mouseDown && node.rotatedAnchors[j].mode === AnchorMode.In) {
+            if (
+              !this.mouseDown &&
+              node.rotatedAnchors[j].mode === AnchorMode.In
+            ) {
               continue;
             }
             this.moveIn.type = MoveInType.HoverAnchors;
@@ -1322,7 +1456,10 @@ export class Topology {
           }
         }
 
-        if (this.options.autoAnchor && node.rect.center.hit(pt, this.options.anchorSize)) {
+        if (
+          this.options.autoAnchor &&
+          node.rect.center.hit(pt, this.options.anchorSize)
+        ) {
           this.moveIn.hoverNode = node;
           this.moveIn.type = MoveInType.AutoAnchor;
           this.divLayer.canvas.style.cursor = 'crosshair';
@@ -1336,14 +1473,22 @@ export class Topology {
       return node;
     }
 
-    if (this.options.hideAnchor || node.hideAnchor || this.data.locked || node.locked) {
+    if (
+      this.options.hideAnchor ||
+      node.hideAnchor ||
+      this.data.locked ||
+      node.locked
+    ) {
       return null;
     }
 
     if (node.hit(pt, this.options.anchorSize)) {
       for (let j = 0; j < node.rotatedAnchors.length; ++j) {
         if (node.rotatedAnchors[j].hit(pt, this.options.anchorSize)) {
-          if (!this.mouseDown && node.rotatedAnchors[j].mode === AnchorMode.In) {
+          if (
+            !this.mouseDown &&
+            node.rotatedAnchors[j].mode === AnchorMode.In
+          ) {
             continue;
           }
           this.moveIn.hoverNode = node;
@@ -1421,7 +1566,10 @@ export class Topology {
         }
 
         for (let i = 0; i < item.rotatedAnchors.length; ++i) {
-          if (item.rotatedAnchors[i].mode && item.rotatedAnchors[i].mode !== mode) {
+          if (
+            item.rotatedAnchors[i].mode &&
+            item.rotatedAnchors[i].mode !== mode
+          ) {
             continue;
           }
           if (item.rotatedAnchors[i].hit(point, 10)) {
@@ -1530,7 +1678,12 @@ export class Topology {
   }
 
   showInput(item: Pen) {
-    if (this.data.locked || item.locked || item.hideInput || this.options.hideInput) {
+    if (
+      this.data.locked ||
+      item.locked ||
+      item.hideInput ||
+      this.options.hideInput
+    ) {
       return;
     }
 
@@ -1579,7 +1732,11 @@ export class Topology {
 
     for (const activePt of this.activeLayer.dockWatchers) {
       for (const item of this.data.pens) {
-        if (!(item instanceof Node) || this.activeLayer.has(item) || item.name === 'text') {
+        if (
+          !(item instanceof Node) ||
+          this.activeLayer.has(item) ||
+          item.name === 'text'
+        ) {
           continue;
         }
 
@@ -1609,7 +1766,10 @@ export class Topology {
 
   cache() {
     if (this.caches.index < this.caches.list.length - 1) {
-      this.caches.list.splice(this.caches.index + 1, this.caches.list.length - this.caches.index - 1);
+      this.caches.list.splice(
+        this.caches.index + 1,
+        this.caches.list.length - this.caches.index - 1
+      );
     }
     const data = new TopologyData(this.data);
     this.caches.list.push(data);
@@ -1658,7 +1818,10 @@ export class Topology {
     this.divLayer.render();
 
     if (noRedo) {
-      this.caches.list.splice(this.caches.index + 1, this.caches.list.length - this.caches.index - 1);
+      this.caches.list.splice(
+        this.caches.index + 1,
+        this.caches.list.length - this.caches.index - 1
+      );
     }
 
     this.dispatch('undo', this.data);
@@ -1678,7 +1841,12 @@ export class Topology {
     this.dispatch('redo', this.data);
   }
 
-  toImage(padding: Padding = 0, type = 'image/png', quality = 1, callback: any = null): string {
+  toImage(
+    padding: Padding = 0,
+    type = 'image/png',
+    quality = 1,
+    callback: any = null
+  ): string {
     const rect = this.getRect();
     const p = formatPadding(padding || 0);
     rect.x -= p[3];
@@ -1703,11 +1871,9 @@ export class Topology {
     if (this.data.bkColor) {
       // ctx.fillStyle = this.data.bkColor;
       // ctx.fillRect(0, 0, canvas.width, canvas.height);
-      console.log(this.parentElem.style)
     }
     if (this.data.bkImage) {
       // ctx.drawImage(this.canvas.bkImg, 0, 0, canvas.width, canvas.height);
-
     }
 
     for (const item of this.data.pens) {
@@ -1728,7 +1894,12 @@ export class Topology {
     return canvas.toDataURL(type, quality);
   }
 
-  saveAsImage(name?: string, padding: Padding = 0, type: string = 'image/png', quality = 1) {
+  saveAsImage(
+    name?: string,
+    padding: Padding = 0,
+    type: string = 'image/png',
+    quality = 1
+  ) {
     const a = document.createElement('a');
     a.setAttribute('download', name || 'le5le.topology.png');
     a.setAttribute('href', this.toImage(padding, type, quality));
@@ -1776,7 +1947,12 @@ export class Topology {
       }
 
       const line = this.data.pens[i] as Line;
-      if (!line.from.id || !line.to.id || line.from.id === deleteedId || line.to.id === deleteedId) {
+      if (
+        !line.from.id ||
+        !line.to.id ||
+        line.from.id === deleteedId ||
+        line.to.id === deleteedId
+      ) {
         this.data.pens.splice(i, 1);
         this.animateLayer.pens.delete(line.id);
         --i;
@@ -1879,7 +2055,13 @@ export class Topology {
           pen.from.anchorIndex,
           idMaps[pen.from.id]
         );
-        pen.to = new Point(pen.to.x + 20, pen.to.y + 20, pen.to.direction, pen.to.anchorIndex, idMaps[pen.to.id]);
+        pen.to = new Point(
+          pen.to.x + 20,
+          pen.to.y + 20,
+          pen.to.direction,
+          pen.to.anchorIndex,
+          idMaps[pen.to.id]
+        );
         const controlPoints = [];
         for (const pt of pen.controlPoints) {
           controlPoints.push(new Point(pt.x + 20, pt.y + 20));
@@ -2028,7 +2210,11 @@ export class Topology {
     });
 
     for (let i = 0; i < pens.length; ++i) {
-      if (pens[i].type === PenType.Node && rect.width === pens[i].rect.width && rect.height === pens[i].rect.height) {
+      if (
+        pens[i].type === PenType.Node &&
+        rect.width === pens[i].rect.width &&
+        rect.height === pens[i].rect.height
+      ) {
         node = pens[i] as Node;
         if (!node.children) {
           node.children = [];
@@ -2151,7 +2337,10 @@ export class Topology {
   //   > 1, expand
   //   < 1, reduce
   scale(scale: number, center?: Point) {
-    if (this.data.scale * scale < this.options.minScale || this.data.scale * scale > this.options.maxScale) {
+    if (
+      this.data.scale * scale < this.options.minScale ||
+      this.data.scale * scale > this.options.maxScale
+    ) {
       return;
     }
 
@@ -2262,7 +2451,12 @@ export class Topology {
   }
 
   private showTip(data: Pen, pos: { x: number; y: number }) {
-    if (!data || data.id === this.tip || this.data.tooltip === false || this.data.tooltip === 0) {
+    if (
+      !data ||
+      data.id === this.tip ||
+      this.data.tooltip === false ||
+      this.data.tooltip === 0
+    ) {
       return;
     }
 
@@ -2375,7 +2569,11 @@ export class Topology {
     });
 
     for (const item of pens) {
-      if (item.type === PenType.Node && rect.width === item.rect.width && rect.height === item.rect.height) {
+      if (
+        item.type === PenType.Node &&
+        rect.width === item.rect.width &&
+        rect.height === item.rect.height
+      ) {
         node = item as Node;
         if (!node.children) {
           node.children = [];

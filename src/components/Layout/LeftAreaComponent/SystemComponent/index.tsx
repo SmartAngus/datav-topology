@@ -1,6 +1,5 @@
 import React from 'react';
-import IndustrialLibraryUpload from '../../../common/IndustrialLibraryUpload'
-
+import IndustrialLibraryUpload from '../../../common/IndustrialLibraryUpload';
 
 const Layout = ({ Tools, onDrag }) => {
   return Tools.map((item, index) => (
@@ -17,13 +16,14 @@ const Layout = ({ Tools, onDrag }) => {
               href="/#"
               onDragStart={(ev) => onDrag(ev, item)}
             >
-              <i className={'iconfont ' + item.icon} style={{ fontSize: 13 }}></i>
+              <i
+                className={'iconfont ' + item.icon}
+                style={{ fontSize: 13 }}
+              ></i>
             </a>
           );
         })}
-        {
-            item.group=="自定义图片"? <IndustrialLibraryUpload/> :''
-        }
+        {item.group == '自定义图片' ? <IndustrialLibraryUpload /> : ''}
       </div>
     </div>
   ));

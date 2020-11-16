@@ -3,27 +3,28 @@ import { Form, Tabs, Row, Col, Input, Collapse, Button, Switch } from 'antd';
 import './index.css';
 import MQTTComponent from './MQTTComponent';
 import LayoutComponent from './LayoutComponent';
+import ColorPicker from '../../../common/ColorPicker/ColorPicker';
 import { canvas } from '../../index';
-import { FormProps } from 'antd/lib/form/Form'
+import { FormProps } from 'antd/lib/form/Form';
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 const { TextArea } = Input;
 interface ICanvasProps extends FormProps {
-  data?: any
-  onFormValueChange?: any
-  onEventValueChange?: any
+  data?: any;
+  onFormValueChange?: any;
+  onEventValueChange?: any;
 }
-const BackgroundCanvasProps:React.FC<ICanvasProps> = ({ data }) => {
-  const [form]=Form.useForm()
+const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
+  const [form] = Form.useForm();
+  const [gridChecked, setGridChecked] = useState(false);
   const { bkColor, bkImage } = data.data;
-  const [wsAddress, setWsAddress] = useState('ws://47.96.159.115:51060/ws?token=1NU6lvRQmTVfx4c7ppOFJb');
-
-  console.log(canvas.layout);
+  const [wsAddress, setWsAddress] = useState(
+    'ws://47.96.159.115:51060/ws?token=1NU6lvRQmTVfx4c7ppOFJb'
+  );
 
   useEffect(() => {
-    form.validateFields(['bkColor','bkImage']).then((values)=>{
-      console.log("form valid")
-    })
+    console.log(data);
+    form.validateFields(['bkColor', 'bkImage']).then((values) => {});
     // form.validateFields((err, value) => {
     //   if (err) return;
     //   data.clearBkImg();
@@ -38,25 +39,31 @@ const BackgroundCanvasProps:React.FC<ICanvasProps> = ({ data }) => {
   /**
    * 渲染位置和大小的表单
    */
-  const handleFormValueChange = (changeValues,allValues)=>{
-    for(let k in changeValues){
-      data.data[k]=changeValues[k]
+  const handleFormValueChange = (changeValues, allValues) => {
+    console.log(changeValues);
+    for (let k in changeValues) {
+      data.data[k] = changeValues[k];
     }
     data.render();
     form.resetFields();
-  }
+  };
 
   const renderForm = useMemo(() => {
     const formLayout = {
       labelCol: { span: 7 },
-      wrapperCol: { span: 15 }
+      wrapperCol: { span: 15 },
     };
     return (
-      <Form {...formLayout} style={{ marginTop: 10, position: 'relative' }} onValuesChange={handleFormValueChange}>
+      <Form
+        {...formLayout}
+        style={{ marginTop: 10, position: 'relative' }}
+        onValuesChange={handleFormValueChange}
+      >
         <Row>
           <Col span={24}>
             <Form.Item name="bkColor" label="背景颜色">
-             <Input type="color" />
+              {/* <Input type="color" /> */}
+              <ColorPicker />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -66,14 +73,15 @@ const BackgroundCanvasProps:React.FC<ICanvasProps> = ({ data }) => {
           </Col>
           <Col span={24}>
             <Form.Item label="背景网格">
-                <Switch
-                  checkedChildren="开"
-                  unCheckedChildren="关"
-                  onClick={(e) => {
-                    console.log(e);
-                    canvas.showGrid(e);
-                  }}
-                />
+              <Switch
+                checkedChildren="开"
+                unCheckedChildren="关"
+                // checked={gridChecked}
+                onClick={(e) => {
+                  canvas.showGrid(e);
+                  setGridChecked(e);
+                }}
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -87,19 +95,19 @@ const BackgroundCanvasProps:React.FC<ICanvasProps> = ({ data }) => {
 
   const onHandleConnectWS = () => {
     canvas.openSocket(wsAddress);
-    console.log("onHandleConnectWS",wsAddress)
-    canvas.socket.socket.onmessage=(a)=>{
-      console.log("socket onmessage")
-    }
-    canvas.socket.socket.onopen=()=>{
-      console.log("socket open")
-      canvas.socket.send(JSON.stringify({
-            qtDataList: [{id: "6413f3a606754c31987ec584ed56d5b7", type: 2},{id: "b32723eaebfe48aaa0f85970c3a39036", type: 2}],
-            subscribe: true
-      }))}
-    canvas.socket.socket.onerror=()=>{
-      console.log("socket onerror")
-    }
+    canvas.socket.socket.onmessage = (a) => {};
+    canvas.socket.socket.onopen = () => {
+      canvas.socket.send(
+        JSON.stringify({
+          qtDataList: [
+            { id: '6413f3a606754c31987ec584ed56d5b7', type: 2 },
+            { id: 'b32723eaebfe48aaa0f85970c3a39036', type: 2 },
+          ],
+          subscribe: true,
+        })
+      );
+    };
+    canvas.socket.socket.onerror = () => {};
     // const index = new WebSocket(wsAddress);
     // //打开事件
     // index.onopen = function() {
@@ -130,15 +138,19 @@ const BackgroundCanvasProps:React.FC<ICanvasProps> = ({ data }) => {
   return (
     <div className="rightArea">
       <Tabs defaultActiveKey="1" animated={false}>
-        <TabPane tab="图文设置" key="1" style={{ margin: 0, position: 'relative' }}>
+        <TabPane
+          tab="图文设置"
+          key="1"
+          style={{ margin: 0, position: 'relative' }}
+        >
           {renderForm}
           <ul className="bottomTip">
-              <li>← ↑ → ↓ ：移动5个像素</li>
-              <li>Ctrl + 鼠标点击：多选</li>
-              <li>Ctrl + 鼠标滚轮：缩放画布</li>
-              <li>Ctrl + ← ↑ → ↓ ：移动1个像素</li>
-              <li>Ctrl + 鼠标拖拽空白：移动整个画布</li>
-              <li>Shift/Alt + 鼠标拖拽节点：独立拖拽（子）节点</li>
+            <li>← ↑ → ↓ ：移动5个像素</li>
+            <li>Ctrl + 鼠标点击：多选</li>
+            <li>Ctrl + 鼠标滚轮：缩放画布</li>
+            <li>Ctrl + ← ↑ → ↓ ：移动1个像素</li>
+            <li>Ctrl + 鼠标拖拽空白：移动整个画布</li>
+            <li>Shift/Alt + 鼠标拖拽节点：独立拖拽（子）节点</li>
           </ul>
         </TabPane>
         <TabPane tab="消息通信" key="2" style={{ margin: 0 }}>
@@ -157,9 +169,9 @@ const BackgroundCanvasProps:React.FC<ICanvasProps> = ({ data }) => {
                 测试连接
               </Button>
             </Panel>
-            <Panel header="MQTT地址" key="2">
+            {/* <Panel header="MQTT地址" key="2">
               <MQTTComponent />
-            </Panel>
+            </Panel> */}
           </Collapse>
         </TabPane>
         <TabPane tab="排版布局" key="3" style={{ margin: 0 }}>
