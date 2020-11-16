@@ -111,7 +111,6 @@ export let canvas;
 export const EditorLayout = ({ history }) => {
   const layoutRef = useRef();
 
-
   const [selected, setSelected] = useState({
     node: null,
     line: null,
@@ -174,7 +173,13 @@ export const EditorLayout = ({ history }) => {
     setIsLoadCanvas(true);
   }, [history]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // console.log("isLoadCanvas==",isLoadCanvas)
+    // console.log(canvas.data)
+    if (canvas.data0 && canvas.data.pens.length > 0) {
+      // 有数据，去遍历有websocket的组件，并订阅
+    }
+  }, []);
 
   /**
    * 注册图形库
@@ -359,14 +364,14 @@ export const EditorLayout = ({ history }) => {
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
       // 只能两层嵌套，后期需要更改，如果有多层的话
-      for(const key in value){
-        if(key.indexOf(".")>0){
-          if(key!=undefined){
-            const k = key.split(".");
-            selected.node.property[k[0]][k[1]]=value[key]
+      for (const key in value) {
+        if (key.indexOf('.') > 0) {
+          if (key != undefined) {
+            const k = key.split('.');
+            selected.node.property[k[0]][k[1]] = value[key];
           }
-        }else{
-          selected.node.property[key]=value[key]
+        } else {
+          selected.node.property[key] = value[key];
         }
       }
     },
