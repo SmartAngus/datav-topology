@@ -82,7 +82,8 @@ import { Tools } from '../config/config';
 import { getNodeById } from '../Service/topologyService';
 import Header from '../Header';
 import NodeComponent from './component/nodeComponent';
-import BackgroundComponent from './component/backgroundComponent';
+// import BackgroundComponent from './component/backgroundComponent';
+import BackgroundComponent from './component/backgroundComponent/newBackgroundCom';
 import LineComponent from './component/lineComponent';
 import SystemComponent from './LeftAreaComponent/SystemComponent';
 import MyComponent from './LeftAreaComponent/MyComponent';
@@ -456,6 +457,7 @@ export const EditorLayout = ({ history }) => {
 
   const renderRightArea = useMemo(() => {
     let _component = rightAreaConfig.default;
+    console.log(rightAreaConfig)
     Object.keys(rightAreaConfig).forEach((item) => {
       if (selected[item]) {
         _component = rightAreaConfig[item];
@@ -463,7 +465,7 @@ export const EditorLayout = ({ history }) => {
     });
     return _component;
   }, [selected, rightAreaConfig]);
-
+  // 渲染头部
   const renderHeader = useMemo(() => {
     if (isLoadCanvas) return <Header canvas={canvas} history={history} />;
   }, [isLoadCanvas, history]);
