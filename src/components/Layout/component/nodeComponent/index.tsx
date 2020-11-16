@@ -1,5 +1,16 @@
 import React, { useMemo, useEffect, useState } from 'react'
-import { Form, InputNumber, Tabs, Collapse, Row, Col, Input, Select, Tag,Checkbox } from 'antd';
+import {
+  Form, InputNumber,
+  Tabs, Collapse,
+  Row, Col, Input,
+  Select, Tag, Checkbox,
+  Button, Space,Modal
+} from 'antd'
+import {
+  PlusOutlined,
+  MinusCircleOutlined,
+  DeleteOutlined
+} from '@ant-design/icons'
 // import AnimateComponent from './AnimateComponent';
 import EventComponent from './EventComponent';
 import {FormProps} from 'antd/lib/form/Form';
@@ -7,6 +18,7 @@ import './index.css';
 import ColorPicker from '../../../common/ColorPicker'
 import {canvas} from '../../index'
 import AnimateComponent from './AnimateComponent'
+import DataPointTable from '../../../common/DataPointTable'
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -30,26 +42,35 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
 
   const [form]=Form.useForm()
   const [propertyForm] = Form.useForm()
+  const [visible, setVisible] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [baseAllValues,setBaseAllValues] = useState({...data?.node})
 
   const { x, y, width, height } = data?.node?.rect || {};
   const { rotate, lineWidth, strokeStyle, dash, text, id,name } = data?.node || {};
   const { color, fontSize, fontFamily } = data?.node?.font || {};
-  const { property } = data?.node?.property||{}
+  const { property } = data?.node
   const extraFields = data.node.data; // 用户自定义数据片段
+  const { dataMethod,dataDot } = property||{}
   useEffect(() => {
     form.setFieldsValue({
       x, y, width, height,rotate,lineWidth, strokeStyle,
       dash,color, fontSize, fontFamily, text
     });
   }, [x, y, width, height,rotate,text,lineWidth, strokeStyle, dash,color, fontSize, fontFamily, text])
-
+  useEffect(()=>{
+    propertyForm.setFieldsValue({
+      dataMethod,dataDot
+    })
+    console.log("property====",data)
+  },[property])
 
   // 字段值更新时触发的回掉
   const handleValuesChange = (changedValues, allValues)=>{
     onFormValueChange&&onFormValueChange(allValues)
   }
   const handlePropertyValuesChange = (changedValues, allValues)=>{
+    console.log("allValues",allValues)
     onPropertyFormValueChange&&onPropertyFormValueChange(allValues)
   }
   //
@@ -63,6 +84,52 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
   // 设置日期格式
   const onSetBiciTimerDataFmt=()=>{
 
+  }
+  // 数据绑定方式
+  const handlePropertyDataMethodChange = (value)=>{
+
+  }
+  const handleOk=()=>{
+    setVisible(false)
+    setLoading(false)
+  }
+  const handleCancel=()=>{
+    setVisible(false)
+    setLoading(false)
+  }
+  // 添加数据点
+  const addDataPoint=()=>{
+    setVisible(true)
+  }
+  const handleSelectedDataPoint=(selectedPointIds)=>{
+    for(let k in selectedPointIds){
+      data.node.property.dataPointParam.qtDataList.push({
+        id:selectedPointIds[k],
+        type:2
+      })
+    }
+  }
+  // 渲染数据点弹出窗口
+  const renderDataPointModal=()=>{
+    return (
+      <Modal
+        visible={visible}
+        title="Title"
+        width={1000}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Return
+          </Button>,
+          <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
+            Submit
+          </Button>,
+        ]}
+      >
+        <DataPointTable onSelectedDataPoint={handleSelectedDataPoint}/>
+      </Modal>
+    )
   }
   /**
   * 渲染位置和大小的表单
@@ -239,18 +306,37 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
 
 
   /**
-  * 渲染元素额外数据
+  * 渲染元素额外数据 {"qtDataList":[{"id":"6413f3a606754c31987ec584ed56d5b7","type":2}],"subscribe":true,"page":"动态曲线"}
   */
 
   const renderExtraDataForm = useMemo(() => {
-    return <Form >
+    return <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
       <Col>
-        <Form.Item label="自定义数据字段">
-          <TextArea rows={10} />
+        <Form.Item name="dataMethod" label="数据传入方式" rules={[{ required: true }]}>
+          <Select
+            placeholder="选择"
+            onChange={handlePropertyDataMethodChange}
+            allowClear
+          >
+            <Option value="male">绑定数据点</Option>
+            <Option value="female">接口传入</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item label="数据点">
+          <Button type="dashed" onClick={() => addDataPoint()} icon={<PlusOutlined />}>
+            添加数据点
+          </Button>
+        </Form.Item>
+        <Form.Item label="数据点1">
+          <span>擎天哈哈哈</span>
+          <Button type="link" icon={<DeleteOutlined />}></Button>
+        </Form.Item>
+        <Form.Item name="dataDot" label="显示精度">
+          <InputNumber min={0} max={5}/>
         </Form.Item>
       </Col>
     </Form>
-  }, [extraFields])
+  }, [property])
 
   return (
     <div className="rightArea">
@@ -303,6 +389,7 @@ const NodeCanvasProps:React.FC<ICanvasProps> = ({ data, onFormValueChange, onEve
           待开发...
         </TabPane>
       </Tabs>
+      {renderDataPointModal()}
 
     </div>
   );

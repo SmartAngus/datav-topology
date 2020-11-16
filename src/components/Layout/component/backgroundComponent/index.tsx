@@ -88,12 +88,12 @@ const BackgroundCanvasProps:React.FC<ICanvasProps> = ({ data }) => {
   const onHandleConnectWS = () => {
     canvas.openSocket(wsAddress);
     console.log("onHandleConnectWS",wsAddress)
-    canvas.socket.socket.onmessage=(a)=>{
-      console.log("socket onmessage")
+    canvas.socket.socket.onmessage=(data)=>{
+      console.log("socket onmessage",data.data)
     }
     canvas.socket.socket.onopen=()=>{
       console.log("socket open")
-      canvas.socket.send(JSON.stringify({
+      canvas.socket.socket.send(JSON.stringify({
             qtDataList: [{id: "6413f3a606754c31987ec584ed56d5b7", type: 2},{id: "b32723eaebfe48aaa0f85970c3a39036", type: 2}],
             subscribe: true
       }))}
