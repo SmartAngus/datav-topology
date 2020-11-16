@@ -148,13 +148,12 @@ const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
     <div className={styles.toolsHeader}>
       <a
         className={styles.toolItem}
-        style={{ marginRight: 100 }}
         onClick={() => console.log('canvas>>>', canvas)}
       >
         <CustomIcon type="icon-exit" />
         <span>退出</span>
       </a>
-      <a className={styles.toolItem} style={{ marginRight: 60 }}>
+      <a className={styles.toolItem}>
         <CustomIcon type="icon-lianxian_icon" />
         <span>连线</span>
       </a>
@@ -168,7 +167,6 @@ const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
       </a>
       <a
         className={styles.toolItem}
-        style={{ marginRight: 60 }}
         onClick={() => canvas.paste()}
       >
         <CustomIcon type="icon-niantie" />
@@ -180,7 +178,6 @@ const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
       </a>
       <a
         className={styles.toolItem}
-        style={{ marginRight: 60 }}
         onClick={() => canvas.redo()}
       >
         <CustomIcon type="icon-icon_huifu" />
@@ -200,7 +197,6 @@ const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
       </a>
       <a
         className={styles.toolItem}
-        style={{ marginRight: 60 }}
         onClick={() => nodePanelLevel('top')}
       >
         <CustomIcon type="icon-ziyuan" />
@@ -212,7 +208,6 @@ const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
       </a>
       <a
         className={styles.toolItem}
-        style={{ marginRight: 60 }}
         onClick={() => handleCombine('unCombo')}
       >
         <CustomIcon type="icon-quxiaozuhe" />
@@ -257,7 +252,7 @@ const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
           onClick={() => scaleZoomOut()}
         />
       </a>
-      <a className={styles.toolItem} style={{ margin: '0 60px 0 30px' }}>
+      <a className={styles.toolItem} style={{ margin: '0 30px' }}>
         <CustomIcon type="icon-quanping" />
         <span>全屏</span>
       </a>
