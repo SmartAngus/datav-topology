@@ -17,6 +17,7 @@ export class Socket {
   }
 
   onmessage = (e: MessageEvent) => {
+    console.log("socket init onmessage")
     if (!this.data.pens.length || !e || !e.data) {
       return;
     }

@@ -23,6 +23,7 @@ import { formatPadding } from './utils/padding';
 import { Socket } from './socket';
 import { MQTT } from './mqtt';
 import { Direction } from './models';
+import { canvas } from '../../../components/Layout'
 
 const resizeCursors = ['nw-resize', 'ne-resize', 'se-resize', 'sw-resize'];
 enum MoveInType {
@@ -532,6 +533,13 @@ export class Topology {
     this.closeSocket();
     if (url || this.data.websocket) {
       this.socket = new Socket(url || this.data.websocket, this.data);
+      console.log("openSocket",this.socket)
+      this.socket.socket.onopen=()=>{
+        console.log("socket open")
+        canvas.socket.send(JSON.stringify({
+          qtDataList: [{id: "6413f3a606754c31987ec584ed56d5b7", type: 2},{id: "b32723eaebfe48aaa0f85970c3a39036", type: 2}],
+          subscribe: true
+        }))}
     }
   }
 
@@ -1693,11 +1701,13 @@ export class Topology {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
     if (this.data.bkColor) {
-      ctx.fillStyle = this.data.bkColor;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // ctx.fillStyle = this.data.bkColor;
+      // ctx.fillRect(0, 0, canvas.width, canvas.height);
+      console.log(this.parentElem.style)
     }
     if (this.data.bkImage) {
-      ctx.drawImage(this.canvas.bkImg, 0, 0, canvas.width, canvas.height);
+      // ctx.drawImage(this.canvas.bkImg, 0, 0, canvas.width, canvas.height);
+
     }
 
     for (const item of this.data.pens) {

@@ -16,17 +16,35 @@ interface ICanvasProps extends FormProps {
 const BackgroundCanvasProps:React.FC<ICanvasProps> = ({ data }) => {
   const [form]=Form.useForm()
   const { bkColor, bkImage } = data.data;
-  const [wsAddress, setWsAddress] = useState('ws://123.207.136.134:9010/ajaxchattest');
+  const [wsAddress, setWsAddress] = useState('ws://47.96.159.115:51060/ws?token=1NU6lvRQmTVfx4c7ppOFJb');
 
   console.log(canvas.layout);
 
   useEffect(() => {
-
+    form.validateFields(['bkColor','bkImage']).then((values)=>{
+      console.log("form valid")
+    })
+    // form.validateFields((err, value) => {
+    //   if (err) return;
+    //   data.clearBkImg();
+    //   data.data.bkColor = value.bkColor;
+    //   data.data.bkImage = value.bkImage;
+    //   data.render();
+    //   form.resetFields();
+    // });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form]);
 
   /**
    * 渲染位置和大小的表单
    */
+  const handleFormValueChange = (changeValues,allValues)=>{
+    for(let k in changeValues){
+      data.data[k]=changeValues[k]
+    }
+    data.render();
+    form.resetFields();
+  }
 
   const renderForm = useMemo(() => {
     const formLayout = {
@@ -34,15 +52,15 @@ const BackgroundCanvasProps:React.FC<ICanvasProps> = ({ data }) => {
       wrapperCol: { span: 15 }
     };
     return (
-      <Form {...formLayout} style={{ marginTop: 10, position: 'relative' }}>
+      <Form {...formLayout} style={{ marginTop: 10, position: 'relative' }} onValuesChange={handleFormValueChange}>
         <Row>
           <Col span={24}>
-            <Form.Item label="背景颜色">
+            <Form.Item name="bkColor" label="背景颜色">
              <Input type="color" />
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item label="背景图片">
+            <Form.Item name="bkImage" label="背景图片">
               <TextArea placeholder="请输入图片的地址" />
             </Form.Item>
           </Col>
@@ -70,8 +88,17 @@ const BackgroundCanvasProps:React.FC<ICanvasProps> = ({ data }) => {
   const onHandleConnectWS = () => {
     canvas.openSocket(wsAddress);
     console.log("onHandleConnectWS",wsAddress)
-    canvas.socket.onmessage=(a)=>{
-      console.log("sssss")
+    canvas.socket.socket.onmessage=(a)=>{
+      console.log("socket onmessage")
+    }
+    canvas.socket.socket.onopen=()=>{
+      console.log("socket open")
+      canvas.socket.send(JSON.stringify({
+            qtDataList: [{id: "6413f3a606754c31987ec584ed56d5b7", type: 2},{id: "b32723eaebfe48aaa0f85970c3a39036", type: 2}],
+            subscribe: true
+      }))}
+    canvas.socket.socket.onerror=()=>{
+      console.log("socket onerror")
     }
     // const index = new WebSocket(wsAddress);
     // //打开事件

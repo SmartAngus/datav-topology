@@ -510,7 +510,7 @@ export const EditorLayout = ({ history }) => {
         </div>
         <div className="full">
           <div>
-            <div id="topology-canvas" style={{ height: 768, width: 1366,background:"#ccc", }} onContextMenu={handleContextMenu} />
+            <div id="topology-canvas" style={{ height: 768, width: 1366,background:"#fff", }} onContextMenu={handleContextMenu} />
           </div>
         </div>
         <div className="props">{renderRightArea}</div>

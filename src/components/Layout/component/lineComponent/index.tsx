@@ -9,7 +9,7 @@ interface ICanvasProps extends FormProps {
   data?: any,
   onFormValueChange?:(value:any)=>void;
 }
-const LineCanvasProps:React.FC<ICanvasProps> = ({ data}) => {
+const LineCanvasProps:React.FC<ICanvasProps> = ({ data,onFormValueChange}) => {
   const [form] = Form.useForm()
 
   const { lineWidth, dash, strokeStyle, name, fromArrow, toArrow } = data?.line || {};
@@ -21,12 +21,15 @@ const LineCanvasProps:React.FC<ICanvasProps> = ({ data}) => {
   /**
   * 渲染位置和大小的表单
   */
+  const handleFormValueChange=(changeValues,allValues)=>{
+    onFormValueChange(allValues)
+  }
 
   const renderForm = useMemo(() => {
-    return <Form form={form}>
+    return <Form form={form} onValuesChange={handleFormValueChange}>
       <Row>
         <Col span={24}>
-          <Form.Item label="线条颜色">
+          <Form.Item name="strokeStyle" label="线条颜色">
             <Input type="color" />
           </Form.Item>
         </Col>
@@ -40,7 +43,7 @@ const LineCanvasProps:React.FC<ICanvasProps> = ({ data}) => {
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="线条样式">
+          <Form.Item name="lineDash" label="线条样式">
               <Select style={{ width: '95%' }}>
                 <Option value={0}>_________</Option>
                 <Option value={1}>---------</Option>
@@ -50,7 +53,7 @@ const LineCanvasProps:React.FC<ICanvasProps> = ({ data}) => {
           </Form.Item>
         </Col>
         <Col offset={1} span={11}>
-          <Form.Item label="线条宽度">
+          <Form.Item name="lineWidth" label="线条宽度">
            <InputNumber style={{ width: '100%' }} />
           </Form.Item>
         </Col>
