@@ -1,365 +1,290 @@
 import React, { useState } from 'react';
-import { Menu, Button, Tag, Popover } from 'antd';
-import * as FileSaver from 'file-saver';
-import './index.css';
+import { Topology } from '../../topology/core';
+import { History } from 'history';
+import { Button, Menu, Popover, Tag, Space } from 'antd';
+import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import CustomIcon from '../config/iconConfig';
+import styles from './index.module.scss';
+
+interface HeaderProps {
+  canvas: Topology;
+  history: History;
+}
+
 const ButtonGroup = Button.Group;
-const { SubMenu } = Menu;
-const Header = ({ canvas, history }) => {
 
-  const [isLock, setIsLock] = useState(false); // 是否处于锁定状态
-
+const Header: React.FC<HeaderProps> = ({ canvas, history }: HeaderProps) => {
   const [scaleNumber, setScaleNumber] = useState(1); // 缩放的基数
 
-  const [lineStyle, setLineStyle] = useState('直线')
+  const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
 
-  const [fromArrowType, setFromArrowType] = useState('无箭头')
-
-  const [toArrowType, setToArrowType] = useState('实心三角形')
-
-  /**
-  * 导入json
-  */
-
-  const onHandleImportJson = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.onchange = event => {
-      const elem = (event.srcElement || event.target) as any;
-      if (elem.files && elem.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          const text = e.target.result + '';
-          try {
-            const data = JSON.parse(text);
-            canvas.open(data);
-          } catch (e) {
-            return false;
-          } finally {
-
-          }
-        };
-        reader.readAsText(elem.files[0]);
-      }
-    };
-    input.click();
-  }
+  const handleSave = () => {
+    console.log('save');
+    // FileSaver.saveAs(
+    //   new Blob([JSON.stringify(canvas.data)], {
+    //     type: 'text/plain;charset=utf-8',
+    //   }),
+    //   `le5le.topology.json`
+    // );
+  };
 
   /**
-  * 保存为svg
-  */
-
-  const onHandleSaveToSvg = () => {
-    const C2S = (window as any).C2S;
-    const ctx = new C2S(canvas.canvas.width + 200, canvas.canvas.height + 200);
-    if (canvas.data.pens) {
-      for (const item of canvas.data.pens) {
-        item.render(ctx);
-      }
-    }
-    let mySerializedSVG = ctx.getSerializedSvg();
-    mySerializedSVG = mySerializedSVG.replace(
-      '<defs/>',
-      `<defs>
-    <style type="text/css">
-      @font-face {
-        font-family: 'topology';
-        src: url('http://at.alicdn.com/t/font_1331132_h688rvffmbc.ttf?t=1569311680797') format('truetype');
-      }
-    </style>
-  </defs>`
-    );
-    mySerializedSVG = mySerializedSVG.replace(/--le5le--/g, '&#x');
-    const urlObject = (window.URL || window) as any;
-    const export_blob = new Blob([mySerializedSVG]);
-    const url = urlObject.createObjectURL(export_blob);
-    const a = document.createElement('a');
-    a.setAttribute('download', 'le5le.topology.svg');
-    a.setAttribute('href', url);
-    const evt = document.createEvent('MouseEvents');
-    evt.initEvent('click', true, true);
-    a.dispatchEvent(evt);
-  }
-
-  /**
-  * 选中menu时, 触发的函数
-  */
-
-  const onHandleSelect = data => {
-    switch (data.key) {
-      case 'create_new':
-        canvas.open({ nodes: [], lines: [] });
+   * 成组
+   * @param key 'combo': 成组  'unCombo': 解组
+   */
+  const handleCombine = (key: string) => {
+    const pens = canvas.activeLayer.pens;
+    switch (key) {
+      case 'combo':
+        canvas.combine(pens);
         break;
-      case 'import_json':
-        onHandleImportJson();
-        break;
-      case 'save_json':
-        FileSaver.saveAs(
-          new Blob([JSON.stringify(canvas.data)], { type: 'text/plain;charset=utf-8' }),
-          `le5le.topology.json`
-        );
-        break;
-      case 'save_png':
-        canvas.saveAsImage('le5le.topology.png');
-        break;
-      case 'save_svg':
-        onHandleSaveToSvg();
-        break;
-      case 'undo':
-        canvas.undo();
-        break;
-      case 'redo':
-        canvas.redo();
-        break;
-      case 'copy':
-        canvas.copy();
-        break;
-      case 'cut':
-        canvas.cut();
-        break;
-      case 'paste':
-        canvas.paste();
-        break;
-      case 'preview':
-        let reader = new FileReader();
-        const result = new Blob([JSON.stringify(canvas.data)], { type: 'text/plain;charset=utf-8' });
-        reader.readAsText(result, 'text/plain;charset=utf-8');
-        reader.onload = (e) => {
-          history.push({ pathname: '/preview', state: { data: JSON.parse(reader.result as any) } });
-        }
+      case 'unCombo':
+        pens
+          .filter((pen) => pen.name === 'combine')
+          .forEach((pen) => canvas.uncombine(pen));
         break;
       default:
         break;
     }
-  }
+  };
 
   /**
-  * 放大画布
-  */
+   * 置于顶层(top)、置于底层(bottom)、上移一层(up)、下移一层(down)
+   */
+  const nodePanelLevel = (key: string) => {
+    // 获取选中的节点
+    const pens = canvas.activeLayer.pens;
+    pens.forEach((pen) => {
+      switch (key) {
+        case 'bottom':
+          canvas.bottom(pen);
+          return;
+        case 'top':
+          canvas.top(pen);
+          return;
+        case 'up':
+          canvas.up(pen);
+          return;
+        case 'down':
+          canvas.down(pen);
+          return;
+        default:
+          return;
+      }
+    });
+  };
 
+  /**
+   * 放大画布
+   */
   const scaleZoomOut = () => {
-    if (scaleNumber < 5) {
-      setScaleNumber(scaleNumber + 0.5);
-      canvas.scaleTo(scaleNumber + 0.5)
+    if (scaleNumber < 3) {
+      setScaleNumber(scaleNumber + 0.1);
+      canvas.scaleTo(scaleNumber + 0.1);
     }
-  }
+  };
 
   /**
    * 缩小画布
    */
-
   const scaleZoomIn = () => {
-    if (scaleNumber > 0.5) {
-      setScaleNumber(scaleNumber - 0.5);
-      canvas.scaleTo(scaleNumber - 0.5)
+    if (scaleNumber > 0.3) {
+      setScaleNumber(scaleNumber - 0.1);
+      canvas.scaleTo(scaleNumber - 0.1);
     }
-  }
+  };
 
   /**
-  * 设置默认的连线类型
-  */
-
-  const onHandleSelectMenu = data => {
-    setLineStyle(data.item.props.children);
-    canvas.data.lineName = data.key;
-    canvas.render();
-  }
+   * 点击选择缩放菜单后隐藏
+   */
+  const handleScalePopClick = (visible) => {
+    setScaleVisible(visible);
+  };
 
   /**
-  * 设置默认的连线起始箭头
-  */
-
- const onHandleSelectMenu1 = data => {
-  setFromArrowType(data.item.props.children);
-  canvas.data.fromArrowType = data.key;
-  canvas.render();
-}
-
-  /**
-  * 设置默认的连线终止箭头
-  */
-
- const onHandleSelectMenu2 = data => {
-  setToArrowType(data.item.props.children);
-  canvas.data.toArrowType = data.key;
-  canvas.render();
-}
-
+   * 处理选择缩放菜单数据
+   */
+  const handleSelectScaleMenu = (data) => {
+    if (data.key === 'adaptive') {
+    } else {
+      setScaleNumber(parseInt(data.key) / 100);
+      canvas.scaleTo(parseInt(data.key) / 100);
+    }
+    setScaleVisible(false);
+  };
 
   /**
-  * 元素连线之间的选项
-  */
-
- const menu2 = (
-  <Menu onClick={data => onHandleSelectMenu2(data)} style={{ border: 0 }}>
-    <Menu.Item key="空">
-      无箭头
-    </Menu.Item>
-    <Menu.Item key="triangleSolid">
-      实心三角形
-    </Menu.Item>
-    <Menu.Item key="triangle">
-      空心三角形
-    </Menu.Item>
-    <Menu.Item key="diamondSolid">
-      实心菱形
-    </Menu.Item>
-    <Menu.Item key="diamond">
-      空心菱形
-    </Menu.Item>
-    <Menu.Item key="circleSolid">
-      实心圆
-    </Menu.Item>
-    <Menu.Item key="circle">
-      空心圆
-    </Menu.Item>
-    <Menu.Item key="line">
-      线型箭头
-    </Menu.Item>
-    <Menu.Item key="lineUp">
-      上单边线箭头
-    </Menu.Item>
-    <Menu.Item key="lineDown">
-      下单边线箭头
-    </Menu.Item>
-  </Menu>
-);
+   * 预览
+   */
+  const handlePreview = () => {
+    let reader = new FileReader();
+    const result = new Blob([JSON.stringify(canvas.data)], {
+      type: 'text/plain;charset=utf-8',
+    });
+    reader.readAsText(result, 'text/plain;charset=utf-8');
+    reader.onload = (e) => {
+      history.push({
+        pathname: '/preview',
+        state: { data: JSON.parse(reader.result as any) },
+      });
+    };
+  };
 
   /**
-  * 元素连线之间的选项
-  */
-
-  const menu1 = (
-    <Menu onClick={data => onHandleSelectMenu1(data)} style={{ border: 0 }}>
-      <Menu.Item key="空">
-        无箭头
-      </Menu.Item>
-      <Menu.Item key="triangleSolid">
-        实心三角形
-      </Menu.Item>
-      <Menu.Item key="triangle">
-        空心三角形
-      </Menu.Item>
-      <Menu.Item key="diamondSolid">
-        实心菱形
-      </Menu.Item>
-      <Menu.Item key="diamond">
-        空心菱形
-      </Menu.Item>
-      <Menu.Item key="circleSolid">
-        实心圆
-      </Menu.Item>
-      <Menu.Item key="circle">
-        空心圆
-      </Menu.Item>
-      <Menu.Item key="line">
-        线型箭头
-      </Menu.Item>
-      <Menu.Item key="lineUp">
-        上单边线箭头
-      </Menu.Item>
-      <Menu.Item key="lineDown">
-        下单边线箭头
-      </Menu.Item>
-    </Menu>
-  );
-
-
-  /**
-  * 连线起始箭头
-  */
-
-  const menu = (
-    <Menu onClick={data => onHandleSelectMenu(data)} style={{ border: 0 }}>
-      <Menu.Item key="line">
-        直线
-    </Menu.Item>
-      <Menu.Item key="polyline">
-        折线
-    </Menu.Item>
-      <Menu.Item key="curve">
-        曲线
-    </Menu.Item>
+   * 缩放比例菜单
+   */
+  const scaleMenu = (
+    <Menu onClick={(data) => handleSelectScaleMenu(data)} style={{ border: 0 }}>
+      <Menu.Item key="50">50%</Menu.Item>
+      <Menu.Item key="100">100%</Menu.Item>
+      <Menu.Item key="150">150%</Menu.Item>
+      <Menu.Item key="200">200%</Menu.Item>
+      <Menu.Divider />
+      <Menu.Item key="adaptive">适应屏幕</Menu.Item>
     </Menu>
   );
 
   return (
-    <div style={{ height: 48, width: '100vw', borderBottom: '1px solid #e8e8e8' }}>
-      <Menu mode="horizontal" style={{ width: 500, float: 'left' }} onClick={onHandleSelect}>
-        <SubMenu
-          title={
-            <span className="submenu-title-wrapper">
-              文件
-            </span>
-          }
+    <div className={styles.toolsHeader}>
+      <a
+        className={styles.toolItem}
+        style={{ marginRight: 100 }}
+        onClick={() => console.log('canvas>>>', canvas)}
+      >
+        <CustomIcon type="icon-exit" />
+        <span>退出</span>
+      </a>
+      <a className={styles.toolItem} style={{ marginRight: 60 }}>
+        <CustomIcon type="icon-lianxian_icon" />
+        <span>连线</span>
+      </a>
+      <a className={styles.toolItem} onClick={() => canvas.cut()}>
+        <CustomIcon type="icon-jianqie" />
+        <span>剪切</span>
+      </a>
+      <a className={styles.toolItem} onClick={() => canvas.copy()}>
+        <CustomIcon type="icon-fuzhi" />
+        <span>复制</span>
+      </a>
+      <a
+        className={styles.toolItem}
+        style={{ marginRight: 60 }}
+        onClick={() => canvas.paste()}
+      >
+        <CustomIcon type="icon-niantie" />
+        <span>粘贴</span>
+      </a>
+      <a className={styles.toolItem} onClick={() => canvas.undo()}>
+        <CustomIcon type="icon-chexiao" />
+        <span>撤销</span>
+      </a>
+      <a
+        className={styles.toolItem}
+        style={{ marginRight: 60 }}
+        onClick={() => canvas.redo()}
+      >
+        <CustomIcon type="icon-icon_huifu" />
+        <span>恢复</span>
+      </a>
+      <a className={styles.toolItem} onClick={() => nodePanelLevel('bottom')}>
+        <CustomIcon type="icon-zhiyudiceng" />
+        <span>置于底层</span>
+      </a>
+      <a className={styles.toolItem} onClick={() => nodePanelLevel('down')}>
+        <CustomIcon type="icon-zhiyudiceng" />
+        <span>后置一层</span>
+      </a>
+      <a className={styles.toolItem} onClick={() => nodePanelLevel('up')}>
+        <CustomIcon type="icon-ziyuan" />
+        <span>前置一层</span>
+      </a>
+      <a
+        className={styles.toolItem}
+        style={{ marginRight: 60 }}
+        onClick={() => nodePanelLevel('top')}
+      >
+        <CustomIcon type="icon-ziyuan" />
+        <span>置于顶层</span>
+      </a>
+      <a className={styles.toolItem} onClick={() => handleCombine('combo')}>
+        <CustomIcon type="icon-jianlizuhe" />
+        <span>编组</span>
+      </a>
+      <a
+        className={styles.toolItem}
+        style={{ marginRight: 60 }}
+        onClick={() => handleCombine('unCombo')}
+      >
+        <CustomIcon type="icon-quxiaozuhe" />
+        <span>解组</span>
+      </a>
+      <a
+        style={{
+          display: 'inline-block',
+          marginTop: '5px',
+          background: '#F0F0F0',
+          borderRadius: '4px',
+          height: 36,
+          lineHeight: '36px',
+        }}
+      >
+        <Button
+          size="small"
+          shape="circle"
+          icon={<MinusOutlined style={{ color: '#666666' }} />}
+          onClick={() => scaleZoomIn()}
+        />
+        <Popover
+          content={scaleMenu}
+          trigger="click"
+          visible={scaleVisible}
+          onVisibleChange={handleScalePopClick}
         >
-          <Menu.Item key="create_new">新建文件</Menu.Item>
-          <Menu.Item key="import_json">打开本地文件</Menu.Item>
-          <Menu.Divider>{}</Menu.Divider>
-          <Menu.Item key="save_json">保存到本地</Menu.Item>
-          <Menu.Item key="save_png">保存为PNG</Menu.Item>
-          <Menu.Item key="save_svg">保存为SVG</Menu.Item>
-        </SubMenu>
-
-        <SubMenu
-          title={
-            <span className="submenu-title-wrapper">
-              编辑
-            </span>
-          }
-        >
-          <Menu.Item key="undo">撤销</Menu.Item>
-          <Menu.Item key="redo">恢复</Menu.Item>
-          <Menu.Divider>{}</Menu.Divider>
-          <Menu.Item key="copy">复制</Menu.Item>
-          <Menu.Item key="cut">剪切</Menu.Item>
-          <Menu.Item key="paste">粘贴</Menu.Item>
-        </SubMenu>
-
-        <SubMenu
-          title={
-            <span className="submenu-title-wrapper">
-              社区
-            </span>
-          }
-        >
-          <Menu.Item key="issues"><a href="https://github.com/Summer-andy/topology-react/issues" rel="noopener noreferrer" target="_blank">咨询与建议</a></Menu.Item>
-          <Menu.Item key="github"><a href="https://github.com/Summer-andy/topology-react/" rel="noopener noreferrer" target="_blank">开源github</a></Menu.Item>
-          <Menu.Item key="docs"> <a href="https://www.yuque.com/alsmile/topology/installation" rel="noopener noreferrer" target="_blank">开发文档</a></Menu.Item>
-        </SubMenu>
-      </Menu>
-
-      <Tag color="cyan" style={{ float: 'right', right: 10, marginTop: 12 }}>x{scaleNumber}</Tag>
-
-      <ButtonGroup style={{ float: 'right', right: 10, marginTop: 7 }}>
-        <Popover content={menu} title="默认连线类型" trigger="hover">
-          <Button>{lineStyle}</Button>
+          <span
+            style={{
+              margin: '0 12px',
+              width: '4ch',
+              display: 'inline-block',
+            }}
+          >
+            {Math.round(scaleNumber * 100)}%
+          </span>
         </Popover>
+        <Button
+          size="small"
+          shape="circle"
+          icon={<PlusOutlined style={{ color: '#666666' }} />}
+          onClick={() => scaleZoomOut()}
+        />
+      </a>
+      <a className={styles.toolItem} style={{ margin: '0 60px 0 30px' }}>
+        <CustomIcon type="icon-quanping" />
+        <span>全屏</span>
+      </a>
+      <a style={{ lineHeight: '48px', marginRight: 30 }}>
+        <CustomIcon type="icon-peizhi-" />
+        <span style={{ marginLeft: 5 }}>配置看板</span>
+      </a>
 
-        <Popover content={menu1} title="默认起点箭头" trigger="hover">
-          <Button>{fromArrowType}</Button>
-        </Popover>
+      <Tag
+        color="#F0DCCE"
+        style={{
+          color: '#FA6400',
+          height: '28px',
+          padding: '3px 10px',
+          marginTop: '10px',
+        }}
+      >
+        修改未保存
+      </Tag>
 
-        <Popover content={menu2} title="默认终点箭头" trigger="hover">
-          <Button>{toArrowType}</Button>
-        </Popover>
-
-        <Button onClick={() => onHandleSelect({ key: 'preview' })}>
-          预览
-        </Button>
-        {
-          isLock ? <Button onClick={() => { setIsLock(false); canvas.lock(0) }}>
-          解锁
-        </Button> : <Button onClick={() => { setIsLock(true); canvas.lock(2) }}>
-
-          锁定
-        </Button>
-        }
-        <Button onClick={() => scaleZoomOut()}>
-          +
-        </Button>
-        <Button onClick={() => scaleZoomIn()} >
-          -
-        </Button>
+      <ButtonGroup style={{ flex: 1, flexDirection: 'row-reverse', right: 20 }}>
+        <Space size="large">
+          <Button onClick={handlePreview}>预览</Button>
+          <Button type="primary" onClick={handleSave}>
+            保存
+          </Button>
+        </Space>
       </ButtonGroup>
     </div>
   );
