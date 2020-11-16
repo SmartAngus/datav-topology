@@ -161,6 +161,9 @@ export const EditorLayout = ({ history }) => {
   useEffect(()=>{
       console.log("isLoadCanvas==",isLoadCanvas)
     console.log(canvas.data)
+    if(canvas.data0&&canvas.data.pens.length>0){// 有数据，去遍历有websocket的组件，并订阅
+
+    }
   },[])
 
   /**
