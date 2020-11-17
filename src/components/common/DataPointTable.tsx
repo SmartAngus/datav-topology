@@ -96,28 +96,28 @@ const DataPointTable=({onSelectedDataPoint}:DataPointTable)=>{
     // 获取数据
     const formData = new FormData()
 
-    // const param = {
-    //   id: '1a99aa5c58144a7b8ce8230ace2c53b6',
-    //   dataType: 1,
-    //   dataTypeList: [1],
-    //   pagination: {current: 1, pageSize: 10, total: 0},
-    // }
-    // const instance = axios.create({
-    //   baseURL:'http://qt.test.bicisims.com',
-    //   timeout:10000000,
-    //   maxContentLength:1000000000
-    // });
-    // // 获取面板数据
-    // instance.post("/api/applications/newBoard/detail",{
-    //   headers: {
-    //     'X-Requested-With': 'XMLHttpRequest',
-    //     'token':'development_of_special_token_by_star_quest',
-    //     'Content-Type':'application/json'
-    //   },
-    //   params: param
-    // }).then((res)=>{
-    //   console.log("detail",res)
-    // });// end then
+    const param = {
+      id: '1a99aa5c58144a7b8ce8230ace2c53b6',
+      dataType: 1,
+      dataTypeList: [1],
+      pagination: {current: 1, pageSize: 10, total: 0},
+    }
+    const instance = axios.create({
+      baseURL:'http://qt.test.bicisims.com',
+      timeout:10000000,
+      maxContentLength:1000000000,
+      withCredentials:false
+    });
+    // 获取面板数据
+    instance.post("/api/manager/datapoint/list",param,{
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'token':'1NU6lvRQmTVfx4c7ppOFJb',
+        'Content-Type':'application/json'
+      }
+    }).then((res)=>{
+      console.log("detail",res)
+    });// end then
 
   })
 

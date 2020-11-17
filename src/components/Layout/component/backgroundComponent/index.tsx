@@ -95,19 +95,41 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
 
   const onHandleConnectWS = () => {
     canvas.openSocket(wsAddress);
-    // console.log("onHandleConnectWS",wsAddress)
-    canvas.socket.socket.onmessage=(data)=>{
-      // console.log("socket onmessage",data.data)
-    }
-    canvas.socket.socket.onopen=()=>{
-      // console.log("socket open")
-      // canvas.socket.socket.send(JSON.stringify({
-      //       qtDataList: [{id: "6413f3a606754c31987ec584ed56d5b7", type: 2},{id: "b32723eaebfe48aaa0f85970c3a39036", type: 2}],
-      //       subscribe: true
-      // }))
-    }
+
     canvas.socket.socket.onerror=()=>{
-      // console.log("socket onerror")
+       console.log("socket onerror")
+    }
+    canvas.socket.socket.onopen=()=> {
+      console.log("onopen")
+      if (canvas.data && canvas.data.pens.length > 0) {
+        // 有数据，去遍历有websocket的组件，并订阅
+        if(canvas.socket!=undefined){
+          (canvas.data.pens||[]).map((node)=>{
+            if(node.property?.dataPointParam?.qtDataList?.length>0){
+              canvas.socket.socket.send(JSON.stringify(({...node.property.dataPointParam,tid:node.TID,id:node.id})))
+            }
+          })
+        }
+      }
+    }
+    canvas.socket.socket.onmessage=(data)=>{
+      console.log("socket onmessage",data.data)
+      if (canvas.data && canvas.data.pens.length > 0) {
+        // 有数据，去遍历有websocket的组件，并订阅
+        if(canvas.socket!=undefined){
+          (canvas.data.pens||[]).map((node)=> {
+            if (node.property?.dataPointParam?.qtDataList?.length > 0) {
+              const r = JSON.parse(data.data)
+              if(node.name=='biciVarer'){
+                if(node.text!=r.value){
+                  node.text=r.value;
+                  canvas.updateProps(false)
+                }
+              }
+            }
+          })
+        }
+      }
     }
     // const index = new WebSocket(wsAddress);
     // //打开事件

@@ -43,8 +43,8 @@ export const Tools = [
             dataDot:1,
             dataPointParam:{
               qtDataList:[{
-                id:"6413f3a606754c31987ec584ed56d5b7",// id 为数据点id
-                type:2
+                id:"189369fd57a145d3b3e516dcc6273538",// id 为数据点id
+                type:1
               }],
               subscribe:true
             }
