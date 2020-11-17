@@ -116,7 +116,7 @@ export const EditorLayout = ({ history }) => {
     line: null,
     multi: false,
     nodes: null,
-    // locked: data.locked
+    locked: 0
   });
 
   // 是否显示右键菜单
@@ -138,7 +138,7 @@ export const EditorLayout = ({ history }) => {
 
     const canvasOptions: Options = {
       rotateCursor: '/rotate.cur',
-      // locked: 0,
+      locked: 1,
       autoExpandDistance: 0,
       viewPadding: [100],
       autoAnchor: false,
@@ -158,7 +158,7 @@ export const EditorLayout = ({ history }) => {
         okText: '保存',
         cancelText: '取消',
         onOk() {
-          // history.location.state.data.locked = 0;
+          history.location.state.data.locked = 0;
           canvas.open(history.location.state.data);
         },
         onCancel() {
@@ -448,7 +448,7 @@ export const EditorLayout = ({ history }) => {
           line: null,
           multi: false,
           nodes: null,
-          // locked: data.locked
+          locked: data.locked
         });
         break;
       case 'line': // 连线
@@ -458,7 +458,7 @@ export const EditorLayout = ({ history }) => {
           line: data,
           multi: false,
           nodes: null,
-          // locked: data.locked
+          locked: data.locked
         });
         break;
       case 'space': // 空白处
@@ -467,7 +467,7 @@ export const EditorLayout = ({ history }) => {
           line: null,
           multi: false,
           nodes: null,
-          // locked: null
+          locked: null
         });
         break;
       case 'rotated':
@@ -507,6 +507,7 @@ export const EditorLayout = ({ history }) => {
               line: null,
               multi: true,
               nodes: data,
+              locked:0
             }
           )
         );
