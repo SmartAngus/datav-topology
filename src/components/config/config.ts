@@ -1,3 +1,4 @@
+import {getMeasureOption} from './chartMeasure'
 export const Tools = [
   {
     group: '通用组件',
@@ -43,8 +44,8 @@ export const Tools = [
             dataDot:1,
             dataPointParam:{
               qtDataList:[{
-                id:"6413f3a606754c31987ec584ed56d5b7",// id 为数据点id
-                type:2
+                id:"189369fd57a145d3b3e516dcc6273538",// id 为数据点id
+                type:1
               }],
               subscribe:true
             }
@@ -318,7 +319,7 @@ export const Tools = [
     children: [
       {
         elementRendered: false,
-        name: '折线图',
+        name: '折线图', // 用name来区分不同的组件
         icon: 'icon-line-chart',
         data: {
           text: '折线图',
@@ -342,6 +343,9 @@ export const Tools = [
                   type: 'line'
                 }]
               }
+            },
+            property:{
+              echartsType:'line'
             }
           }
         }
@@ -359,42 +363,28 @@ export const Tools = [
           data: {
             echarts: {
               option: {
-                color: ['#3398DB'],
-                tooltip: {
-                  trigger: 'axis',
-                  axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                  }
+                legend: {},
+                tooltip: {},
+                dataset: {
+                  dimensions: ['product', '2015', '2016', '2017'],
+                  source: [
+                    {product: 'Matcha Latte', '2015': 43.3, '2016': 85.8, '2017': 93.7},
+                    {product: 'Milk Tea', '2015': 83.1, '2016': 73.4, '2017': 55.1},
+                    {product: 'Cheese Cocoa', '2015': 86.4, '2016': 65.2, '2017': 82.5},
+                    {product: 'Walnut Brownie', '2015': 72.4, '2016': 53.9, '2017': 39.1}
+                  ]
                 },
-                grid: {
-                  left: '3%',
-                  right: '4%',
-                  bottom: '3%',
-                  containLabel: true
-                },
-                xAxis: [
-                  {
-                    type: 'category',
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    axisTick: {
-                      alignWithLabel: true
-                    }
-                  }
-                ],
-                yAxis: [
-                  {
-                    type: 'value'
-                  }
-                ],
+                xAxis: {type: 'category'},
+                yAxis: {},
                 series: [
-                  {
-                    name: '直接访问',
-                    type: 'bar',
-                    barWidth: '60%',
-                    data: [10, 52, 200, 334, 390, 330, 220]
-                  }
+                  {type: 'bar'},
+                  {type: 'bar'},
+                  {type: 'bar'}
                 ]
-              }
+              } // end echarts option
+            },
+            property:{
+              echartsType:'bar'
             }
           }
         }
@@ -455,6 +445,9 @@ export const Tools = [
                   }
                 ]
               }
+            },
+            property:{
+              echartsType:'pie'
             }
           }
         }
@@ -489,10 +482,34 @@ export const Tools = [
                   }
                 ]
               }
+            },
+            property:{
+              echartsType:'gauge'
             }
           }
         }
       },
+      {
+        elementRendered: false,
+        name: '计量器',
+        icon: 'icon-line-chart',
+        data: {
+          text: '计量器',
+          rect: {
+            width: 300,
+            height: 200
+          },
+          name: 'echarts',
+          data: {
+            echarts: {
+              option: getMeasureOption()
+            },
+            property:{
+              echartsType:'chartMeasure'
+            }
+          }
+        }
+      }
     ]
   },
   {

@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Table, Tag, Space } from 'antd';
-import axios from "axios"
+import axios from 'axios';
 
 interface DataPointTable {
-  onSelectedDataPoint?:(selectedRowKeys)=>void;
+  onSelectedDataPoint?: (selectedRowKeys) => void;
 }
 
-const DataPointTable=({onSelectedDataPoint}:DataPointTable)=>{
-  const [selectedRowKeys,setSelectedRowKeys]=useState([])
+const DataPointTable = ({ onSelectedDataPoint }: DataPointTable) => {
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const columns = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: text => <a>{text}</a>,
+      render: (text) => <a>{text}</a>,
     },
     {
       title: 'Age',
@@ -29,9 +29,9 @@ const DataPointTable=({onSelectedDataPoint}:DataPointTable)=>{
       title: 'Tags',
       key: 'tags',
       dataIndex: 'tags',
-      render: tags => (
+      render: (tags) => (
         <React.Fragment>
-          {tags.map(tag => {
+          {tags.map((tag) => {
             let color = tag.length > 5 ? 'geekblue' : 'green';
             if (tag === 'loser') {
               color = 'volcano';
@@ -92,39 +92,40 @@ const DataPointTable=({onSelectedDataPoint}:DataPointTable)=>{
   // status: -1
   // type: 1
   // unit: "摄氏度"
-  useEffect(()=>{
+  useEffect(() => {
     // 获取数据
-    const formData = new FormData()
+    const formData = new FormData();
 
-    // const param = {
-    //   id: '1a99aa5c58144a7b8ce8230ace2c53b6',
-    //   dataType: 1,
-    //   dataTypeList: [1],
-    //   pagination: {current: 1, pageSize: 10, total: 0},
-    // }
-    // const instance = axios.create({
-    //   baseURL:'http://qt.test.bicisims.com',
-    //   timeout:10000000,
-    //   maxContentLength:1000000000
-    // });
-    // // 获取面板数据
-    // instance.post("/api/applications/newBoard/detail",{
-    //   headers: {
-    //     'X-Requested-With': 'XMLHttpRequest',
-    //     'token':'development_of_special_token_by_star_quest',
-    //     'Content-Type':'application/json'
-    //   },
-    //   params: param
-    // }).then((res)=>{
-    //   console.log("detail",res)
-    // });// end then
+    const param = {
+      id: '1a99aa5c58144a7b8ce8230ace2c53b6',
+      dataType: 1,
+      dataTypeList: [1],
+      pagination: { current: 1, pageSize: 10, total: 0 },
+    };
+    const instance = axios.create({
+      baseURL: 'http://qt.test.bicisims.com',
+      timeout: 10000000,
+      maxContentLength: 1000000000,
+      withCredentials: false,
+    });
+    // 获取面板数据
+    instance
+      .post('/api/manager/datapoint/list', param, {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          token: '1NU6lvRQmTVfx4c7ppOFJb',
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((res) => {
+        console.log('detail', res);
+      }); // end then
+  });
 
-  })
-
-  const onSelectChange = selectedRowKeys => {
+  const onSelectChange = (selectedRowKeys) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
-    setSelectedRowKeys(selectedRowKeys)
-    onSelectedDataPoint&&onSelectedDataPoint(selectedRowKeys)
+    setSelectedRowKeys(selectedRowKeys);
+    onSelectedDataPoint && onSelectedDataPoint(selectedRowKeys);
   };
 
   const rowSelection = {
@@ -136,7 +137,7 @@ const DataPointTable=({onSelectedDataPoint}:DataPointTable)=>{
       {
         key: 'odd',
         text: 'Select Odd Row',
-        onSelect: changableRowKeys => {
+        onSelect: (changableRowKeys) => {
           let newSelectedRowKeys = [];
           newSelectedRowKeys = changableRowKeys.filter((key, index) => {
             if (index % 2 !== 0) {
@@ -144,13 +145,13 @@ const DataPointTable=({onSelectedDataPoint}:DataPointTable)=>{
             }
             return true;
           });
-          this.setState({ selectedRowKeys: newSelectedRowKeys });
+          setSelectedRowKeys(newSelectedRowKeys);
         },
       },
       {
         key: 'even',
         text: 'Select Even Row',
-        onSelect: changableRowKeys => {
+        onSelect: (changableRowKeys) => {
           let newSelectedRowKeys = [];
           newSelectedRowKeys = changableRowKeys.filter((key, index) => {
             if (index % 2 !== 0) {
@@ -158,15 +159,14 @@ const DataPointTable=({onSelectedDataPoint}:DataPointTable)=>{
             }
             return false;
           });
-          this.setState({ selectedRowKeys: newSelectedRowKeys });
+          setSelectedRowKeys(newSelectedRowKeys);
         },
       },
     ],
   };
 
-
   return (
-    <Table columns={columns} dataSource={data} rowSelection={rowSelection}/>
-  )
-}
+    <Table columns={columns} dataSource={data} rowSelection={rowSelection} />
+  );
+};
 export default DataPointTable;

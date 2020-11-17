@@ -116,7 +116,7 @@ export const EditorLayout = ({ history }) => {
     line: null,
     multi: false,
     nodes: null,
-    // locked: data.locked
+    locked: 0,
   });
 
   // 是否显示右键菜单
@@ -138,7 +138,7 @@ export const EditorLayout = ({ history }) => {
 
     const canvasOptions: Options = {
       rotateCursor: '/rotate.cur',
-      // locked: 0,
+      locked: 1,
       autoExpandDistance: 0,
       viewPadding: [100],
       autoAnchor: false,
@@ -158,7 +158,7 @@ export const EditorLayout = ({ history }) => {
         okText: '保存',
         cancelText: '取消',
         onOk() {
-          // history.location.state.data.locked = 0;
+          history.location.state.data.locked = 0;
           canvas.open(history.location.state.data);
         },
         onCancel() {
@@ -176,9 +176,6 @@ export const EditorLayout = ({ history }) => {
   useEffect(() => {
     // console.log("isLoadCanvas==",isLoadCanvas)
     // console.log(canvas.data)
-    if (canvas.data0 && canvas.data.pens.length > 0) {
-      // 有数据，去遍历有websocket的组件，并订阅
-    }
   }, []);
 
   /**
@@ -364,6 +361,9 @@ export const EditorLayout = ({ history }) => {
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
       // 只能两层嵌套，后期需要更改，如果有多层的话
+      canvas.setValue(selected.node.id, 'setValue');
+      // 通知有数据属性更新,会重新渲染画布
+      canvas.updateProps(false);
       for (const key in value) {
         if (key.indexOf('.') > 0) {
           if (key != undefined) {
@@ -447,7 +447,7 @@ export const EditorLayout = ({ history }) => {
           line: null,
           multi: false,
           nodes: null,
-          // locked: data.locked
+          locked: data.locked,
         });
         break;
       case 'line': // 连线
@@ -457,7 +457,7 @@ export const EditorLayout = ({ history }) => {
           line: data,
           multi: false,
           nodes: null,
-          // locked: data.locked
+          locked: data.locked,
         });
         break;
       case 'space': // 空白处
@@ -466,7 +466,7 @@ export const EditorLayout = ({ history }) => {
           line: null,
           multi: false,
           nodes: null,
-          // locked: null
+          locked: null,
         });
         break;
       case 'rotated':
@@ -506,6 +506,7 @@ export const EditorLayout = ({ history }) => {
               line: null,
               multi: true,
               nodes: data,
+              locked: 0,
             }
           )
         );

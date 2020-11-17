@@ -37,6 +37,7 @@ export interface Options {
     textBaseline?: string;
   };
   rotateCursor?: string;
+  locked?:number,
   hoverCursor?: string;
   hideInput?: boolean;
   hideRotateCP?: boolean;

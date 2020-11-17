@@ -404,6 +404,7 @@ export class Topology {
   }
 
   addNode(node: Node | any, focus = false) {
+    console.log("addNode----")
     if (!drawNodeFns[node.name]) {
       return null;
     }
@@ -559,17 +560,6 @@ export class Topology {
     this.closeSocket();
     if (url || this.data.websocket) {
       this.socket = new Socket(url || this.data.websocket, this.data);
-      this.socket.socket.onopen = () => {
-        canvas.socket.send(
-          JSON.stringify({
-            qtDataList: [
-              { id: '6413f3a606754c31987ec584ed56d5b7', type: 2 },
-              { id: 'b32723eaebfe48aaa0f85970c3a39036', type: 2 },
-            ],
-            subscribe: true,
-          })
-        );
-      };
     }
   }
 
