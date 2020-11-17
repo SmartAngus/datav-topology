@@ -32,13 +32,13 @@
 }
 
 .page .tool .button a {
-    display: inline-block;
-    color: #333;
-    line-height: 1;
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    text-decoration: none !important;
+  display: inline-block;
+  color: #333;
+  line-height: 1;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  text-decoration: none !important;
 }
 
 .page .tool .button a .iconfont {
@@ -62,3 +62,4 @@
   overflow-y: auto;
   position: relative;
 }
+

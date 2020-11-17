@@ -8,10 +8,10 @@ interface ColorPickerProps {
   onChange?: (value: string) => void;
 }
 
-const ColorPicker: React.FC<ColorPickerProps> = (props) => {
+const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
   const { onChange } = props;
   const [visible, setVisible] = useState(false);
-  const [color, setColor] = useState('#ffffff');
+  const [color, setColor] = useState('rgba(155, 155, 155 ,1)');
 
   const triggerChange = (color: string) => {
     if (onChange) {
@@ -27,8 +27,10 @@ const ColorPicker: React.FC<ColorPickerProps> = (props) => {
     setVisible(false);
   };
 
-  const handleChange = (color) => {
-    setColor(color.hex);
+  const handleChange = (color: any) => {
+    setColor(
+      `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`
+    );
   };
 
   const handleSetColor = () => {
@@ -51,6 +53,7 @@ const ColorPicker: React.FC<ColorPickerProps> = (props) => {
         boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
         display: 'inline-block',
         cursor: 'pointer',
+        marginTop: '5px',
       },
       popover: {
         position: 'fixed',

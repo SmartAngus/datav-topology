@@ -1,12 +1,4 @@
-.rightArea .ant-tabs-nav .ant-tabs-tab {
-  margin: 0;
-}
-
-.rightArea .ant-tabs-bar {
-  margin: 0;
-}
-
-.rightArea .bottomTip {
+.bottomTip {
   position: fixed;
   height: 200px;
   width: 100%;
@@ -16,7 +8,7 @@
   border-top: 1px solid #333;
 }
 
-.rightArea .bottomTip li {
+.bottomTip li {
   padding-left: 5px;
   margin-left: 25px;
   height: 26px;
@@ -28,3 +20,5 @@
   /* list-style: none; */
   text-align: -webkit-match-parent;
 }
+
+
