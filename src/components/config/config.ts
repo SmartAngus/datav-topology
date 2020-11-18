@@ -9,19 +9,19 @@ export const Tools = [
         data: {
           text: '1970-01-01 00:00:00',
           rect: {
-            width: 100,
-            height: 100
+            width: 200,
+            height: 45
           },
           name: 'biciTimer',
           elementRendered:false,
           property:{
             date:{
               show:true,
-              format:'lll'
+              format:'L'
             },
             time:{
               show:true,
-              format:'lll'
+              format:'LTS'
             }
           },
           iconColor:'#ccc'
@@ -34,7 +34,7 @@ export const Tools = [
           text: '00:00:00',
           rect: {
             width: 100,
-            height: 100
+            height: 45
           },
           name: 'biciVarer',
           elementRendered:false,
@@ -44,12 +44,87 @@ export const Tools = [
             dataDot:1,
             dataPointParam:{
               qtDataList:[{
-                id:"189369fd57a145d3b3e516dcc6273538",// id 为数据点id
+                id:"02399e78150d4ac5b68bd5516e1a6851",// id 为数据点id
                 type:1
               }],
               subscribe:true
             }
           }
+        }
+      },
+      {
+        name: '数据卡片',
+        icon: 'icon-class',
+        data: {
+          text: '数据卡片',
+          rect: {
+            width: 200,
+            height: 120
+          },
+          paddingTop: 30,
+          font: {
+            fontFamily: 'Arial',
+            color: '#222',
+            fontWeight: 'bold'
+          },
+          fillStyle: '#ffffba',
+          strokeStyle: '#7e1212',
+          name: 'biciCard',
+          children: [
+            {
+              text: '10000',
+              name: 'text',
+              paddingLeft: 10,
+              paddingRight: 10,
+              paddingTop: 10,
+              paddingBottom: 10,
+              rectInParent: {
+                x: 0,
+                y: 0,
+                width: '100%',
+                height: '50%',
+              },
+              font: {
+                fontFamily: 'Arial',
+                color: '#222',
+                textAlign: 'center',
+                fontSize:20,
+                textBaseline: 'middle'
+              }
+            },
+            {
+              text: '上线 1000  下线 10',
+              name: 'text',
+              paddingLeft: 10,
+              paddingRight: 10,
+              paddingTop: 10,
+              paddingBottom: 10,
+              rectInParent: {
+                x: 0,
+                y: '50%',
+                width: '100%',
+                height: '50%',
+              },
+              font: {
+                fontFamily: 'Arial',
+                color: '#222',
+                textAlign: 'center',
+                textBaseline: 'middle'
+              }
+            }
+          ]
+        }
+      },
+      {
+        name: '指示灯',
+        icon: 'icon-final',
+        data: {
+          text: '指示灯',
+          rect: {
+            width: 30,
+            height: 30
+          },
+          name: 'biciPilot'
         }
       }
     ]
@@ -331,21 +406,92 @@ export const Tools = [
           data: {
             echarts: {
               option: {
-                xAxis: {
-                  type: 'category',
-                  data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                title:{
+                  text:'曲线图'
                 },
-                yAxis: {
-                  type: 'value'
+                legend: {},
+                tooltip: {},
+                dataset: {
+                  // 用 dimensions 指定了维度的顺序。直角坐标系中，
+                  // 默认把第一个维度映射到 X 轴上，第二个维度映射到 Y 轴上。
+                  // 如果不指定 dimensions，也可以通过指定 series.encode
+                  // 完成映射，参见后文。
+                  dimensions: ['product', '2015', '2016', '2017'],
+                  source: [
+                    {product: 'Matcha Latte', '2015': 43.3, '2016': 85.8, '2017': 93.7},
+                    {product: 'Milk Tea', '2015': 83.1, '2016': 73.4, '2017': 55.1},
+                    {product: 'Cheese Cocoa', '2015': 86.4, '2016': 65.2, '2017': 82.5},
+                    {product: 'Walnut Brownie', '2015': 72.4, '2016': 53.9, '2017': 39.1}
+                  ]
                 },
-                series: [{
-                  data: [820, 932, 901, 934, 1290, 1330, 1320],
-                  type: 'line'
-                }]
+                xAxis: {type: 'category'},
+                yAxis: {},
+                series: [
+                  {type: 'line'},
+                  {type: 'line'},
+                  {type: 'line'}
+                ]
               }
             },
             property:{
-              echartsType:'line'
+              echartsType:'line',
+              dataMethod:'aa',
+              dataDot:1,
+              dataPointParam:{
+                qtDataList:[{
+                  id:"6413f3a606754c31987ec584ed56d5b7",// id 为数据点id
+                  type:2
+                }],
+                subscribe:true
+              }
+            }
+          }
+        }
+      },
+      {
+        elementRendered: false,
+        name: '实时曲线图', // 用name来区分不同的组件
+        icon: 'icon-line-chart',
+        data: {
+          text: '实时曲线图',
+          rect: {
+            width: 300,
+            height: 200
+          },
+          name: 'echarts',
+          data: {
+            echarts: {
+              option: {
+                legend: {},
+                tooltip: {
+                  trigger: 'axis',
+                  showContent: false
+                },
+                dataset: {
+                  source: [
+                    ['product', '2012', '2013', '2014', '2015', '2016', '2017'],
+                    ['Matcha Latte', 41.1, 30.4, 65.1, 53.3, 83.8, 98.7],
+                  ]
+                },
+                xAxis: {type: 'time'},
+                yAxis: {gridIndex: 0,type:'value'},
+                grid: {top: '20%'},
+                series: [
+                  {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                ]
+              }
+            },
+            property:{
+              echartsType:'timeLine',
+              dataMethod:'aa',
+              dataDot:1,
+              dataPointParam:{
+                qtDataList:[{
+                  id:"02399e78150d4ac5b68bd5516e1a6851",// id 为数据点id
+                  type:1
+                }],
+                subscribe:true
+              }
             }
           }
         }
@@ -384,7 +530,16 @@ export const Tools = [
               } // end echarts option
             },
             property:{
-              echartsType:'bar'
+              echartsType:'bar',
+              dataMethod:'aa',
+              dataDot:1,
+              dataPointParam:{
+                qtDataList:[{
+                  id:"6413f3a606754c31987ec584ed56d5b7",// id 为数据点id
+                  type:2
+                }],
+                subscribe:true
+              }
             }
           }
         }
@@ -447,15 +602,24 @@ export const Tools = [
               }
             },
             property:{
-              echartsType:'pie'
+              echartsType:'pie',
+              dataMethod:'aa',
+              dataDot:1,
+              dataPointParam:{
+                qtDataList:[{
+                  id:"6413f3a606754c31987ec584ed56d5b7",// id 为数据点id
+                  type:2
+                }],
+                subscribe:true
+              }
             }
           }
         }
       }, {
-        name: '仪表盘',
+        name: '',
         icon: 'icon-dashboard-chart',
         data: {
-          text: '仪表盘',
+          text: '',
           rect: {
             width: 300,
             height: 300
@@ -469,8 +633,12 @@ export const Tools = [
                 },
                 toolbox: {
                   feature: {
-                    restore: {},
-                    saveAsImage: {}
+                    restore: {
+                      show:false
+                    },
+                    saveAsImage: {
+                      show:false
+                    }
                   }
                 },
                 series: [
@@ -478,13 +646,22 @@ export const Tools = [
                     name: '业务指标',
                     type: 'gauge',
                     detail: { formatter: '{value}%' },
-                    data: [{ value: 50, name: '完成率' }]
+                    data: [{ value: 0, name: '' }]
                   }
                 ]
               }
             },
             property:{
-              echartsType:'gauge'
+              echartsType:'gauge',
+              dataMethod:'aa',
+              dataDot:1,
+              dataPointParam:{
+                qtDataList:[{
+                  id:"02399e78150d4ac5b68bd5516e1a6851",// id 为数据点id
+                  type:1
+                }],
+                subscribe:true
+              }
             }
           }
         }
@@ -505,7 +682,16 @@ export const Tools = [
               option: getMeasureOption()
             },
             property:{
-              echartsType:'chartMeasure'
+              echartsType:'chartMeasure',
+              dataMethod:'aa',
+              dataDot:1,
+              dataPointParam:{
+                qtDataList:[{
+                  id:"6413f3a606754c31987ec584ed56d5b7",// id 为数据点id
+                  type:2
+                }],
+                subscribe:true
+              }
             }
           }
         }
@@ -705,7 +891,7 @@ export const Tools = [
         name: '开始',
         icon: 'icon-inital',
         data: {
-          text: '',
+          text: 'kaishi',
           rect: {
             width: 30,
             height: 30

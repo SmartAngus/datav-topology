@@ -21,6 +21,7 @@ import { canvas } from '../../index';
 import { FormProps } from 'antd/lib/form/Form';
 import CustomIcon from '../../../config/iconConfig';
 import styles from './index.module.scss';
+import { dynamicWebSocketData } from '../../../common/DynamicWebSocketData'
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -34,7 +35,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
   const [form] = Form.useForm();
   const { bkColor, bkImage } = data.data;
   const [wsAddress, setWsAddress] = useState(
-    'ws://47.96.159.115:51060/ws?token=1NU6lvRQmTVfx4c7ppOFJb'
+    'ws://47.96.159.115:51060/ws?token=6hFRgllpOJfeqO4wWUIJlu'
   );
 
   useEffect(() => {
@@ -296,42 +297,9 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
 
   const onHandleConnectWS = () => {
     canvas.openSocket(wsAddress);
+    // 将绑定获得wenbsocket数据
+    dynamicWebSocketData()
 
-    canvas.socket.socket.onerror=()=>{
-       console.log("socket onerror")
-    }
-    canvas.socket.socket.onopen=()=> {
-      console.log("onopen")
-      if (canvas.data && canvas.data.pens.length > 0) {
-        // 有数据，去遍历有websocket的组件，并订阅
-        if(canvas.socket!=undefined){
-          (canvas.data.pens||[]).map((node)=>{
-            if(node.property?.dataPointParam?.qtDataList?.length>0){
-              canvas.socket.socket.send(JSON.stringify(({...node.property.dataPointParam,tid:node.TID,id:node.id})))
-            }
-          })
-        }
-      }
-    }
-    canvas.socket.socket.onmessage=(data)=>{
-      console.log("socket onmessage",data.data)
-      if (canvas.data && canvas.data.pens.length > 0) {
-        // 有数据，去遍历有websocket的组件，并订阅
-        if(canvas.socket!=undefined){
-          (canvas.data.pens||[]).map((node)=> {
-            if (node.property?.dataPointParam?.qtDataList?.length > 0) {
-              const r = JSON.parse(data.data)
-              if(node.name=='biciVarer'){
-                if(node.text!=r.value){
-                  node.text=r.value;
-                  canvas.updateProps(false)
-                }
-              }
-            }
-          })
-        }
-      }
-    }
     // const index = new WebSocket(wsAddress);
     // //打开事件
     // index.onopen = function() {
