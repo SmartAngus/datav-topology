@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Topology } from '../../topology/core';
 import { PageHeader, Button } from 'antd';
+import moment from 'moment'
 let canvas;
 let x, y;
 const Preview = ({ history }) => {
@@ -21,7 +22,7 @@ const Preview = ({ history }) => {
   const initWebsocketData=()=>{
     console.log("initWebsocketData")
     canvas.open(history.location.state.data);
-    canvas.openSocket("ws://47.96.159.115:51060/ws?token=1NU6lvRQmTVfx4c7ppOFJb");
+    //canvas.openSocket("ws://47.96.159.115:51060/ws?token=1NU6lvRQmTVfx4c7ppOFJb");
     if(canvas!=undefined&&canvas.socket!=undefined){
       console.log("preview websocket")
       canvas.socket.socket.onopen=()=> {
@@ -57,6 +58,26 @@ const Preview = ({ history }) => {
         }
       }
     }
+    (canvas.data.pens||[]).map(node=>{
+      console.log("init timer")
+      if(node.name=='biciTimer'){
+        setInterval(()=>{
+          formatTimer(node)
+        },1000)
+      }
+    })
+  }
+  function formatTimer(node) {
+    let y=''
+    let h=''
+    if(node.property.date.show){
+      y=moment().format(node.property.date.format)
+    }
+    if(node.property.time.show){
+      h=moment().format(node.property.time.format)
+    }
+    node.text=y+' '+h
+    canvas.updateProps(false)
   }
 
   /**

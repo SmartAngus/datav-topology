@@ -1,6 +1,8 @@
 import { registerNode } from '../core'
 import {biciTimer,biciTimerIconRect,biciTimerTextRect} from './timer'
 import {biciVarer,biciVarerIconRect,biciVarerTextRect} from './varer'
+import {simpleCard,simpleCardIconRect,simpleCardTextRect} from './card'
+import {biciPilotIconRect,biciPilotTextRect,biciPilot} from './pilot'
 
 // name - node名称.
 // drawFn - node渲染函数。上面的myShape
@@ -20,4 +22,6 @@ import {biciVarer,biciVarerIconRect,biciVarerTextRect} from './varer'
 export function register() {
   registerNode("biciTimer",biciTimer,null,biciTimerIconRect,biciTimerTextRect,true)
   registerNode("biciVarer",biciVarer,null,biciVarerIconRect,biciVarerTextRect,true)
+  registerNode("biciCard",simpleCard,null,simpleCardIconRect,simpleCardTextRect,true)
+  registerNode("biciPilot",biciPilot,null,biciPilotIconRect,biciPilotTextRect,true)
 }

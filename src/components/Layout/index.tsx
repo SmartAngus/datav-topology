@@ -143,6 +143,7 @@ export const EditorLayout = ({ history }) => {
       viewPadding: [100],
       autoAnchor: false,
       cacheLen: 50,
+      hideInput:true
     };
     canvasOptions.on = onMessage;
     canvasRegister();
