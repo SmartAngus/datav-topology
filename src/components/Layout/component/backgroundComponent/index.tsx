@@ -11,20 +11,29 @@ import {
   Image,
   Upload,
   Checkbox,
+  Switch,
 } from 'antd';
 import { DownOutlined, UploadOutlined } from '@ant-design/icons';
 import MQTTComponent from './MQTTComponent';
 import { Topology } from '../../../../topology/core';
 import LayoutComponent from './LayoutComponent';
 import ColorPicker from '../../../common/ColorPicker/ColorPicker';
+import ReactSwitch from '../../../common/ReactSwitch';
 import { canvas } from '../../index';
 import { FormProps } from 'antd/lib/form/Form';
 import CustomIcon from '../../../config/iconConfig';
 import styles from './index.module.scss';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 const { TextArea } = Input;
+const panelSizeObj = {
+  '16:9': ['1920*1080', '1680*1050', '1600*900', '1366*768'],
+  '4:3': ['1024*768', '800*600'],
+  '2:3': ['1280:1920', '768*1024', '640*960', '600*800'],
+};
+
 interface ICanvasProps extends FormProps {
   data?: Topology;
   onFormValueChange?: any;
@@ -32,6 +41,14 @@ interface ICanvasProps extends FormProps {
 }
 const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
   const [form] = Form.useForm();
+  const [rcSwitchState, setRcSwitchState] = useState(
+    data.canvas.width > data.canvas.height ? false : true
+  ); // 页面布局切换
+  // 控制Popover的显示隐藏
+  const [popoverVisible, setPopoverVisible] = useState({
+    resolution: false, // 分辨率
+    bgSelect: false, // 预设背景选择
+  });
   const { bkColor, bkImage } = data.data;
   const [wsAddress, setWsAddress] = useState(
     'ws://47.96.159.115:51060/ws?token=1NU6lvRQmTVfx4c7ppOFJb'
@@ -55,53 +72,17 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
    * 渲染位置和大小的表单
    */
   const handleFormValueChange = (changeValues, allValues) => {
-    console.log(changeValues);
-    for (let k in changeValues) {
-      data.data[k] = changeValues[k];
-    }
-    data.render();
-    form.resetFields();
+    console.log('handleFormValueChange>>>', changeValues);
+    console.log('allValues>>>', allValues);
+    // for (let k in changeValues) {
+    //   data.data[k] = changeValues[k];
+    // }
+    // data.render();
+    // form.resetFields();
   };
 
-  // const renderForm = useMemo(() => {
-  //   const formLayout = {
-  //     labelCol: { span: 7 },
-  //     wrapperCol: { span: 15 },
-  //   };
-  //   return (
-  //     <Form
-  //       {...formLayout}
-  //       style={{ marginTop: 10, position: 'relative' }}
-  //       onValuesChange={handleFormValueChange}
-  //     >
-  //       <Row>
-  //         <Col span={24}>
-  //           <Form.Item name="bkColor" label="背景颜色">
-  //             {/* <Input type="color" /> */}
-  //             <ColorPicker />
-  //           </Form.Item>
-  //         </Col>
-  //         <Col span={24}>
-  //           <Form.Item name="bkImage" label="背景图片">
-  //             <TextArea placeholder="请输入图片的地址" />
-  //           </Form.Item>
-  //         </Col>
-  //         <Col span={24}>
-  //           <Form.Item label="背景网格">
-  //             <Switch
-  //               checkedChildren="开"
-  //               unCheckedChildren="关"
-  //               // checked={gridChecked}
-  //               onClick={(e) => {
-  //                 canvas.showGrid(e);
-  //               }}
-  //             />
-  //           </Form.Item>
-  //         </Col>
-  //       </Row>
-  //     </Form>
-  //   );
-  // }, [bkColor, bkImage]);
+  // 背景图片checkbox切换
+  const handleBgImgChange = () => {};
 
   // 画布背景图片上传
   const bgUploadChange = ({ file }) => {
@@ -111,181 +92,230 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
     }
   };
 
-  //
-  const bgImgChange = (e) => {
-    console.log(e.target.checked);
+  // 选择预设图片
+  const selectedBgImg = () => {
+    // TODO: 设置背景图片
+    setPopoverVisible({ ...popoverVisible, bgSelect: false });
   };
 
   // 背景颜色改变
-  const colorPickerChange = (val) => {
+  const colorPickerChange = (val: string) => {
     data.data['bkColor'] = val;
     data.render();
   };
 
+  // 网格选择切换
+  const gridOnChange = (e: CheckboxChangeEvent) => {
+    canvas.showGrid(e.target.checked);
+  };
+
+  // 画布布局切换
+  const handleRCSwitchStateChange = () => {
+    setRcSwitchState(!rcSwitchState);
+    // 宽高互换
+    const width = data.canvas.height;
+    const height = data.canvas.width;
+    data.resize({ width, height });
+  };
+
+  // 选择画布大小后重新渲染画布
+  const selectedResolution = (size: string) => {
+    const width = +size.split('*')[0];
+    const height = +size.split('*')[1];
+    data.resize({ width, height });
+    // TODO: 改变div大小
+    form.setFieldsValue({ w: width, h: height });
+    // 隐藏Popover
+    setPopoverVisible({ ...popoverVisible, resolution: false });
+  };
+
   // 分辨率Popover
-  const resolutionContent = (
-    <div>
-      <h3>16:9</h3>
-      <Row gutter={[0, 16]}>
-        <Col span={12}>
-          <a href="#">1920*1080</a>
-        </Col>
-        <Col span={12}>
-          <a href="#">1680*1050</a>
-        </Col>
-        <Col span={12}>
-          <a href="#">1600*900</a>
-        </Col>
-        <Col span={12}>
-          <a href="#">1366*768</a>
-        </Col>
-      </Row>
-      <h3>4:3</h3>
-      <Row gutter={[0, 16]}>
-        <Col span={12}>
-          <a href="#">1024*768</a>
-        </Col>
-        <Col span={12}>
-          <a href="#">800*600</a>
-        </Col>
-      </Row>
-      <h3>2:3</h3>
-      <Row gutter={[0, 16]}>
-        <Col span={12}>
-          <a href="#">1280:1920</a>
-        </Col>
-        <Col span={12}>
-          <a href="#">768*1024</a>
-        </Col>
-        <Col span={12}>
-          <a href="#">640*960</a>
-        </Col>
-        <Col span={12}>
-          <a href="#">600*800</a>
-        </Col>
-      </Row>
-    </div>
-  );
+  const resolutionContent = useMemo(() => {
+    return (
+      <div>
+        {Object.keys(panelSizeObj).map((key: string, index: number) => {
+          return (
+            <div key={index}>
+              <h3>{key}</h3>
+              <Row gutter={[0, 16]}>
+                {panelSizeObj[key].map((val: string, index: number) => {
+                  return (
+                    <Col span={12} key={index}>
+                      <a href="#" onClick={() => selectedResolution(val)}>
+                        {val}
+                      </a>
+                    </Col>
+                  );
+                })}
+              </Row>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }, [panelSizeObj]);
   const bgSeletedContent = (
     <div>
       <h3>预设图片</h3>
-      <Row
-        style={{
-          border: '1px solid #096DD9',
-          boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.06)',
-        }}
-      >
-        <Image
-          src={require('./bg01.png')}
-          preview={false}
-          alt="预设背景1"
-          width={260}
-          height={120}
-        />
-      </Row>
-      <Row
-        style={{
-          margin: '10px 0',
-          border: '1px solid #096DD9',
-          boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.06)',
-        }}
-      >
-        <Image
-          src={require('./bg02.png')}
-          preview={false}
-          alt="预设背景2"
-          width={260}
-          height={120}
-        />
-      </Row>
-      <Row>
-        <Image
-          src={require('./bg03.png')}
-          preview={false}
-          alt="预设背景3"
-          width={260}
-          height={120}
-        />
-      </Row>
+      {[1, 2, 3].map((item) => {
+        return (
+          <Row
+            key={item}
+            style={{
+              border: '1px solid #096DD9',
+              boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.06)',
+            }}
+            onClick={selectedBgImg}
+          >
+            <Image
+              src={require(`./bg0${item}.png`)}
+              preview={false}
+              alt={`预设背景${item}`}
+              width={260}
+              height={120}
+            />
+          </Row>
+        );
+      })}
     </div>
   );
+
   const renderDefultOptions = (
     <Collapse defaultActiveKey={['1']} expandIconPosition="right">
       <Panel header="基础属性" key="1">
-        <Popover
-          placement="bottom"
-          trigger="click"
-          content={resolutionContent}
-          arrowPointAtCenter
-        >
-          <Input suffix={<DownOutlined />} readOnly />
-        </Popover>
-        <Row style={{ marginTop: 15 }} gutter={[8, 0]} align="middle">
-          <Col span={8}>
-            <Input suffix="W" />
-          </Col>
-          <Col span={8}>
-            <Input suffix="H" />
-          </Col>
-          <Col span={8}>
-            <Button icon={<CustomIcon type="icon-heng" />} />
-            <Button icon={<CustomIcon type="icon-shu" />} />
-          </Col>
-        </Row>
+        <Form form={form} onValuesChange={handleFormValueChange}>
+          <Popover
+            placement="bottom"
+            trigger="click"
+            content={resolutionContent}
+            visible={popoverVisible.resolution}
+            onVisibleChange={(visible) =>
+              setPopoverVisible({ ...popoverVisible, resolution: visible })
+            }
+            arrowPointAtCenter
+          >
+            <Form.Item name="sizeVal" initialValue="自定义">
+              <Input suffix={<DownOutlined />} readOnly />
+            </Form.Item>
+          </Popover>
+
+          <Row style={{ marginTop: 15 }} gutter={[8, 0]} align="middle">
+            <Col span={8}>
+              <Form.Item name="w">
+                <Input suffix="W" />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item name="h">
+                <Input suffix="H" />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item>
+                <ReactSwitch
+                  onChange={handleRCSwitchStateChange}
+                  checked={rcSwitchState}
+                  offHandleColor="#096DD9"
+                  onHandleColor="#096DD9"
+                  offColor="#ccc"
+                  onColor="#ccc"
+                  uncheckedIcon={
+                    <CustomIcon style={{ lineHeight: 2 }} type="icon-shu" />
+                  }
+                  checkedIcon={
+                    <CustomIcon style={{ lineHeight: 2 }} type="icon-heng" />
+                  }
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
       </Panel>
       <Panel header="背景" key="2">
-        <Popover
-          placement="bottom"
-          trigger="click"
-          content={bgSeletedContent}
-          arrowPointAtCenter
-        >
-          <Input readOnly suffix={<DownOutlined />} />
-        </Popover>
-        <Row style={{ marginTop: 15 }} align="middle">
-          <Col>背景颜色</Col>
-          <Col push={1}>
-            <Checkbox />
-          </Col>
-          <Col push={2}>
-            <ColorPicker onChange={colorPickerChange} />
-          </Col>
-        </Row>
-        <Row style={{ marginTop: 15 }} align="middle">
-          <Col>背景图片</Col>
-          <Col push={1}>
-            <Checkbox onChange={bgImgChange} />
-          </Col>
-          <Col push={2}>
-            <Upload
-              action="http://qt.test.bicisims.com/api/file/file/uploadReturnPath"
-              accept="image/*"
-              data={{
-                mappingType: 107,
-                mappingId: 'ooip6ffe388d487db754b885b8aa65b9',
-              }}
-              headers={{ token: 'development_of_special_token_by_star_quest' }}
-              showUploadList={false}
-              onChange={bgUploadChange}
-            >
-              <Button icon={<UploadOutlined />}>Upload</Button>
-            </Upload>
-          </Col>
-        </Row>
+        <Form form={form} onValuesChange={handleFormValueChange}>
+          <Popover
+            placement="bottom"
+            trigger="click"
+            content={bgSeletedContent}
+            arrowPointAtCenter
+            visible={popoverVisible.bgSelect}
+            onVisibleChange={(visible) =>
+              setPopoverVisible({ ...popoverVisible, bgSelect: visible })
+            }
+          >
+            <Form.Item name="bgVal">
+              <Input readOnly suffix={<DownOutlined />} />
+            </Form.Item>
+          </Popover>
+
+          <Row style={{ marginTop: 15 }} align="middle">
+            <Col push={1}>
+              <Form.Item
+                name="bgColorCheck"
+                label="背景颜色"
+                valuePropName="checked"
+              >
+                <Checkbox />
+              </Form.Item>
+            </Col>
+            <Col push={2}>
+              <Form.Item name="bgColor">
+                <ColorPicker onChange={colorPickerChange} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col push={1}>
+              <Form.Item
+                name="bgImgCheck"
+                label="背景图片"
+                valuePropName="checked"
+              >
+                <Checkbox onChange={handleBgImgChange} />
+              </Form.Item>
+            </Col>
+            <Col push={2}>
+              <Form.Item name="upload" valuePropName="fileList">
+                <Upload
+                  action="http://qt.test.bicisims.com/api/file/file/uploadReturnPath"
+                  accept="image/*"
+                  data={{
+                    mappingType: 107,
+                    mappingId: 'ooip6ffe388d487db754b885b8aa65b9',
+                  }}
+                  headers={{
+                    token: 'development_of_special_token_by_star_quest',
+                  }}
+                  showUploadList={false}
+                  onChange={bgUploadChange}
+                >
+                  <Button icon={<UploadOutlined />}>Upload</Button>
+                </Upload>
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
       </Panel>
       <Panel header="网格" key="3">
-        <Row align="middle">
-          <Col>网格</Col>
-          <Col push={1}>
-            <Checkbox />
-          </Col>
-          <Col push={2}>
-            <ColorPicker onChange={colorPickerChange} />
-          </Col>
-          <Col push={3} span={8}>
-            <Input suffix="px" />
-          </Col>
-        </Row>
+        <Form form={form} onValuesChange={handleFormValueChange}>
+          <Row align="middle">
+            <Col push={1}>
+              <Form.Item name="gridCheck" label="网格" valuePropName="checked">
+                <Checkbox onChange={gridOnChange} />
+              </Form.Item>
+            </Col>
+            <Col push={2}>
+              <Form.Item name="gridColor">
+                <ColorPicker />
+              </Form.Item>
+            </Col>
+            <Col push={3} span={8}>
+              <Form.Item name="gridSize">
+                <Input suffix="px" />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
       </Panel>
     </Collapse>
   );
@@ -297,41 +327,47 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
   const onHandleConnectWS = () => {
     canvas.openSocket(wsAddress);
 
-    canvas.socket.socket.onerror=()=>{
-       console.log("socket onerror")
-    }
-    canvas.socket.socket.onopen=()=> {
-      console.log("onopen")
+    canvas.socket.socket.onerror = () => {
+      //  console.log("socket onerror")
+    };
+    canvas.socket.socket.onopen = () => {
+      // console.log("onopen")
       if (canvas.data && canvas.data.pens.length > 0) {
         // 有数据，去遍历有websocket的组件，并订阅
-        if(canvas.socket!=undefined){
-          (canvas.data.pens||[]).map((node)=>{
-            if(node.property?.dataPointParam?.qtDataList?.length>0){
-              canvas.socket.socket.send(JSON.stringify(({...node.property.dataPointParam,tid:node.TID,id:node.id})))
+        if (canvas.socket != undefined) {
+          (canvas.data.pens || []).map((node) => {
+            if (node.property?.dataPointParam?.qtDataList?.length > 0) {
+              canvas.socket.socket.send(
+                JSON.stringify({
+                  ...node.property.dataPointParam,
+                  tid: node.TID,
+                  id: node.id,
+                })
+              );
             }
-          })
+          });
         }
       }
-    }
-    canvas.socket.socket.onmessage=(data)=>{
-      console.log("socket onmessage",data.data)
+    };
+    canvas.socket.socket.onmessage = (data) => {
+      // console.log("socket onmessage",data.data)
       if (canvas.data && canvas.data.pens.length > 0) {
         // 有数据，去遍历有websocket的组件，并订阅
-        if(canvas.socket!=undefined){
-          (canvas.data.pens||[]).map((node)=> {
+        if (canvas.socket != undefined) {
+          (canvas.data.pens || []).map((node) => {
             if (node.property?.dataPointParam?.qtDataList?.length > 0) {
-              const r = JSON.parse(data.data)
-              if(node.name=='biciVarer'){
-                if(node.text!=r.value){
-                  node.text=r.value;
-                  canvas.updateProps(false)
+              const r = JSON.parse(data.data);
+              if (node.name == 'biciVarer') {
+                if (node.text != r.value) {
+                  node.text = r.value;
+                  canvas.updateProps(false);
                 }
               }
             }
-          })
+          });
         }
       }
-    }
+    };
     // const index = new WebSocket(wsAddress);
     // //打开事件
     // index.onopen = function() {
@@ -361,7 +397,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
 
   return (
     <div>
-      <Tabs defaultActiveKey="1" animated={false}>
+      <Tabs defaultActiveKey="1" centered>
         <TabPane tab="图文设置" key="1" style={{ margin: 0 }}>
           {renderDefultOptions}
           <ul className={styles.bottomTip}>

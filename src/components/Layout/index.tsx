@@ -437,8 +437,9 @@ export const EditorLayout = ({ history }) => {
    * @params {object} data - 节点数据
    */
 
-  const onMessage = (event, data) => {
+  const onMessage = (event: string, data: Node) => {
     const node = data;
+    // console.log('监听画布上元素的事件>>>', event);
     switch (event) {
       case 'node': // 节点
       case 'addNode':
@@ -548,9 +549,10 @@ export const EditorLayout = ({ history }) => {
   /**
    * 渲染画布右侧区域操作栏
    */
-
   const renderRightArea = useMemo(() => {
     let _component = rightAreaConfig.default;
+    // console.log('渲染画布右侧区域操作栏>>>', rightAreaConfig);
+    // console.log('selected>>>', selected)
     Object.keys(rightAreaConfig).forEach((item) => {
       if (selected[item]) {
         _component = rightAreaConfig[item];

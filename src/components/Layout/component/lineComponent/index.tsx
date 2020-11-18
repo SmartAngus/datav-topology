@@ -27,7 +27,9 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
   const { lineWidth, dash, strokeStyle, name, fromArrow, toArrow } =
     data?.line || {};
 
-  useEffect(() => {}, [form]);
+  useEffect(() => {
+    console.log(data);
+  }, [form]);
 
   /**
    * 渲染位置和大小的表单
