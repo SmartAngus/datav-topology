@@ -44,7 +44,7 @@ export const Tools = [
             dataDot:1,
             dataPointParam:{
               qtDataList:[{
-                id:"02399e78150d4ac5b68bd5516e1a6851",// id 为数据点id
+                id:"14040d68efd3401c9fd977c8e7f9bce8",// id 为数据点id
                 type:1
               }],
               subscribe:true
@@ -471,8 +471,8 @@ export const Tools = [
               dataDot:1,
               dataPointParam:{
                 qtDataList:[{
-                  id:"6413f3a606754c31987ec584ed56d5b7",// id 为数据点id
-                  type:2
+                  id:"14040d68efd3401c9fd977c8e7f9bce8",// id 为数据点id
+                  type:1
                 }],
                 subscribe:true
               }
@@ -493,24 +493,49 @@ export const Tools = [
           name: 'echarts',
           data: {
             echarts: {
-              option: {
-                legend: {},
+              option:{
+                animation: false,
+                title: {
+                  text: '总流量（kbps）'/*,
+        left:"110px"*/ },
                 tooltip: {
                   trigger: 'axis',
-                  showContent: false
+                  axisPointer: { type: 'cross' }
                 },
-                dataset: {
-                  source: [
-                    ['product', '16:20:01', '16:20:02', '16:20:03', '16:20:04', '16:20:05', '16:20:06'],
-                    ['Matcha Latte', 41.1, 30.4, 65.1, 53.3, 83.8, 98.7],
-                  ]
+                grid: {
+                  left: 50/*"50px"*/,
+                  right: 15/*"15px"*/
                 },
-                xAxis: {type: 'time'},
-                yAxis: {gridIndex: 0,type:'value'},
-                grid: {top: '20%'},
-                series: [
-                  {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                ]
+                legend: {
+                  data: ['当前流量']
+                },
+                xAxis: {
+                  boundaryGap: false,
+                  data: [1,2,3,4,5,6,7,8,9,10]
+                },
+                yAxis: { boundaryGap: false },
+                series: [{
+                  symbol: "none",/*去掉小圆点*/
+                  name: '当前流量',
+                  type: 'line',
+                  smoothMonotone:'x',
+                  smooth:true,
+                  markLine: {
+                    silent: true,
+                    data: [{
+                      yAxis: 20
+                    }, {
+                      yAxis: 40
+                    }, {
+                      yAxis: 60
+                    }, {
+                      yAxis: 100
+                    }, {
+                      yAxis: 120
+                    }]
+                  },
+                  data: []/*,             smooth:true//显示为平滑的曲线*/
+                }]
               }
             },
             property:{
@@ -519,7 +544,7 @@ export const Tools = [
               dataDot:1,
               dataPointParam:{
                 qtDataList:[{
-                  id:"02399e78150d4ac5b68bd5516e1a6851",// id 为数据点id
+                  id:"14040d68efd3401c9fd977c8e7f9bce8",// id 为数据点id
                   type:1
                 }],
                 subscribe:true
@@ -567,8 +592,8 @@ export const Tools = [
               dataDot:1,
               dataPointParam:{
                 qtDataList:[{
-                  id:"6413f3a606754c31987ec584ed56d5b7",// id 为数据点id
-                  type:2
+                  id:"14040d68efd3401c9fd977c8e7f9bce8",// id 为数据点id
+                  type:1
                 }],
                 subscribe:true
               }
@@ -639,8 +664,8 @@ export const Tools = [
               dataDot:1,
               dataPointParam:{
                 qtDataList:[{
-                  id:"6413f3a606754c31987ec584ed56d5b7",// id 为数据点id
-                  type:2
+                  id:"14040d68efd3401c9fd977c8e7f9bce8",// id 为数据点id
+                  type:1
                 }],
                 subscribe:true
               }
