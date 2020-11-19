@@ -5,13 +5,15 @@ import { SketchPicker } from 'react-color';
 import styleScss from './ColorPicker.module.scss';
 
 interface ColorPickerProps {
+  value?: string;
+  disabled?: boolean;
   onChange?: (value: string) => void;
 }
 
 const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
-  const { onChange } = props;
+  const { value, disabled, onChange } = props;
   const [visible, setVisible] = useState(false);
-  const [color, setColor] = useState('rgba(155, 155, 155 ,1)');
+  const [color, setColor] = useState(value ? value : 'rgba(155, 155, 155 ,1)');
 
   const triggerChange = (color: string) => {
     if (onChange) {
@@ -24,6 +26,7 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
   };
 
   const handleClose = () => {
+    setColor(value ? value : 'rgba(155, 155, 155 ,1)');
     setVisible(false);
   };
 
@@ -87,7 +90,7 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
           <Button onClick={handleClose} style={{ marginRight: 20 }}>
             取消
           </Button>
-          <Button type="primary" onClick={handleSetColor}>
+          <Button type="primary" onClick={handleSetColor} disabled={disabled}>
             确定
           </Button>
         </div>

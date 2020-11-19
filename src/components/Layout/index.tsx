@@ -90,6 +90,7 @@ import {
 import { Modal, Tabs } from 'antd';
 import { Tools } from '../config/config';
 import { getNodeById } from '../Service/topologyService';
+import { useClickAway } from 'ahooks';
 import Header from '../Header';
 import NodeComponent from './component/nodeComponent';
 import BackgroundComponent from './component/backgroundComponent';
@@ -101,7 +102,7 @@ import './index.css';
 import CanvasContextMenu from '../canvasContextMenu';
 const { confirm } = Modal;
 const { TabPane } = Tabs;
-export let canvas;
+export let canvas: Topology;
 
 /**
  * 编辑器画布
@@ -110,6 +111,7 @@ export let canvas;
  */
 export const EditorLayout = ({ history }) => {
   const layoutRef = useRef();
+  const contextMenuRef = useRef();
 
   const [selected, setSelected] = useState({
     node: null,
@@ -133,6 +135,10 @@ export const EditorLayout = ({ history }) => {
 
   const [isLoadCanvas, setIsLoadCanvas] = useState(false);
 
+  useClickAway(() => {
+    setShowContextmenu(false);
+  }, contextMenuRef);
+
   useEffect(() => {
     console.log('ref type>>>', typeof layoutRef);
 
@@ -143,7 +149,7 @@ export const EditorLayout = ({ history }) => {
       viewPadding: [100],
       autoAnchor: false,
       cacheLen: 50,
-      hideInput:true
+      hideInput: true,
     };
     canvasOptions.on = onMessage;
     canvasRegister();
@@ -182,7 +188,6 @@ export const EditorLayout = ({ history }) => {
   /**
    * 注册图形库
    */
-
   const canvasRegister = () => {
     registerChart();
     registerBiciComp();
@@ -312,7 +317,6 @@ export const EditorLayout = ({ history }) => {
    * 当表单数据变化时, 重新渲染canvas
    * @params {object} value - 图形的宽度,高度, x, y等等
    */
-
   const onHandleFormValueChange = useCallback(
     (value) => {
       const {
@@ -325,8 +329,10 @@ export const EditorLayout = ({ history }) => {
         fontSize,
         fontFamily,
         text,
+        fillStyle,
         ...other
       } = value;
+      console.log('改变直>>>', value);
       const changedValues = {
         node: {
           rect: other,
@@ -334,6 +340,7 @@ export const EditorLayout = ({ history }) => {
           rotate,
           lineWidth,
           strokeStyle,
+          fillStyle,
           dash,
           text,
           data,
@@ -353,7 +360,8 @@ export const EditorLayout = ({ history }) => {
           }
         }
       }
-
+      // 背景纯色
+      // selected.node['bkType'] = 0;
       canvas.updateProps(selected.node);
     },
     [selected]
@@ -391,7 +399,6 @@ export const EditorLayout = ({ history }) => {
    * 当线条表单数据变化时, 重新渲染canvas
    * @params {object} value - 图形的宽度,高度, x, y等等
    */
-
   const onHandleLineFormValueChange = useCallback(
     (value) => {
       const {
@@ -521,7 +528,6 @@ export const EditorLayout = ({ history }) => {
   /**
    * 画布右侧配置区域
    */
-
   const rightAreaConfig = useMemo(() => {
     return {
       node: selected && (
@@ -552,8 +558,6 @@ export const EditorLayout = ({ history }) => {
    */
   const renderRightArea = useMemo(() => {
     let _component = rightAreaConfig.default;
-    // console.log('渲染画布右侧区域操作栏>>>', rightAreaConfig);
-    // console.log('selected>>>', selected)
     Object.keys(rightAreaConfig).forEach((item) => {
       if (selected[item]) {
         _component = rightAreaConfig[item];
@@ -592,12 +596,12 @@ export const EditorLayout = ({ history }) => {
     }
   };
   const renderContextMenu = (
-    <div style={contextmenu as CSSProperties}>
+    <div style={contextmenu as CSSProperties} ref={contextMenuRef}>
       <CanvasContextMenu data={selected} canvas={canvas} />
     </div>
   );
   return (
-    <div ref={layoutRef}>
+    <div id="layout" ref={layoutRef}>
       {renderHeader}
       <div className="page">
         <div className="tool">

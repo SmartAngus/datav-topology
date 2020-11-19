@@ -50,14 +50,27 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
     resolution: false, // 分辨率
     bgSelect: false, // 预设背景选择
   });
-  const { bkColor, bkImage } = data.data;
   const [wsAddress, setWsAddress] = useState(
     'ws://47.96.159.115:51060/ws?token=6hFRgllpOJfeqO4wWUIJlu'
   );
 
   useEffect(() => {
     console.log(data);
-    form.validateFields(['bkColor', 'bkImage']).then((values) => {});
+    // 回显数值
+    const w = data.canvas.width;
+    const h = data.canvas.height;
+    const bgColor = data.data.bkColor;
+    const bkImage = data.data.bkImage;
+    form.setFieldsValue({
+      sizeVal: `预设·${w}*${h}`,
+      w,
+      h,
+      bgColor,
+      bgColorCheck: bgColor ? true : false,
+      bgImgCheck: bkImage ? true : false,
+      gridCheck: data.data.grid ? data.data.grid : false,
+    });
+    // form.validateFields(['bkColor', 'bkImage']).then((values) => {});
     // form.validateFields((err, value) => {
     //   if (err) return;
     //   data.clearBkImg();
@@ -93,9 +106,11 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
     }
   };
 
-  // 选择预设图片
-  const selectedBgImg = () => {
+  // 设置背景图片
+  const selectedBgImg = (url: string) => {
     // TODO: 设置背景图片
+    // 修改背景图片前，需要先canvas.clearBkImg清空旧图片
+    canvas.clearBkImg();
     setPopoverVisible({ ...popoverVisible, bgSelect: false });
   };
 
@@ -166,7 +181,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
               border: '1px solid #096DD9',
               boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.06)',
             }}
-            onClick={selectedBgImg}
+            onClick={() => selectedBgImg(require(`./bg0${item}.png`))}
           >
             <Image
               src={require(`./bg0${item}.png`)}
@@ -193,6 +208,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
             onVisibleChange={(visible) =>
               setPopoverVisible({ ...popoverVisible, resolution: visible })
             }
+            getPopupContainer={() => document.querySelector('#layout')}
             arrowPointAtCenter
           >
             <Form.Item name="sizeVal" initialValue="自定义">
@@ -243,8 +259,10 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
             onVisibleChange={(visible) =>
               setPopoverVisible({ ...popoverVisible, bgSelect: visible })
             }
+            getPopupContainer={() => document.querySelector('#layout')}
+            arrowContent
           >
-            <Form.Item name="bgVal">
+            <Form.Item name="bgVal" initialValue="预设背景">
               <Input readOnly suffix={<DownOutlined />} />
             </Form.Item>
           </Popover>
@@ -276,7 +294,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
               </Form.Item>
             </Col>
             <Col push={2}>
-              <Form.Item name="upload" valuePropName="fileList">
+              <Form.Item>
                 <Upload
                   action="http://qt.test.bicisims.com/api/file/file/uploadReturnPath"
                   accept="image/*"
@@ -392,9 +410,9 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
             </Panel> */}
           </Collapse>
         </TabPane>
-        <TabPane tab="排版布局" key="3" style={{ margin: 0 }}>
+        {/* <TabPane tab="排版布局" key="3" style={{ margin: 0 }}>
           <LayoutComponent />
-        </TabPane>
+        </TabPane> */}
       </Tabs>
     </div>
   );

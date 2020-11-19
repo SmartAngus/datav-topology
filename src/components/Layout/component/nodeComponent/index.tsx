@@ -26,23 +26,24 @@ import { FormProps } from 'antd/lib/form/Form';
 import './index.css';
 import ColorPicker from '../../../common/ColorPicker/ColorPicker';
 import { canvas } from '../../index';
+import { alignNodes } from '../../../../topology/layout/src/align';
 import AnimateComponent from './AnimateComponent';
 import DataPointTable from '../../../common/DataPointTable';
 import CustomIcon from '../../../config/iconConfig';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 const { Option } = Select;
 const { TextArea } = Input;
-const ButtonGroup = Button.Group;
 // 对齐方式 key 对齐方式 val 图标名称
 const alignObj = {
-  左对齐: 'icon-zuoduiqi',
-  右对齐: 'icon-youduiqi',
-  顶部对齐: 'icon-dingbuduiqi',
-  底部对齐: 'icon-dibuduiqi',
-  垂直居中: 'icon-chuizhijuzhong',
-  水平居中: 'icon-shuipingjuzhong',
+  left: ['左对齐', 'icon-zuoduiqi'],
+  right: ['右对齐', 'icon-youduiqi'],
+  top: ['顶部对齐', 'icon-dingbuduiqi'],
+  bottom: ['底部对齐', 'icon-dibuduiqi'],
+  center: ['垂直居中', 'icon-chuizhijuzhong'],
+  middle: ['水平居中', 'icon-shuipingjuzhong'],
 };
 
 interface ICanvasProps extends FormProps {
@@ -51,13 +52,7 @@ interface ICanvasProps extends FormProps {
   onPropertyFormValueChange?: any;
   onEventValueChange: any;
 }
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
-};
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
-};
+
 const NodeCanvasProps: React.FC<ICanvasProps> = ({
   data,
   onFormValueChange,
@@ -68,10 +63,13 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const [propertyForm] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [baseAllValues, setBaseAllValues] = useState({ ...data?.node });
+  const [checkObj, setCheckObj] = useState({
+    fill: data.node['fillStyle'] !== '', // 填充颜色checkbox
+    border: data.node['strokeStyle'] !== '#222' || data.node['lineWidth'] !== 1, // 边框颜色checkbox
+  });
 
   const { x, y, width, height } = data?.node?.rect || {};
-  const { rotate, lineWidth, strokeStyle, dash, text, id, name } =
+  const { rotate, lineWidth, strokeStyle, dash, text, id, name, fillStyle } =
     data?.node || {};
   const { color, fontSize, fontFamily } = data?.node?.font || {};
   const { property } = data?.node;
@@ -113,6 +111,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       dataDot,
     });
     console.log('property====', data);
+    console.log(checkObj);
   }, [property]);
 
   // 字段值更新时触发的回掉
@@ -120,19 +119,21 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     onFormValueChange && onFormValueChange(allValues);
   };
   const handlePropertyValuesChange = (changedValues, allValues) => {
-    console.log('allValues', allValues);
+    // console.log('allValues', allValues);
     onPropertyFormValueChange && onPropertyFormValueChange(allValues);
   };
   //
-  const handleFieldsChange = (changedValues, allValues) => {
-    //console.log("handleFieldsChange")
-  };
-  //
-  const handleFinish = () => {
-    //console.log("handleFinish")
-  };
+
   // 设置对齐方式
-  const handleAlign = (key: string) => {};
+  const handleAlign = (key: string) => {
+    const pens = canvas.activeLayer.pens;
+    const rect = canvas.activeLayer.rect;
+    console.log(canvas);
+    if (pens.length >= 2) {
+      alignNodes(pens, rect, key);
+      canvas.render();
+    }
+  };
   // 设置日期格式
   const onSetBiciTimerDataFmt = () => {};
   // 数据绑定方式
@@ -187,115 +188,145 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   /**
    * 渲染位置和大小的表单
    */
-  const renderForm = useMemo(() => {
+  const renderPositionForm = useMemo(() => {
     return (
-      <Form
-        form={form}
-        onValuesChange={handleValuesChange}
-        onFieldsChange={handleFieldsChange}
-        onFinish={handleFinish}
-      >
-        <Row>
-          <Col span={14}>
-            <Form.Item name="x" label="位置">
-              <Input suffix="X" />
-            </Form.Item>
-          </Col>
-          <Col span={9} push={1}>
-            <Form.Item name="y">
-              <Input suffix="Y" />
-            </Form.Item>
-          </Col>
-          <Col span={14}>
-            <Form.Item name="width" label="宽高">
-              <Input suffix="W" />
-            </Form.Item>
-          </Col>
-          <Col span={9} push={1}>
-            <Form.Item name="height">
-              <Input suffix="H" />
-            </Form.Item>
-          </Col>
-          <Col span={16}>
-            <Form.Item name="rotate" label="旋转角度">
-              <Input suffix="°" />
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
+      <Panel header="位置和大小" key="pos">
+        <Form form={form} onValuesChange={handleValuesChange}>
+          <Row>
+            <Col span={14}>
+              <Form.Item name="x" label="位置">
+                <Input suffix="X" />
+              </Form.Item>
+            </Col>
+            <Col span={9} push={1}>
+              <Form.Item name="y">
+                <Input suffix="Y" />
+              </Form.Item>
+            </Col>
+            <Col span={14}>
+              <Form.Item name="width" label="宽高">
+                <Input suffix="W" />
+              </Form.Item>
+            </Col>
+            <Col span={9} push={1}>
+              <Form.Item name="height">
+                <Input suffix="H" />
+              </Form.Item>
+            </Col>
+            <Col span={16}>
+              <Form.Item name="rotate" label="旋转角度">
+                <Input suffix="°" />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Panel>
     );
   }, [x, y, width, height, rotate]);
 
+  const fillColorCheckboxChange = (e: CheckboxChangeEvent) => {
+    data.node['fillStyle'] = e.target.checked
+      ? form.getFieldValue('fillStyle')
+      : '';
+    setCheckObj({ ...checkObj, fill: e.target.checked });
+    canvas.updateProps(data.node);
+  };
   /**
-   * 渲染样式的表单
+   * 渲染填充样式
    */
-
-  const renderStyleForm = useMemo(() => {
+  const renderFillStyle = useMemo(() => {
     return (
-      <Form
-        form={form}
-        onValuesChange={handleValuesChange}
-        onFieldsChange={handleFieldsChange}
-        onFinish={handleFinish}
-      >
-        <Row>
-          <Col span={24}>
-            <Form.Item name="strokeStyle" label="线条颜色">
-              <Input type="color" />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item name="dash" label="线条样式">
-              <Select style={{ width: '95%' }}>
-                <Option value={0}>_________</Option>
-                <Option value={1}>---------</Option>
-                <Option value={2}>_ _ _ _ _</Option>
-                <Option value={3}>- . - . - .</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item name="lineWidth" label="线条宽度">
-              <InputNumber style={{ width: '100%' }} />
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
+      <Panel header="填充" key="fill">
+        <Form form={form} onValuesChange={handleValuesChange}>
+          <Row align="middle">
+            <Col span={8}>
+              <Form.Item label="颜色" labelCol={{ span: 16 }} labelAlign="left">
+                <Checkbox onChange={fillColorCheckboxChange} />
+              </Form.Item>
+            </Col>
+            <Col push={1}>
+              <Form.Item name="fillStyle">
+                <ColorPicker disabled={!checkObj.fill} />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Panel>
     );
-  }, [lineWidth, strokeStyle, dash]);
+  }, [fillStyle]);
+
+  const borderColorCheckboxChange = (e: CheckboxChangeEvent) => {
+    data.node['strokeStyle'] = e.target.checked
+      ? form.getFieldValue('strokeStyle')
+      : '#222';
+    data.node['lineWidth'] = e.target.checked
+      ? form.getFieldValue('lineWidth')
+      : 1;
+    setCheckObj({ ...checkObj, border: e.target.checked });
+    canvas.updateProps(data.node);
+  };
+
+  /**
+   * 渲染边框样式
+   */
+  const renderBorderStyle = useMemo(() => {
+    return (
+      <Panel header="边框" key="border">
+        <Form form={form} onValuesChange={handleValuesChange}>
+          <Row align="middle">
+            <Col span={8}>
+              <Form.Item label="颜色" labelCol={{ span: 16 }} labelAlign="left">
+                <Checkbox
+                  onChange={borderColorCheckboxChange}
+                  checked={checkObj.border}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={6} push={1}>
+              <Form.Item name="strokeStyle">
+                <ColorPicker disabled={!checkObj.border} />
+              </Form.Item>
+            </Col>
+            <Col push={2}>
+              <Form.Item name="lineWidth" initialValue={1}>
+                <InputNumber disabled={!checkObj.border} />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Panel>
+    );
+  }, [strokeStyle, lineWidth, checkObj.border]);
 
   /**
    * 渲染字体的表单
    */
   const renderFontForm = useMemo(() => {
     return (
-      <Form
-        form={form}
-        onValuesChange={handleValuesChange}
-        onFieldsChange={handleFieldsChange}
-        onFinish={handleFinish}
-      >
-        <Col span={24}>
-          <Form.Item name="color" label="字体颜色">
-            <Input type="color" />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item name="fontFamily" label="字体类型">
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col span={11} offset={1}>
-          <Form.Item name="fontSize" label="字体大小">
-            <InputNumber />
-          </Form.Item>
-        </Col>
-        <Col span={24}>
-          <Form.Item name="text" label="内容">
-            <TextArea />
-          </Form.Item>
-        </Col>
-      </Form>
+      <Panel header="文字" key="font">
+        <Form form={form} onValuesChange={handleValuesChange}>
+          <Col span={24}>
+            <Form.Item name="color" label="颜色">
+              <ColorPicker />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item name="fontFamily" label="字体">
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item name="fontSize" label="大小">
+              <InputNumber />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item name="text" label="内容">
+              <TextArea />
+            </Form.Item>
+          </Col>
+        </Form>
+      </Panel>
     );
   }, [color, fontFamily, fontSize, text]);
 
@@ -324,44 +355,60 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    */
   const renderBiciTimerDataForm = useMemo(() => {
     return (
-      <Panel header="时间格式" key="4">
+      <Panel header="时间格式" key="time">
         <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-          <Col span={8}>
-            <Form.Item name="date.show" valuePropName="checked">
-              <Checkbox>日期</Checkbox>
-            </Form.Item>
-          </Col>
-          <Col span={16}>
-            <Form.Item name="date.format" rules={[{ required: true }]}>
-              <Select
-                placeholder="设置日期格式"
-                onChange={onSetBiciTimerDataFmt}
-                allowClear
+          <Row>
+            <Col span={8}>
+              <Form.Item
+                name="date.show"
+                valuePropName="checked"
+                label="日期"
+                labelCol={{ span: 16 }}
+                labelAlign="left"
               >
-                <Option value="male">male</Option>
-                <Option value="female">female</Option>
-                <Option value="other">other</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item name="time.show" valuePropName="checked">
-              <Checkbox>时间</Checkbox>
-            </Form.Item>
-          </Col>
-          <Col span={16}>
-            <Form.Item name="time.format" rules={[{ required: true }]}>
-              <Select
-                placeholder="设置日期格式"
-                onChange={onSetBiciTimerDataFmt}
-                allowClear
+                <Checkbox />
+              </Form.Item>
+            </Col>
+            <Col span={14}>
+              <Form.Item name="date.format" rules={[{ required: true }]}>
+                <Select
+                  placeholder="设置日期格式"
+                  onChange={onSetBiciTimerDataFmt}
+                  allowClear
+                >
+                  <Option value="male">male</Option>
+                  <Option value="female">female</Option>
+                  <Option value="other">other</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <Form.Item
+                name="time.show"
+                valuePropName="checked"
+                label="时间"
+                labelCol={{ span: 16 }}
+                labelAlign="left"
               >
-                <Option value="male">male</Option>
-                <Option value="female">female</Option>
-                <Option value="other">other</Option>
-              </Select>
-            </Form.Item>
-          </Col>
+                <Checkbox />
+              </Form.Item>
+            </Col>
+            <Col span={14}>
+              <Form.Item name="time.format" rules={[{ required: true }]}>
+                <Select
+                  placeholder="设置日期格式"
+                  onChange={onSetBiciTimerDataFmt}
+                  allowClear
+                >
+                  <Option value="male">male</Option>
+                  <Option value="female">female</Option>
+                  <Option value="other">other</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Panel>
     );
@@ -414,15 +461,18 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    */
   const renderAlign = useMemo(() => {
     return (
-      <Row justify="space-around">
+      <Row justify="space-around" style={{ borderBottom: '1px solid #d9d9d9' }}>
         {Object.keys(alignObj).map((key: string, index: number) => {
           return (
             <Col key={index}>
-              <Tooltip title={key}>
+              <Tooltip
+                title={alignObj[key][0]}
+                getPopupContainer={() => document.querySelector('#layout')}
+              >
                 <Button
                   size="large"
                   type="text"
-                  icon={<CustomIcon type={alignObj[key]} />}
+                  icon={<CustomIcon type={alignObj[key][1]} />}
                   onClick={() => handleAlign(key)}
                 />
               </Tooltip>
@@ -436,25 +486,30 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   /**
    * 渲染数据卡片样式设置  property
    */
-  const renderDataCard=useMemo(()=>{
+  const renderDataCard = useMemo(() => {
     return (
-      <Panel header="数据卡片样式设置" key="6">
+      <Panel header="数据卡片样式设置" key="dataCard">
         <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
           <Col span={12}>
-            <Form.Item valuePropName="checked" style={{marginBottom:0}}>
+            <Form.Item valuePropName="checked" style={{ marginBottom: 0 }}>
               数据上下限
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item style={{ marginBottom: 0 }}>
-              <Form.Item
-                style={{ display: 'inline-block' }}
-              >
+              <Form.Item style={{ display: 'inline-block' }}>
                 <InputNumber />
               </Form.Item>
               <span
-                style={{ display: 'inline-block', width: '24px', lineHeight: '32px', textAlign: 'center' }}
-              >-</span>
+                style={{
+                  display: 'inline-block',
+                  width: '24px',
+                  lineHeight: '32px',
+                  textAlign: 'center',
+                }}
+              >
+                -
+              </span>
               <Form.Item style={{ display: 'inline-block' }}>
                 <InputNumber />
               </Form.Item>
@@ -462,8 +517,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Col>
         </Form>
       </Panel>
-    )
-  },[property])
+    );
+  }, [property]);
 
   return (
     <div className="rightArea">
@@ -471,18 +526,13 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       <Tabs defaultActiveKey="1" centered>
         <TabPane tab="外观" key="1" style={{ margin: 0 }}>
           <Collapse defaultActiveKey={['1', '2', '3']}>
-            <Panel header="位置和大小" key="1">
-              {renderForm}
-            </Panel>
-            <Panel header="样式" key="2">
-              {renderStyleForm}
-            </Panel>
-            <Panel header="文字" key="3">
-              {renderFontForm}
-            </Panel>
+            {renderPositionForm}
+            {/* {renderFillStyle} */}
+            {/* {renderBorderStyle} */}
+            {renderFontForm}
             {/** 渲染时间组件属性 */}
             {name === 'biciTimer' && renderBiciTimerDataForm}
-            {name==='biciCard'&&renderDataCard}
+            {name === 'biciCard' && renderDataCard}
           </Collapse>
         </TabPane>
         <TabPane tab="数据" key="2" style={{ margin: 0 }}>
