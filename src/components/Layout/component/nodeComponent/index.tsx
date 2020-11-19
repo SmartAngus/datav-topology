@@ -433,6 +433,38 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     );
   }, [alignObj]);
 
+  /**
+   * 渲染数据卡片样式设置  property
+   */
+  const renderDataCard=useMemo(()=>{
+    return (
+      <Panel header="数据卡片样式设置" key="6">
+        <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
+          <Col span={12}>
+            <Form.Item valuePropName="checked" style={{marginBottom:0}}>
+              数据上下限
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item style={{ marginBottom: 0 }}>
+              <Form.Item
+                style={{ display: 'inline-block' }}
+              >
+                <InputNumber />
+              </Form.Item>
+              <span
+                style={{ display: 'inline-block', width: '24px', lineHeight: '32px', textAlign: 'center' }}
+              >-</span>
+              <Form.Item style={{ display: 'inline-block' }}>
+                <InputNumber />
+              </Form.Item>
+            </Form.Item>
+          </Col>
+        </Form>
+      </Panel>
+    )
+  },[property])
+
   return (
     <div className="rightArea">
       {renderAlign}
@@ -450,6 +482,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Panel>
             {/** 渲染时间组件属性 */}
             {name === 'biciTimer' && renderBiciTimerDataForm}
+            {name==='biciCard'&&renderDataCard}
           </Collapse>
         </TabPane>
         <TabPane tab="数据" key="2" style={{ margin: 0 }}>

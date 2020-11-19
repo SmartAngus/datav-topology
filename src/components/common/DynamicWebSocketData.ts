@@ -125,20 +125,18 @@ export function dynamicWebSocketData() {
             const r = JSON.parse(data.data)
             switch (theChart) {
               case 'gauge':
-                console.log("gauge data...")
                 node.data.echarts.option.series[0].data[0].value=r.value
                 canvas.updateProps(false)
                 break;
               case 'timeLine':
                 const source1 = node.data.echarts.option.dataset.source[1]
                 const times = node.data.echarts.option.dataset.source[0]
-                //source1.splice(1,1)
+                source1.splice(1,1)
                 source1.push(r.value)
-                //times.splice(1,1)
+                times.splice(1,1)
                 times.push(moment(r.time).format("LTS"))
                 node.data.echarts.option.dataset.source[0]=times;
                 node.data.echarts.option.dataset.source[1]=source1;
-                console.log(JSON.stringify(node.data.echarts.option))
                 canvas.updateProps(false)
                 break;
               default:

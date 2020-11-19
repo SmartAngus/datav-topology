@@ -112,7 +112,39 @@ export const Tools = [
                 textBaseline: 'middle'
               }
             }
-          ]
+          ],
+          property: {
+            normal:{
+              value:0,
+              font:{
+                fontFamily: 'Arial',
+                color: '#222',
+                textAlign: 'center',
+                textBaseline: 'middle'
+              },
+              bkColor:'#fff'
+            },
+            topLimit:{
+              value:0,
+              font:{
+                fontFamily: 'Arial',
+                color: '#222',
+                textAlign: 'center',
+                textBaseline: 'middle'
+              },
+              bkColor:'#fff'
+            },
+            bottomLimit:{
+              value:0,
+              font: {
+                fontFamily: 'Arial',
+                color: '#222',
+                textAlign: 'center',
+                textBaseline: 'middle'
+              },
+              bkColor:'#fff'
+            }
+          }
         }
       },
       {
@@ -453,7 +485,7 @@ export const Tools = [
         name: '实时曲线图', // 用name来区分不同的组件
         icon: 'icon-line-chart',
         data: {
-          text: '实时曲线图',
+          text: '',
           rect: {
             width: 300,
             height: 200
@@ -469,7 +501,7 @@ export const Tools = [
                 },
                 dataset: {
                   source: [
-                    ['product', '2012', '2013', '2014', '2015', '2016', '2017'],
+                    ['product', '16:20:01', '16:20:02', '16:20:03', '16:20:04', '16:20:05', '16:20:06'],
                     ['Matcha Latte', 41.1, 30.4, 65.1, 53.3, 83.8, 98.7],
                   ]
                 },
