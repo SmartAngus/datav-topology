@@ -51,7 +51,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
     bgSelect: false, // 预设背景选择
   });
   const [wsAddress, setWsAddress] = useState(
-    'ws://47.96.159.115:51060/ws?token=6hFRgllpOJfeqO4wWUIJlu'
+    'ws://47.96.159.115:51060/ws?token=5lpRaFsOnAtHmLXoG9fUbs'
   );
 
   useEffect(() => {

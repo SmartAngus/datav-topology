@@ -106,8 +106,9 @@ export function dynamicWebSocketData() {
       }
     }
   }
+  const times=[]
   canvas.socket.socket.onmessage=(data)=>{
-    console.log("socket onmessage",data.data)
+    // console.log("socket onmessage",data.data)
     if (canvas.data && canvas.data.pens.length > 0) {
       // 有数据，去遍历有websocket的组件，并订阅
       if(canvas.socket!=undefined){
@@ -129,20 +130,31 @@ export function dynamicWebSocketData() {
                 canvas.updateProps(false)
                 break;
               case 'timeLine':
-                const source1 = node.data.echarts.option.dataset.source[1]
-                const times = node.data.echarts.option.dataset.source[0]
-                source1.splice(1,1)
-                source1.push(r.value)
-                times.splice(1,1)
-                times.push(moment(r.time).format("LTS"))
-                node.data.echarts.option.dataset.source[0]=times;
-                node.data.echarts.option.dataset.source[1]=source1;
+               // const source1 = node.data.echarts.option.series[0].data;
+               //  const time=[r.time,r.value]
+               //  if(source1.length>5){
+               //    source1.shift()
+               //  }
+               //  source1.push(time)
+               //  node.data.echarts.option.series[0].data=source1;
+               //  canvas.updateProps(false)
+                const xAxisData = node.data.echarts.option.xAxis.data
+                const yAxisData = node.data.echarts.option.series[0].data
+                if(xAxisData.length>10){
+                  xAxisData.shift()
+                }
+                if(yAxisData.length>10){
+                  yAxisData.shift()
+                }
+                xAxisData.push(moment(r.time).format("LTS"))
+                yAxisData.push(r.value)
+                node.data.echarts.option.xAxis.data=xAxisData;
+                node.data.echarts.option.series[0].data=yAxisData;
                 canvas.updateProps(false)
                 break;
               default:
                 console.log("----")
             }
-            console.log("theChart==",theChart)
           }
         })
       }
