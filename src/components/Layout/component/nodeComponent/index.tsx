@@ -358,12 +358,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       <Panel header="时间格式" key="time">
         <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
           <Row>
-            <Col span={8}>
+            <Col span={10}>
               <Form.Item
                 name="date.show"
                 valuePropName="checked"
                 label="日期"
-                labelCol={{ span: 16 }}
+                labelCol={{ span: 14 }}
                 labelAlign="left"
               >
                 <Checkbox />
@@ -384,12 +384,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
           </Row>
           <Row>
-            <Col span={8}>
+            <Col span={10}>
               <Form.Item
                 name="time.show"
                 valuePropName="checked"
                 label="时间"
-                labelCol={{ span: 16 }}
+                labelCol={{ span: 14 }}
                 labelAlign="left"
               >
                 <Checkbox />

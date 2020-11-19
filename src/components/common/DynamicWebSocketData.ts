@@ -1,9 +1,12 @@
-import { canvas } from '../Layout'
-import moment from 'moment'
+import { canvas } from '../Layout';
+import moment from 'moment';
+import { Node } from '../../topology/core';
 
 // 里面的字符可以根据自己的需要进行调整
 moment.locale('zh-cn', {
-  months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
+  months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split(
+    '_'
+  ),
   monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
   weekdays: '星期日_星期一_星期二_星期三_星期四_星期五_星期六'.split('_'),
   weekdaysShort: '周日_周一_周二_周三_周四_周五_周六'.split('_'),
@@ -25,8 +28,7 @@ moment.locale('zh-cn', {
     if (hour === 12) {
       hour = 0;
     }
-    if (meridiem === '凌晨' || meridiem === '早上' ||
-      meridiem === '上午') {
+    if (meridiem === '凌晨' || meridiem === '早上' || meridiem === '上午') {
       return hour;
     } else if (meridiem === '下午' || meridiem === '晚上') {
       return hour + 12;
@@ -57,7 +59,7 @@ moment.locale('zh-cn', {
     nextWeek: '[下]ddddLT',
     lastDay: '[昨天]LT',
     lastWeek: '[上]ddddLT',
-    sameElse: 'L'
+    sameElse: 'L',
   },
   dayOfMonthOrdinalParse: /\d{1,2}(日|月|周)/,
   relativeTime: {
@@ -74,91 +76,107 @@ moment.locale('zh-cn', {
     M: '1个月',
     MM: '%d个月',
     y: '1年',
-    yy: '%d年'
+    yy: '%d年',
   },
   week: {
     // GB/T 7408-1994《数据元和交换格式·信息交换·日期和时间表示法》与ISO 8601:1988等效
     dow: 1, // Monday is the first day of the week.
-    doy: 4  // The week that contains Jan 4th is the first week of the year.
-  }
-})
+    doy: 4, // The week that contains Jan 4th is the first week of the year.
+  },
+});
 
 export function dynamicWebSocketData() {
-  canvas.socket.socket.onerror=()=>{
-    console.log("socket onerror")
-  }
-  canvas.socket.socket.onopen=()=> {
-    console.log("onopen")
+  canvas.socket.socket.onerror = () => {
+    console.log('socket onerror');
+  };
+  canvas.socket.socket.onopen = () => {
+    console.log('onopen');
     if (canvas.data && canvas.data.pens.length > 0) {
-      console.log("websocket.....")
+      console.log('websocket.....');
       // 有数据，去遍历有websocket的组件，并订阅
-      if(canvas.socket!=undefined){
-        console.log("websokcet....",canvas.data.pens);
-        (canvas.data.pens||[]).map((node)=>{
-          if(node.property?.dataPointParam?.qtDataList?.length>0){
-            console.log(".........websocket send",node)
-            canvas.socket.socket.send(JSON.stringify(({...node.property.dataPointParam,tid:node.TID,id:node.id})))
-          }else if(node.data!=''&&node.data!=undefined&&node.data.property?.dataPointParam?.qtDataList?.length>0){
-            console.log(".........websocket send",node)
-            canvas.socket.socket.send(JSON.stringify(({...node.data.property.dataPointParam,tid:node.TID,id:node.id})))
+      if (canvas.socket != undefined) {
+        console.log('websokcet....', canvas.data.pens);
+        (canvas.data.pens || []).map((node: Node) => {
+          if (node.property?.dataPointParam?.qtDataList?.length > 0) {
+            console.log('.........websocket send', node);
+            canvas.socket.socket.send(
+              JSON.stringify({
+                ...node.property.dataPointParam,
+                tid: node.TID,
+                id: node.id,
+              })
+            );
+          } else if (
+            node.data != '' &&
+            node.data != undefined &&
+            node.data.property?.dataPointParam?.qtDataList?.length > 0
+          ) {
+            console.log('.........websocket send', node);
+            canvas.socket.socket.send(
+              JSON.stringify({
+                ...node.data.property.dataPointParam,
+                tid: node.TID,
+                id: node.id,
+              })
+            );
           }
-        })
+        });
       }
     }
-  }
-  const times=[]
-  canvas.socket.socket.onmessage=(data)=>{
+  };
+  const times = [];
+  canvas.socket.socket.onmessage = (data) => {
     // console.log("socket onmessage",data.data)
     if (canvas.data && canvas.data.pens.length > 0) {
       // 有数据，去遍历有websocket的组件，并订阅
-      if(canvas.socket!=undefined){
-        (canvas.data.pens||[]).map((node)=> {
+      if (canvas.socket != undefined) {
+        (canvas.data.pens || []).map((node: Node) => {
           if (node.property?.dataPointParam?.qtDataList?.length > 0) {
-            const r = JSON.parse(data.data)
-            if(node.name=='biciVarer'){
-              if(node.text!=r.value){
-                node.text=r.value;
-                canvas.updateProps(false)
+            const r = JSON.parse(data.data);
+            if (node.name == 'biciVarer') {
+              if (node.text != r.value) {
+                node.text = r.value;
+                canvas.updateProps(false);
               }
             }
-          }else if(node.name=='echarts'){// 如果是图表组件，下面就需要判断具体的是那种图表组件
-            const theChart = node.data.property.echartsType
-            const r = JSON.parse(data.data)
+          } else if (node.name == 'echarts') {
+            // 如果是图表组件，下面就需要判断具体的是那种图表组件
+            const theChart = node.data.property.echartsType;
+            const r = JSON.parse(data.data);
             switch (theChart) {
               case 'gauge':
-                node.data.echarts.option.series[0].data[0].value=r.value
-                canvas.updateProps(false)
+                node.data.echarts.option.series[0].data[0].value = r.value;
+                canvas.updateProps(false);
                 break;
               case 'timeLine':
-               // const source1 = node.data.echarts.option.series[0].data;
-               //  const time=[r.time,r.value]
-               //  if(source1.length>5){
-               //    source1.shift()
-               //  }
-               //  source1.push(time)
-               //  node.data.echarts.option.series[0].data=source1;
-               //  canvas.updateProps(false)
-                const xAxisData = node.data.echarts.option.xAxis.data
-                const yAxisData = node.data.echarts.option.series[0].data
-                if(xAxisData.length>10){
-                  xAxisData.shift()
+                // const source1 = node.data.echarts.option.series[0].data;
+                //  const time=[r.time,r.value]
+                //  if(source1.length>5){
+                //    source1.shift()
+                //  }
+                //  source1.push(time)
+                //  node.data.echarts.option.series[0].data=source1;
+                //  canvas.updateProps(false)
+                const xAxisData = node.data.echarts.option.xAxis.data;
+                const yAxisData = node.data.echarts.option.series[0].data;
+                if (xAxisData.length > 10) {
+                  xAxisData.shift();
                 }
-                if(yAxisData.length>10){
-                  yAxisData.shift()
+                if (yAxisData.length > 10) {
+                  yAxisData.shift();
                 }
-                xAxisData.push(moment(r.time).format("LTS"))
-                yAxisData.push(r.value)
-                node.data.echarts.option.xAxis.data=xAxisData;
-                node.data.echarts.option.series[0].data=yAxisData;
-                canvas.updateProps(false)
+                xAxisData.push(moment(r.time).format('LTS'));
+                yAxisData.push(r.value);
+                node.data.echarts.option.xAxis.data = xAxisData;
+                node.data.echarts.option.series[0].data = yAxisData;
+                canvas.updateProps(false);
                 break;
               default:
-                console.log("----")
+                console.log('----');
             }
           }
-        })
+        });
       }
     }
   };
 }
-
