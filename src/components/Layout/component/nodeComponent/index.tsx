@@ -163,7 +163,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     console.log('onDataPointBind')
     console.log(selectedRowKeys, selectedRows);
   }
-  // 渲染数据点弹出窗口
+  // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
   const renderDataPointModal = () => {
     return (
       <DataBindModal

@@ -447,7 +447,7 @@ export const EditorLayout = ({ history }) => {
 
   const onMessage = (event: string, data: Node) => {
     const node = data;
-    // console.log('监听画布上元素的事件>>>', event);
+    console.log('监听画布上元素的事件>>>', event);
     switch (event) {
       case 'node': // 节点
       case 'addNode':
