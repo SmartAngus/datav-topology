@@ -31,6 +31,7 @@ import AnimateComponent from './AnimateComponent';
 import DataPointTable from '../../../common/DataPointTable';
 import CustomIcon from '../../../config/iconConfig';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import DataBindModal from '../../../FilterDataPoint'
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -148,7 +149,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
   // 添加数据点
   const addDataPoint = () => {
-    setVisible(true);
+    setVisible(!visible);
   };
   const handleSelectedDataPoint = (selectedPointIds) => {
     for (let k in selectedPointIds) {
@@ -158,32 +159,44 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       });
     }
   };
+  const onDataPointBind=()=>{
+
+  }
   // 渲染数据点弹出窗口
   const renderDataPointModal = () => {
+    // return (
+    //   <Modal
+    //     visible={visible}
+    //     title="Title"
+    //     width={1000}
+    //     onOk={handleOk}
+    //     onCancel={handleCancel}
+    //     footer={[
+    //       <Button key="back" onClick={handleCancel}>
+    //         Return
+    //       </Button>,
+    //       <Button
+    //         key="submit"
+    //         type="primary"
+    //         loading={loading}
+    //         onClick={handleOk}
+    //       >
+    //         Submit
+    //       </Button>,
+    //     ]}
+    //   >
+    //     <DataPointTable onSelectedDataPoint={handleSelectedDataPoint} />
+    //   </Modal>
+    // );
     return (
-      <Modal
+      <DataBindModal
         visible={visible}
-        title="Title"
-        width={1000}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[
-          <Button key="back" onClick={handleCancel}>
-            Return
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={loading}
-            onClick={handleOk}
-          >
-            Submit
-          </Button>,
-        ]}
-      >
-        <DataPointTable onSelectedDataPoint={handleSelectedDataPoint} />
-      </Modal>
-    );
+        disableSource={['react']}
+        selectedRows={[]}
+        onCancel={addDataPoint}
+        onGetSelectRow={onDataPointBind}
+      ></DataBindModal>
+    )
   };
   /**
    * 渲染位置和大小的表单

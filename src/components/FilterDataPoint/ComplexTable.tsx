@@ -3,9 +3,42 @@
  */
 import React, { PureComponent } from 'react'
 import { biciNotification, ComplexTable } from 'bici-transformers'
-import { fetchPerceptualPointList } from '../../../apis/perceptualPoint'
 import _ from 'lodash'
-import { DEVICE_STATUS } from '../../../data/userSide'
+import axios from 'axios'
+const API_URL='http://qt.test.bicisims.com'
+const timeout=2000;
+const maxContentLength=200000000;
+const withCredentials = false
+export const client = axios.create({baseURL: `${API_URL}/api`, timeout, maxContentLength,withCredentials}) // 基础请求包装对象
+// 获取复杂感知点列表
+export function fetchPerceptualPointList(params) {
+  return client.post('/applications/complexData/list', params,{
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      token: '5lpRaFsOnAtHmLXoG9fUbs',
+      'Content-Type': 'application/json',
+    }
+  })
+}
+// 传感器状态
+export const DEVICE_STATUS = [
+  {
+    value: 1,
+    text: '正常',
+  },
+  {
+    value: 2,
+    text: '超过上限',
+  },
+  {
+    value: 3,
+    text: '低于下限',
+  },
+  {
+    value: -1,
+    text: '无数据',
+  },
+]
 
 const initialQueryParams = {
   calculationCode: '',
@@ -19,13 +52,21 @@ const initialQueryParams = {
   },
   pagination: {
     current: 1,
-    pageSize: 10
+    pageSize: 10,
+    total:0
   },
 }
-
-export default class ComplexDataPoint extends PureComponent {
+interface ComplexDataPointProps{
+  selectedRowKeys?:any[];
+  mode?:any;
+  disableDataId?:any;
+  source?:any;
+  selectedRows?:any[];
+}
+export default class ComplexDataPoint extends PureComponent<any,any> {
   state = {
     dataList: [],
+    sorterList:[],
     total: 0,
     selectedRowKeys: [],
     selectedRows: [],
@@ -109,14 +150,17 @@ export default class ComplexDataPoint extends PureComponent {
 
   requestList () {
     const {pagination, sorterList, calculationCode, dataName, position, tagName, statusList} = this.state
-    let params = {pagination, sorterList, dataTypeList: [1]}
+    let params = {pagination, sorterList, dataTypeList: [1]} as any
 
     if (calculationCode) { params.calculationCode = calculationCode }
     if (dataName) { params.dataName = dataName }
     if (position) { params.position = position }
     if (tagName) { params.tagName = tagName }
     if (statusList&&statusList.length) { params.statusList = statusList }
-    fetchPerceptualPointList(params).then(({list, total}) => this.setState({dataList: list, total}))
+    fetchPerceptualPointList(params).then((res) => {
+      const {list,total}=res["data"].data
+      this.setState({ dataList: list, total })
+    })
   }
 
   handleSearch = (key, value) => { // 用户列表模糊查询

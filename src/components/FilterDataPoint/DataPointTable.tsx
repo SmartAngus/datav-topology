@@ -3,10 +3,27 @@
  */
 import React, { Component } from 'react'
 import { ComplexTable, biciNotification } from 'bici-transformers'
-import { fetchSearchDataPointManageList } from '../../../apis/dataPointManage'
-import { DATAPOINT_STATUS, DATA_ORIGIN } from '../../../data/userSide'
+import { DATAPOINT_STATUS, DATA_ORIGIN } from '../common/userSide'
 // import { Tooltip } from 'antd'
 import _ from 'lodash'
+import axios from 'axios'
+const API_URL='http://qt.test.bicisims.com'
+const timeout = 60000
+const maxTimeout = 60000
+const maxContentLength = Math.pow(1024, 2)
+const withCredentials = false
+
+export const apiClient = axios.create({baseURL: `${API_URL}/api/manager`, timeout, maxContentLength,withCredentials}) // 数据中心请求包装对象 兼容之前的请求
+// 查询数据点列表
+export function fetchSearchDataPointManageList(params) {
+  return apiClient.post('/datapoint/list', params,{
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      token: '5lpRaFsOnAtHmLXoG9fUbs',
+      'Content-Type': 'application/json',
+    }
+  })
+}
 
 const initialQueryParams = {
   dataName: '',
@@ -25,15 +42,17 @@ const initialQueryParams = {
   pagination: {
     current: 1,
     pageSize: 10,
+    total:0,
   },
 }
 
-export default class DataPointTable extends Component {
+export default class DataPointTable extends Component<any,any> {
   state = {
     dataList: [],
     total: 0,
+    sorterList:[],
     selectedRowKeys: [],
-    selectedRows: [], 
+    selectedRows: [],
     doubleArr: [], //双数组
     ...initialQueryParams,
   }
@@ -57,7 +76,7 @@ export default class DataPointTable extends Component {
       tagName,
       statusList,
     } = this.state
-    let params = { dataType: 1, pagination, sorterList }
+    let params = { dataType: 1, pagination, sorterList } as any;
     if (this.props.isOnlyNumber) {
       params.dataTypeList = [1]
     }
@@ -85,7 +104,10 @@ export default class DataPointTable extends Component {
     if (statusList && statusList.length) {
       params.statusList = statusList
     }
-    fetchSearchDataPointManageList(params).then(({ list, total }) => this.setState({ dataList: list, total }))
+    fetchSearchDataPointManageList(params).then((res) => {
+      const {list,total}=res["data"].data
+      this.setState({ dataList: list, total })
+    })
   }
 
   handleSearch = (key, value) => {
@@ -163,7 +185,7 @@ export default class DataPointTable extends Component {
       filterMultiple: true,
       render: (text, record) => {
         const channel = DATA_ORIGIN.filter((v) => v.value === record.channel)[0] || {}
-        const { text: channelText } = channel
+        const { text: channelText } = channel as any
         return <div style={{ width: ComplexTable.columnWidth.nm - 16 }}>{channelText}</div>
       },
     },
@@ -193,7 +215,7 @@ export default class DataPointTable extends Component {
         const { text: statusText } = DATAPOINT_STATUS.filter((v) => v.value === status)[0] || {}
         const className = status === 1 ? 'green6' : 'black85'
         return (
-          <div width={100} className={className}>
+          <div style={{width:100}} className={className}>
             {statusText}
           </div>
         )
