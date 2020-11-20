@@ -4,12 +4,7 @@
 import React, { PureComponent } from 'react'
 import { biciNotification, ComplexTable } from 'bici-transformers'
 import _ from 'lodash'
-import axios from 'axios'
-const API_URL='http://qt.test.bicisims.com'
-const timeout=2000;
-const maxContentLength=200000000;
-const withCredentials = false
-export const client = axios.create({baseURL: `${API_URL}/api`, timeout, maxContentLength,withCredentials}) // 基础请求包装对象
+import {client} from '../data/api'
 // 获取复杂感知点列表
 export function fetchPerceptualPointList(params) {
   return client.post('/applications/complexData/list', params,{

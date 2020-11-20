@@ -6,14 +6,10 @@ import { ComplexTable, biciNotification } from 'bici-transformers'
 import { DATAPOINT_STATUS, DATA_ORIGIN } from '../common/userSide'
 // import { Tooltip } from 'antd'
 import _ from 'lodash'
-import axios from 'axios'
-const API_URL='http://qt.test.bicisims.com'
-const timeout = 60000
-const maxTimeout = 60000
-const maxContentLength = Math.pow(1024, 2)
-const withCredentials = false
+import {apiClient} from '../data/api'
 
-export const apiClient = axios.create({baseURL: `${API_URL}/api/manager`, timeout, maxContentLength,withCredentials}) // 数据中心请求包装对象 兼容之前的请求
+
+
 // 查询数据点列表
 export function fetchSearchDataPointManageList(params) {
   return apiClient.post('/datapoint/list', params,{

@@ -3,14 +3,8 @@
  */
 import React, { Component } from 'react'
 import { ComplexTable, biciNotification } from 'bici-transformers'
-import _ from 'lodash'
+import {client} from '../data/api'
 
-import axios from 'axios'
-const API_URL='http://qt.test.bicisims.com'
-const timeout=2000;
-const maxContentLength=200000000;
-const withCredentials = false
-export const client = axios.create({baseURL: `${API_URL}/api`, timeout, maxContentLength,withCredentials}) // 基础请求包装对象
 // 查询反应堆列表
 export function fetchSearchReactStackList (params) {
   return client.post('/applications/reactor/list', params,{
