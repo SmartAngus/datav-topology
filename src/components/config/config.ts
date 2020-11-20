@@ -673,7 +673,7 @@ export const Tools = [
           }
         }
       }, {
-        name: '',
+        name: '仪表盘',
         icon: 'icon-dashboard-chart',
         data: {
           text: '',

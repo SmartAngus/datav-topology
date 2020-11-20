@@ -28,6 +28,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
 
   useEffect(()=>{
     setIsSave(canvas.isSave)
+    canvas.updateProps(false)
   },[canvas])
 
   const handleSave = () => {

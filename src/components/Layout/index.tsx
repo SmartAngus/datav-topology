@@ -310,8 +310,12 @@ export const EditorLayout = ({ history }) => {
     );
   };
 
-  const onDrag = (event, node) => {
-    event.dataTransfer.setData('Text', JSON.stringify(node.data));
+  const onDrag = (event, node, custom=false) => {
+    if(custom){
+      event.dataTransfer.setData('Text', JSON.stringify(node));
+    }else{
+      event.dataTransfer.setData('Text', JSON.stringify(node.data));
+    }
   };
 
   /**
