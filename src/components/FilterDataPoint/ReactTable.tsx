@@ -3,10 +3,18 @@
  */
 import React, { Component } from 'react'
 import { ComplexTable, biciNotification } from 'bici-transformers'
-import _ from 'lodash'
+import {client} from '../data/api'
 
-import { fetchSearchReactStackList } from '../../../apis/dataReactStack'
-
+// 查询反应堆列表
+export function fetchSearchReactStackList (params) {
+  return client.post('/applications/reactor/list', params,{
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      token: '5lpRaFsOnAtHmLXoG9fUbs',
+      'Content-Type': 'application/json',
+    }
+  })
+}
 const initialQueryParams = {
   code: '',
   position: '',
@@ -16,7 +24,8 @@ const initialQueryParams = {
   statusList: [],
   pagination: {
     current: 1,
-    pageSize: 10
+    pageSize: 10,
+    total:0
   },
   sorter: {
     field: '',
@@ -24,10 +33,11 @@ const initialQueryParams = {
   }
 }
 
-export default class ReactTable extends Component {
+export default class ReactTable extends Component<any,any> {
   state = {
     dataList: [],
     total: 0,
+    sorterList:[],
     selectedRowKeys: [],
     selectedRows: [],
     ...initialQueryParams
@@ -39,7 +49,7 @@ export default class ReactTable extends Component {
 
   requestList () {
     const {pagination, sorterList, code, name, position, period, source, statusList} = this.state
-    let params = {pagination, sorterList, dataTypeList: [1]}
+    let params = {pagination, sorterList, dataTypeList: [1]} as any
 
     if (code) { params.code = code }
     if (name) { params.name = name }
@@ -47,7 +57,10 @@ export default class ReactTable extends Component {
     if (period) { params.period = period }
     if (source) { params.source = source }
     if (statusList&&statusList.length) { params.statusList = statusList }
-    fetchSearchReactStackList(params).then(({list, total}) => this.setState({dataList: list, total}))
+    fetchSearchReactStackList(params).then((res) => {
+      const {list,total}=res["data"].data
+      this.setState({ dataList: list, total })
+    })
   }
 
   handleSearch = (key, value) => { // 用户列表模糊查询
@@ -133,7 +146,7 @@ export default class ReactTable extends Component {
 
   render () {
     const {dataList, total, pagination} = this.state
-    const {selectedRowKeys, mode, disableDataId} = this.props
+    const {selectedRowKeys, mode, disableDataId} = this.props as any
     const rowSelection = {
       type: mode,
       selectedRowKeys,

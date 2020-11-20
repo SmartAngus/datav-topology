@@ -16,7 +16,7 @@ const initialState = {
   selectedRows: [],
 }
 
-export default class FilterDataPoint extends React.PureComponent {
+export default class FilterDataPoint extends React.PureComponent<any,any> {
   static propTypes = {
     mode: PropsTypes.string,
     onCancel: PropsTypes.func.isRequired,
@@ -99,7 +99,7 @@ export default class FilterDataPoint extends React.PureComponent {
     this.props.onCancel()
   }
 
-  render () { 
+  render () {
     const {selectedRowKeys, selectedRows} = this.state
     const {visible, disableSource = [], mode, isOnlyNumber, disableDataId} = this.props
     const childrenProps = {

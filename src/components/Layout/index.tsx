@@ -96,6 +96,7 @@ import NodeComponent from './component/nodeComponent';
 import BackgroundComponent from './component/backgroundComponent';
 import LineComponent from './component/lineComponent';
 import SystemComponent from './LeftAreaComponent/SystemComponent';
+import CustomComponent from './LeftAreaComponent/CustomComponent'
 import MyComponent from './LeftAreaComponent/MyComponent';
 
 import './index.css';
@@ -453,7 +454,7 @@ export const EditorLayout = ({ history }) => {
 
   const onMessage = (event: string, data: Node) => {
     const node = data;
-    // console.log('监听画布上元素的事件>>>', event);
+    console.log('监听画布上元素的事件>>>', event);
     switch (event) {
       case 'node': // 节点
       case 'addNode':
@@ -603,19 +604,20 @@ export const EditorLayout = ({ history }) => {
   };
   const renderContextMenu = (
     <div style={contextmenu as CSSProperties} ref={contextMenuRef}>
-      <CanvasContextMenu data={selected} canvas={canvas} />
+      <CanvasContextMenu data={selected} canvas={canvas} show={showContextmenu} />
     </div>
-  );
+  )
   return (
     <div id="layout" ref={layoutRef}>
       {renderHeader}
       <div className="page">
         <div className="tool">
-          <Tabs defaultActiveKey="1" centered>
-            <TabPane tab="系统组件" key="1" style={{ margin: 0 }}>
+          <Tabs defaultActiveKey="1">
+            <TabPane tab="组件" key="1" style={{ margin: 0 }}>
               <SystemComponent onDrag={onDrag} Tools={Tools} />
+              <CustomComponent  onDrag={onDrag} Tools={Tools}/>
             </TabPane>
-            <TabPane tab="我的图片" key="2" style={{ margin: 0 }}>
+            <TabPane tab="图库" key="2" style={{ margin: 0 }}>
               <MyComponent />
             </TabPane>
           </Tabs>
@@ -630,7 +632,7 @@ export const EditorLayout = ({ history }) => {
           </div>
         </div>
         <div className="props">{renderRightArea}</div>
-        {showContextmenu && renderContextMenu}
+        {renderContextMenu}
       </div>
     </div>
   );

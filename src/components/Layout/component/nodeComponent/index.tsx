@@ -32,6 +32,7 @@ import AnimateComponent from './AnimateComponent';
 import DataPointTable from '../../../common/DataPointTable';
 import CustomIcon from '../../../config/iconConfig';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import DataBindModal from '../../../FilterDataPoint';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -148,7 +149,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
   // 添加数据点
   const addDataPoint = () => {
-    setVisible(true);
+    setVisible(!visible);
   };
   const handleSelectedDataPoint = (selectedPointIds) => {
     for (let k in selectedPointIds) {
@@ -158,31 +159,20 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       });
     }
   };
-  // 渲染数据点弹出窗口
+  const onDataPointBind = (selectedRowKeys, selectedRows) => {
+    console.log('onDataPointBind');
+    console.log(selectedRowKeys, selectedRows);
+  };
+  // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
   const renderDataPointModal = () => {
     return (
-      <Modal
+      <DataBindModal
         visible={visible}
-        title="Title"
-        width={1000}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[
-          <Button key="back" onClick={handleCancel}>
-            Return
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={loading}
-            onClick={handleOk}
-          >
-            Submit
-          </Button>,
-        ]}
-      >
-        <DataPointTable onSelectedDataPoint={handleSelectedDataPoint} />
-      </Modal>
+        disableSource={['react']}
+        selectedRows={[]}
+        onCancel={addDataPoint}
+        onGetSelectRow={onDataPointBind}
+      ></DataBindModal>
     );
   };
   /**
@@ -586,7 +576,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               buttonStyle="solid"
             />
           </Form.Item>
-          <Form.List name="areas">
+          <Form.List name="lightAreas">
             {(fields, { add, remove }) => (
               <Fragment>
                 {fields.map((field) => (
@@ -629,16 +619,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     </Form.Item>
                   </Space>
                 ))}
-                <Form.Item>
-                  <Button
-                    type="dashed"
-                    onClick={() => add()}
-                    block
-                    icon={<PlusOutlined />}
-                  >
-                    添加
-                  </Button>
-                </Form.Item>
+                {form.getFieldValue('lightAreas')?.length <= 10 ||
+                !form.getFieldValue('lightAreas') ? (
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      添加
+                    </Button>
+                  </Form.Item>
+                ) : null}
               </Fragment>
             )}
           </Form.List>
