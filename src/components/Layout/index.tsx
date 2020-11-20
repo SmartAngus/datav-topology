@@ -343,7 +343,7 @@ export const EditorLayout = ({ history }) => {
           strokeStyle,
           fillStyle,
           dash,
-          text,
+          // text,
           data,
         },
       };
@@ -612,7 +612,7 @@ export const EditorLayout = ({ history }) => {
       {renderHeader}
       <div className="page">
         <div className="tool">
-          <Tabs defaultActiveKey="1">
+          <Tabs defaultActiveKey="1" centered>
             <TabPane tab="组件" key="1" style={{ margin: 0 }}>
               <SystemComponent onDrag={onDrag} Tools={Tools} />
               <CustomComponent  onDrag={onDrag} Tools={Tools}/>
