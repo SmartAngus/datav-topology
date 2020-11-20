@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState, Fragment } from 'react';
 import {
   Form,
   InputNumber,
@@ -14,6 +14,7 @@ import {
   Space,
   Modal,
   Tooltip,
+  Radio,
 } from 'antd';
 import {
   PlusOutlined,
@@ -31,7 +32,7 @@ import AnimateComponent from './AnimateComponent';
 import DataPointTable from '../../../common/DataPointTable';
 import CustomIcon from '../../../config/iconConfig';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import DataBindModal from '../../../FilterDataPoint'
+import DataBindModal from '../../../FilterDataPoint';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -112,7 +113,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       dataDot,
     });
     console.log('property====', data);
-    console.log(checkObj);
   }, [property]);
 
   // 字段值更新时触发的回掉
@@ -159,10 +159,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       });
     }
   };
-  const onDataPointBind=(selectedRowKeys, selectedRows)=>{
-    console.log('onDataPointBind')
+  const onDataPointBind = (selectedRowKeys, selectedRows) => {
+    console.log('onDataPointBind');
     console.log(selectedRowKeys, selectedRows);
-  }
+  };
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
   const renderDataPointModal = () => {
     return (
@@ -173,7 +173,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         onCancel={addDataPoint}
         onGetSelectRow={onDataPointBind}
       ></DataBindModal>
-    )
+    );
   };
   /**
    * 渲染位置和大小的表单
@@ -310,11 +310,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <InputNumber />
             </Form.Item>
           </Col>
-          <Col span={24}>
+          {/* <Col span={24}>
             <Form.Item name="text" label="内容">
               <TextArea />
             </Form.Item>
-          </Col>
+          </Col> */}
         </Form>
       </Panel>
     );
@@ -345,7 +345,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    */
   const renderBiciTimerDataForm = useMemo(() => {
     return (
-      <Panel header="时间格式" key="time">
+      <Panel header="时间格式" key="biciTimer">
         <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
           <Row>
             <Col span={10}>
@@ -366,7 +366,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   onChange={onSetBiciTimerDataFmt}
                   allowClear
                 >
-                  <Option value="male">male</Option>
+                  <Option value="YYYY-MM-DD">YYYY-MM-DD</Option>
                   <Option value="female">female</Option>
                   <Option value="other">other</Option>
                 </Select>
@@ -388,11 +388,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             <Col span={14}>
               <Form.Item name="time.format" rules={[{ required: true }]}>
                 <Select
-                  placeholder="设置日期格式"
+                  placeholder="设置时间格式"
                   onChange={onSetBiciTimerDataFmt}
                   allowClear
                 >
-                  <Option value="male">male</Option>
+                  <Option value="hh：mm：ss">hh：mm：ss</Option>
                   <Option value="female">female</Option>
                   <Option value="other">other</Option>
                 </Select>
@@ -478,7 +478,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    */
   const renderDataCard = useMemo(() => {
     return (
-      <Panel header="数据卡片样式设置" key="dataCard">
+      <Panel header="数据卡片样式设置" key="biciCard">
         <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
           <Col span={12}>
             <Form.Item valuePropName="checked" style={{ marginBottom: 0 }}>
@@ -510,6 +510,136 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     );
   }, [property]);
 
+  /**
+   * 渲染指示灯样式
+   */
+  const renderLight = useMemo(() => {
+    return (
+      <Panel header="样式" key="biciLight">
+        <Form
+          form={propertyForm}
+          onValuesChange={handlePropertyValuesChange}
+          labelCol={{ span: 6 }}
+          labelAlign="left"
+        >
+          <Col span={24}>
+            <Form.Item name="color" label="颜色">
+              <ColorPicker />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item label="尺寸">
+              <InputNumber placeholder="请输入直径" style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item wrapperCol={{ offset: 6 }}>
+              <Button.Group
+                style={{ width: '100%', backgroundColor: '#E0E7F5' }}
+              >
+                <Button block size="small" type="text">
+                  小
+                </Button>
+                <Button block size="small" type="text">
+                  中
+                </Button>
+                <Button block size="small" type="text">
+                  大
+                </Button>
+              </Button.Group>
+            </Form.Item>
+          </Col>
+          <Row>
+            <Col span={10}>
+              <Form.Item
+                name="showText"
+                label="文字标签"
+                labelCol={{ span: 16 }}
+                valuePropName="checked"
+              >
+                <Checkbox />
+              </Form.Item>
+            </Col>
+            <Col span={14}>
+              <Form.Item name="text">
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item label="状态定义" wrapperCol={{ offset: 3 }}>
+            <Radio.Group
+              options={[
+                { label: '单点值', value: 'single' },
+                { label: '范围值', value: 'area' },
+              ]}
+              optionType="button"
+              buttonStyle="solid"
+            />
+          </Form.Item>
+          <Form.List name="lightAreas">
+            {(fields, { add, remove }) => (
+              <Fragment>
+                {fields.map((field) => (
+                  <Space
+                    key={field.key}
+                    style={{ display: 'flex', marginBottom: 8 }}
+                    align="center"
+                  >
+                    <Form.Item
+                      {...field}
+                      name={[field.name, 'lightAreaCheck']}
+                      fieldKey={[field.fieldKey, 'lightAreaCheck']}
+                      valuePropName="checked"
+                    >
+                      <Checkbox />
+                    </Form.Item>
+                    <Form.Item
+                      {...field}
+                      name={[field.name, 'lightAreaColor']}
+                      fieldKey={[field.fieldKey, 'lightAreaColor']}
+                    >
+                      <ColorPicker />
+                    </Form.Item>
+                    <Form.Item
+                      {...field}
+                      name={[field.name, 'lightAreaVal']}
+                      fieldKey={[field.fieldKey, 'lightAreaVal']}
+                    >
+                      <Input placeholder="数值" />
+                    </Form.Item>
+                    <Form.Item
+                      {...field}
+                      name={[field.name, 'lightAreaText']}
+                      fieldKey={[field.fieldKey, 'lightAreaText']}
+                    >
+                      <Input placeholder="文本" />
+                    </Form.Item>
+                    <Form.Item>
+                      <MinusCircleOutlined onClick={() => remove(field.name)} />
+                    </Form.Item>
+                  </Space>
+                ))}
+                {form.getFieldValue('lightAreas')?.length <= 10 ||
+                !form.getFieldValue('lightAreas') ? (
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      添加
+                    </Button>
+                  </Form.Item>
+                ) : null}
+              </Fragment>
+            )}
+          </Form.List>
+        </Form>
+      </Panel>
+    );
+  }, []);
+
   return (
     <div className="rightArea">
       {renderAlign}
@@ -520,6 +650,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             {/* {renderFillStyle} */}
             {/* {renderBorderStyle} */}
             {renderFontForm}
+            {renderLight}
             {/** 渲染时间组件属性 */}
             {name === 'biciTimer' && renderBiciTimerDataForm}
             {name === 'biciCard' && renderDataCard}
