@@ -30,7 +30,8 @@ export function saveNewComponent (params) {
 
 export default class CanvasContextMenu extends Component<CanvasContextMenuProps> {
   state={
-    newComVisible:false
+    newComVisible:false,
+    componentName:'新建组件'
   }
   formRef = React.createRef<FormInstance>();
   onTop() {
@@ -102,7 +103,7 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
     this.props.canvas.addNode(newNode)
     this.props.canvas.render()
     console.log("newNode",newNode)
-    saveNewComponent({componentName:'aaa',componentProperty:JSON.stringify(newNode)}).then(res=>{
+    saveNewComponent({componentName:this.state.componentName,componentProperty:JSON.stringify(newNode)}).then(res=>{
       console.log("res==",res)
     })
   }
@@ -111,8 +112,9 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
   }
   onCheck = async () => {
     try {
-      const values = await this.formRef.current.validateFields(['newCompName']);
+      const values = await this.formRef.current.validateFields(['componentName']);
       console.log('Success:', values);
+      this.setState({componentName:values.componentName})
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
@@ -141,8 +143,8 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
               min: 2,
               message: '不低于2个字符',
             }
-          ]} label="组件名字" name="newCompName">
-            <Input placeholder="Warning" id="warning2" />
+          ]} label="组件名字" name="componentName">
+            <Input placeholder="输入组件名字" id="componentName" />
           </Form.Item>
         </Form>
       </Modal>
