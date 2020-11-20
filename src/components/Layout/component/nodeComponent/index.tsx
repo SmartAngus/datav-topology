@@ -159,35 +159,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       });
     }
   };
-  const onDataPointBind=()=>{
-
+  const onDataPointBind=(selectedRowKeys, selectedRows)=>{
+    console.log('onDataPointBind')
+    console.log(selectedRowKeys, selectedRows);
   }
   // 渲染数据点弹出窗口
   const renderDataPointModal = () => {
-    // return (
-    //   <Modal
-    //     visible={visible}
-    //     title="Title"
-    //     width={1000}
-    //     onOk={handleOk}
-    //     onCancel={handleCancel}
-    //     footer={[
-    //       <Button key="back" onClick={handleCancel}>
-    //         Return
-    //       </Button>,
-    //       <Button
-    //         key="submit"
-    //         type="primary"
-    //         loading={loading}
-    //         onClick={handleOk}
-    //       >
-    //         Submit
-    //       </Button>,
-    //     ]}
-    //   >
-    //     <DataPointTable onSelectedDataPoint={handleSelectedDataPoint} />
-    //   </Modal>
-    // );
     return (
       <DataBindModal
         visible={visible}

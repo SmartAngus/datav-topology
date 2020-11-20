@@ -597,9 +597,9 @@ export const EditorLayout = ({ history }) => {
   };
   const renderContextMenu = (
     <div style={contextmenu as CSSProperties} ref={contextMenuRef}>
-      <CanvasContextMenu data={selected} canvas={canvas} />
+      <CanvasContextMenu data={selected} canvas={canvas} show={showContextmenu} />
     </div>
-  );
+  )
   return (
     <div id="layout" ref={layoutRef}>
       {renderHeader}
@@ -624,7 +624,7 @@ export const EditorLayout = ({ history }) => {
           </div>
         </div>
         <div className="props">{renderRightArea}</div>
-        {showContextmenu && renderContextMenu}
+        {renderContextMenu}
       </div>
     </div>
   );
