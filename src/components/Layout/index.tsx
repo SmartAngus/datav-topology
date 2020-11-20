@@ -369,6 +369,7 @@ export const EditorLayout = ({ history }) => {
   /*当自定义的属性发生变化时*/
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
+      console.log('>>>', value);
       // 只能两层嵌套，后期需要更改，如果有多层的话
       canvas.setValue(selected.node.id, 'setValue');
       // 通知有数据属性更新,会重新渲染画布
@@ -380,7 +381,12 @@ export const EditorLayout = ({ history }) => {
             selected.node.property[k[0]][k[1]] = value[key];
           }
         } else {
-          selected.node.property[key] = value[key];
+          if (value[key] !== undefined) {
+            if (Array.isArray(value[key])) {
+            } else {
+              selected.node.property[key] = value[key];
+            }
+          }
         }
       }
     },
@@ -605,7 +611,7 @@ export const EditorLayout = ({ history }) => {
       {renderHeader}
       <div className="page">
         <div className="tool">
-          <Tabs defaultActiveKey="1">
+          <Tabs defaultActiveKey="1" centered>
             <TabPane tab="系统组件" key="1" style={{ margin: 0 }}>
               <SystemComponent onDrag={onDrag} Tools={Tools} />
             </TabPane>
