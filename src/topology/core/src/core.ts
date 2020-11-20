@@ -113,6 +113,7 @@ export class Topology {
 
   socket: Socket;
   mqtt: MQTT;
+  isSave:boolean;
   _emitter: Emitter;
 
   private scheduledAnimationFrame = false;
@@ -298,6 +299,7 @@ export class Topology {
     this.parentElem.onresize = this.winResize;
     window.addEventListener('resize', this.winResize);
     (window as any).topology = this;
+    this.isSave = true;
   }
 
   winResize = () => {
@@ -404,7 +406,6 @@ export class Topology {
   }
 
   addNode(node: Node | any, focus = false) {
-    console.log("addNode----")
     if (!drawNodeFns[node.name]) {
       return null;
     }
@@ -477,6 +478,7 @@ export class Topology {
     this.offscreen.render();
     this.canvas.render();
     this.rendering = false;
+    this.isSave = false;
   }
 
   // open - redraw by the data

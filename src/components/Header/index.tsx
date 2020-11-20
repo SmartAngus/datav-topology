@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import { Topology } from '../../topology/core';
 import { History } from 'history';
 import { Button, Menu, Popover, Tag, Space } from 'antd';
@@ -24,8 +24,17 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
 
   const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
 
+  const [isSave,setIsSave]=useState(canvas.isSave)
+
+  useEffect(()=>{
+    setIsSave(canvas.isSave)
+    canvas.updateProps(false)
+  },[canvas])
+
   const handleSave = () => {
-    console.log('canvas>>>', canvas);
+    canvas.isSave=true;
+
+    console.log('canvas>>>', canvas.isSave);
     // FileSaver.saveAs(
     //   new Blob([JSON.stringify(canvas.data)], {
     //     type: 'text/plain;charset=utf-8',
@@ -35,7 +44,11 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     const saveData = new Blob([JSON.stringify(canvas.data)], {
       type: 'text/plain;charset=utf-8',
     });
-    console.log('save data>>>', saveData.text());
+    console.log('save data>>>', );
+    saveData.text().then(r=>{
+      console.log(JSON.parse(r))
+      setIsSave(false)
+    })
   };
 
   /**
@@ -265,11 +278,12 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
 
       <Tag
         color="#F0DCCE"
+        visible={isSave}
         style={{
           color: '#FA6400',
           height: '28px',
           padding: '3px 10px',
-          marginTop: '10px',
+          marginTop: '10px'
         }}
       >
         修改未保存
