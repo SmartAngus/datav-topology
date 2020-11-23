@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { client } from '../../../data/api'
+import { client,clientParam } from '../../../data/api'
 
-export function getNewComponents (params) {
-  return client.post('/applications/customComponent/list', params,{
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      token: '5lpRaFsOnAtHmLXoG9fUbs',
-      'Content-Type': 'application/json',
-    }
-  })
-}
-const Layout = ({ Tools, onDrag }) => {
+const Layout = ({ Tools, onDrag,combineCom }) => {
+  function getNewComponents () {
+    return clientParam(combineCom.apiURL).post(combineCom.list.url, combineCom.list.params,{
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        token: combineCom.token,
+        'Content-Type': 'application/json',
+      }
+    })
+  }
   console.log("CustomComponent",Tools)
   const [componentList,setComponentList]=useState([])
   useEffect(()=>{
-    getNewComponents({}).then(r=>{
+    getNewComponents().then(r=>{
       console.log("r",r)
       setComponentList(r.data.data)
     })

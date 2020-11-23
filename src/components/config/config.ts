@@ -89,7 +89,8 @@ export const Tools = [
                 color: '#222',
                 textAlign: 'center',
                 fontSize:20,
-                textBaseline: 'middle'
+                textBaseline: 'middle',
+                fontWight:800
               }
             },
             {

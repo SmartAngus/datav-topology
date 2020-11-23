@@ -556,9 +556,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Row>
           </Form>
         </Panel>
-        <Panel header="样式-正常状态" key="biciCardNormal"></Panel>
-        <Panel header="样式-低于下限" key="biciCardNormal"></Panel>
-        <Panel header="样式-高于上线" key="biciCardNormal"></Panel>
+        <Panel header="样式-正常状态" key="biciCardNormal1"></Panel>
+        <Panel header="样式-低于下限" key="biciCardNormal2"></Panel>
+        <Panel header="样式-高于上线" key="biciCardNormal3"></Panel>
       </Fragment>
     );
   }, [property, dataTypeRadio]);

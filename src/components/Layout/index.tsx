@@ -4,8 +4,8 @@ import React, {
   useCallback,
   useMemo,
   CSSProperties,
-  useRef,
-} from 'react';
+  useRef, useImperativeHandle
+} from 'react'
 import { Topology, registerNode, Options, Node } from '../../topology/core';
 import {
   register as registerChart,
@@ -101,6 +101,7 @@ import MyComponent from './LeftAreaComponent/MyComponent';
 
 import './index.css';
 import CanvasContextMenu from '../canvasContextMenu';
+import { DataVEditorProps } from '../data/defines'
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
@@ -110,9 +111,11 @@ export let canvas: Topology;
  * @param history
  * @constructor
  */
-export const EditorLayout = ({ history }) => {
+export const EditorLayout = (props:DataVEditorProps) => {
+  const history = props.history;
   const layoutRef = useRef();
   const contextMenuRef = useRef();
+  const [isSave,setIsSave]=useState(true)
 
   const [selected, setSelected] = useState({
     node: null,
@@ -142,6 +145,10 @@ export const EditorLayout = ({ history }) => {
 
   useEffect(() => {
     console.log('ref type>>>', typeof layoutRef);
+    console.log("industrialLibrary==",props.industrialLibrary)
+
+    window["API_URL"]=props.apiURL
+    console.log("apiURL",props.apiURL)
 
     const canvasOptions: Options = {
       rotateCursor: '/rotate.cur',
@@ -158,6 +165,7 @@ export const EditorLayout = ({ history }) => {
     async function getNodeData() {
       const data = await getNodeById(history.location.state.id);
       canvas.open(data.data);
+      console.log("history.location.state==",history.location.state)
     }
 
     if (history.location.state && history.location.state.from === '/preview') {
@@ -462,6 +470,7 @@ export const EditorLayout = ({ history }) => {
     switch (event) {
       case 'node': // 节点
       case 'addNode':
+        setIsSave(false)
         setSelected({
           node: data,
           line: null,
@@ -491,6 +500,7 @@ export const EditorLayout = ({ history }) => {
         break;
       case 'rotated':
       case 'move':
+        setIsSave(false)
         setSelected(
           Object.assign(
             {},
@@ -555,7 +565,7 @@ export const EditorLayout = ({ history }) => {
           onFormValueChange={onHandleLineFormValueChange}
         />
       ), // 渲染线条类型的组件
-      default: canvas && <BackgroundComponent data={canvas} />, // 渲染画布背景的组件
+      default: canvas && <BackgroundComponent data={canvas} websocketConf={props.websocketConf}/>, // 渲染画布背景的组件
     };
   }, [
     selected,
@@ -579,8 +589,15 @@ export const EditorLayout = ({ history }) => {
   // 渲染头部
   const renderHeader = useMemo(() => {
     if (isLoadCanvas)
-      return <Header canvas={canvas} history={history} rootRef={layoutRef} />;
-  }, [isLoadCanvas, history, layoutRef]);
+      return <Header
+        canvas={canvas}
+        history={history}
+        rootRef={layoutRef}
+        isSave={isSave}
+        setIsSave={setIsSave}
+        onExtraSetting={props.onExtraSetting}
+      />;
+  }, [isLoadCanvas, history, layoutRef,isSave]);
   // 右键菜单
   const handleContextMenu = (event) => {
     setShowContextmenu(!showContextmenu);
@@ -608,7 +625,7 @@ export const EditorLayout = ({ history }) => {
   };
   const renderContextMenu = (
     <div style={contextmenu as CSSProperties} ref={contextMenuRef}>
-      <CanvasContextMenu data={selected} canvas={canvas} show={showContextmenu} />
+      <CanvasContextMenu data={selected} canvas={canvas} show={showContextmenu} combineCom={props.uploadConfig.combineCom} />
     </div>
   )
   return (
@@ -619,7 +636,7 @@ export const EditorLayout = ({ history }) => {
           <Tabs defaultActiveKey="1" centered>
             <TabPane tab="组件" key="1" style={{ margin: 0 }}>
               <SystemComponent onDrag={onDrag} Tools={Tools} />
-              <CustomComponent  onDrag={onDrag} Tools={Tools}/>
+              <CustomComponent  onDrag={onDrag} Tools={Tools} combineCom={props.uploadConfig.combineCom}/>
             </TabPane>
             <TabPane tab="图库" key="2" style={{ margin: 0 }}>
               <MyComponent />

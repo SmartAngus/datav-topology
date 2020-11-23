@@ -39,8 +39,9 @@ interface ICanvasProps extends FormProps {
   data?: Topology;
   onFormValueChange?: any;
   onEventValueChange?: any;
+  websocketConf?:any;
 }
-const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
+const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data,websocketConf }) => {
   const [form] = Form.useForm();
   const [rcSwitchState, setRcSwitchState] = useState(
     data.canvas.width > data.canvas.height ? false : true
@@ -51,7 +52,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data }) => {
     bgSelect: false, // 预设背景选择
   });
   const [wsAddress, setWsAddress] = useState(
-    'ws://47.96.159.115:51060/ws?token=5lpRaFsOnAtHmLXoG9fUbs'
+    websocketConf.url
   );
 
   useEffect(() => {
