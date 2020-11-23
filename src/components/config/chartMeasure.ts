@@ -13,13 +13,14 @@ export function getMeasureOption(){
       kd.push('')
     } else {
       if((i - 10) % 20 === 0) {
-        kd.push('-3');
+        kd.push('1');
       } else if((i - 10) % 4 === 0) {
-        kd.push('-1');
+        kd.push('3');
       } else {
         kd.push('');
       }
     }
+    console.log("kd",kd)
 
   }
 //中间线的渐变色和文本内容
@@ -61,7 +62,7 @@ export function getMeasureOption(){
     }
   }
   if(TP_value < -10) {
-    boxPosition = [65, -120];
+    boxPosition = [165, -120];
   }
   leftColor = Gradient[Gradient.length - 1].color;
 // 因为柱状初始化为0，温度存在负值，所以加上负值60和空出距离10
@@ -71,7 +72,7 @@ export function getMeasureOption(){
       text: '温度计',
       show: false
     },
-    yAxis: [{
+    yAxis: [{// 刻度坐标轴配置
       show: false,
       data: [],
       min: 0,
@@ -130,15 +131,16 @@ export function getMeasureOption(){
         label: {
           normal: {
             show: true,
-            position: boxPosition,
+            position: "top",
+            distance:-10,
             width: 200,
             height: 100,
-            formatter: '{back| ' + TP_value + ' }{unit|°C}\n{downTxt|' + TP_txt + '}',
+            formatter: '{back| ' + TP_value + ' }{unit|°C}{downTxt|' + TP_txt + '}',
             rich: {
               back: {
                 align: 'center',
                 lineHeight: 50,
-                fontSize: 40,
+                fontSize: 14,
                 fontFamily: 'digifacewide',
                 color: leftColor
               },
@@ -149,10 +151,10 @@ export function getMeasureOption(){
                 color: leftColor
               },
               downTxt: {
-                lineHeight: 50,
-                fontSize: 25,
+                lineHeight: 28,
+                fontSize: 14,
                 align: 'center',
-                color: '#fff'
+                color: leftColor
               }
             }
           }

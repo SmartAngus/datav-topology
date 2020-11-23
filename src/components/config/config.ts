@@ -731,8 +731,8 @@ export const Tools = [
         data: {
           text: '计量器',
           rect: {
-            width: 300,
-            height: 200
+            width: 50,
+            height: 446
           },
           name: 'echarts',
           data: {
