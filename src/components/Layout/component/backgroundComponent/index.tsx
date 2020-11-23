@@ -37,11 +37,16 @@ const panelSizeObj = {
 
 interface ICanvasProps extends FormProps {
   data?: Topology;
+  baseUrl?: string;
   onFormValueChange?: any;
   onEventValueChange?: any;
-  websocketConf?:any;
+  websocketConf?: any;
 }
-const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data,websocketConf }) => {
+const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
+  data,
+  baseUrl,
+  websocketConf,
+}) => {
   const [form] = Form.useForm();
   const [rcSwitchState, setRcSwitchState] = useState(
     data.canvas.width > data.canvas.height ? false : true
@@ -51,12 +56,10 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data,websocketConf }) =
     resolution: false, // 分辨率
     bgSelect: false, // 预设背景选择
   });
-  const [wsAddress, setWsAddress] = useState(
-    websocketConf.url
-  );
+  const [wsAddress, setWsAddress] = useState(websocketConf.url);
 
   useEffect(() => {
-    console.log(data);
+    console.log('canvas>>>', canvas);
     // 回显数值
     const w = data.canvas.width;
     const h = data.canvas.height;
@@ -297,7 +300,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({ data,websocketConf }) =
             <Col push={2}>
               <Form.Item>
                 <Upload
-                  action="http://qt.test.bicisims.com/api/file/file/uploadReturnPath"
+                  action={`${baseUrl}/api/file/file/uploadReturnPath`}
                   accept="image/*"
                   data={{
                     mappingType: 107,

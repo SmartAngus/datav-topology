@@ -10,22 +10,22 @@ export const Tools = [
           text: '1970-01-01 00:00:00',
           rect: {
             width: 200,
-            height: 45
+            height: 45,
           },
           name: 'biciTimer',
-          elementRendered:false,
-          property:{
-            date:{
-              show:true,
-              format:'L'
+          elementRendered: false,
+          property: {
+            date: {
+              show: true,
+              format: 'L',
             },
-            time:{
-              show:true,
-              format:'LTS'
-            }
+            time: {
+              show: true,
+              format: 'LTS',
+            },
           },
-          iconColor:'#ccc'
-        }
+          iconColor: '#ccc',
+        },
       },
       {
         name: 'varer',
@@ -34,23 +34,25 @@ export const Tools = [
           text: '00:00:00',
           rect: {
             width: 100,
-            height: 45
+            height: 45,
           },
           name: 'biciVarer',
-          elementRendered:false,
-          iconColor:'#ccc',
-          property:{
-            dataMethod:'aa',
-            dataDot:1,
-            dataPointParam:{
-              qtDataList:[{
-                id:"14040d68efd3401c9fd977c8e7f9bce8",// id 为数据点id
-                type:1
-              }],
-              subscribe:true
-            }
-          }
-        }
+          elementRendered: false,
+          iconColor: '#ccc',
+          property: {
+            dataMethod: 'aa',
+            dataDot: 1,
+            dataPointParam: {
+              qtDataList: [
+                {
+                  id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
+                  type: 1,
+                },
+              ],
+              subscribe: true,
+            },
+          },
+        },
       },
       {
         name: '数据卡片',
@@ -59,13 +61,13 @@ export const Tools = [
           text: '数据卡片',
           rect: {
             width: 200,
-            height: 120
+            height: 120,
           },
           paddingTop: 30,
           font: {
             fontFamily: 'Arial',
             color: '#222',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
           },
           fillStyle: '#ffffba',
           strokeStyle: '#7e1212',
@@ -110,43 +112,54 @@ export const Tools = [
                 fontFamily: 'Arial',
                 color: '#222',
                 textAlign: 'center',
-                textBaseline: 'middle'
-              }
-            }
+                textBaseline: 'middle',
+              },
+            },
           ],
           property: {
-            normal:{
-              value:0,
-              font:{
-                fontFamily: 'Arial',
-                color: '#222',
-                textAlign: 'center',
-                textBaseline: 'middle'
-              },
-              bkColor:'#fff'
+            title: '',
+            showTitle: true,
+            limitType: '', // 数据类型：dataPoint 数据点  custom 自定义
+            showLimit: true, // 展示上下限
+            limit: {
+              bottom: '', // 下限
+              top: '', // 上限
             },
-            topLimit:{
-              value:0,
-              font:{
-                fontFamily: 'Arial',
-                color: '#222',
-                textAlign: 'center',
-                textBaseline: 'middle'
-              },
-              bkColor:'#fff'
-            },
-            bottomLimit:{
-              value:0,
+            normal: {
               font: {
                 fontFamily: 'Arial',
+                size: 18,
                 color: '#222',
                 textAlign: 'center',
-                textBaseline: 'middle'
+                textBaseline: 'middle',
               },
-              bkColor:'#fff'
-            }
-          }
-        }
+              showBkColor: true,
+              bkColor: '#fff',
+            },
+            topLimit: {
+              font: {
+                fontFamily: 'Arial',
+                size: 18,
+                color: '#222',
+                textAlign: 'center',
+                textBaseline: 'middle',
+              },
+              showBkColor: true,
+              bkColor: '#fff',
+            },
+            bottomLimit: {
+              font: {
+                fontFamily: 'Arial',
+                size: 18,
+                color: '#222',
+                textAlign: 'center',
+                textBaseline: 'middle',
+              },
+              showBkColor: true,
+              bkColor: '#fff',
+            },
+          },
+        },
       },
       {
         name: '指示灯',
@@ -155,12 +168,12 @@ export const Tools = [
           text: '指示灯',
           rect: {
             width: 30,
-            height: 30
+            height: 30,
           },
-          name: 'biciPilot'
-        }
-      }
-    ]
+          name: 'biciPilot',
+        },
+      },
+    ],
   },
   {
     group: '自定义图片',
@@ -172,11 +185,12 @@ export const Tools = [
           text: '',
           rect: {
             width: 100,
-            height: 100
+            height: 100,
           },
           name: 'image',
-          image: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-        }
+          image:
+            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        },
       },
       {
         name: 'image',
@@ -185,13 +199,13 @@ export const Tools = [
           text: '',
           rect: {
             width: 100,
-            height: 100
+            height: 100,
           },
           name: 'image',
-          image: require('./machine.jpg')
-        }
+          image: require('./machine.jpg'),
+        },
       },
-    ]
+    ],
   },
   {
     group: '基本形状',
@@ -203,15 +217,15 @@ export const Tools = [
           text: '圆角矩形',
           rect: {
             width: 200,
-            height: 50
+            height: 50,
           },
           paddingLeft: 10,
           paddingRight: 10,
           paddingTop: 10,
           paddingBottom: 10,
           borderRadius: 0.1,
-          name: 'rectangle'
-        }
+          name: 'rectangle',
+        },
       },
       {
         name: 'circle',
@@ -220,11 +234,11 @@ export const Tools = [
           text: '圆',
           rect: {
             width: 100,
-            height: 100
+            height: 100,
           },
           name: 'circle',
-          textMaxLine: 1
-        }
+          textMaxLine: 1,
+        },
       },
       {
         name: 'triangle',
@@ -233,10 +247,10 @@ export const Tools = [
           text: '三角形',
           rect: {
             width: 100,
-            height: 100
+            height: 100,
           },
-          name: 'triangle'
-        }
+          name: 'triangle',
+        },
       },
       {
         name: 'diamond',
@@ -245,10 +259,10 @@ export const Tools = [
           text: '菱形',
           rect: {
             width: 100,
-            height: 100
+            height: 100,
           },
-          name: 'diamond'
-        }
+          name: 'diamond',
+        },
       },
       {
         name: 'pentagon',
@@ -257,10 +271,10 @@ export const Tools = [
           text: '五边形',
           rect: {
             width: 100,
-            height: 100
+            height: 100,
           },
-          name: 'pentagon'
-        }
+          name: 'pentagon',
+        },
       },
       {
         name: 'hexagon',
@@ -269,12 +283,12 @@ export const Tools = [
           text: '六边形',
           rect: {
             width: 100,
-            height: 100
+            height: 100,
           },
           paddingTop: 10,
           paddingBottom: 10,
-          name: 'hexagon'
-        }
+          name: 'hexagon',
+        },
       },
       {
         name: 'pentagram',
@@ -283,10 +297,10 @@ export const Tools = [
           text: '五角星',
           rect: {
             width: 100,
-            height: 100
+            height: 100,
           },
-          name: 'pentagram'
-        }
+          name: 'pentagram',
+        },
       },
       {
         name: 'leftArrow',
@@ -295,10 +309,10 @@ export const Tools = [
           text: '左箭头',
           rect: {
             width: 200,
-            height: 100
+            height: 100,
           },
-          name: 'leftArrow'
-        }
+          name: 'leftArrow',
+        },
       },
       {
         name: 'rightArrow',
@@ -307,10 +321,10 @@ export const Tools = [
           text: '右箭头',
           rect: {
             width: 200,
-            height: 100
+            height: 100,
           },
-          name: 'rightArrow'
-        }
+          name: 'rightArrow',
+        },
       },
       {
         name: 'twowayArrow',
@@ -319,10 +333,10 @@ export const Tools = [
           text: '双向箭头',
           rect: {
             width: 200,
-            height: 100
+            height: 100,
           },
-          name: 'twowayArrow'
-        }
+          name: 'twowayArrow',
+        },
       },
       {
         name: 'line',
@@ -331,10 +345,10 @@ export const Tools = [
           text: '直线',
           rect: {
             width: 100,
-            height: 100
+            height: 100,
           },
-          name: 'line'
-        }
+          name: 'line',
+        },
       },
       {
         name: 'cloud',
@@ -343,10 +357,10 @@ export const Tools = [
           text: '云',
           rect: {
             width: 100,
-            height: 100
+            height: 100,
           },
-          name: 'cloud'
-        }
+          name: 'cloud',
+        },
       },
       {
         name: 'message',
@@ -355,14 +369,14 @@ export const Tools = [
           text: '消息框',
           rect: {
             width: 100,
-            height: 100
+            height: 100,
           },
           paddingLeft: 10,
           paddingRight: 10,
           paddingTop: 10,
           paddingBottom: 10,
-          name: 'message'
-        }
+          name: 'message',
+        },
       },
       {
         name: 'file',
@@ -371,14 +385,14 @@ export const Tools = [
           text: '文档',
           rect: {
             width: 80,
-            height: 100
+            height: 100,
           },
           paddingLeft: 10,
           paddingRight: 10,
           paddingTop: 10,
           paddingBottom: 10,
-          name: 'file'
-        }
+          name: 'file',
+        },
       },
       {
         name: 'text',
@@ -387,10 +401,10 @@ export const Tools = [
           text: 'le5le-topology / 乐吾乐',
           rect: {
             width: 160,
-            height: 30
+            height: 30,
           },
-          name: 'text'
-        }
+          name: 'text',
+        },
       },
       {
         name: 'people',
@@ -398,10 +412,10 @@ export const Tools = [
         data: {
           rect: {
             width: 70,
-            height: 100
+            height: 100,
           },
-          name: 'people'
-        }
+          name: 'people',
+        },
       },
       {
         name: '视频/网页',
@@ -410,7 +424,7 @@ export const Tools = [
           text: '视频/网页',
           rect: {
             width: 200,
-            height: 200
+            height: 200,
           },
           paddingLeft: 10,
           paddingRight: 10,
@@ -418,9 +432,9 @@ export const Tools = [
           paddingBottom: 10,
           strokeStyle: 'transparent',
           name: 'div',
-        }
-      }
-    ]
+        },
+      },
+    ],
   },
   {
     group: '图表控件',
@@ -433,14 +447,14 @@ export const Tools = [
           text: '折线图',
           rect: {
             width: 300,
-            height: 200
+            height: 200,
           },
           name: 'echarts',
           data: {
             echarts: {
               option: {
-                title:{
-                  text:'曲线图'
+                title: {
+                  text: '曲线图',
                 },
                 legend: {},
                 tooltip: {},
@@ -451,35 +465,53 @@ export const Tools = [
                   // 完成映射，参见后文。
                   dimensions: ['product', '2015', '2016', '2017'],
                   source: [
-                    {product: 'Matcha Latte', '2015': 43.3, '2016': 85.8, '2017': 93.7},
-                    {product: 'Milk Tea', '2015': 83.1, '2016': 73.4, '2017': 55.1},
-                    {product: 'Cheese Cocoa', '2015': 86.4, '2016': 65.2, '2017': 82.5},
-                    {product: 'Walnut Brownie', '2015': 72.4, '2016': 53.9, '2017': 39.1}
-                  ]
+                    {
+                      product: 'Matcha Latte',
+                      '2015': 43.3,
+                      '2016': 85.8,
+                      '2017': 93.7,
+                    },
+                    {
+                      product: 'Milk Tea',
+                      '2015': 83.1,
+                      '2016': 73.4,
+                      '2017': 55.1,
+                    },
+                    {
+                      product: 'Cheese Cocoa',
+                      '2015': 86.4,
+                      '2016': 65.2,
+                      '2017': 82.5,
+                    },
+                    {
+                      product: 'Walnut Brownie',
+                      '2015': 72.4,
+                      '2016': 53.9,
+                      '2017': 39.1,
+                    },
+                  ],
                 },
-                xAxis: {type: 'category'},
+                xAxis: { type: 'category' },
                 yAxis: {},
-                series: [
-                  {type: 'line'},
-                  {type: 'line'},
-                  {type: 'line'}
-                ]
-              }
+                series: [{ type: 'line' }, { type: 'line' }, { type: 'line' }],
+              },
             },
-            property:{
-              echartsType:'line',
-              dataMethod:'aa',
-              dataDot:1,
-              dataPointParam:{
-                qtDataList:[{
-                  id:"14040d68efd3401c9fd977c8e7f9bce8",// id 为数据点id
-                  type:1
-                }],
-                subscribe:true
-              }
-            }
-          }
-        }
+            property: {
+              echartsType: 'line',
+              dataMethod: 'aa',
+              dataDot: 1,
+              dataPointParam: {
+                qtDataList: [
+                  {
+                    id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
+                    type: 1,
+                  },
+                ],
+                subscribe: true,
+              },
+            },
+          },
+        },
       },
       {
         elementRendered: false,
@@ -489,70 +521,81 @@ export const Tools = [
           text: '',
           rect: {
             width: 300,
-            height: 200
+            height: 200,
           },
           name: 'echarts',
           data: {
             echarts: {
-              option:{
+              option: {
                 animation: false,
                 title: {
-                  text: '总流量（kbps）'/*,
-        left:"110px"*/ },
+                  text: '总流量（kbps）' /*,
+        left:"110px"*/,
+                },
                 tooltip: {
                   trigger: 'axis',
-                  axisPointer: { type: 'cross' }
+                  axisPointer: { type: 'cross' },
                 },
                 grid: {
-                  left: 50/*"50px"*/,
-                  right: 15/*"15px"*/
+                  left: 50 /*"50px"*/,
+                  right: 15 /*"15px"*/,
                 },
                 legend: {
-                  data: ['当前流量']
+                  data: ['当前流量'],
                 },
                 xAxis: {
                   boundaryGap: false,
-                  data: [1,2,3,4,5,6,7,8,9,10]
+                  data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
                 },
                 yAxis: { boundaryGap: false },
-                series: [{
-                  symbol: "none",/*去掉小圆点*/
-                  name: '当前流量',
-                  type: 'line',
-                  smoothMonotone:'x',
-                  smooth:true,
-                  markLine: {
-                    silent: true,
-                    data: [{
-                      yAxis: 20
-                    }, {
-                      yAxis: 40
-                    }, {
-                      yAxis: 60
-                    }, {
-                      yAxis: 100
-                    }, {
-                      yAxis: 120
-                    }]
+                series: [
+                  {
+                    symbol: 'none' /*去掉小圆点*/,
+                    name: '当前流量',
+                    type: 'line',
+                    smoothMonotone: 'x',
+                    smooth: true,
+                    markLine: {
+                      silent: true,
+                      data: [
+                        {
+                          yAxis: 20,
+                        },
+                        {
+                          yAxis: 40,
+                        },
+                        {
+                          yAxis: 60,
+                        },
+                        {
+                          yAxis: 100,
+                        },
+                        {
+                          yAxis: 120,
+                        },
+                      ],
+                    },
+                    data: [] /*,             smooth:true//显示为平滑的曲线*/,
                   },
-                  data: []/*,             smooth:true//显示为平滑的曲线*/
-                }]
-              }
+                ],
+              },
             },
-            property:{
-              echartsType:'timeLine',
-              dataMethod:'aa',
-              dataDot:1,
-              dataPointParam:{
-                qtDataList:[{
-                  id:"14040d68efd3401c9fd977c8e7f9bce8",// id 为数据点id
-                  type:1
-                }],
-                subscribe:true
-              }
-            }
-          }
-        }
+            property: {
+              echartsType: 'timeLine',
+              dataMethod: 'aa',
+              dataDot: 1,
+              dataPointParam: {
+                qtDataList: [
+                  {
+                    id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
+                    type: 1,
+                  },
+                ],
+                subscribe: true,
+              },
+            },
+          },
+        },
       },
       {
         name: '柱状图',
@@ -561,7 +604,7 @@ export const Tools = [
           text: '柱状图',
           rect: {
             width: 300,
-            height: 200
+            height: 200,
           },
           name: 'echarts',
           data: {
@@ -572,35 +615,53 @@ export const Tools = [
                 dataset: {
                   dimensions: ['product', '2015', '2016', '2017'],
                   source: [
-                    {product: 'Matcha Latte', '2015': 43.3, '2016': 85.8, '2017': 93.7},
-                    {product: 'Milk Tea', '2015': 83.1, '2016': 73.4, '2017': 55.1},
-                    {product: 'Cheese Cocoa', '2015': 86.4, '2016': 65.2, '2017': 82.5},
-                    {product: 'Walnut Brownie', '2015': 72.4, '2016': 53.9, '2017': 39.1}
-                  ]
+                    {
+                      product: 'Matcha Latte',
+                      '2015': 43.3,
+                      '2016': 85.8,
+                      '2017': 93.7,
+                    },
+                    {
+                      product: 'Milk Tea',
+                      '2015': 83.1,
+                      '2016': 73.4,
+                      '2017': 55.1,
+                    },
+                    {
+                      product: 'Cheese Cocoa',
+                      '2015': 86.4,
+                      '2016': 65.2,
+                      '2017': 82.5,
+                    },
+                    {
+                      product: 'Walnut Brownie',
+                      '2015': 72.4,
+                      '2016': 53.9,
+                      '2017': 39.1,
+                    },
+                  ],
                 },
-                xAxis: {type: 'category'},
+                xAxis: { type: 'category' },
                 yAxis: {},
-                series: [
-                  {type: 'bar'},
-                  {type: 'bar'},
-                  {type: 'bar'}
-                ]
-              } // end echarts option
+                series: [{ type: 'bar' }, { type: 'bar' }, { type: 'bar' }],
+              }, // end echarts option
             },
-            property:{
-              echartsType:'bar',
-              dataMethod:'aa',
-              dataDot:1,
-              dataPointParam:{
-                qtDataList:[{
-                  id:"14040d68efd3401c9fd977c8e7f9bce8",// id 为数据点id
-                  type:1
-                }],
-                subscribe:true
-              }
-            }
-          }
-        }
+            property: {
+              echartsType: 'bar',
+              dataMethod: 'aa',
+              dataDot: 1,
+              dataPointParam: {
+                qtDataList: [
+                  {
+                    id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
+                    type: 1,
+                  },
+                ],
+                subscribe: true,
+              },
+            },
+          },
+        },
       },
       {
         name: '饼图',
@@ -609,7 +670,7 @@ export const Tools = [
           text: '饼图',
           rect: {
             width: 200,
-            height: 200
+            height: 200,
           },
           name: 'echarts',
           data: {
@@ -617,12 +678,18 @@ export const Tools = [
               option: {
                 tooltip: {
                   trigger: 'item',
-                  formatter: '{a} <br/>{b}: {c} ({d}%)'
+                  formatter: '{a} <br/>{b}: {c} ({d}%)',
                 },
                 legend: {
                   orient: 'vertical',
                   x: 'left',
-                  data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+                  data: [
+                    '直接访问',
+                    '邮件营销',
+                    '联盟广告',
+                    '视频广告',
+                    '搜索引擎',
+                  ],
                 },
                 series: [
                   {
@@ -633,96 +700,101 @@ export const Tools = [
                     label: {
                       normal: {
                         show: false,
-                        position: 'center'
+                        position: 'center',
                       },
                       emphasis: {
                         show: true,
                         textStyle: {
                           fontSize: '30',
-                          fontWeight: 'bold'
-                        }
-                      }
+                          fontWeight: 'bold',
+                        },
+                      },
                     },
                     labelLine: {
                       normal: {
-                        show: false
-                      }
+                        show: false,
+                      },
                     },
                     data: [
                       { value: 335, name: '直接访问' },
                       { value: 310, name: '邮件营销' },
                       { value: 234, name: '联盟广告' },
                       { value: 135, name: '视频广告' },
-                      { value: 1548, name: '搜索引擎' }
-                    ]
-                  }
-                ]
-              }
+                      { value: 1548, name: '搜索引擎' },
+                    ],
+                  },
+                ],
+              },
             },
-            property:{
-              echartsType:'pie',
-              dataMethod:'aa',
-              dataDot:1,
-              dataPointParam:{
-                qtDataList:[{
-                  id:"14040d68efd3401c9fd977c8e7f9bce8",// id 为数据点id
-                  type:1
-                }],
-                subscribe:true
-              }
-            }
-          }
-        }
-      }, {
+            property: {
+              echartsType: 'pie',
+              dataMethod: 'aa',
+              dataDot: 1,
+              dataPointParam: {
+                qtDataList: [
+                  {
+                    id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
+                    type: 1,
+                  },
+                ],
+                subscribe: true,
+              },
+            },
+          },
+        },
+      },
+      {
         name: '仪表盘',
         icon: 'icon-dashboard-chart',
         data: {
           text: '',
           rect: {
             width: 300,
-            height: 300
+            height: 300,
           },
           name: 'echarts',
           data: {
             echarts: {
               option: {
                 tooltip: {
-                  formatter: '{a} <br/>{b} : {c}%'
+                  formatter: '{a} <br/>{b} : {c}%',
                 },
                 toolbox: {
                   feature: {
                     restore: {
-                      show:false
+                      show: false,
                     },
                     saveAsImage: {
-                      show:false
-                    }
-                  }
+                      show: false,
+                    },
+                  },
                 },
                 series: [
                   {
                     name: '业务指标',
                     type: 'gauge',
                     detail: { formatter: '{value}%' },
-                    data: [{ value: 0, name: '' }]
-                  }
-                ]
-              }
+                    data: [{ value: 0, name: '' }],
+                  },
+                ],
+              },
             },
-            property:{
-              echartsType:'gauge',
-              dataMethod:'aa',
-              dataDot:1,
-              dataPointParam:{
-                qtDataList:[{
-                  id:"02399e78150d4ac5b68bd5516e1a6851",// id 为数据点id
-                  type:1
-                }],
-                subscribe:true
-              }
-            }
-          }
-        }
+            property: {
+              echartsType: 'gauge',
+              dataMethod: 'aa',
+              dataDot: 1,
+              dataPointParam: {
+                qtDataList: [
+                  {
+                    id: '02399e78150d4ac5b68bd5516e1a6851', // id 为数据点id
+                    type: 1,
+                  },
+                ],
+                subscribe: true,
+              },
+            },
+          },
+        },
       },
       {
         elementRendered: false,
@@ -731,30 +803,32 @@ export const Tools = [
         data: {
           text: '计量器',
           rect: {
-            width: 50,
-            height: 446
+            width: 300,
+            height: 200,
           },
           name: 'echarts',
           data: {
             echarts: {
-              option: getMeasureOption()
+              option: getMeasureOption(),
             },
-            property:{
-              echartsType:'chartMeasure',
-              dataMethod:'aa',
-              dataDot:1,
-              dataPointParam:{
-                qtDataList:[{
-                  id:"6413f3a606754c31987ec584ed56d5b7",// id 为数据点id
-                  type:2
-                }],
-                subscribe:true
-              }
-            }
-          }
-        }
-      }
-    ]
+            property: {
+              echartsType: 'chartMeasure',
+              dataMethod: 'aa',
+              dataDot: 1,
+              dataPointParam: {
+                qtDataList: [
+                  {
+                    id: '6413f3a606754c31987ec584ed56d5b7', // id 为数据点id
+                    type: 2,
+                  },
+                ],
+                subscribe: true,
+              },
+            },
+          },
+        },
+      },
+    ],
   },
   {
     group: '流程图',
@@ -766,11 +840,11 @@ export const Tools = [
           text: '开始',
           rect: {
             width: 120,
-            height: 40
+            height: 40,
           },
           borderRadius: 0.5,
-          name: 'rectangle'
-        }
+          name: 'rectangle',
+        },
       },
       {
         name: '流程',
@@ -779,10 +853,10 @@ export const Tools = [
           text: '流程',
           rect: {
             width: 120,
-            height: 40
+            height: 40,
           },
-          name: 'rectangle'
-        }
+          name: 'rectangle',
+        },
       },
       {
         name: '判定',
@@ -791,10 +865,10 @@ export const Tools = [
           text: '判定',
           rect: {
             width: 120,
-            height: 60
+            height: 60,
           },
-          name: 'diamond'
-        }
+          name: 'diamond',
+        },
       },
       {
         name: '数据',
@@ -803,10 +877,10 @@ export const Tools = [
           text: '数据',
           rect: {
             width: 120,
-            height: 50
+            height: 50,
           },
-          name: 'flowData'
-        }
+          name: 'flowData',
+        },
       },
       {
         name: '准备',
@@ -815,10 +889,10 @@ export const Tools = [
           text: '准备',
           rect: {
             width: 120,
-            height: 50
+            height: 50,
           },
-          name: 'hexagon'
-        }
+          name: 'hexagon',
+        },
       },
       {
         name: '子流程',
@@ -827,10 +901,10 @@ export const Tools = [
           text: '子流程',
           rect: {
             width: 120,
-            height: 50
+            height: 50,
           },
-          name: 'flowSubprocess'
-        }
+          name: 'flowSubprocess',
+        },
       },
       {
         name: '数据库',
@@ -839,10 +913,10 @@ export const Tools = [
           text: '数据库',
           rect: {
             width: 80,
-            height: 120
+            height: 120,
           },
-          name: 'flowDb'
-        }
+          name: 'flowDb',
+        },
       },
       {
         name: '文档',
@@ -851,10 +925,10 @@ export const Tools = [
           text: '文档',
           rect: {
             width: 120,
-            height: 100
+            height: 100,
           },
-          name: 'flowDocument'
-        }
+          name: 'flowDocument',
+        },
       },
       {
         name: '内部存储',
@@ -863,10 +937,10 @@ export const Tools = [
           text: '内部存储',
           rect: {
             width: 120,
-            height: 80
+            height: 80,
           },
-          name: 'flowInternalStorage'
-        }
+          name: 'flowInternalStorage',
+        },
       },
       {
         name: '外部存储',
@@ -875,10 +949,10 @@ export const Tools = [
           text: '外部存储',
           rect: {
             width: 120,
-            height: 80
+            height: 80,
           },
-          name: 'flowExternStorage'
-        }
+          name: 'flowExternStorage',
+        },
       },
       {
         name: '队列',
@@ -887,10 +961,10 @@ export const Tools = [
           text: '队列',
           rect: {
             width: 100,
-            height: 100
+            height: 100,
           },
-          name: 'flowQueue'
-        }
+          name: 'flowQueue',
+        },
       },
       {
         name: '手动输入',
@@ -899,10 +973,10 @@ export const Tools = [
           text: '手动输入',
           rect: {
             width: 120,
-            height: 80
+            height: 80,
           },
-          name: 'flowManually'
-        }
+          name: 'flowManually',
+        },
       },
       {
         name: '展示',
@@ -911,10 +985,10 @@ export const Tools = [
           text: '展示',
           rect: {
             width: 120,
-            height: 80
+            height: 80,
           },
-          name: 'flowDisplay'
-        }
+          name: 'flowDisplay',
+        },
       },
       {
         name: '并行模式',
@@ -923,10 +997,10 @@ export const Tools = [
           text: '并行模式',
           rect: {
             width: 120,
-            height: 50
+            height: 50,
           },
-          name: 'flowParallel'
-        }
+          name: 'flowParallel',
+        },
       },
       {
         name: '注释',
@@ -935,12 +1009,12 @@ export const Tools = [
           text: '注释',
           rect: {
             width: 100,
-            height: 100
+            height: 100,
           },
-          name: 'flowComment'
-        }
-      }
-    ]
+          name: 'flowComment',
+        },
+      },
+    ],
   },
   {
     group: '活动图',
@@ -952,12 +1026,12 @@ export const Tools = [
           text: 'kaishi',
           rect: {
             width: 30,
-            height: 30
+            height: 30,
           },
           name: 'circle',
           fillStyle: '#555',
-          strokeStyle: 'transparent'
-        }
+          strokeStyle: 'transparent',
+        },
       },
       {
         name: '结束',
@@ -966,10 +1040,10 @@ export const Tools = [
           text: '',
           rect: {
             width: 30,
-            height: 30
+            height: 30,
           },
-          name: 'activityFinal'
-        }
+          name: 'activityFinal',
+        },
       },
       {
         name: '活动',
@@ -978,11 +1052,11 @@ export const Tools = [
           text: '活动',
           rect: {
             width: 120,
-            height: 50
+            height: 50,
           },
           borderRadius: 0.25,
-          name: 'rectangle'
-        }
+          name: 'rectangle',
+        },
       },
       {
         name: '决策/合并',
@@ -991,10 +1065,10 @@ export const Tools = [
           text: '决策',
           rect: {
             width: 120,
-            height: 50
+            height: 50,
           },
-          name: 'diamond'
-        }
+          name: 'diamond',
+        },
       },
       {
         name: '垂直泳道',
@@ -1003,10 +1077,10 @@ export const Tools = [
           text: '垂直泳道',
           rect: {
             width: 200,
-            height: 500
+            height: 500,
           },
-          name: 'swimlaneV'
-        }
+          name: 'swimlaneV',
+        },
       },
       {
         name: '水平泳道',
@@ -1015,10 +1089,10 @@ export const Tools = [
           text: '水平泳道',
           rect: {
             width: 500,
-            height: 200
+            height: 200,
           },
-          name: 'swimlaneH'
-        }
+          name: 'swimlaneH',
+        },
       },
       {
         name: '垂直分岔/汇合',
@@ -1027,12 +1101,12 @@ export const Tools = [
           text: '',
           rect: {
             width: 10,
-            height: 150
+            height: 150,
           },
           name: 'forkV',
           fillStyle: '#555',
-          strokeStyle: 'transparent'
-        }
+          strokeStyle: 'transparent',
+        },
       },
       {
         name: '水平分岔/汇合',
@@ -1041,14 +1115,14 @@ export const Tools = [
           text: '',
           rect: {
             width: 150,
-            height: 10
+            height: 10,
           },
           name: 'forkH',
           fillStyle: '#555',
-          strokeStyle: 'transparent'
-        }
-      }
-    ]
+          strokeStyle: 'transparent',
+        },
+      },
+    ],
   },
   {
     group: '时序图和类图',
@@ -1060,10 +1134,10 @@ export const Tools = [
           text: '生命线',
           rect: {
             width: 150,
-            height: 400
+            height: 400,
           },
-          name: 'lifeline'
-        }
+          name: 'lifeline',
+        },
       },
       {
         name: '激活',
@@ -1072,10 +1146,10 @@ export const Tools = [
           text: '',
           rect: {
             width: 12,
-            height: 200
+            height: 200,
           },
-          name: 'sequenceFocus'
-        }
+          name: 'sequenceFocus',
+        },
       },
       {
         name: '简单类',
@@ -1084,13 +1158,13 @@ export const Tools = [
           text: 'Topolgoy',
           rect: {
             width: 270,
-            height: 200
+            height: 200,
           },
           paddingTop: 40,
           font: {
             fontFamily: 'Arial',
             color: '#222',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
           },
           fillStyle: '#ffffba',
           strokeStyle: '#7e1212',
@@ -1108,17 +1182,17 @@ export const Tools = [
                 y: 0,
                 width: '100%',
                 height: '100%',
-                rotate: 0
+                rotate: 0,
               },
               font: {
                 fontFamily: 'Arial',
                 color: '#222',
                 textAlign: 'left',
-                textBaseline: 'top'
-              }
-            }
-          ]
-        }
+                textBaseline: 'top',
+              },
+            },
+          ],
+        },
       },
       {
         name: '类',
@@ -1127,13 +1201,13 @@ export const Tools = [
           text: 'Topolgoy',
           rect: {
             width: 270,
-            height: 200
+            height: 200,
           },
           paddingTop: 40,
           font: {
             fontFamily: 'Arial',
             color: '#222',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
           },
           fillStyle: '#ffffba',
           strokeStyle: '#7e1212',
@@ -1151,14 +1225,14 @@ export const Tools = [
                 y: 0,
                 width: '100%',
                 height: '50%',
-                rotate: 0
+                rotate: 0,
               },
               font: {
                 fontFamily: 'Arial',
                 color: '#222',
                 textAlign: 'left',
-                textBaseline: 'top'
-              }
+                textBaseline: 'top',
+              },
             },
             {
               text: '+ setName(name: string): void',
@@ -1172,18 +1246,18 @@ export const Tools = [
                 y: '50%',
                 width: '100%',
                 height: '50%',
-                rotate: 0
+                rotate: 0,
               },
               font: {
                 fontFamily: 'Arial',
                 color: '#222',
                 textAlign: 'left',
-                textBaseline: 'top'
-              }
-            }
-          ]
-        }
-      }
-    ]
-  }
+                textBaseline: 'top',
+              },
+            },
+          ],
+        },
+      },
+    ],
+  },
 ];

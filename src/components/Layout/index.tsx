@@ -147,7 +147,7 @@ export const EditorLayout = (props:DataVEditorProps) => {
     console.log('ref type>>>', typeof layoutRef);
     console.log("industrialLibrary==",props.industrialLibrary)
 
-    window["API_URL"]=props.apiURL
+    // window["API_URL"]=props.apiURL
     console.log("apiURL",props.apiURL)
 
     const canvasOptions: Options = {
@@ -565,7 +565,7 @@ export const EditorLayout = (props:DataVEditorProps) => {
           onFormValueChange={onHandleLineFormValueChange}
         />
       ), // 渲染线条类型的组件
-      default: canvas && <BackgroundComponent data={canvas} websocketConf={props.websocketConf}/>, // 渲染画布背景的组件
+      default: canvas && <BackgroundComponent data={canvas} baseUrl={props.apiURL} websocketConf={props.websocketConf}/>, // 渲染画布背景的组件
     };
   }, [
     selected,
