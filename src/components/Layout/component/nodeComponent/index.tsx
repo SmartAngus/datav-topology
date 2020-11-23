@@ -70,7 +70,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     border: data.node['strokeStyle'] !== '#222' || data.node['lineWidth'] !== 1, // 边框颜色checkbox
   });
   const [valTypeRadio, setValTypeRadio] = useState('single'); // radio 值类型 single 单点值 area 范围值
-  const [dataTypeRadio, setDataTypeRadio] = useState('dataPoint'); // radio 数据类型 dataPoint 数据点 custom 自定义
 
   const { x, y, width, height } = data?.node?.rect || {};
   const { rotate, lineWidth, strokeStyle, dash, text, id, name, fillStyle } =
@@ -479,14 +478,20 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    * 渲染数据卡片样式设置  property
    */
   const renderDataCard = useMemo(() => {
+    const statusObj = {
+      normal: '正常状态',
+      bottomLimit: '低于下限',
+      topLimit: '高于上限',
+    };
     return (
       <Fragment>
-        <Panel header="基本信息" key="biciCardInfo">
+        <Panel header="基本信息" key="info">
           <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
             <Row>
               <Col span={10}>
                 <Form.Item
                   label="标题"
+                  name="showTitle"
                   labelCol={{ span: 12 }}
                   labelAlign="left"
                 >
@@ -494,43 +499,39 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Form.Item>
               </Col>
               <Col span={14}>
-                <Form.Item>
+                <Form.Item name="title">
                   <Input placeholder="标题名称" />
                 </Form.Item>
               </Col>
             </Row>
-            <Col span={24}>
-              <Form.Item
-                label="上下限"
-                labelCol={{ span: 6 }}
-                labelAlign="left"
-                wrapperCol={{ offset: 4 }}
-              >
-                <Radio.Group
-                  options={[
-                    { label: '数据点', value: 'dataPoint' },
-                    { label: '自定义', value: 'custom' },
-                  ]}
-                  value={dataTypeRadio}
-                  optionType="button"
-                  buttonStyle="solid"
-                  onChange={(e) => setDataTypeRadio(e.target.value)}
-                />
-              </Form.Item>
-            </Col>
+            <Form.Item
+              name="limitType"
+              label="上下限"
+              labelCol={{ span: 9 }}
+              labelAlign="left"
+              initialValue="dataPoint"
+            >
+              <Radio.Group
+                options={[
+                  { label: '数据点', value: 'dataPoint' },
+                  { label: '自定义', value: 'custom' },
+                ]}
+                optionType="button"
+                buttonStyle="solid"
+              />
+            </Form.Item>
             <Row>
               <Col span={4}>
-                <Form.Item name="showRange">
+                <Form.Item name="showLimit">
                   <Checkbox />
                 </Form.Item>
               </Col>
               <Col span={20}>
                 <Input.Group compact>
-                  <Form.Item name="valMin">
-                    <InputNumber
-                      style={{ width: 90, textAlign: 'center' }}
+                  <Form.Item name="limit.bottom">
+                    <Input
+                      style={{ width: 80 }}
                       placeholder="下限"
-                      disabled={dataTypeRadio === 'dataPoint'}
                     />
                   </Form.Item>
                   <Input
@@ -541,14 +542,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     placeholder="~"
                     disabled
                   />
-                  <Form.Item name="valMax">
-                    <InputNumber
+                  <Form.Item name="limit.top">
+                    <Input
                       style={{
-                        width: 90,
-                        textAlign: 'center',
+                        width: 80,
                       }}
                       placeholder="上限"
-                      disabled={dataTypeRadio === 'dataPoint'}
                     />
                   </Form.Item>
                 </Input.Group>
@@ -556,12 +555,53 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Row>
           </Form>
         </Panel>
-        <Panel header="样式-正常状态" key="biciCardNormal"></Panel>
-        <Panel header="样式-低于下限" key="biciCardNormal"></Panel>
-        <Panel header="样式-高于上线" key="biciCardNormal"></Panel>
+        {Object.keys(statusObj).map((key) => {
+          return (
+            <Panel header={`样式-${statusObj[key]}`} key={key}>
+              <Form
+                form={propertyForm}
+                onValuesChange={handlePropertyValuesChange}
+              >
+                <Form.Item
+                  name={`${key}.font.fontFamily`}
+                  label="字体"
+                  labelCol={{ span: 8 }}
+                  labelAlign="left"
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  name={`${key}.font.size`}
+                  label="字号"
+                  labelCol={{ span: 8 }}
+                  labelAlign="left"
+                >
+                  <Input />
+                </Form.Item>
+                <Row>
+                  <Col span={10}>
+                    <Form.Item
+                      name={`${key}.showBkColor`}
+                      label="背景颜色"
+                      labelCol={{ span: 18 }}
+                      labelAlign="left"
+                    >
+                      <Checkbox />
+                    </Form.Item>
+                  </Col>
+                  <Col span={13} push={1}>
+                    <Form.Item name={`${key}.bkColor`}>
+                      <ColorPicker />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+            </Panel>
+          );
+        })}
       </Fragment>
     );
-  }, [property, dataTypeRadio]);
+  }, [property]);
 
   /**
    * 渲染指示灯样式
@@ -699,17 +739,253 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     );
   }, [property, valTypeRadio]);
 
+  /**
+   * 渲染计量器样式
+   */
+  const renderMeter = useMemo(() => {
+    return (
+      <Panel header="样式" key="meterStyle">
+        <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
+          <Row>
+            <Col>
+              <Form.Item label="范围"></Form.Item>
+            </Col>
+            <Col>
+              <Input.Group compact>
+                <Form.Item name="meterValMin">
+                  <InputNumber style={{ width: 90 }} placeholder="下限" />
+                </Form.Item>
+                <Input
+                  style={{
+                    width: 30,
+                    pointerEvents: 'none',
+                  }}
+                  placeholder="~"
+                  disabled
+                />
+                <Form.Item name="meterValMax">
+                  <InputNumber
+                    style={{
+                      width: 90,
+                    }}
+                    placeholder="上限"
+                  />
+                </Form.Item>
+              </Input.Group>
+            </Col>
+          </Row>
+          <Form.Item name="meterNum" label="刻度">
+            <Input placeholder="请输入个数" suffix="个" />
+          </Form.Item>
+          <Row>
+            <Form.Item label="颜色分区"></Form.Item>
+          </Row>
+          {[1, 2, 3, 4, 5].map((item) => (
+            <Row key={item}>
+              <Col span={3}>
+                <Form.Item>
+                  <Checkbox />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item>
+                  <ColorPicker />
+                </Form.Item>
+              </Col>
+              <Col span={15}>
+                <Input.Group compact>
+                  <Form.Item>
+                    <Input style={{ width: 65 }} placeholder="下限" />
+                  </Form.Item>
+                  <Input
+                    style={{
+                      width: 30,
+                      pointerEvents: 'none',
+                    }}
+                    placeholder="~"
+                    disabled
+                  />
+                  <Form.Item>
+                    <Input
+                      style={{
+                        width: 65,
+                      }}
+                      placeholder="上限"
+                    />
+                  </Form.Item>
+                </Input.Group>
+              </Col>
+            </Row>
+          ))}
+        </Form>
+      </Panel>
+    );
+  }, []);
+
+  /**
+   * 渲染曲线图样式
+   */
+  const renderLineGraph = useMemo(() => {
+    return (
+      <Fragment>
+        <Panel header="基本信息" key="lineInfo">
+          <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
+            <Row>
+              <Col span={6}>
+                <Form.Item label="标题">
+                  <Checkbox />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item>
+                  <ColorPicker />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item>
+                  <Input placeholder="标题" maxLength={20} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Form.Item label="上下限" wrapperCol={{ push: 6 }}>
+              <Radio.Group
+                options={[
+                  { label: '数据点', value: 'dataPoint' },
+                  { label: '自定义', value: 'custom' },
+                ]}
+                optionType="button"
+                buttonStyle="solid"
+              />
+            </Form.Item>
+            <Row>
+              <Col>
+                <Form.Item>
+                  <Checkbox />
+                </Form.Item>
+              </Col>
+              <Col push={2}>
+                <Input.Group compact>
+                  <Form.Item>
+                    <InputNumber style={{ width: 90 }} placeholder="下限" />
+                  </Form.Item>
+                  <Input
+                    style={{
+                      width: 30,
+                      pointerEvents: 'none',
+                    }}
+                    placeholder="~"
+                    disabled
+                  />
+                  <Form.Item>
+                    <InputNumber
+                      style={{
+                        width: 90,
+                      }}
+                      placeholder="上限"
+                    />
+                  </Form.Item>
+                </Input.Group>
+              </Col>
+            </Row>
+          </Form>
+        </Panel>
+        <Panel header="样式" key="lineStyle">
+          <Form>
+            <Form.Item label="线性" wrapperCol={{ push: 10 }}>
+              <Radio.Group
+                options={[
+                  { label: '曲线', value: 'curves' },
+                  { label: '折线', value: 'broken' },
+                ]}
+                optionType="button"
+                buttonStyle="solid"
+              />
+            </Form.Item>
+            <Row>
+              <Col span={10}>
+                <Form.Item
+                  label="参考线"
+                  labelCol={{ span: 16 }}
+                  labelAlign="left"
+                >
+                  <Checkbox />
+                </Form.Item>
+              </Col>
+              <Col span={12} push={2}>
+                <Form.Item>
+                  <ColorPicker />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Form.Item label="曲线颜色"></Form.Item>
+            </Row>
+            <Form.List name="lineGraphRange">
+              {(fields, { add, remove }) => (
+                <Fragment>
+                  {fields.map((field) => (
+                    <Space
+                      key={field.key}
+                      style={{ display: 'flex', marginBottom: 8 }}
+                      align="center"
+                      size={20}
+                    >
+                      <Form.Item
+                        {...field}
+                        name={[field.name, 'lineGraphRangeCheck']}
+                        fieldKey={[field.fieldKey, 'lineGraphRangeCheck']}
+                        valuePropName="checked"
+                      >
+                        <Checkbox />
+                      </Form.Item>
+                      <Form.Item
+                        {...field}
+                        name={[field.name, 'lineGraphRangeColor']}
+                        fieldKey={[field.fieldKey, 'lineGraphRangeColor']}
+                      >
+                        <ColorPicker />
+                      </Form.Item>
+                      <Form.Item>
+                        <MinusCircleOutlined
+                          onClick={() => remove(field.name)}
+                        />
+                      </Form.Item>
+                    </Space>
+                  ))}
+                  {form.getFieldValue('lineGraphRange')?.length <= 10 ||
+                  !form.getFieldValue('lineGraphRange') ? (
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        添加
+                      </Button>
+                    </Form.Item>
+                  ) : null}
+                </Fragment>
+              )}
+            </Form.List>
+          </Form>
+        </Panel>
+      </Fragment>
+    );
+  }, []);
   return (
     <div className="rightArea">
       {renderAlign}
       <Tabs defaultActiveKey="1" centered>
         <TabPane tab="外观" key="1" style={{ margin: 0 }}>
-          <Collapse defaultActiveKey={['1', '2', '3']}>
+          <Collapse defaultActiveKey={['pos']}>
             {renderPositionForm}
             {/* {renderFillStyle} */}
             {/* {renderBorderStyle} */}
-            {renderFontForm}
+            {/* {renderFontForm} */}
             {/* {renderLight} */}
+            {/* {renderMeter} */}
+            {/* {renderLineGraph} */}
             {/** 渲染时间组件属性 */}
             {name === 'biciTimer' && renderBiciTimerDataForm}
             {name === 'biciCard' && renderDataCard}
