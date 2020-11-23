@@ -7,20 +7,30 @@ export function getMeasureOption(){
   let showValue = null;
   let boxPosition = [65, 0];
   let TP_txt = ''
+  let yAxisData=[]
 // 刻度使用柱状图模拟，短设置1，长的设置3；构造一个数据
   for(let i = 0, len = 135; i <= len; i++) {
+    const kv={key:'',value:0};
     if(i < 10 || i > 130) {
-      kd.push('')
+      kv.key=''
+      if(i<10) kv.value=-60
+      if(i>130) kv.value= 70
+      kd.push(kv)
+
     } else {
       if((i - 10) % 20 === 0) {
-        kd.push('1');
+        kv.key='-3';
+        kv.value=i
       } else if((i - 10) % 4 === 0) {
-        kd.push('3');
+        kv.key='-1';
+        kv.value=i
       } else {
-        kd.push('');
+        kv.key='';
+        kv.value=i
       }
+      kd.push(kv)
     }
-    console.log("kd",kd)
+    yAxisData.push(i)
 
   }
 //中间线的渐变色和文本内容
@@ -73,7 +83,7 @@ export function getMeasureOption(){
       show: false
     },
     yAxis: [{// 刻度坐标轴配置
-      show: false,
+      show: true,
       data: [],
       min: 0,
       max: 135,
@@ -87,8 +97,8 @@ export function getMeasureOption(){
     }, {
       type: 'category',
       data: ['', '', '', '', '', '', '', '', '', '', '°C'],
-      position: 'left',
-      offset: -80,
+      position: 'right',
+      offset: 0,
       axisLabel: {
         fontSize: 10,
         color: 'white'
@@ -119,7 +129,6 @@ export function getMeasureOption(){
       show: false,
       min: -5,
       max: 80,
-
     }],
     series: [{
       name: '条',
@@ -133,9 +142,8 @@ export function getMeasureOption(){
             show: true,
             position: "top",
             distance:-10,
-            width: 200,
-            height: 100,
-            formatter: '{back| ' + TP_value + ' }{unit|°C}{downTxt|' + TP_txt + '}',
+            // formatter: '{back| ' + TP_value + ' }{unit|°C}{downTxt|' + TP_txt + '}',
+            formatter: '{back| ' + TP_value + ' }{unit|°C}',
             rich: {
               back: {
                 align: 'center',
@@ -244,27 +252,23 @@ export function getMeasureOption(){
       yAxisIndex: 0,
       xAxisIndex: 3,
       label: {
-        normal: {
-          show: true,
-          position: 'left',
-          distance: 10,
-          color: 'white',
-          fontSize: 14,
-          formatter: function(params) {
-            if(params.dataIndex > 130 || params.dataIndex < 10) {
-              return '';
-            } else {
-              if((params.dataIndex - 10) % 20 === 0) {
-                return params.dataIndex - 70;
-              } else {
-                return '';
-              }
-            }
+        show: true,
+        position: 'left',
+        distance: 10,
+        color: 'white',
+        fontSize: 14,
+        formatter: function(params) {
+          if (params.dataIndex % 10 === 0) {
+            return params.dataIndex ;
+          } else if( params.dataIndex==100){
+            return params.dataIndex;
+          }else{
+            return ""
           }
         }
       },
       barGap: '-100%',
-      data: kd,
+      data: kd.map(item=>item.key),
       barWidth: 1,
       itemStyle: {
         normal: {
