@@ -90,9 +90,10 @@ export const Tools = [
                 fontFamily: 'Arial',
                 color: '#222',
                 textAlign: 'center',
-                fontSize: 20,
+                fontSize:20,
                 textBaseline: 'middle',
-              },
+                fontWight:800
+              }
             },
             {
               text: '上线 1000  下线 10',

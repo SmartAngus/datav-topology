@@ -29,7 +29,6 @@ import { formatPadding } from './utils/padding';
 import { Socket } from './socket';
 import { MQTT } from './mqtt';
 import { Direction } from './models';
-import { canvas } from '../../../components/Layout';
 
 const resizeCursors = ['nw-resize', 'ne-resize', 'se-resize', 'sw-resize'];
 enum MoveInType {
@@ -113,7 +112,6 @@ export class Topology {
 
   socket: Socket;
   mqtt: MQTT;
-  isSave:boolean;
   _emitter: Emitter;
 
   private scheduledAnimationFrame = false;
@@ -299,7 +297,6 @@ export class Topology {
     this.parentElem.onresize = this.winResize;
     window.addEventListener('resize', this.winResize);
     (window as any).topology = this;
-    this.isSave = true;
   }
 
   winResize = () => {
@@ -478,7 +475,6 @@ export class Topology {
     this.offscreen.render();
     this.canvas.render();
     this.rendering = false;
-    this.isSave = false;
   }
 
   // open - redraw by the data

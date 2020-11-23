@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Topology } from '../../topology/core';
 import { History } from 'history';
 import { Button, Menu, Popover, Tag, Space } from 'antd';
@@ -12,29 +12,27 @@ interface HeaderProps {
   canvas?: Topology;
   history?: History;
   rootRef?: BasicTarget<HTMLElement>;
+  isSave?: boolean;
+  setIsSave?: (value: boolean) => void;
+  onExtraSetting?: () => void;
 }
 
 const ButtonGroup = Button.Group;
 
 const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
-  const { canvas, history, rootRef } = props;
+  const { canvas, history, rootRef, isSave, setIsSave } = props;
 
   const [isFullscreen, { toggleFull }] = useFullscreen(rootRef);
   const [scaleNumber, setScaleNumber] = useState(1); // 缩放的基数
 
   const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
 
-  const [isSave,setIsSave]=useState(canvas.isSave)
-
-  useEffect(()=>{
-    setIsSave(canvas.isSave)
-    canvas.updateProps(false)
-  },[canvas])
+  useEffect(() => {
+    canvas.updateProps(false);
+  }, [canvas]);
 
   const handleSave = () => {
-    canvas.isSave=true;
-
-    console.log('canvas>>>', canvas.isSave);
+    setIsSave(true);
     // FileSaver.saveAs(
     //   new Blob([JSON.stringify(canvas.data)], {
     //     type: 'text/plain;charset=utf-8',
@@ -44,11 +42,10 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     const saveData = new Blob([JSON.stringify(canvas.data)], {
       type: 'text/plain;charset=utf-8',
     });
-    console.log('save data>>>', );
-    saveData.text().then(r=>{
-      console.log(JSON.parse(r))
-      setIsSave(false)
-    })
+    console.log('save data>>>');
+    saveData.text().then((r) => {
+      console.log(JSON.parse(r));
+    });
   };
 
   /**
@@ -151,6 +148,13 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
         state: { data: JSON.parse(reader.result as any) },
       });
     };
+  };
+  /**
+   * 点击额外配置
+   */
+  const handleExtraSetting = () => {
+    const { onExtraSetting } = props;
+    onExtraSetting && onExtraSetting();
   };
 
   /**
@@ -271,19 +275,22 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
         <CustomIcon type="icon-quanping" />
         <span>{isFullscreen ? '退出全屏' : '全屏'}</span>
       </a>
-      <a style={{ lineHeight: '48px', marginRight: 30 }}>
+      <a
+        style={{ lineHeight: '48px', marginRight: 30 }}
+        onClick={handleExtraSetting}
+      >
         <CustomIcon type="icon-peizhi-" />
         <span style={{ marginLeft: 5 }}>配置看板</span>
       </a>
 
       <Tag
         color="#F0DCCE"
-        visible={isSave}
+        visible={!isSave}
         style={{
           color: '#FA6400',
           height: '28px',
           padding: '3px 10px',
-          marginTop: '10px'
+          marginTop: '10px',
         }}
       >
         修改未保存

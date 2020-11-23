@@ -5,7 +5,7 @@ import { Topology,Node,Line,Lock } from '../../topology/core';
 import styles from './index.module.scss';
 import { Form, Input, Modal } from 'antd'
 import { FormInstance } from 'antd/es/form'
-import { client } from '../data/api'
+import { client, clientParam } from '../data/api'
 
 export interface CanvasContextMenuProps {
   data: {
@@ -17,22 +17,24 @@ export interface CanvasContextMenuProps {
   };
   canvas: Topology;
   show?:boolean;
-}
-export function saveNewComponent (params) {
-  return client.post('/applications/customComponent/save', params,{
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      token: '5lpRaFsOnAtHmLXoG9fUbs',
-      'Content-Type': 'application/json',
-    }
-  })
+  combineCom?:any;
 }
 
 export default class CanvasContextMenu extends Component<CanvasContextMenuProps> {
   state={
-    newComVisible:false
+    newComVisible:false,
+    componentName:'新建组件'
   }
   formRef = React.createRef<FormInstance>();
+  saveNewComponent (params) {
+    return clientParam(this.props.combineCom.apiURL).post(this.props.combineCom.add.url, params,{
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        token: this.props.combineCom.token,
+        'Content-Type': 'application/json',
+      }
+    })
+  }
   onTop() {
     if (this.props.data.node) {
       this.props.canvas.top(this.props.data.node)
@@ -96,23 +98,24 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
   // 确定新建组件
   handleOk=()=>{
     this.onCheck()
-    this.setState({newComVisible:false})
-    const newNode = this.props.canvas.toComponent(this.props.data.nodes)
-    this.props.canvas.delete();
-    this.props.canvas.addNode(newNode)
-    this.props.canvas.render()
-    console.log("newNode",newNode)
-    saveNewComponent({componentName:'aaa',componentProperty:JSON.stringify(newNode)}).then(res=>{
-      console.log("res==",res)
-    })
   }
   handleCancel=()=>{
     this.setState({newComVisible:false})
   }
   onCheck = async () => {
     try {
-      const values = await this.formRef.current.validateFields(['newCompName']);
+      const values = await this.formRef.current.validateFields(['componentName']);
       console.log('Success:', values);
+      this.setState({componentName:values.componentName})
+      this.setState({newComVisible:false})
+      const newNode = this.props.canvas.toComponent(this.props.data.nodes)
+      this.props.canvas.delete();
+      this.props.canvas.addNode(newNode)
+      this.props.canvas.render()
+      console.log("newNode",newNode)
+      this.saveNewComponent({componentName:this.state.componentName,componentProperty:JSON.stringify(newNode)}).then(res=>{
+        console.log("res==",res)
+      })
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
@@ -141,8 +144,8 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
               min: 2,
               message: '不低于2个字符',
             }
-          ]} label="组件名字" name="newCompName">
-            <Input placeholder="Warning" id="warning2" />
+          ]} label="组件名字" name="componentName">
+            <Input placeholder="输入组件名字" id="componentName" />
           </Form.Item>
         </Form>
       </Modal>
