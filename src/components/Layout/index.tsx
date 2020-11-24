@@ -461,9 +461,13 @@ export const EditorLayout = (props: DataVEditorProps) => {
    * 缩放画布
    * @param scaleKey 缩放系数
    */
-  const handleScaleCanvas = (scaleKey) => {
-    console.log('scaleKey', scaleKey);
-  };
+  const handleScaleCanvas=(scaleKey)=>{
+    console.log("scaleKey",scaleKey)
+    // const  width=canvasSizeInfo.width*scaleKey;
+    // const height=canvasSizeInfo.height*scaleKey;
+    // const r = calcCanvas(width,height)
+    // setCanvasSizeInfo({...r,width,height})
+  }
 
   /**
    * 当线条表单数据变化时, 重新渲染canvas
@@ -718,31 +722,23 @@ export const EditorLayout = (props: DataVEditorProps) => {
           </Tabs>
         </div>
         <div className="full">
-          <svg
-            className="svg"
-            ref={svgRef}
-            style={{
-              minWidth: canvasSizeInfo.minWidth,
-              minHeight: canvasSizeInfo.minHeight,
-            }}
-          ></svg>
-          <div
-            ref={canvasRef}
-            id="topology-canvas"
-            style={{
-              position: 'absolute',
-              borderWidth: 1,
-              overflow: 'hidden',
-              left: canvasSizeInfo.left,
-              top: canvasSizeInfo.top,
-              width: canvasSizeInfo.width,
-              height: canvasSizeInfo.height,
-              background: '#ccc',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundImage: `url(${bkImageUrl})`,
-            }}
-            onContextMenu={handleContextMenu}
+          <svg className="svg" ref={svgRef} style={{minWidth:canvasSizeInfo.minWidth,minHeight:canvasSizeInfo.minHeight}}></svg>
+          <div ref={canvasRef}
+               id="topology-canvas"
+               style={{
+                 position: "absolute",
+                 borderWidth: 1,
+                 overflow: "hidden",
+                 left: canvasSizeInfo.left,
+                 top: canvasSizeInfo.top,
+                 width: canvasSizeInfo.width,
+                 height: canvasSizeInfo.height,
+                 background: '#ccc',
+                 backgroundSize:'cover',
+                 backgroundRepeat:'no-repeat',
+                 backgroundImage:`url(${bkImageUrl})`
+               }}
+               onContextMenu={handleContextMenu}
           />
         </div>
         <div className="props">{renderRightArea}</div>
