@@ -166,8 +166,8 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
       <Menu.Item key="100">100%</Menu.Item>
       <Menu.Item key="150">150%</Menu.Item>
       <Menu.Item key="200">200%</Menu.Item>
-      <Menu.Divider />
-      <Menu.Item key="adaptive">适应屏幕</Menu.Item>
+      {/* <Menu.Divider />
+      <Menu.Item key="adaptive">适应屏幕</Menu.Item> */}
     </Menu>
   );
 

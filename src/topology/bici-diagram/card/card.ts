@@ -30,8 +30,20 @@ export function simpleCard(ctx: CanvasRenderingContext2D, node: Node) {
     node.rect.y + node.rect.height,
     r
   );
-  ctx.arcTo(node.rect.x, node.rect.y + node.rect.height, node.rect.x, node.rect.y, r);
-  ctx.arcTo(node.rect.x, node.rect.y, node.rect.x + node.rect.width, node.rect.y, r);
+  ctx.arcTo(
+    node.rect.x,
+    node.rect.y + node.rect.height,
+    node.rect.x,
+    node.rect.y,
+    r
+  );
+  ctx.arcTo(
+    node.rect.x,
+    node.rect.y,
+    node.rect.x + node.rect.width,
+    node.rect.y,
+    r
+  );
   ctx.closePath();
 
   ctx.moveTo(node.rect.x, node.rect.y + 40);

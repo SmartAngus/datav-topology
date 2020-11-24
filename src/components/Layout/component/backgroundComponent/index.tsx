@@ -74,30 +74,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
       bgImgCheck: bkImage ? true : false,
       gridCheck: data.data.grid ? data.data.grid : false,
     });
-    // form.validateFields(['bkColor', 'bkImage']).then((values) => {});
-    // form.validateFields((err, value) => {
-    //   if (err) return;
-    //   data.clearBkImg();
-    //   data.data.bkColor = value.bkColor;
-    //   data.data.bkImage = value.bkImage;
-    //   data.render();
-    //   form.resetFields();
-    // });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form]);
-
-  /**
-   * 渲染位置和大小的表单
-   */
-  const handleFormValueChange = (changeValues, allValues) => {
-    console.log('handleFormValueChange>>>', changeValues);
-    console.log('allValues>>>', allValues);
-    // for (let k in changeValues) {
-    //   data.data[k] = changeValues[k];
-    // }
-    // data.render();
-    // form.resetFields();
-  };
 
   // 背景图片checkbox切换
   const handleBgImgChange = () => {};
@@ -127,6 +104,12 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   // 网格选择切换
   const gridOnChange = (e: CheckboxChangeEvent) => {
     canvas.showGrid(e.target.checked);
+  };
+
+  // 设置宽高
+  const panelSizeChange = () => {
+    const {w, h} = form.getFieldsValue(['w', 'h']);
+    data.resize({ width: w, height: h });
   };
 
   // 画布布局切换
@@ -203,7 +186,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   const renderDefultOptions = (
     <Collapse defaultActiveKey={['1']} expandIconPosition="right">
       <Panel header="基础属性" key="1">
-        <Form form={form} onValuesChange={handleFormValueChange}>
+        <Form form={form}>
           <Popover
             placement="bottom"
             trigger="click"
@@ -223,12 +206,12 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
           <Row style={{ marginTop: 15 }} gutter={[8, 0]} align="middle">
             <Col span={8}>
               <Form.Item name="w">
-                <Input suffix="W" />
+                <Input suffix="W" onChange={panelSizeChange} />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item name="h">
-                <Input suffix="H" />
+                <Input suffix="H" onChange={panelSizeChange} />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -253,7 +236,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
       <Panel header="背景" key="2">
-        <Form form={form} onValuesChange={handleFormValueChange}>
+        <Form form={form}>
           <Popover
             placement="bottom"
             trigger="click"
@@ -294,7 +277,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
                 label="背景图片"
                 valuePropName="checked"
               >
-                <Checkbox onChange={handleBgImgChange} />
+                <Checkbox />
               </Form.Item>
             </Col>
             <Col push={2}>
@@ -320,7 +303,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
       <Panel header="网格" key="3">
-        <Form form={form} onValuesChange={handleFormValueChange}>
+        <Form form={form}>
           <Row align="middle">
             <Col push={1}>
               <Form.Item name="gridCheck" label="网格" valuePropName="checked">

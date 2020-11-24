@@ -1,35 +1,41 @@
-import React, { useEffect, useState } from 'react'
-import { client,clientParam } from '../../../data/api'
+import React, { useEffect, useState } from 'react';
+import { client, clientParam } from '../../../data/api';
 
-const Layout = ({ Tools, onDrag,combineCom }) => {
-  function getNewComponents () {
-    return clientParam(combineCom.apiURL).post(combineCom.list.url, combineCom.list.params,{
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        token: combineCom.token,
-        'Content-Type': 'application/json',
+const Layout = ({ Tools, onDrag, combineCom }) => {
+  function getNewComponents() {
+    return clientParam(combineCom.apiURL).post(
+      combineCom.list.url,
+      combineCom.list.params,
+      {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          token: combineCom.token,
+          'Content-Type': 'application/json',
+        },
       }
-    })
+    );
   }
-  console.log("CustomComponent",Tools)
-  const [componentList,setComponentList]=useState([])
-  useEffect(()=>{
-    getNewComponents().then(r=>{
-      console.log("r",r)
-      setComponentList(r.data.data)
-    })
-  },[])
+  // console.log("CustomComponent",Tools)
+  const [componentList, setComponentList] = useState([]);
+  useEffect(() => {
+    getNewComponents().then((r) => {
+      console.log('r', r);
+      setComponentList(r.data.data);
+    });
+  }, []);
   return (
     <div>
       <div className="title">自定义组件</div>
       <div className="button">
-        {(componentList||[]).map((item,key)=>{
+        {(componentList || []).map((item, key) => {
           return (
             <a
               key={key}
               draggable
               href="/#"
-              onDragStart={(ev) => onDrag(ev, JSON.parse(item.componentProperty),true)}
+              onDragStart={(ev) =>
+                onDrag(ev, JSON.parse(item.componentProperty), true)
+              }
             >
               <i
                 className="iconfont icon-triangle"
@@ -37,7 +43,7 @@ const Layout = ({ Tools, onDrag,combineCom }) => {
               ></i>
               {item.componentName}
             </a>
-          )
+          );
         })}
       </div>
     </div>

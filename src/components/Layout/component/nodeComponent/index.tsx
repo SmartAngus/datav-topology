@@ -47,6 +47,10 @@ const alignObj = {
   center: ['垂直居中', 'icon-chuizhijuzhong'],
   middle: ['水平居中', 'icon-shuipingjuzhong'],
 };
+// 需要显示文件填充的节点列表
+const fillStyleNodeList = [''];
+//
+const fontStyleNodeList = ['biciPilot'];
 
 interface ICanvasProps extends FormProps {
   data?: any;
@@ -65,20 +69,15 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const [propertyForm] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [checkObj, setCheckObj] = useState({
-    fill: data.node['fillStyle'] !== '', // 填充颜色checkbox
-    border: data.node['strokeStyle'] !== '#222' || data.node['lineWidth'] !== 1, // 边框颜色checkbox
-  });
-  const [valTypeRadio, setValTypeRadio] = useState('single'); // radio 值类型 single 单点值 area 范围值
 
   const { x, y, width, height } = data?.node?.rect || {};
-  const { rotate, lineWidth, strokeStyle, dash, text, id, name, fillStyle } =
+  const { rotate, lineWidth, strokeStyle, text, id, name, fillStyle } =
     data?.node || {};
   const { color, fontSize, fontFamily } = data?.node?.font || {};
-  const { property } = data?.node;
-  const extraFields = data.node.data; // 用户自定义数据片段
+  const { property } = data?.node; // 用户自定义数据片段
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
+    console.log('fillStyle>>>', fillStyle);
     form.setFieldsValue({
       x,
       y,
@@ -87,11 +86,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       rotate,
       lineWidth,
       strokeStyle,
-      dash,
       color,
       fontSize,
       fontFamily,
       text,
+      showFillStyle: false,
     });
   }, [
     x,
@@ -102,12 +101,13 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     text,
     lineWidth,
     strokeStyle,
-    dash,
     color,
     fontSize,
     fontFamily,
     text,
+    fillStyle,
   ]);
+
   useEffect(() => {
     propertyForm.setFieldsValue({
       dataMethod,
@@ -117,8 +117,51 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   }, [property]);
 
   // 字段值更新时触发的回掉
-  const handleValuesChange = (changedValues, allValues) => {
-    onFormValueChange && onFormValueChange(allValues);
+  const handleValuesChange = (changedValues) => {
+    const {
+      x,
+      y,
+      width,
+      height,
+      rotate,
+      color,
+      fontSize,
+      fontFamily,
+      fillStyle,
+      strokeStyle,
+    } = changedValues;
+    const changedProps = {
+      rect: {
+        x: x ? Number(x) : undefined,
+        y: y ? Number(y) : undefined,
+        width: width ? Number(width) : undefined,
+        height: height ? Number(height) : undefined,
+      },
+      font: {
+        color,
+        fontSize: fontSize ? Number(fontSize) : undefined,
+        fontFamily,
+      },
+      rotate: rotate ? Number(rotate) : undefined,
+      strokeStyle,
+      fillStyle,
+    };
+    console.log('changedProps>>>', changedProps);
+    for (const key in changedProps) {
+      if (typeof changedProps[key] === 'object') {
+        for (const k in changedProps[key]) {
+          if (changedProps[key][k] !== undefined) {
+            data.node[key][k] = changedProps[key][k];
+          }
+        }
+      } else {
+        if (changedProps[key] !== undefined) {
+          data.node[key] = changedProps[key];
+        }
+      }
+    }
+
+    canvas.updateProps(false, [data.node]);
   };
   const handlePropertyValuesChange = (changedValues, allValues) => {
     // console.log('allValues', allValues);
@@ -176,6 +219,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       ></DataBindModal>
     );
   };
+
   /**
    * 渲染位置和大小的表单
    */
@@ -215,47 +259,36 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     );
   }, [x, y, width, height, rotate]);
 
-  const fillColorCheckboxChange = (e: CheckboxChangeEvent) => {
-    data.node['fillStyle'] = e.target.checked
-      ? form.getFieldValue('fillStyle')
-      : '';
-    setCheckObj({ ...checkObj, fill: e.target.checked });
-    canvas.updateProps(data.node);
-  };
   /**
    * 渲染填充样式
    */
   const renderFillStyle = useMemo(() => {
+    console.log('showFillStyle>>>', form.getFieldValue('showFillStyle'));
     return (
       <Panel header="填充" key="fill">
-        <Form form={form} onValuesChange={handleValuesChange}>
+        <Form form={form}>
           <Row align="middle">
             <Col span={8}>
-              <Form.Item label="颜色" labelCol={{ span: 16 }} labelAlign="left">
-                <Checkbox onChange={fillColorCheckboxChange} />
+              <Form.Item
+                name="showFillStyle"
+                label="颜色"
+                labelCol={{ span: 16 }}
+                labelAlign="left"
+                valuePropName="checked"
+              >
+                <Checkbox />
               </Form.Item>
             </Col>
             <Col push={1}>
               <Form.Item name="fillStyle">
-                <ColorPicker disabled={!checkObj.fill} />
+                <ColorPicker disabled={form.getFieldValue('showFillStyle')} />
               </Form.Item>
             </Col>
           </Row>
         </Form>
       </Panel>
     );
-  }, [fillStyle]);
-
-  const borderColorCheckboxChange = (e: CheckboxChangeEvent) => {
-    data.node['strokeStyle'] = e.target.checked
-      ? form.getFieldValue('strokeStyle')
-      : '#222';
-    data.node['lineWidth'] = e.target.checked
-      ? form.getFieldValue('lineWidth')
-      : 1;
-    setCheckObj({ ...checkObj, border: e.target.checked });
-    canvas.updateProps(data.node);
-  };
+  }, [form, fillStyle]);
 
   /**
    * 渲染边框样式
@@ -267,27 +300,24 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           <Row align="middle">
             <Col span={8}>
               <Form.Item label="颜色" labelCol={{ span: 16 }} labelAlign="left">
-                <Checkbox
-                  onChange={borderColorCheckboxChange}
-                  checked={checkObj.border}
-                />
+                <Checkbox />
               </Form.Item>
             </Col>
             <Col span={6} push={1}>
               <Form.Item name="strokeStyle">
-                <ColorPicker disabled={!checkObj.border} />
+                <ColorPicker />
               </Form.Item>
             </Col>
             <Col push={2}>
               <Form.Item name="lineWidth" initialValue={1}>
-                <InputNumber disabled={!checkObj.border} />
+                <InputNumber />
               </Form.Item>
             </Col>
           </Row>
         </Form>
       </Panel>
     );
-  }, [strokeStyle, lineWidth, checkObj.border]);
+  }, [strokeStyle, lineWidth]);
 
   /**
    * 渲染字体的表单
@@ -494,6 +524,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   name="showTitle"
                   labelCol={{ span: 12 }}
                   labelAlign="left"
+                  valuePropName="checked"
                 >
                   <Checkbox />
                 </Form.Item>
@@ -522,17 +553,14 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Form.Item>
             <Row>
               <Col span={4}>
-                <Form.Item name="showLimit">
+                <Form.Item name="showLimit" valuePropName="checked">
                   <Checkbox />
                 </Form.Item>
               </Col>
               <Col span={20}>
                 <Input.Group compact>
                   <Form.Item name="limit.bottom">
-                    <Input
-                      style={{ width: 80 }}
-                      placeholder="下限"
-                    />
+                    <Input style={{ width: 80 }} placeholder="下限" />
                   </Form.Item>
                   <Input
                     style={{
@@ -585,6 +613,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       label="背景颜色"
                       labelCol={{ span: 18 }}
                       labelAlign="left"
+                      valuePropName="checked"
                     >
                       <Checkbox />
                     </Form.Item>
@@ -621,7 +650,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item label="尺寸">
+            <Form.Item name="size" label="尺寸">
               <InputNumber placeholder="请输入直径" style={{ width: '100%' }} />
             </Form.Item>
           </Col>
@@ -659,19 +688,21 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               </Form.Item>
             </Col>
           </Row>
-          <Form.Item label="状态定义" wrapperCol={{ offset: 3 }}>
+          <Form.Item
+            name="stateType"
+            label="状态定义"
+            wrapperCol={{ offset: 3 }}
+          >
             <Radio.Group
               options={[
                 { label: '单点值', value: 'single' },
-                { label: '范围值', value: 'area' },
+                { label: '范围值', value: 'range' },
               ]}
-              value={valTypeRadio}
               optionType="button"
               buttonStyle="solid"
-              onChange={(e) => setValTypeRadio(e.target.value)}
             />
           </Form.Item>
-          <Form.List name="lightAreas">
+          <Form.List name="lightRange">
             {(fields, { add, remove }) => (
               <Fragment>
                 {fields.map((field) => (
@@ -682,34 +713,30 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   >
                     <Form.Item
                       {...field}
-                      name={[field.name, 'lightAreaCheck']}
-                      fieldKey={[field.fieldKey, 'lightAreaCheck']}
+                      name={[field.name, 'lightRangeCheck']}
+                      fieldKey={[field.fieldKey, 'lightRangeCheck']}
                       valuePropName="checked"
                     >
                       <Checkbox />
                     </Form.Item>
                     <Form.Item
                       {...field}
-                      name={[field.name, 'lightAreaColor']}
-                      fieldKey={[field.fieldKey, 'lightAreaColor']}
+                      name={[field.name, 'lightRangeColor']}
+                      fieldKey={[field.fieldKey, 'lightRangeColor']}
                     >
                       <ColorPicker />
                     </Form.Item>
                     <Form.Item
                       {...field}
-                      name={[field.name, 'lightAreaVal']}
-                      fieldKey={[field.fieldKey, 'lightAreaVal']}
+                      name={[field.name, 'lightRangeVal']}
+                      fieldKey={[field.fieldKey, 'lightRangeVal']}
                     >
-                      <Input
-                        placeholder={
-                          valTypeRadio === 'single' ? '数值' : '值~值'
-                        }
-                      />
+                      <Input placeholder="数值" />
                     </Form.Item>
                     <Form.Item
                       {...field}
-                      name={[field.name, 'lightAreaText']}
-                      fieldKey={[field.fieldKey, 'lightAreaText']}
+                      name={[field.name, 'lightRangeText']}
+                      fieldKey={[field.fieldKey, 'lightRangeText']}
                     >
                       <Input placeholder="文本" />
                     </Form.Item>
@@ -718,8 +745,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     </Form.Item>
                   </Space>
                 ))}
-                {form.getFieldValue('lightAreas')?.length <= 10 ||
-                !form.getFieldValue('lightAreas') ? (
+                {form.getFieldValue('lightRange')?.length <= 10 ||
+                !form.getFieldValue('lightRange') ? (
                   <Form.Item>
                     <Button
                       type="dashed"
@@ -737,7 +764,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [property, valTypeRadio]);
+  }, [property]);
 
   /**
    * 渲染计量器样式
@@ -980,10 +1007,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         <TabPane tab="外观" key="1" style={{ margin: 0 }}>
           <Collapse defaultActiveKey={['pos']}>
             {renderPositionForm}
-            {/* {renderFillStyle} */}
             {/* {renderBorderStyle} */}
-            {/* {renderFontForm} */}
-            {/* {renderLight} */}
+            {fontStyleNodeList.includes(name) && renderFontForm}
+            {renderFillStyle}
+            {name === 'biciPilot' && renderLight}
             {/* {renderMeter} */}
             {/* {renderLineGraph} */}
             {/** 渲染时间组件属性 */}
@@ -1006,13 +1033,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             canvasData={data}
             onEventValueChange={onEventValueChange}
           />
-        </TabPane>
-         <TabPane tab="动效" key="4" style={{ margin: 0 }}>
-          <AnimateComponent canvasData={data} />
-          待开发...
-        </TabPane>
-        <TabPane tab="结构" key="5" style={{ margin: 0 }}>
-          待开发...
         </TabPane> */}
       </Tabs>
       {renderDataPointModal()}

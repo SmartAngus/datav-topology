@@ -1,6 +1,6 @@
 import { s8, Node, createDiv, rectangle } from '../../../core';
-import {Stomp} from '@stomp/stompjs'
-import SockJS from 'sockjs-client'
+import { Stomp } from '@stomp/stompjs';
+import { reviver } from '../../../../components/utils/serializing';
 export const echartsObjs: any = {};
 
 export function echarts(ctx: CanvasRenderingContext2D, node: Node) {
@@ -14,7 +14,7 @@ export function echarts(ctx: CanvasRenderingContext2D, node: Node) {
   }
 
   if (typeof node.data === 'string') {
-    node.data = JSON.parse(node.data);
+    node.data = JSON.parse(node.data, reviver);
   }
 
   if (!node.data.echarts) {
@@ -48,17 +48,16 @@ export function echarts(ctx: CanvasRenderingContext2D, node: Node) {
   if (!node.elementRendered) {
     // 初始化时，等待父div先渲染完成，避免初始图表控件太大。
     setTimeout(() => {
-
       var stompClient = null;
-
-
 
       function connect() {
         var socket = new WebSocket('ws://localhost/gs-guide-websocket');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
-          stompClient.subscribe('http://localhost/app/topic/greetings', function (greeting) {
-          });
+          stompClient.subscribe(
+            'http://localhost/app/topic/greetings',
+            function (greeting) {}
+          );
         });
       }
 
@@ -69,17 +68,15 @@ export function echarts(ctx: CanvasRenderingContext2D, node: Node) {
       }
 
       function sendName() {
-        stompClient.send("http://localhost/app/hello", {}, JSON.stringify({'name': "majy"}));
+        stompClient.send(
+          'http://localhost/app/hello',
+          {},
+          JSON.stringify({ name: 'majy' })
+        );
       }
-
-
-
-
-
-
-
-
-      echartsObjs[node.id].chart.setOption(node.data.echarts.option);
+      echartsObjs[node.id].chart.setOption(
+        JSON.parse(JSON.stringify(node.data.echarts.option), reviver)
+      );
       echartsObjs[node.id].chart.resize();
       node.elementRendered = true;
     });

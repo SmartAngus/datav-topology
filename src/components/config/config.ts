@@ -1,4 +1,4 @@
-import {getMeasureOption} from './chartMeasure'
+import { getMeasureOption } from './chartMeasure';
 export const Tools = [
   {
     group: '通用组件',
@@ -60,25 +60,27 @@ export const Tools = [
         data: {
           text: '数据卡片',
           rect: {
-            width: 200,
-            height: 120,
+            width: 278,
+            height: 128,
           },
           paddingTop: 30,
           font: {
             fontFamily: 'Arial',
-            color: '#222',
-            fontWeight: 'bold',
+            color: '#fff',
+            fontSize: 14,
+            fontWeight: 400,
           },
-          fillStyle: '#ffffba',
-          strokeStyle: '#7e1212',
+          fillStyle: '#6236FF',
+          strokeStyle: '#222',
           name: 'biciCard',
           children: [
             {
               text: '10000',
               name: 'text',
+              hideAnchor: true,
               paddingLeft: 10,
               paddingRight: 10,
-              paddingTop: 10,
+              paddingTop: '50%',
               paddingBottom: 10,
               rectInParent: {
                 x: 0,
@@ -88,19 +90,20 @@ export const Tools = [
               },
               font: {
                 fontFamily: 'Arial',
-                color: '#222',
+                color: '#fff',
                 textAlign: 'center',
-                fontSize:20,
+                fontSize: 42,
                 textBaseline: 'middle',
-                fontWight:800
-              }
+                fontWight: 400,
+              },
             },
             {
-              text: '上线 1000  下线 10',
+              text: '上限: 10000   下限: 300',
               name: 'text',
+              hideAnchor: true,
               paddingLeft: 10,
               paddingRight: 10,
-              paddingTop: 10,
+              paddingTop: '50%',
               paddingBottom: 10,
               rectInParent: {
                 x: 0,
@@ -110,7 +113,9 @@ export const Tools = [
               },
               font: {
                 fontFamily: 'Arial',
-                color: '#222',
+                color: '#fff',
+                fontSize: 14,
+                fontWight: 400,
                 textAlign: 'center',
                 textBaseline: 'middle',
               },
@@ -171,6 +176,14 @@ export const Tools = [
             height: 30,
           },
           name: 'biciPilot',
+          property: {
+            color: '',
+            size: 5,
+            text: '',
+            showText: true,
+            stateType: 'single', // 状态定义: single 单点值,  range 范围值
+            lightRange: [], // 指示灯 状态定义 列表
+          },
         },
       },
     ],
@@ -804,7 +817,7 @@ export const Tools = [
           text: '计量器',
           rect: {
             width: 300,
-            height: 200,
+            height: 500,
           },
           name: 'echarts',
           data: {

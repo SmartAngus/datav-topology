@@ -4,8 +4,9 @@ import React, {
   useCallback,
   useMemo,
   CSSProperties,
-  useRef, useImperativeHandle
-} from 'react'
+  useRef,
+  useImperativeHandle,
+} from 'react';
 import { Topology, registerNode, Options, Node } from '../../topology/core';
 import {
   register as registerChart,
@@ -91,17 +92,18 @@ import { Modal, Tabs } from 'antd';
 import { Tools } from '../config/config';
 import { getNodeById } from '../Service/topologyService';
 import { useClickAway } from 'ahooks';
+import { replacer } from '../utils/serializing';
 import Header from '../Header';
 import NodeComponent from './component/nodeComponent';
 import BackgroundComponent from './component/backgroundComponent';
 import LineComponent from './component/lineComponent';
 import SystemComponent from './LeftAreaComponent/SystemComponent';
-import CustomComponent from './LeftAreaComponent/CustomComponent'
+import CustomComponent from './LeftAreaComponent/CustomComponent';
 import MyComponent from './LeftAreaComponent/MyComponent';
 
 import './index.css';
 import CanvasContextMenu from '../canvasContextMenu';
-import { DataVEditorProps } from '../data/defines'
+import { DataVEditorProps } from '../data/defines';
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
@@ -111,11 +113,11 @@ export let canvas: Topology;
  * @param history
  * @constructor
  */
-export const EditorLayout = (props:DataVEditorProps) => {
+export const EditorLayout = (props: DataVEditorProps) => {
   const history = props.history;
   const layoutRef = useRef();
   const contextMenuRef = useRef();
-  const [isSave,setIsSave]=useState(true)
+  const [isSave, setIsSave] = useState(true);
 
   const [selected, setSelected] = useState({
     node: null,
@@ -144,11 +146,11 @@ export const EditorLayout = (props:DataVEditorProps) => {
   }, contextMenuRef);
 
   useEffect(() => {
-    console.log('ref type>>>', typeof layoutRef);
-    console.log("industrialLibrary==",props.industrialLibrary)
+    console.log('Tools>>>', Tools);
+    // console.log('industrialLibrary==', props.industrialLibrary);
 
     // window["API_URL"]=props.apiURL
-    console.log("apiURL",props.apiURL)
+    // console.log('apiURL', props.apiURL);
 
     const canvasOptions: Options = {
       rotateCursor: '/rotate.cur',
@@ -165,7 +167,7 @@ export const EditorLayout = (props:DataVEditorProps) => {
     async function getNodeData() {
       const data = await getNodeById(history.location.state.id);
       canvas.open(data.data);
-      console.log("history.location.state==",history.location.state)
+      console.log('history.location.state==', history.location.state);
     }
 
     if (history.location.state && history.location.state.from === '/preview') {
@@ -318,11 +320,15 @@ export const EditorLayout = (props:DataVEditorProps) => {
     );
   };
 
-  const onDrag = (event, node, custom=false) => {
-    if(custom){
-      event.dataTransfer.setData('Text', JSON.stringify(node));
-    }else{
-      event.dataTransfer.setData('Text', JSON.stringify(node.data));
+  const onDrag = (event, node, custom = false) => {
+    console.log('custom>>>?', custom);
+    if (custom) {
+      event.dataTransfer.setData('Topology', JSON.stringify(node, replacer));
+    } else {
+      event.dataTransfer.setData(
+        'Topology',
+        JSON.stringify(node.data, replacer)
+      );
     }
   };
 
@@ -346,6 +352,7 @@ export const EditorLayout = (props:DataVEditorProps) => {
         ...other
       } = value;
       console.log('改变直>>>', value);
+      console.log('rect.other>>>', other);
       const changedValues = {
         node: {
           rect: other,
@@ -382,7 +389,8 @@ export const EditorLayout = (props:DataVEditorProps) => {
   /*当自定义的属性发生变化时*/
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
-      console.log('>>>', value);
+      console.log('自定义的属性>>>', value);
+      console.log('selected.node>>>', selected.node);
       // 只能两层嵌套，后期需要更改，如果有多层的话
       canvas.setValue(selected.node.id, 'setValue');
       // 通知有数据属性更新,会重新渲染画布
@@ -466,11 +474,11 @@ export const EditorLayout = (props:DataVEditorProps) => {
 
   const onMessage = (event: string, data: Node) => {
     const node = data;
-    console.log('监听画布上元素的事件>>>', event);
+    // console.log('监听画布上元素的事件>>>', event);
     switch (event) {
       case 'node': // 节点
       case 'addNode':
-        setIsSave(false)
+        setIsSave(false);
         setSelected({
           node: data,
           line: null,
@@ -500,7 +508,7 @@ export const EditorLayout = (props:DataVEditorProps) => {
         break;
       case 'rotated':
       case 'move':
-        setIsSave(false)
+        setIsSave(false);
         setSelected(
           Object.assign(
             {},
@@ -565,7 +573,13 @@ export const EditorLayout = (props:DataVEditorProps) => {
           onFormValueChange={onHandleLineFormValueChange}
         />
       ), // 渲染线条类型的组件
-      default: canvas && <BackgroundComponent data={canvas} baseUrl={props.apiURL} websocketConf={props.websocketConf}/>, // 渲染画布背景的组件
+      default: canvas && (
+        <BackgroundComponent
+          data={canvas}
+          baseUrl={props.apiURL}
+          websocketConf={props.websocketConf}
+        />
+      ), // 渲染画布背景的组件
     };
   }, [
     selected,
@@ -589,15 +603,17 @@ export const EditorLayout = (props:DataVEditorProps) => {
   // 渲染头部
   const renderHeader = useMemo(() => {
     if (isLoadCanvas)
-      return <Header
-        canvas={canvas}
-        history={history}
-        rootRef={layoutRef}
-        isSave={isSave}
-        setIsSave={setIsSave}
-        onExtraSetting={props.onExtraSetting}
-      />;
-  }, [isLoadCanvas, history, layoutRef,isSave]);
+      return (
+        <Header
+          canvas={canvas}
+          history={history}
+          rootRef={layoutRef}
+          isSave={isSave}
+          setIsSave={setIsSave}
+          onExtraSetting={props.onExtraSetting}
+        />
+      );
+  }, [isLoadCanvas, history, layoutRef, isSave]);
   // 右键菜单
   const handleContextMenu = (event) => {
     setShowContextmenu(!showContextmenu);
@@ -625,9 +641,14 @@ export const EditorLayout = (props:DataVEditorProps) => {
   };
   const renderContextMenu = (
     <div style={contextmenu as CSSProperties} ref={contextMenuRef}>
-      <CanvasContextMenu data={selected} canvas={canvas} show={showContextmenu} combineCom={props.uploadConfig.combineCom} />
+      <CanvasContextMenu
+        data={selected}
+        canvas={canvas}
+        show={showContextmenu}
+        combineCom={props.uploadConfig.combineCom}
+      />
     </div>
-  )
+  );
   return (
     <div id="layout" ref={layoutRef}>
       {renderHeader}
@@ -636,7 +657,11 @@ export const EditorLayout = (props:DataVEditorProps) => {
           <Tabs defaultActiveKey="1" centered>
             <TabPane tab="组件" key="1" style={{ margin: 0 }}>
               <SystemComponent onDrag={onDrag} Tools={Tools} />
-              <CustomComponent  onDrag={onDrag} Tools={Tools} combineCom={props.uploadConfig.combineCom}/>
+              <CustomComponent
+                onDrag={onDrag}
+                Tools={Tools}
+                combineCom={props.uploadConfig.combineCom}
+              />
             </TabPane>
             <TabPane tab="图库" key="2" style={{ margin: 0 }}>
               <MyComponent />
