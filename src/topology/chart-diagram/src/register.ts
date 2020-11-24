@@ -5,7 +5,7 @@ export function register(_echarts?: any) {
   echartsObjs.echarts = _echarts;
   if (!echartsObjs.echarts && !(window as any).echarts) {
     loadJS(
-      'https://cdn.bootcdn.net/ajax/libs/echarts/4.9.0-rc.1/echarts.min.js',
+      'https://cdn.bootcdn.net/ajax/libs/echarts/5.0.0/echarts.min.js',
       null,
       true
     );

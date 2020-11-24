@@ -61,8 +61,6 @@ interface ICanvasProps extends FormProps {
 
 const NodeCanvasProps: React.FC<ICanvasProps> = ({
   data,
-  onFormValueChange,
-  onEventValueChange,
   onPropertyFormValueChange,
 }) => {
   const [form] = Form.useForm();
@@ -77,7 +75,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const { property } = data?.node; // 用户自定义数据片段
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
-    console.log('fillStyle>>>', fillStyle);
     form.setFieldsValue({
       x,
       y,
@@ -90,7 +87,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       fontSize,
       fontFamily,
       text,
-      showFillStyle: false,
+      fillStyle,
+      showFillStyle: fillStyle ? true : false,
+      showBoardColor: strokeStyle ? true : false,
     });
   }, [
     x,
@@ -129,6 +128,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       fontFamily,
       fillStyle,
       strokeStyle,
+      lineWidth,
     } = changedValues;
     const changedProps = {
       rect: {
@@ -144,9 +144,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       },
       rotate: rotate ? Number(rotate) : undefined,
       strokeStyle,
+      lineWidth: lineWidth ? Number(lineWidth) : undefined,
       fillStyle,
     };
-    console.log('changedProps>>>', changedProps);
     for (const key in changedProps) {
       if (typeof changedProps[key] === 'object') {
         for (const k in changedProps[key]) {
@@ -263,10 +263,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    * 渲染填充样式
    */
   const renderFillStyle = useMemo(() => {
-    console.log('showFillStyle>>>', form.getFieldValue('showFillStyle'));
     return (
       <Panel header="填充" key="fill">
-        <Form form={form}>
+        <Form form={form} onValuesChange={handleValuesChange}>
           <Row align="middle">
             <Col span={8}>
               <Form.Item
@@ -281,14 +280,14 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
             <Col push={1}>
               <Form.Item name="fillStyle">
-                <ColorPicker disabled={form.getFieldValue('showFillStyle')} />
+                <ColorPicker />
               </Form.Item>
             </Col>
           </Row>
         </Form>
       </Panel>
     );
-  }, [form, fillStyle]);
+  }, [form]);
 
   /**
    * 渲染边框样式
@@ -299,7 +298,13 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         <Form form={form} onValuesChange={handleValuesChange}>
           <Row align="middle">
             <Col span={8}>
-              <Form.Item label="颜色" labelCol={{ span: 16 }} labelAlign="left">
+              <Form.Item
+                name="showBoardColor"
+                label="颜色"
+                labelCol={{ span: 16 }}
+                labelAlign="left"
+                valuePropName="checked"
+              >
                 <Checkbox />
               </Form.Item>
             </Col>
@@ -1007,9 +1012,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         <TabPane tab="外观" key="1" style={{ margin: 0 }}>
           <Collapse defaultActiveKey={['pos']}>
             {renderPositionForm}
+            {/* {fontStyleNodeList.includes(name) && renderFontForm} */}
+            {/* {renderFontForm} */}
+            {/* {renderFillStyle} */}
             {/* {renderBorderStyle} */}
-            {fontStyleNodeList.includes(name) && renderFontForm}
-            {renderFillStyle}
             {name === 'biciPilot' && renderLight}
             {/* {renderMeter} */}
             {/* {renderLineGraph} */}

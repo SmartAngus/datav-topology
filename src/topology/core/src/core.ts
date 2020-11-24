@@ -2632,21 +2632,35 @@ export class Topology {
     pen[attr] = val;
   }
 
-  createGrid() {
+  createGrid(out=false) {
+    const size = this.data.gridSize||10;
+    const minSize = size/4;
+    const gridColor = this.data.gridColor||'#000';
     this.gridElem.style.position = 'absolute';
     this.gridElem.style.display = 'none';
     this.gridElem.style.left = '0';
     this.gridElem.style.top = '0';
     this.gridElem.innerHTML = `<svg class="svg-grid" width="100%" height="100%" style="position:absolute;left:0;right:0;top:0;bottom:0"
       xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-          <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#f3f3f3" stroke-width="1" />
+    <defs>
+        <pattern id="grid1" patternUnits="userSpaceOnUse" width="${size}" height="${size}">
+            <path d="M ${size} 0 L 0 0 0 ${size}" fill="none" stroke="${gridColor}" stroke-width="1" />
         </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#grid)" />
+        <pattern id="grid2" patternUnits="userSpaceOnUse" width="${minSize}" height="${minSize}">
+            <path d="M ${minSize} 0 L 0 0 0 ${minSize}" fill="none" stroke="#f3f3f3" stroke-width="1" />
+        </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid2)" />
+    <rect width="100%" height="100%" fill="url(#grid1)" />
     </svg>`;
-    this.parentElem.appendChild(this.gridElem);
+    if(!out){
+      this.parentElem.appendChild(this.gridElem);
+    }else{
+      const svg=document.querySelector(".svg-grid");
+      svg.parentNode.parentNode.removeChild(svg.parentNode);
+      this.parentElem.prepend(this.gridElem);
+    }
+
   }
 
   showGrid(show?: boolean) {

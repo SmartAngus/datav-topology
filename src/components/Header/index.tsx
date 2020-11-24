@@ -15,12 +15,13 @@ interface HeaderProps {
   isSave?: boolean;
   setIsSave?: (value: boolean) => void;
   onExtraSetting?: () => void;
+  onScaleCanvas?:(scale:number)=>void;
 }
 
 const ButtonGroup = Button.Group;
 
 const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
-  const { canvas, history, rootRef, isSave, setIsSave } = props;
+  const { canvas, history, rootRef, isSave, setIsSave,onScaleCanvas } = props;
 
   const [isFullscreen, { toggleFull }] = useFullscreen(rootRef);
   const [scaleNumber, setScaleNumber] = useState(1); // 缩放的基数
@@ -101,6 +102,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     if (scaleNumber < 3) {
       setScaleNumber(scaleNumber + 0.1);
       canvas.scaleTo(scaleNumber + 0.1);
+      onScaleCanvas&&onScaleCanvas(scaleNumber + 0.1)
     }
   };
 
@@ -111,6 +113,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     if (scaleNumber > 0.3) {
       setScaleNumber(scaleNumber - 0.1);
       canvas.scaleTo(scaleNumber - 0.1);
+      onScaleCanvas&&onScaleCanvas(scaleNumber + 0.1)
     }
   };
 
@@ -129,6 +132,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     } else {
       setScaleNumber(parseInt(data.key) / 100);
       canvas.scaleTo(parseInt(data.key) / 100);
+      onScaleCanvas&&onScaleCanvas(parseInt(data.key) / 100)
     }
     setScaleVisible(false);
   };

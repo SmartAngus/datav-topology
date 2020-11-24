@@ -25,6 +25,7 @@ import CustomIcon from '../../../config/iconConfig';
 import styles from './index.module.scss';
 import { dynamicWebSocketData } from '../../../common/DynamicWebSocketData';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { calcCanvas, getHexColor } from '../../../utils/cacl';
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -41,11 +42,19 @@ interface ICanvasProps extends FormProps {
   onFormValueChange?: any;
   onEventValueChange?: any;
   websocketConf?: any;
+  preInstallBgImages?: any;
+  svgRef?: any;
+  canvasRef?: any;
+  onChangeCanvasSize?: (sizeInfo: any) => void;
+  onChangeBkImage?: (imageUrl: string) => void;
 }
 const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   data,
   baseUrl,
+  onChangeCanvasSize,
+  onChangeBkImage,
   websocketConf,
+  ...props
 }) => {
   const [form] = Form.useForm();
   const [rcSwitchState, setRcSwitchState] = useState(
@@ -73,8 +82,37 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
       bgColorCheck: bgColor ? true : false,
       bgImgCheck: bkImage ? true : false,
       gridCheck: data.data.grid ? data.data.grid : false,
+      gridSize: data.data.gridSize,
+      gridColor: data.data.gridColor,
     });
   }, [form]);
+
+  /**
+   * 渲染位置和大小的表单
+   */
+  const handleFormValueChange = (changeValues, allValues) => {
+    console.log('handleFormValueChange>>>', changeValues);
+    console.log('allValues>>>', allValues);
+    if (changeValues.gridSize) {
+      const gridSize = parseInt(changeValues.gridSize);
+      data.data['gridSize'] = gridSize;
+      canvas.createGrid(true);
+      if (data.data.grid) {
+        canvas.showGrid(true);
+      }
+    } else if (changeValues.gridColor) {
+      data.data['gridColor'] = changeValues.gridColor;
+      canvas.createGrid(true);
+      if (data.data.grid) {
+        canvas.showGrid(true);
+      }
+    }
+    // for (let k in changeValues) {
+    //   data.data[k] = changeValues[k];
+    // }
+    // data.render();
+    // form.resetFields();
+  };
 
   // 背景图片checkbox切换
   const handleBgImgChange = () => {};
@@ -92,7 +130,9 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     // TODO: 设置背景图片
     // 修改背景图片前，需要先canvas.clearBkImg清空旧图片
     canvas.clearBkImg();
+    data.data['bkImage'] = url;
     setPopoverVisible({ ...popoverVisible, bgSelect: false });
+    onChangeBkImage && onChangeBkImage(url);
   };
 
   // 背景颜色改变
@@ -108,7 +148,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
 
   // 设置宽高
   const panelSizeChange = () => {
-    const {w, h} = form.getFieldsValue(['w', 'h']);
+    const { w, h } = form.getFieldsValue(['w', 'h']);
     data.resize({ width: w, height: h });
   };
 
@@ -118,7 +158,9 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     // 宽高互换
     const width = data.canvas.height;
     const height = data.canvas.width;
+    const r = calcCanvas(width, height);
     data.resize({ width, height });
+    onChangeCanvasSize && onChangeCanvasSize({ ...r, width, height });
   };
 
   // 选择画布大小后重新渲染画布
@@ -126,10 +168,12 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     const width = +size.split('*')[0];
     const height = +size.split('*')[1];
     data.resize({ width, height });
-    // TODO: 改变div大小
     form.setFieldsValue({ w: width, h: height });
     // 隐藏Popover
     setPopoverVisible({ ...popoverVisible, resolution: false });
+    const r = calcCanvas(width, height);
+    data.resize({ width, height });
+    onChangeCanvasSize && onChangeCanvasSize({ ...r, width, height });
   };
 
   // 分辨率Popover
@@ -160,18 +204,18 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   const bgSeletedContent = (
     <div>
       <h3>预设图片</h3>
-      {[1, 2, 3].map((item) => {
+      {(props.preInstallBgImages || []).map((item) => {
         return (
           <Row
-            key={item}
+            key={item.key}
             style={{
               border: '1px solid #096DD9',
               boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.06)',
             }}
-            onClick={() => selectedBgImg(require(`./bg0${item}.png`))}
+            onClick={() => selectedBgImg(item.img)}
           >
             <Image
-              src={require(`./bg0${item}.png`)}
+              src={item.img}
               preview={false}
               alt={`预设背景${item}`}
               width={260}
@@ -392,14 +436,8 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
                 测试连接
               </Button>
             </Panel>
-            {/* <Panel header="MQTT地址" key="2">
-              <MQTTComponent />
-            </Panel> */}
           </Collapse>
         </TabPane>
-        {/* <TabPane tab="排版布局" key="3" style={{ margin: 0 }}>
-          <LayoutComponent />
-        </TabPane> */}
       </Tabs>
     </div>
   );

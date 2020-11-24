@@ -95,8 +95,8 @@ let measureOption = {
     {
       type: 'category',
       data: ['', '', '', '', '', '', '', '', '', '', '°C'],
-      position: 'left',
-      offset: -80,
+      position: 'right',
+      offset: 0,
       axisLabel: {
         fontSize: 10,
         color: 'white',
@@ -146,16 +146,15 @@ let measureOption = {
           label: {
             normal: {
               show: true,
-              position: boxPosition,
-              width: 200,
-              height: 100,
-              formatter:
-                '{back| ' + TP_value + ' }{unit|°C}\n{downTxt|' + TP_txt + '}',
+              position: 'top',
+              distance: -10,
+              // formatter: '{back| ' + TP_value + ' }{unit|°C}{downTxt|' + TP_txt + '}',
+              formatter: '{back| ' + TP_value + ' }{unit|°C}',
               rich: {
                 back: {
                   align: 'center',
                   lineHeight: 50,
-                  fontSize: 40,
+                  fontSize: 14,
                   fontFamily: 'digifacewide',
                   color: leftColor,
                 },
@@ -166,10 +165,10 @@ let measureOption = {
                   color: leftColor,
                 },
                 downTxt: {
-                  lineHeight: 50,
-                  fontSize: 25,
+                  lineHeight: 28,
+                  fontSize: 14,
                   align: 'center',
-                  color: '#fff',
+                  color: leftColor,
                 },
               },
             },
@@ -287,7 +286,7 @@ let measureOption = {
         },
       },
       barGap: '-100%',
-      data: kd,
+      data: kd.map((item) => item.key),
       barWidth: 1,
       itemStyle: {
         normal: {
