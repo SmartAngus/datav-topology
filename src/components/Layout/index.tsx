@@ -362,50 +362,50 @@ export const EditorLayout = (props: DataVEditorProps) => {
   const onHandleFormValueChange = useCallback(
     (value) => {
       const {
+        x,
+        y,
+        width,
+        height,
         rotate,
-        data,
-        lineWidth,
-        strokeStyle,
-        dash,
         color,
         fontSize,
         fontFamily,
-        text,
         fillStyle,
-        ...other
+        strokeStyle,
+        lineWidth,
       } = value;
-      console.log('改变直>>>', value);
-      console.log('rect.other>>>', other);
-      const changedValues = {
-        node: {
-          rect: other,
-          font: { color, fontSize, fontFamily },
-          rotate,
-          lineWidth,
-          strokeStyle,
-          fillStyle,
-          dash,
-          // text,
-          data,
+      const changedProps = {
+        rect: {
+          x: x ? Number(x) : undefined,
+          y: y ? Number(y) : undefined,
+          width: width ? Number(width) : undefined,
+          height: height ? Number(height) : undefined,
         },
+        font: {
+          color,
+          fontSize: fontSize ? Number(fontSize) : undefined,
+          fontFamily,
+        },
+        rotate: rotate ? Number(rotate) : undefined,
+        strokeStyle,
+        lineWidth: lineWidth ? Number(lineWidth) : undefined,
+        fillStyle,
       };
-
-      if (changedValues.node) {
-        // 遍历查找修改的属性，赋值给原始Node
-        for (const key in changedValues.node) {
-          if (Array.isArray(changedValues.node[key])) {
-          } else if (typeof changedValues.node[key] === 'object') {
-            for (const k in changedValues.node[key]) {
-              selected.node[key][k] = changedValues.node[key][k];
+      for (const key in changedProps) {
+        if (typeof changedProps[key] === 'object') {
+          for (const k in changedProps[key]) {
+            if (changedProps[key][k] !== undefined) {
+              selected.node[key][k] = changedProps[key][k];
             }
-          } else {
-            selected.node[key] = changedValues.node[key];
+          }
+        } else {
+          if (changedProps[key] !== undefined) {
+            selected.node[key] = changedProps[key];
           }
         }
       }
-      // 背景纯色
-      // selected.node['bkType'] = 0;
-      canvas.updateProps(selected.node);
+
+      canvas.updateProps(false, [selected.node]);
     },
     [selected]
   );
@@ -413,7 +413,6 @@ export const EditorLayout = (props: DataVEditorProps) => {
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
       console.log('自定义的属性>>>', value);
-      console.log('selected.node>>>', selected.node);
       // 只能两层嵌套，后期需要更改，如果有多层的话
       canvas.setValue(selected.node.id, 'setValue');
       // 通知有数据属性更新,会重新渲染画布

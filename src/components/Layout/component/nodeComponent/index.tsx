@@ -61,6 +61,7 @@ interface ICanvasProps extends FormProps {
 
 const NodeCanvasProps: React.FC<ICanvasProps> = ({
   data,
+  onFormValueChange,
   onPropertyFormValueChange,
 }) => {
   const [form] = Form.useForm();
@@ -117,52 +118,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
 
   // 字段值更新时触发的回掉
   const handleValuesChange = (changedValues) => {
-    const {
-      x,
-      y,
-      width,
-      height,
-      rotate,
-      color,
-      fontSize,
-      fontFamily,
-      fillStyle,
-      strokeStyle,
-      lineWidth,
-    } = changedValues;
-    const changedProps = {
-      rect: {
-        x: x ? Number(x) : undefined,
-        y: y ? Number(y) : undefined,
-        width: width ? Number(width) : undefined,
-        height: height ? Number(height) : undefined,
-      },
-      font: {
-        color,
-        fontSize: fontSize ? Number(fontSize) : undefined,
-        fontFamily,
-      },
-      rotate: rotate ? Number(rotate) : undefined,
-      strokeStyle,
-      lineWidth: lineWidth ? Number(lineWidth) : undefined,
-      fillStyle,
-    };
-    for (const key in changedProps) {
-      if (typeof changedProps[key] === 'object') {
-        for (const k in changedProps[key]) {
-          if (changedProps[key][k] !== undefined) {
-            data.node[key][k] = changedProps[key][k];
-          }
-        }
-      } else {
-        if (changedProps[key] !== undefined) {
-          data.node[key] = changedProps[key];
-        }
-      }
-    }
-
-    canvas.updateProps(false, [data.node]);
+    onFormValueChange && onFormValueChange(changedValues);
   };
+
   const handlePropertyValuesChange = (changedValues, allValues) => {
     // console.log('allValues', allValues);
     onPropertyFormValueChange && onPropertyFormValueChange(allValues);
