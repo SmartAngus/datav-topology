@@ -460,6 +460,10 @@ export const EditorLayout = (props:DataVEditorProps) => {
    */
   const handleScaleCanvas=(scaleKey)=>{
     console.log("scaleKey",scaleKey)
+    // const  width=canvasSizeInfo.width*scaleKey;
+    // const height=canvasSizeInfo.height*scaleKey;
+    // const r = calcCanvas(width,height)
+    // setCanvasSizeInfo({...r,width,height})
   }
 
   /**
@@ -704,21 +708,21 @@ export const EditorLayout = (props:DataVEditorProps) => {
         <div className="full">
           <svg className="svg" ref={svgRef} style={{minWidth:canvasSizeInfo.minWidth,minHeight:canvasSizeInfo.minHeight}}></svg>
           <div ref={canvasRef}
-            id="topology-canvas"
-            style={{
-              position: "absolute",
-              borderWidth: 1,
-              overflow: "hidden",
-              left: canvasSizeInfo.left,
-              top: canvasSizeInfo.top,
-              width: canvasSizeInfo.width,
-              height: canvasSizeInfo.height,
-              background: '#ccc',
-              backgroundSize:'cover',
-              backgroundRepeat:'no-repeat',
-              backgroundImage:`url(${bkImageUrl})`
-            }}
-            onContextMenu={handleContextMenu}
+               id="topology-canvas"
+               style={{
+                 position: "absolute",
+                 borderWidth: 1,
+                 overflow: "hidden",
+                 left: canvasSizeInfo.left,
+                 top: canvasSizeInfo.top,
+                 width: canvasSizeInfo.width,
+                 height: canvasSizeInfo.height,
+                 background: '#ccc',
+                 backgroundSize:'cover',
+                 backgroundRepeat:'no-repeat',
+                 backgroundImage:`url(${bkImageUrl})`
+               }}
+               onContextMenu={handleContextMenu}
           />
         </div>
         <div className="props">{renderRightArea}</div>

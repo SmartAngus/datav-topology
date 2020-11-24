@@ -2633,7 +2633,7 @@ export class Topology {
   }
 
   createGrid(out=false) {
-    const size = this.data.gridSize||10;
+    const size = this.data.gridSize||60;
     const minSize = size/4;
     const gridColor = this.data.gridColor||'#000';
     this.gridElem.style.position = 'absolute';

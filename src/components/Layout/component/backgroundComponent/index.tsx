@@ -140,6 +140,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     // 修改背景图片前，需要先canvas.clearBkImg清空旧图片
     canvas.clearBkImg();
     data.data['bkImage']=url;
+    console.log(data.data['bkImage'])
     setPopoverVisible({ ...popoverVisible, bgSelect: false });
     onChangeBkImage&&onChangeBkImage(url)
   };
