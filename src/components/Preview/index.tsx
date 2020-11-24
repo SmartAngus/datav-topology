@@ -127,7 +127,11 @@ const Preview = ({ history }) => {
         title="返回画板"
         subTitle="预览"
       />
-      <div id="topology-canvas-preview" style={{ height: 'calc(100vh - 66px)', width: '100vw' }} />
+      <div id="topology-canvas-preview" style={{
+        height: 'calc(100vh - 66px)',
+        width: '100vw',
+        backgroundImage:`url(${history.location.state.data.bkImage})`
+      }} />
     </React.Fragment>
   );
 };

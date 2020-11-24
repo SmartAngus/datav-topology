@@ -25,7 +25,7 @@ import CustomIcon from '../../../config/iconConfig';
 import styles from './index.module.scss';
 import { dynamicWebSocketData } from '../../../common/DynamicWebSocketData';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import { calcCanvas } from '../../../utils/cacl'
+import { calcCanvas,getHexColor } from '../../../utils/cacl'
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -46,11 +46,13 @@ interface ICanvasProps extends FormProps {
   svgRef?:any;
   canvasRef?:any;
   onChangeCanvasSize?:(sizeInfo:any)=>void;
+  onChangeBkImage?:(imageUrl:string)=>void;
 }
 const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   data,
   baseUrl,
   onChangeCanvasSize,
+  onChangeBkImage,
   websocketConf,...props
 }) => {
   const [form] = Form.useForm();
@@ -79,6 +81,8 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
       bgColorCheck: bgColor ? true : false,
       bgImgCheck: bkImage ? true : false,
       gridCheck: data.data.grid ? data.data.grid : false,
+      gridSize:data.data.gridSize,
+      gridColor:data.data.gridColor,
     });
     // form.validateFields(['bkColor', 'bkImage']).then((values) => {});
     // form.validateFields((err, value) => {
@@ -98,6 +102,20 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   const handleFormValueChange = (changeValues, allValues) => {
     console.log('handleFormValueChange>>>', changeValues);
     console.log('allValues>>>', allValues);
+    if(changeValues.gridSize){
+      const gridSize=parseInt(changeValues.gridSize)
+      data.data['gridSize']=gridSize;
+      canvas.createGrid(true)
+      if(data.data.grid){
+        canvas.showGrid(true)
+      }
+    }else if(changeValues.gridColor){
+      data.data['gridColor']=changeValues.gridColor;
+      canvas.createGrid(true)
+      if(data.data.grid){
+        canvas.showGrid(true)
+      }
+    }
     // for (let k in changeValues) {
     //   data.data[k] = changeValues[k];
     // }
@@ -123,6 +141,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     canvas.clearBkImg();
     data.data['bkImage']=url;
     setPopoverVisible({ ...popoverVisible, bgSelect: false });
+    onChangeBkImage&&onChangeBkImage(url)
   };
 
   // 背景颜色改变

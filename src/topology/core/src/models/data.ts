@@ -14,6 +14,8 @@ export class TopologyData {
   bkImage: string;
   bkColor: string;
   grid?: boolean;
+  gridColor?: string;
+  gridSize?: number;
   websocket?: string;
   mqttUrl?: string;
   mqttOptions?: {
@@ -45,6 +47,8 @@ export class TopologyData {
       this.bkImage = json.bkImage;
       this.bkColor = json.bkColor;
       this.grid = json.grid;
+      this.gridColor = json.gridColor;
+      this.gridSize = json.gridSize;
       this.manualCps = json.manualCps;
 
       this.websocket = json.websocket;

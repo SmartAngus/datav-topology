@@ -26,3 +26,17 @@ export function calcCanvas(width:string|number=826,height:string|number=1168) {
 export function calcScroll(width:string|number=826,height:string|number=1168) {
 
 }
+export function getHexColor(color) {
+  if (color==="transparent") return "transparent";
+  if(color==undefined){
+    return color;
+  }
+  var a = parseFloat(color.a || 1),
+    r = Math.floor(a * parseInt(color.r) + (1 - a) * 255),
+    g = Math.floor(a * parseInt(color.g) + (1 - a) * 255),
+    b = Math.floor(a * parseInt(color.b) + (1 - a) * 255)
+  return '#' +
+    ('0' + r.toString(16)).slice(-2) +
+    ('0' + g.toString(16)).slice(-2) +
+    ('0' + b.toString(16)).slice(-2)
+}

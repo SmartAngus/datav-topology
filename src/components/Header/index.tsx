@@ -101,7 +101,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
   const scaleZoomOut = () => {
     if (scaleNumber < 3) {
       setScaleNumber(scaleNumber + 0.1);
-      // canvas.scaleTo(scaleNumber + 0.1);
+      canvas.scaleTo(scaleNumber + 0.1);
       onScaleCanvas&&onScaleCanvas(scaleNumber + 0.1)
     }
   };
@@ -112,7 +112,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
   const scaleZoomIn = () => {
     if (scaleNumber > 0.3) {
       setScaleNumber(scaleNumber - 0.1);
-      // canvas.scaleTo(scaleNumber - 0.1);
+      canvas.scaleTo(scaleNumber - 0.1);
       onScaleCanvas&&onScaleCanvas(scaleNumber + 0.1)
     }
   };
@@ -131,7 +131,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     if (data.key === 'adaptive') {
     } else {
       setScaleNumber(parseInt(data.key) / 100);
-      // canvas.scaleTo(parseInt(data.key) / 100);
+      canvas.scaleTo(parseInt(data.key) / 100);
       onScaleCanvas&&onScaleCanvas(parseInt(data.key) / 100)
     }
     setScaleVisible(false);

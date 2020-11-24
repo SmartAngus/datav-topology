@@ -117,6 +117,7 @@ export const EditorLayout = (props:DataVEditorProps) => {
   const layoutRef = useRef();
   const contextMenuRef = useRef();
   const [isSave,setIsSave]=useState(true)
+  const [bkImageUrl,setBkImageUrl]=useState("")
 
   const [canvasSizeInfo,setCanvasSizeInfo]=useState({
     minWidth:3199,
@@ -444,6 +445,16 @@ export const EditorLayout = (props:DataVEditorProps) => {
     []
   );
   /**
+   * 切换画布背景图片
+   */
+  const handleChangeBkImage=useCallback(
+    (imgUrl) => {
+      console.log(imgUrl)
+      setBkImageUrl(imgUrl)
+    },
+    []
+  );
+  /**
    * 缩放画布
    * @param scaleKey 缩放系数
    */
@@ -610,6 +621,7 @@ export const EditorLayout = (props:DataVEditorProps) => {
         svgRef={svgRef}
         canvasRef={canvasRef}
         onChangeCanvasSize={handleChangeCanvasSize}
+        onChangeBkImage={handleChangeBkImage}
       />, // 渲染画布背景的组件
     };
   }, [
@@ -701,7 +713,11 @@ export const EditorLayout = (props:DataVEditorProps) => {
               top: canvasSizeInfo.top,
               width: canvasSizeInfo.width,
               height: canvasSizeInfo.height,
-              background: '#ccc' }}
+              background: '#ccc',
+              backgroundSize:'cover',
+              backgroundRepeat:'no-repeat',
+              backgroundImage:`url(${bkImageUrl})`
+            }}
             onContextMenu={handleContextMenu}
           />
         </div>
