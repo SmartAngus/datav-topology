@@ -4,13 +4,13 @@
 import React, { PureComponent } from 'react'
 import { biciNotification, ComplexTable } from 'bici-transformers'
 import _ from 'lodash'
-import {client} from '../data/api'
+import {clientParam} from '../data/api'
 // 获取复杂感知点列表
 export function fetchPerceptualPointList(params) {
-  return client.post('/applications/complexData/list', params,{
+  return clientParam(window["API_URL"]).post('/applications/complexData/list', params,{
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
-      token: '5lpRaFsOnAtHmLXoG9fUbs',
+      token: window["token"],
       'Content-Type': 'application/json',
     }
   })
@@ -153,8 +153,10 @@ export default class ComplexDataPoint extends PureComponent<any,any> {
     if (tagName) { params.tagName = tagName }
     if (statusList&&statusList.length) { params.statusList = statusList }
     fetchPerceptualPointList(params).then((res) => {
-      const {list,total}=res["data"].data
-      this.setState({ dataList: list, total })
+      if(res["data"].data){
+        const {list,total}=res["data"].data
+        this.setState({ dataList: list, total })
+      }
     })
   }
 

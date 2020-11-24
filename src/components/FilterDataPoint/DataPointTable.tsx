@@ -6,16 +6,16 @@ import { ComplexTable, biciNotification } from 'bici-transformers'
 import { DATAPOINT_STATUS, DATA_ORIGIN } from '../common/userSide'
 // import { Tooltip } from 'antd'
 import _ from 'lodash'
-import {apiClient} from '../data/api'
+import {apiClientParam} from '../data/api'
 
 
 
 // 查询数据点列表
 export function fetchSearchDataPointManageList(params) {
-  return apiClient.post('/datapoint/list', params,{
+  return apiClientParam(window["API_URL"]).post('/datapoint/list', params,{
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
-      token: '5lpRaFsOnAtHmLXoG9fUbs',
+      token: window["token"],
       'Content-Type': 'application/json',
     }
   })
@@ -101,8 +101,10 @@ export default class DataPointTable extends Component<any,any> {
       params.statusList = statusList
     }
     fetchSearchDataPointManageList(params).then((res) => {
-      const {list,total}=res["data"].data
-      this.setState({ dataList: list, total })
+      if(res["data"].data){
+        const {list,total}=res["data"].data
+        this.setState({ dataList: list, total })
+      }
     })
   }
 

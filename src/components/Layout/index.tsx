@@ -172,8 +172,9 @@ export const EditorLayout = (props: DataVEditorProps) => {
     console.log('Tools>>>', Tools);
     // console.log('industrialLibrary==', props.industrialLibrary);
 
-    // window["API_URL"]=props.apiURL
-    // console.log('apiURL', props.apiURL);
+    window["API_URL"]=props.apiURL
+    window["token"]=props.token
+    console.log('apiURL', props.apiURL);
 
     canvasOptions.on = onMessage;
     canvasRegister();

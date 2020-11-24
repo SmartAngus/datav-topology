@@ -21,6 +21,7 @@ const EditorLayoutCanvas:React.FC<any> = ({...props})=>{
     {key:2,img:preBgImg2},
     {key:3,img:preBgImg3}
   ]
+  const token = "development_of_special_token_by_star_quest"
   const industrialLibrary = [
     {
       type:'mk',
@@ -259,6 +260,7 @@ const EditorLayoutCanvas:React.FC<any> = ({...props})=>{
         autoSaveInterval={20}
         websocketConf={websocketConf}
         apiURL={apiURL}
+        token={token}
         // onPreview={handlePreview}
       />
     </div>
