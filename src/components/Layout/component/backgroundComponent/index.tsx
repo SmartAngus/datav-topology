@@ -25,6 +25,7 @@ import CustomIcon from '../../../config/iconConfig';
 import styles from './index.module.scss';
 import { dynamicWebSocketData } from '../../../common/DynamicWebSocketData';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { calcCanvas } from '../../../utils/cacl'
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -41,11 +42,16 @@ interface ICanvasProps extends FormProps {
   onFormValueChange?: any;
   onEventValueChange?: any;
   websocketConf?: any;
+  preInstallBgImages?:any;
+  svgRef?:any;
+  canvasRef?:any;
+  onChangeCanvasSize?:(sizeInfo:any)=>void;
 }
 const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   data,
   baseUrl,
-  websocketConf,
+  onChangeCanvasSize,
+  websocketConf,...props
 }) => {
   const [form] = Form.useForm();
   const [rcSwitchState, setRcSwitchState] = useState(
@@ -115,6 +121,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     // TODO: 设置背景图片
     // 修改背景图片前，需要先canvas.clearBkImg清空旧图片
     canvas.clearBkImg();
+    data.data['bkImage']=url;
     setPopoverVisible({ ...popoverVisible, bgSelect: false });
   };
 
@@ -135,7 +142,9 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     // 宽高互换
     const width = data.canvas.height;
     const height = data.canvas.width;
+    const r = calcCanvas(width,height);
     data.resize({ width, height });
+    onChangeCanvasSize&&onChangeCanvasSize({...r,width,height})
   };
 
   // 选择画布大小后重新渲染画布
@@ -143,10 +152,12 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     const width = +size.split('*')[0];
     const height = +size.split('*')[1];
     data.resize({ width, height });
-    // TODO: 改变div大小
     form.setFieldsValue({ w: width, h: height });
     // 隐藏Popover
     setPopoverVisible({ ...popoverVisible, resolution: false });
+    const r = calcCanvas(width,height);
+    data.resize({ width, height });
+    onChangeCanvasSize&&onChangeCanvasSize({...r,width,height})
   };
 
   // 分辨率Popover
@@ -177,18 +188,18 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   const bgSeletedContent = (
     <div>
       <h3>预设图片</h3>
-      {[1, 2, 3].map((item) => {
+      {(props.preInstallBgImages||[]).map((item) => {
         return (
           <Row
-            key={item}
+            key={item.key}
             style={{
               border: '1px solid #096DD9',
               boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.06)',
             }}
-            onClick={() => selectedBgImg(require(`./bg0${item}.png`))}
+            onClick={() => selectedBgImg(item.img)}
           >
             <Image
-              src={require(`./bg0${item}.png`)}
+              src={item.img}
               preview={false}
               alt={`预设背景${item}`}
               width={260}

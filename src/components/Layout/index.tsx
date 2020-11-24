@@ -102,6 +102,7 @@ import MyComponent from './LeftAreaComponent/MyComponent';
 import './index.css';
 import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines'
+import { calcCanvas } from '../utils/cacl'
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
@@ -116,6 +117,15 @@ export const EditorLayout = (props:DataVEditorProps) => {
   const layoutRef = useRef();
   const contextMenuRef = useRef();
   const [isSave,setIsSave]=useState(true)
+
+  const [canvasSizeInfo,setCanvasSizeInfo]=useState({
+    minWidth:3199,
+    minHeight:2289,
+    left:1168,
+    top:560,
+    width:826,
+    height:1168,
+  })
 
   const [selected, setSelected] = useState({
     node: null,
@@ -138,6 +148,18 @@ export const EditorLayout = (props:DataVEditorProps) => {
   });
 
   const [isLoadCanvas, setIsLoadCanvas] = useState(false);
+  const svgRef = useRef()
+  const canvasRef = useRef()
+
+  const canvasOptions: Options = {
+    rotateCursor: '/rotate.cur',
+    locked: 1,
+    autoExpandDistance: 0,
+    viewPadding: [100],
+    autoAnchor: false,
+    cacheLen: 50,
+    hideInput: true,
+  };
 
   useClickAway(() => {
     setShowContextmenu(false);
@@ -150,15 +172,7 @@ export const EditorLayout = (props:DataVEditorProps) => {
     // window["API_URL"]=props.apiURL
     console.log("apiURL",props.apiURL)
 
-    const canvasOptions: Options = {
-      rotateCursor: '/rotate.cur',
-      locked: 1,
-      autoExpandDistance: 0,
-      viewPadding: [100],
-      autoAnchor: false,
-      cacheLen: 50,
-      hideInput: true,
-    };
+
     canvasOptions.on = onMessage;
     canvasRegister();
     canvas = new Topology('topology-canvas', canvasOptions);
@@ -190,9 +204,15 @@ export const EditorLayout = (props:DataVEditorProps) => {
   }, [history]);
 
   useEffect(() => {
-    // console.log("isLoadCanvas==",isLoadCanvas)
-    // console.log(canvas.data)
-  }, []);
+    scrollCenter()
+  }, [canvasSizeInfo]);
+  /**
+   * 滚动条居中
+   */
+  const scrollCenter=()=>{
+    const fullDiv = document.querySelector(".full") as HTMLElement;
+    fullDiv.scrollTo((fullDiv.scrollWidth-fullDiv.offsetWidth)/2,(fullDiv.scrollHeight-fullDiv.offsetHeight)/2)
+  }
 
   /**
    * 注册图形库
@@ -413,6 +433,23 @@ export const EditorLayout = (props:DataVEditorProps) => {
     },
     [selected]
   );
+  /**
+   * 切换画布大小
+   */
+  const handleChangeCanvasSize=useCallback(
+    (sizeInfo) => {
+      console.log(sizeInfo)
+      setCanvasSizeInfo(sizeInfo)
+    },
+    []
+  );
+  /**
+   * 缩放画布
+   * @param scaleKey 缩放系数
+   */
+  const handleScaleCanvas=(scaleKey)=>{
+    console.log("scaleKey",scaleKey)
+  }
 
   /**
    * 当线条表单数据变化时, 重新渲染canvas
@@ -565,7 +602,15 @@ export const EditorLayout = (props:DataVEditorProps) => {
           onFormValueChange={onHandleLineFormValueChange}
         />
       ), // 渲染线条类型的组件
-      default: canvas && <BackgroundComponent data={canvas} baseUrl={props.apiURL} websocketConf={props.websocketConf}/>, // 渲染画布背景的组件
+      default: canvas && <BackgroundComponent
+        data={canvas}
+        baseUrl={props.apiURL}
+        websocketConf={props.websocketConf}
+        preInstallBgImages={props.preInstallBgImages}
+        svgRef={svgRef}
+        canvasRef={canvasRef}
+        onChangeCanvasSize={handleChangeCanvasSize}
+      />, // 渲染画布背景的组件
     };
   }, [
     selected,
@@ -596,6 +641,7 @@ export const EditorLayout = (props:DataVEditorProps) => {
         isSave={isSave}
         setIsSave={setIsSave}
         onExtraSetting={props.onExtraSetting}
+        onScaleCanvas={handleScaleCanvas}
       />;
   }, [isLoadCanvas, history, layoutRef,isSave]);
   // 右键菜单
@@ -644,13 +690,20 @@ export const EditorLayout = (props:DataVEditorProps) => {
           </Tabs>
         </div>
         <div className="full">
-          <div>
-            <div
-              id="topology-canvas"
-              style={{ height: 768, width: 1366, background: '#fff' }}
-              onContextMenu={handleContextMenu}
-            />
-          </div>
+          <svg className="svg" ref={svgRef} style={{minWidth:canvasSizeInfo.minWidth,minHeight:canvasSizeInfo.minHeight}}></svg>
+          <div ref={canvasRef}
+            id="topology-canvas"
+            style={{
+              position: "absolute",
+              borderWidth: 1,
+              overflow: "hidden",
+              left: canvasSizeInfo.left,
+              top: canvasSizeInfo.top,
+              width: canvasSizeInfo.width,
+              height: canvasSizeInfo.height,
+              background: '#ccc' }}
+            onContextMenu={handleContextMenu}
+          />
         </div>
         <div className="props">{renderRightArea}</div>
         {renderContextMenu}
