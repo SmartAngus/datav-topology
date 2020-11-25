@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react'
 import { Topology } from '../../topology/core';
 import { History } from 'history';
 import { Button, Menu, Popover, Tag, Space } from 'antd';
@@ -7,6 +7,7 @@ import { useFullscreen } from 'ahooks';
 import { BasicTarget } from 'ahooks/lib/utils/dom';
 import CustomIcon from '../config/iconConfig';
 import styles from './index.module.scss';
+import { base64ToFile } from '../utils/cacl'
 
 interface HeaderProps {
   canvas?: Topology;
@@ -17,11 +18,14 @@ interface HeaderProps {
   onExtraSetting?: () => void;
   onScaleCanvas?:(scale:number)=>void;
   onEditorSaveCb?:(canvasData:any)=>void;
+  onPoweroff?:()=>void;
+  autoSaveInterval?:number;
+  ref?:any;
 }
 
 const ButtonGroup = Button.Group;
 
-const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
+const Header: React.FC<HeaderProps> = React.forwardRef((props: HeaderProps,ref) => {
   const { canvas, history, rootRef, isSave, setIsSave,onScaleCanvas } = props;
 
   const [isFullscreen, { toggleFull }] = useFullscreen(rootRef);
@@ -32,6 +36,27 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
   useEffect(() => {
     canvas.updateProps(false);
   }, [canvas]);
+
+  // 对父组件暴露保存数据的接口
+  useImperativeHandle(
+    ref,
+    () => ({
+      save: () => {
+        handleSave()
+      }
+    }),
+    [isSave]
+  )
+
+  // 设置每五分钟保存一次数据
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleSave()
+    }, 1000 * 60 * (props.autoSaveInterval || 5))
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [isSave])
 
   const handleSave = () => {
     setIsSave(true);
@@ -45,11 +70,21 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
       type: 'text/plain;charset=utf-8',
     });
     console.log('save data>>>');
+    const screenshot = base64ToFile(canvas.toImage());
+
+    console.log("screenShot=",screenshot)
+    canvas.saveAsImage()
     saveData.text().then((r) => {
       const json = JSON.parse(r);
+      json.screenshot=screenshot;
       props.onEditorSaveCb&&props.onEditorSaveCb(json)
     });
   };
+
+  // 处理退出按钮
+  const handleExitEditor=()=>{
+    props.onPoweroff&&props.onPoweroff();
+  }
 
   /**
    * 成组
@@ -181,7 +216,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     <div className={styles.toolsHeader}>
       <a
         className={styles.toolItem}
-        onClick={() => console.log('canvas>>>', canvas)}
+        onClick={handleExitEditor}
       >
         <CustomIcon type="icon-exit" />
         <span>退出</span>
@@ -312,6 +347,6 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
       </ButtonGroup>
     </div>
   );
-};
+});
 
 export default Header;

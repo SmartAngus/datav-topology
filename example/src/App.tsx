@@ -154,7 +154,7 @@ const EditorLayoutCanvas:React.FC<any> = ({...props})=>{
     console.log(data)
     const api = axios.create({ headers: { 'Content-Type': 'multipart/form-data' } })
     const formData = new FormData()
-    api.defaults.headers.common['token'] = "development_of_special_token_by_star_quest"
+    api.defaults.headers.common['token'] = "5KmTbcul1R4RNxnSiwTlpr"
     formData.append('file', data.screenshot)
     formData.append('mappingId', "ooip6ffe388d487db754b885b8aa65b9")
 
@@ -257,7 +257,7 @@ const EditorLayoutCanvas:React.FC<any> = ({...props})=>{
         uploadConfig={uploadConfig}
         onPoweroff={handlePoweroff}
         preInstallBgImages={preInstallBgImages}
-        autoSaveInterval={20}
+        autoSaveInterval={30}
         websocketConf={websocketConf}
         apiURL={apiURL}
         token={token}

@@ -1857,11 +1857,11 @@ export class Topology {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
     if (this.data.bkColor) {
-      // ctx.fillStyle = this.data.bkColor;
-      // ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = this.data.bkColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
     if (this.data.bkImage) {
-      // ctx.drawImage(this.canvas.bkImg, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(this.canvas.bkImg, 0, 0, canvas.width, canvas.height);
     }
 
     for (const item of this.data.pens) {
