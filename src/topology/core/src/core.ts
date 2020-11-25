@@ -2660,7 +2660,16 @@ export class Topology {
       svg.parentNode.parentNode.removeChild(svg.parentNode);
       this.parentElem.prepend(this.gridElem);
     }
-
+    this.data.gridSize=size;
+    this.data.gridColor=gridColor;
+  }
+  setGrid(gridSize?:number,gridColor?:string){
+    if(gridSize!=undefined){
+      this.data.gridSize = gridSize;
+    }
+    if(gridColor!=undefined){
+      this.data.gridColor = gridColor;
+    }
   }
 
   showGrid(show?: boolean) {

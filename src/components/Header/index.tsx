@@ -16,6 +16,7 @@ interface HeaderProps {
   setIsSave?: (value: boolean) => void;
   onExtraSetting?: () => void;
   onScaleCanvas?:(scale:number)=>void;
+  onEditorSaveCb?:(canvasData:any)=>void;
 }
 
 const ButtonGroup = Button.Group;
@@ -45,7 +46,8 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     });
     console.log('save data>>>');
     saveData.text().then((r) => {
-      console.log(JSON.parse(r));
+      const json = JSON.parse(r);
+      props.onEditorSaveCb&&props.onEditorSaveCb(json)
     });
   };
 

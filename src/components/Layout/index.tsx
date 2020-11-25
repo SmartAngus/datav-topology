@@ -665,6 +665,7 @@ export const EditorLayout = (props: DataVEditorProps) => {
           setIsSave={setIsSave}
           onExtraSetting={props.onExtraSetting}
           onScaleCanvas={handleScaleCanvas}
+          onEditorSaveCb={props.onEditorSaveCb}
         />
       );
   }, [isLoadCanvas, history, layoutRef, isSave]);
