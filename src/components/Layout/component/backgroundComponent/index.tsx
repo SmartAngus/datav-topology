@@ -350,7 +350,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
       <Panel header="网格" key="3">
-        <Form form={form}>
+        <Form form={form} onValuesChange={handleFormValueChange}>
           <Row align="middle">
             <Col push={1}>
               <Form.Item name="gridCheck" label="网格" valuePropName="checked">
