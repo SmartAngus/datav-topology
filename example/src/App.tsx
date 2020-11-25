@@ -80,7 +80,7 @@ const EditorLayoutCanvas:React.FC<any> = ({...props})=>{
         params:{}
       },
       rename:{
-        url:"/applications/customComponent/rename",
+        url:"/applications/customComponent/update",
         params:{}
       }
     }
@@ -269,8 +269,8 @@ const EditorLayoutCanvas:React.FC<any> = ({...props})=>{
 
 const App = () => {
   return <BrowserRouter>
-    <Route exact path="/" component={EditorLayoutCanvas} />
-    <Route path="/preview" component={Preview} />
+    <Route exact path="/" component={EditorLayoutCanvas} key={1} />
+    <Route path="/preview" component={Preview} key={2}/>
   </BrowserRouter >
 }
 
