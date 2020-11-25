@@ -361,7 +361,7 @@ class ReactSwitch extends Component {
     );
   }
 }
-ReactSwitch.PropTypes = {
+ReactSwitch.propTypes = {
   checked: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,

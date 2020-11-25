@@ -1,12 +1,81 @@
 import React, { useEffect, useState } from 'react';
 import { Topology } from '../../topology/core';
 import { History } from 'history';
-import { Button, Menu, Popover, Tag, Space } from 'antd';
+import { Button, Menu, Popover, Tag, Space, Tooltip } from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { useFullscreen } from 'ahooks';
 import { BasicTarget } from 'ahooks/lib/utils/dom';
 import CustomIcon from '../config/iconConfig';
 import styles from './index.module.scss';
+
+const headTools = [
+  {
+    key: 'cut',
+    name: '剪切',
+    icon: 'icon-jianqie',
+    title: 'Ctrl+X',
+  },
+  {
+    key: 'copy',
+    name: '复制',
+    icon: 'icon-fuzhi',
+    title: 'Ctrl+C',
+  },
+  {
+    key: 'paste',
+    name: '粘贴',
+    icon: 'icon-niantie',
+    title: 'Ctrl+V',
+  },
+  {
+    key: 'undo',
+    name: '撤销',
+    icon: 'icon-chexiao',
+    title: 'Ctrl+Z',
+  },
+  {
+    key: 'redo',
+    name: '恢复',
+    icon: 'icon-icon_huifu',
+    title: 'Ctrl+Z',
+  },
+  {
+    key: 'bottom',
+    name: '置于底层',
+    icon: 'icon-zhiyudiceng',
+    title: 'Ctrl+Alt+[',
+  },
+  {
+    key: 'down',
+    name: '后置一层',
+    icon: 'icon-zhiyudiceng',
+    title: 'Ctrl+[',
+  },
+  {
+    key: 'up',
+    name: '前置一层',
+    icon: 'icon-ziyuan',
+    title: 'Ctrl+]',
+  },
+  {
+    key: 'top',
+    name: '置于顶层',
+    icon: 'icon-ziyuan',
+    title: 'Ctrl+Alt+]',
+  },
+  {
+    key: 'combo',
+    name: '编组',
+    icon: 'icon-jianlizuhe',
+    title: 'Ctrl+G',
+  },
+  {
+    key: 'unCombo',
+    name: '解组',
+    icon: 'icon-quxiaozuhe',
+    title: 'Ctrl+U',
+  },
+];
 
 interface HeaderProps {
   canvas?: Topology;
@@ -15,13 +84,13 @@ interface HeaderProps {
   isSave?: boolean;
   setIsSave?: (value: boolean) => void;
   onExtraSetting?: () => void;
-  onScaleCanvas?:(scale:number)=>void;
+  onScaleCanvas?: (scale: number) => void;
 }
 
 const ButtonGroup = Button.Group;
 
 const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
-  const { canvas, history, rootRef, isSave, setIsSave,onScaleCanvas } = props;
+  const { canvas, history, rootRef, isSave, setIsSave, onScaleCanvas } = props;
 
   const [isFullscreen, { toggleFull }] = useFullscreen(rootRef);
   const [scaleNumber, setScaleNumber] = useState(1); // 缩放的基数
@@ -49,13 +118,24 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     });
   };
 
-  /**
-   * 成组
-   * @param key 'combo': 成组  'unCombo': 解组
-   */
-  const handleCombine = (key: string) => {
+  const handleHeaderClick = (key: string) => {
     const pens = canvas.activeLayer.pens;
     switch (key) {
+      case 'cut':
+        canvas.cut();
+        break;
+      case 'copy':
+        canvas.copy();
+        break;
+      case 'paste':
+        canvas.paste();
+        break;
+      case 'undo':
+        canvas.undo();
+        break;
+      case 'redo':
+        canvas.redo();
+        break;
       case 'combo':
         canvas.combine(pens);
         break;
@@ -64,35 +144,21 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
           .filter((pen) => pen.name === 'combine')
           .forEach((pen) => canvas.uncombine(pen));
         break;
+      case 'bottom':
+        pens.forEach((pen) => canvas.bottom(pen));
+        break;
+      case 'top':
+        pens.forEach((pen) => canvas.top(pen));
+        break;
+      case 'up':
+        pens.forEach((pen) => canvas.up(pen));
+        break;
+      case 'down':
+        pens.forEach((pen) => canvas.down(pen));
+        break;
       default:
         break;
     }
-  };
-
-  /**
-   * 置于顶层(top)、置于底层(bottom)、上移一层(up)、下移一层(down)
-   */
-  const nodePanelLevel = (key: string) => {
-    // 获取选中的节点
-    const pens = canvas.activeLayer.pens;
-    pens.forEach((pen) => {
-      switch (key) {
-        case 'bottom':
-          canvas.bottom(pen);
-          return;
-        case 'top':
-          canvas.top(pen);
-          return;
-        case 'up':
-          canvas.up(pen);
-          return;
-        case 'down':
-          canvas.down(pen);
-          return;
-        default:
-          return;
-      }
-    });
   };
 
   /**
@@ -102,7 +168,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     if (scaleNumber < 3) {
       setScaleNumber(scaleNumber + 0.1);
       canvas.scaleTo(scaleNumber + 0.1);
-      onScaleCanvas&&onScaleCanvas(scaleNumber + 0.1)
+      onScaleCanvas && onScaleCanvas(scaleNumber + 0.1);
     }
   };
 
@@ -113,7 +179,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     if (scaleNumber > 0.3) {
       setScaleNumber(scaleNumber - 0.1);
       canvas.scaleTo(scaleNumber - 0.1);
-      onScaleCanvas&&onScaleCanvas(scaleNumber + 0.1)
+      onScaleCanvas && onScaleCanvas(scaleNumber + 0.1);
     }
   };
 
@@ -132,7 +198,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     } else {
       setScaleNumber(parseInt(data.key) / 100);
       canvas.scaleTo(parseInt(data.key) / 100);
-      onScaleCanvas&&onScaleCanvas(parseInt(data.key) / 100)
+      onScaleCanvas && onScaleCanvas(parseInt(data.key) / 100);
     }
     setScaleVisible(false);
   };
@@ -188,50 +254,18 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
         <CustomIcon type="icon-lianxian_icon" />
         <span>连线</span>
       </a> */}
-      <a className={styles.toolItem} onClick={() => canvas.cut()}>
-        <CustomIcon type="icon-jianqie" />
-        <span>剪切</span>
-      </a>
-      <a className={styles.toolItem} onClick={() => canvas.copy()}>
-        <CustomIcon type="icon-fuzhi" />
-        <span>复制</span>
-      </a>
-      <a className={styles.toolItem} onClick={() => canvas.paste()}>
-        <CustomIcon type="icon-niantie" />
-        <span>粘贴</span>
-      </a>
-      <a className={styles.toolItem} onClick={() => canvas.undo()}>
-        <CustomIcon type="icon-chexiao" />
-        <span>撤销</span>
-      </a>
-      <a className={styles.toolItem} onClick={() => canvas.redo()}>
-        <CustomIcon type="icon-icon_huifu" />
-        <span>恢复</span>
-      </a>
-      <a className={styles.toolItem} onClick={() => nodePanelLevel('bottom')}>
-        <CustomIcon type="icon-zhiyudiceng" />
-        <span>置于底层</span>
-      </a>
-      <a className={styles.toolItem} onClick={() => nodePanelLevel('down')}>
-        <CustomIcon type="icon-zhiyudiceng" />
-        <span>后置一层</span>
-      </a>
-      <a className={styles.toolItem} onClick={() => nodePanelLevel('up')}>
-        <CustomIcon type="icon-ziyuan" />
-        <span>前置一层</span>
-      </a>
-      <a className={styles.toolItem} onClick={() => nodePanelLevel('top')}>
-        <CustomIcon type="icon-ziyuan" />
-        <span>置于顶层</span>
-      </a>
-      <a className={styles.toolItem} onClick={() => handleCombine('combo')}>
-        <CustomIcon type="icon-jianlizuhe" />
-        <span>编组</span>
-      </a>
-      <a className={styles.toolItem} onClick={() => handleCombine('unCombo')}>
-        <CustomIcon type="icon-quxiaozuhe" />
-        <span>解组</span>
-      </a>
+      {headTools.map((item) => (
+        <Tooltip placement="bottom" title={item.title} key={item.key}>
+          <a
+            className={styles.toolItem}
+            onClick={() => handleHeaderClick(item.key)}
+          >
+            <CustomIcon type={item.icon} />
+            <span>{item.name}</span>
+          </a>
+        </Tooltip>
+      ))}
+
       <a
         style={{
           display: 'inline-block',

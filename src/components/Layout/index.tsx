@@ -5,7 +5,6 @@ import React, {
   useMemo,
   CSSProperties,
   useRef,
-  useImperativeHandle,
 } from 'react';
 import { Topology, registerNode, Options, Node } from '../../topology/core';
 import {
@@ -13,81 +12,6 @@ import {
   echartsObjs,
 } from '../../topology/chart-diagram';
 import { register as registerBiciComp } from '../../topology/bici-diagram';
-import {
-  flowData,
-  flowDataAnchors,
-  flowDataIconRect,
-  flowDataTextRect,
-  flowSubprocess,
-  flowSubprocessIconRect,
-  flowSubprocessTextRect,
-  flowDb,
-  flowDbIconRect,
-  flowDbTextRect,
-  flowDocument,
-  flowDocumentAnchors,
-  flowDocumentIconRect,
-  flowDocumentTextRect,
-  flowInternalStorage,
-  flowInternalStorageIconRect,
-  flowInternalStorageTextRect,
-  flowExternStorage,
-  flowExternStorageAnchors,
-  flowExternStorageIconRect,
-  flowExternStorageTextRect,
-  flowQueue,
-  flowQueueIconRect,
-  flowQueueTextRect,
-  flowManually,
-  flowManuallyAnchors,
-  flowManuallyIconRect,
-  flowManuallyTextRect,
-  flowDisplay,
-  flowDisplayAnchors,
-  flowDisplayIconRect,
-  flowDisplayTextRect,
-  flowParallel,
-  flowParallelAnchors,
-  flowComment,
-  flowCommentAnchors,
-} from '../../topology/flow-diagram';
-
-import {
-  activityFinal,
-  activityFinalIconRect,
-  activityFinalTextRect,
-  swimlaneV,
-  swimlaneVIconRect,
-  swimlaneVTextRect,
-  swimlaneH,
-  swimlaneHIconRect,
-  swimlaneHTextRect,
-  fork,
-  forkHAnchors,
-  forkIconRect,
-  forkTextRect,
-  forkVAnchors,
-} from '../../topology/activity-diagram';
-
-import {
-  simpleClass,
-  simpleClassIconRect,
-  simpleClassTextRect,
-  interfaceClass,
-  interfaceClassIconRect,
-  interfaceClassTextRect,
-} from '../../topology/class-diagram';
-
-import {
-  lifeline,
-  lifelineAnchors,
-  lifelineIconRect,
-  lifelineTextRect,
-  sequenceFocus,
-  sequenceFocusAnchors,
-  sequenceFocusIconRect,
-  sequenceFocusTextRect,
-} from '../../topology/sequence-diagram';
 import { Modal, Tabs } from 'antd';
 import { Tools } from '../config/config';
 import { getNodeById } from '../Service/topologyService';
@@ -99,7 +23,7 @@ import BackgroundComponent from './component/backgroundComponent';
 import LineComponent from './component/lineComponent';
 import SystemComponent from './LeftAreaComponent/SystemComponent';
 import CustomComponent from './LeftAreaComponent/CustomComponent';
-import MyComponent from './LeftAreaComponent/MyComponent';
+import MyComponent from './LeftAreaComponent/PicComponent';
 
 import './index.css';
 import CanvasContextMenu from '../canvasContextMenu';
@@ -169,11 +93,9 @@ export const EditorLayout = (props: DataVEditorProps) => {
   }, contextMenuRef);
 
   useEffect(() => {
-    console.log('Tools>>>', Tools);
-    // console.log('industrialLibrary==', props.industrialLibrary);
+    // console.log('Tools>>>', Tools);
 
     // window["API_URL"]=props.apiURL
-    // console.log('apiURL', props.apiURL);
 
     canvasOptions.on = onMessage;
     canvasRegister();
@@ -225,126 +147,9 @@ export const EditorLayout = (props: DataVEditorProps) => {
   const canvasRegister = () => {
     registerChart();
     registerBiciComp();
-    registerNode(
-      'flowData',
-      flowData,
-      flowDataAnchors,
-      flowDataIconRect,
-      flowDataTextRect
-    );
-    registerNode(
-      'flowSubprocess',
-      flowSubprocess,
-      null,
-      flowSubprocessIconRect,
-      flowSubprocessTextRect
-    );
-    registerNode('flowDb', flowDb, null, flowDbIconRect, flowDbTextRect);
-    registerNode(
-      'flowDocument',
-      flowDocument,
-      flowDocumentAnchors,
-      flowDocumentIconRect,
-      flowDocumentTextRect
-    );
-    registerNode(
-      'flowInternalStorage',
-      flowInternalStorage,
-      null,
-      flowInternalStorageIconRect,
-      flowInternalStorageTextRect
-    );
-    registerNode(
-      'flowExternStorage',
-      flowExternStorage,
-      flowExternStorageAnchors,
-      flowExternStorageIconRect,
-      flowExternStorageTextRect
-    );
-    registerNode(
-      'flowQueue',
-      flowQueue,
-      null,
-      flowQueueIconRect,
-      flowQueueTextRect
-    );
-    registerNode(
-      'flowManually',
-      flowManually,
-      flowManuallyAnchors,
-      flowManuallyIconRect,
-      flowManuallyTextRect
-    );
-    registerNode(
-      'flowDisplay',
-      flowDisplay,
-      flowDisplayAnchors,
-      flowDisplayIconRect,
-      flowDisplayTextRect
-    );
-    registerNode('flowParallel', flowParallel, flowParallelAnchors, null, null);
-    registerNode('flowComment', flowComment, flowCommentAnchors, null, null);
-
-    // activity
-    registerNode(
-      'activityFinal',
-      activityFinal,
-      null,
-      activityFinalIconRect,
-      activityFinalTextRect
-    );
-    registerNode(
-      'swimlaneV',
-      swimlaneV,
-      null,
-      swimlaneVIconRect,
-      swimlaneVTextRect
-    );
-    registerNode(
-      'swimlaneH',
-      swimlaneH,
-      null,
-      swimlaneHIconRect,
-      swimlaneHTextRect
-    );
-    registerNode('forkH', fork, forkHAnchors, forkIconRect, forkTextRect);
-    registerNode('forkV', fork, forkVAnchors, forkIconRect, forkTextRect);
-
-    // class
-    registerNode(
-      'simpleClass',
-      simpleClass,
-      null,
-      simpleClassIconRect,
-      simpleClassTextRect
-    );
-    registerNode(
-      'interfaceClass',
-      interfaceClass,
-      null,
-      interfaceClassIconRect,
-      interfaceClassTextRect
-    );
-
-    // sequence
-    registerNode(
-      'lifeline',
-      lifeline,
-      lifelineAnchors,
-      lifelineIconRect,
-      lifelineTextRect
-    );
-    registerNode(
-      'sequenceFocus',
-      sequenceFocus,
-      sequenceFocusAnchors,
-      sequenceFocusIconRect,
-      sequenceFocusTextRect
-    );
   };
 
   const onDrag = (event, node, custom = false) => {
-    console.log('custom>>>?', custom);
     if (custom) {
       event.dataTransfer.setData('Topology', JSON.stringify(node, replacer));
     } else {
@@ -412,7 +217,8 @@ export const EditorLayout = (props: DataVEditorProps) => {
   /*当自定义的属性发生变化时*/
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
-      console.log('自定义的属性>>>', value);
+      // console.log('自定义的属性>>>', value);
+      // console.log('selected.node>>>', selected.node);
       // 只能两层嵌套，后期需要更改，如果有多层的话
       canvas.setValue(selected.node.id, 'setValue');
       // 通知有数据属性更新,会重新渲染画布
@@ -447,27 +253,25 @@ export const EditorLayout = (props: DataVEditorProps) => {
    * 切换画布大小
    */
   const handleChangeCanvasSize = useCallback((sizeInfo) => {
-    console.log(sizeInfo);
     setCanvasSizeInfo(sizeInfo);
   }, []);
   /**
    * 切换画布背景图片
    */
   const handleChangeBkImage = useCallback((imgUrl) => {
-    console.log(imgUrl);
     setBkImageUrl(imgUrl);
   }, []);
   /**
    * 缩放画布
    * @param scaleKey 缩放系数
    */
-  const handleScaleCanvas=(scaleKey)=>{
-    console.log("scaleKey",scaleKey)
+  const handleScaleCanvas = (scaleKey) => {
+    console.log('scaleKey', scaleKey);
     // const  width=canvasSizeInfo.width*scaleKey;
     // const height=canvasSizeInfo.height*scaleKey;
     // const r = calcCanvas(width,height)
     // setCanvasSizeInfo({...r,width,height})
-  }
+  };
 
   /**
    * 当线条表单数据变化时, 重新渲染canvas
@@ -717,28 +521,36 @@ export const EditorLayout = (props: DataVEditorProps) => {
               />
             </TabPane>
             <TabPane tab="图库" key="2" style={{ margin: 0 }}>
-              <MyComponent />
+              <MyComponent uploaConfig={props.uploadConfig} />
             </TabPane>
           </Tabs>
         </div>
         <div className="full">
-          <svg className="svg" ref={svgRef} style={{minWidth:canvasSizeInfo.minWidth,minHeight:canvasSizeInfo.minHeight}}></svg>
-          <div ref={canvasRef}
-               id="topology-canvas"
-               style={{
-                 position: "absolute",
-                 borderWidth: 1,
-                 overflow: "hidden",
-                 left: canvasSizeInfo.left,
-                 top: canvasSizeInfo.top,
-                 width: canvasSizeInfo.width,
-                 height: canvasSizeInfo.height,
-                 background: '#ccc',
-                 backgroundSize:'cover',
-                 backgroundRepeat:'no-repeat',
-                 backgroundImage:`url(${bkImageUrl})`
-               }}
-               onContextMenu={handleContextMenu}
+          <svg
+            className="svg"
+            ref={svgRef}
+            style={{
+              minWidth: canvasSizeInfo.minWidth,
+              minHeight: canvasSizeInfo.minHeight,
+            }}
+          ></svg>
+          <div
+            ref={canvasRef}
+            id="topology-canvas"
+            style={{
+              position: 'absolute',
+              borderWidth: 1,
+              overflow: 'hidden',
+              left: canvasSizeInfo.left,
+              top: canvasSizeInfo.top,
+              width: canvasSizeInfo.width,
+              height: canvasSizeInfo.height,
+              background: '#ccc',
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundImage: `url(${bkImageUrl})`,
+            }}
+            onContextMenu={handleContextMenu}
           />
         </div>
         <div className="props">{renderRightArea}</div>

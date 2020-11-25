@@ -27,10 +27,10 @@ const Layout = ({ Tools, onDrag, combineCom }) => {
     <div>
       <div className="title">自定义组件</div>
       <div className="button">
-        {(componentList || []).map((item, key) => {
+        {(componentList || []).map((item, index) => {
           return (
             <a
-              key={key}
+              key={index}
               draggable
               href="/#"
               onDragStart={(ev) =>

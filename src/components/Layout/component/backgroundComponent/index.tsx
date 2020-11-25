@@ -60,6 +60,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   const [rcSwitchState, setRcSwitchState] = useState(
     data.canvas.width > data.canvas.height ? false : true
   ); // 页面布局切换
+  const [bkUrl, setBkUrl] = useState(''); // 保存背景图片url地址
   // 控制Popover的显示隐藏
   const [popoverVisible, setPopoverVisible] = useState({
     resolution: false, // 分辨率
@@ -68,7 +69,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   const [wsAddress, setWsAddress] = useState(websocketConf.url);
 
   useEffect(() => {
-    console.log('canvas>>>', canvas);
+    console.log('data.data>>>', data.data);
     // 回显数值
     const w = data.canvas.width;
     const h = data.canvas.height;
@@ -90,9 +91,14 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   /**
    * 渲染位置和大小的表单
    */
-  const handleFormValueChange = (changeValues, allValues) => {
-    console.log('handleFormValueChange>>>', changeValues);
-    console.log('allValues>>>', allValues);
+  const handleFormValueChange = (changeValues) => {
+    // console.log('handleFormValueChange>>>', changeValues);
+    // console.log('allValues>>>', allValues);
+    if (changeValues.bgColor) {
+      data.data['bkColor'] = changeValues.bgColor;
+      data.render();
+      form.setFieldsValue({ bgColorCheck: true });
+    }
     if (changeValues.gridSize) {
       const gridSize = parseInt(changeValues.gridSize);
       data.data['gridSize'] = gridSize;
@@ -107,39 +113,42 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
         canvas.showGrid(true);
       }
     }
-    // for (let k in changeValues) {
-    //   data.data[k] = changeValues[k];
-    // }
-    // data.render();
-    // form.resetFields();
   };
 
   // 背景图片checkbox切换
-  const handleBgImgChange = () => {};
+  const handleBgImgChange = (e: CheckboxChangeEvent) => {
+    if (e.target.checked) {
+      selectedBgImg(bkUrl);
+    } else {
+      canvas.clearBkImg();
+      onChangeBkImage && onChangeBkImage('');
+    }
+  };
 
   // 画布背景图片上传
   const bgUploadChange = ({ file }) => {
     if (file.status === 'done') {
       const url = file.response.data[0];
-      console.log(url);
+      selectedBgImg(url);
     }
   };
 
   // 设置背景图片
   const selectedBgImg = (url: string) => {
-    // TODO: 设置背景图片
     // 修改背景图片前，需要先canvas.clearBkImg清空旧图片
     canvas.clearBkImg();
-    data.data['bkImage']=url;
-    console.log(data.data['bkImage'])
+    data.data['bkImage'] = url;
+    setBkUrl(url);
     setPopoverVisible({ ...popoverVisible, bgSelect: false });
     onChangeBkImage && onChangeBkImage(url);
+    form.setFieldsValue({ bgImgCheck: true });
   };
 
-  // 背景颜色改变
-  const colorPickerChange = (val: string) => {
-    data.data['bkColor'] = val;
-    data.render();
+  // 背景颜色显示隐藏
+  const bkColorCheckChange = (e: CheckboxChangeEvent) => {
+    const result = e.target.checked ? form.getFieldValue('bgColor') : '#ccc';
+    data.data['bkColor'] = result;
+    canvas.render();
   };
 
   // 网格选择切换
@@ -150,7 +159,12 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   // 设置宽高
   const panelSizeChange = () => {
     const { w, h } = form.getFieldsValue(['w', 'h']);
-    data.resize({ width: w, height: h });
+    const width = parseInt(w);
+    const height = parseInt(h);
+    const r = calcCanvas(width, height);
+    data.resize({ width, height });
+    onChangeCanvasSize && onChangeCanvasSize({ ...r, width, height });
+    form.setFieldsValue({ sizeVal: `自定义` });
   };
 
   // 画布布局切换
@@ -162,14 +176,22 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     const r = calcCanvas(width, height);
     data.resize({ width, height });
     onChangeCanvasSize && onChangeCanvasSize({ ...r, width, height });
+    form.setFieldsValue({
+      w: width,
+      h: height,
+    });
   };
 
   // 选择画布大小后重新渲染画布
   const selectedResolution = (size: string) => {
     const width = +size.split('*')[0];
     const height = +size.split('*')[1];
-    data.resize({ width, height });
-    form.setFieldsValue({ w: width, h: height });
+    form.setFieldsValue({
+      w: width,
+      h: height,
+      sizeVal: `预设·${width}*${height}`,
+    });
+    setRcSwitchState(!(width > height));
     // 隐藏Popover
     setPopoverVisible({ ...popoverVisible, resolution: false });
     const r = calcCanvas(width, height);
@@ -281,7 +303,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
       <Panel header="背景" key="2">
-        <Form form={form}>
+        <Form form={form} onValuesChange={handleFormValueChange}>
           <Popover
             placement="bottom"
             trigger="click"
@@ -306,12 +328,12 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
                 label="背景颜色"
                 valuePropName="checked"
               >
-                <Checkbox />
+                <Checkbox onChange={bkColorCheckChange} />
               </Form.Item>
             </Col>
             <Col push={2}>
               <Form.Item name="bgColor">
-                <ColorPicker onChange={colorPickerChange} />
+                <ColorPicker />
               </Form.Item>
             </Col>
           </Row>
@@ -322,7 +344,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
                 label="背景图片"
                 valuePropName="checked"
               >
-                <Checkbox />
+                <Checkbox onChange={handleBgImgChange} />
               </Form.Item>
             </Col>
             <Col push={2}>
@@ -348,7 +370,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
       <Panel header="网格" key="3">
-        <Form form={form}>
+        <Form form={form} onValuesChange={handleFormValueChange}>
           <Row align="middle">
             <Col push={1}>
               <Form.Item name="gridCheck" label="网格" valuePropName="checked">
@@ -361,7 +383,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
               </Form.Item>
             </Col>
             <Col push={3} span={8}>
-              <Form.Item name="gridSize">
+              <Form.Item name="gridSize" initialValue={60}>
                 <Input suffix="px" />
               </Form.Item>
             </Col>
@@ -422,7 +444,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
           </ul>
         </TabPane>
         <TabPane tab="消息通信" key="2" style={{ margin: 0 }}>
-          <Collapse defaultActiveKey={['1', '2']}>
+          <Collapse defaultActiveKey={['1']}>
             <Panel header="websocket地址" key="1">
               <TextArea
                 placeholder="请输入websocket地址"
