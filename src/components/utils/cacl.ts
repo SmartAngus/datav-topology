@@ -40,3 +40,26 @@ export function getHexColor(color) {
     ('0' + g.toString(16)).slice(-2) +
     ('0' + b.toString(16)).slice(-2)
 }
+
+/**
+ * 将base64的图片数据转化成file对象上传
+ * @param data
+ */
+export function base64ToFile(data) {
+
+  // 将base64 的图片转换成file对象上传 atob将ascii码解析成binary数据
+  let binary = atob(data.split(',')[1]);
+  let mime = data.split(',')[0].match(/:(.*?);/)[1];
+  let array = [];
+  for (let i = 0; i < binary.length; i++) {
+    array.push(binary.charCodeAt(i));
+  }
+  let fileData = new Blob([new Uint8Array(array)], {
+    type: mime,
+  });
+
+  let file = new File([fileData], `${new Date().getTime()}.png`, { type: mime });
+
+  return file;
+
+}

@@ -5,6 +5,7 @@ import React, {
   useMemo,
   CSSProperties,
   useRef,
+  useImperativeHandle,
 } from 'react';
 import { Topology, registerNode, Options, Node } from '../../topology/core';
 import {
@@ -38,10 +39,11 @@ export let canvas: Topology;
  * @param history
  * @constructor
  */
-export const EditorLayout = (props: DataVEditorProps) => {
+export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const history = props.history;
   const layoutRef = useRef();
   const contextMenuRef = useRef();
+  const headerRef = useRef();
   const [isSave, setIsSave] = useState(true);
   const [bkImageUrl, setBkImageUrl] = useState('');
 
@@ -92,10 +94,28 @@ export const EditorLayout = (props: DataVEditorProps) => {
     setShowContextmenu(false);
   }, contextMenuRef);
 
+  // 对父组件暴露保存数据的接口
+  useImperativeHandle(
+    ref,
+    () => ({
+      getIsSave: () => {
+        return isSave;
+      },
+      handleSaveData: () => {
+        if (headerRef !== undefined) {
+          (headerRef as any).current.save();
+        }
+      },
+    }),
+    [isSave]
+  );
+
   useEffect(() => {
     // console.log('Tools>>>', Tools);
 
-    // window["API_URL"]=props.apiURL
+    window['API_URL'] = props.apiURL;
+    window['token'] = props.token;
+    // console.log('apiURL', props.apiURL);
 
     canvasOptions.on = onMessage;
     canvasRegister();
@@ -461,6 +481,7 @@ export const EditorLayout = (props: DataVEditorProps) => {
     if (isLoadCanvas)
       return (
         <Header
+          ref={headerRef}
           canvas={canvas}
           history={history}
           rootRef={layoutRef}
@@ -468,6 +489,9 @@ export const EditorLayout = (props: DataVEditorProps) => {
           setIsSave={setIsSave}
           onExtraSetting={props.onExtraSetting}
           onScaleCanvas={handleScaleCanvas}
+          onEditorSaveCb={props.onEditorSaveCb}
+          onPoweroff={props.onPoweroff}
+          autoSaveInterval={props.autoSaveInterval}
         />
       );
   }, [isLoadCanvas, history, layoutRef, isSave]);
@@ -558,4 +582,4 @@ export const EditorLayout = (props: DataVEditorProps) => {
       </div>
     </div>
   );
-};
+});

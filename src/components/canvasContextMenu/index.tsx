@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Topology,Node,Line,Lock } from '../../topology/core';
 
 import styles from './index.module.scss';
-import { Form, Input, Modal } from 'antd'
+import { Form, Input, Modal, message } from 'antd'
 import { FormInstance } from 'antd/es/form'
 import { client, clientParam } from '../data/api'
 
@@ -105,16 +105,14 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
   onCheck = async () => {
     try {
       const values = await this.formRef.current.validateFields(['componentName']);
-      console.log('Success:', values);
       this.setState({componentName:values.componentName})
       this.setState({newComVisible:false})
       const newNode = this.props.canvas.toComponent(this.props.data.nodes)
       this.props.canvas.delete();
       this.props.canvas.addNode(newNode)
       this.props.canvas.render()
-      console.log("newNode",newNode)
       this.saveNewComponent({componentName:this.state.componentName,componentProperty:JSON.stringify(newNode)}).then(res=>{
-        console.log("res==",res)
+        message.info("新建组合组件成功")
       })
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
@@ -134,7 +132,7 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
           <Form.Item rules={[
             {
               required: true,
-              message: 'Please input your name',
+              message: '请输入组件名称',
             },
             {
               max: 20,

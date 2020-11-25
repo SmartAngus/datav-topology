@@ -3,14 +3,14 @@
  */
 import React, { Component } from 'react'
 import { ComplexTable, biciNotification } from 'bici-transformers'
-import {client} from '../data/api'
+import { client, clientParam } from '../data/api'
 
 // 查询反应堆列表
 export function fetchSearchReactStackList (params) {
-  return client.post('/applications/reactor/list', params,{
+  return clientParam(window["API_URL"]).post('/applications/reactor/list', params,{
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
-      token: '5lpRaFsOnAtHmLXoG9fUbs',
+      token: window['token'],
       'Content-Type': 'application/json',
     }
   })
@@ -58,8 +58,10 @@ export default class ReactTable extends Component<any,any> {
     if (source) { params.source = source }
     if (statusList&&statusList.length) { params.statusList = statusList }
     fetchSearchReactStackList(params).then((res) => {
-      const {list,total}=res["data"].data
-      this.setState({ dataList: list, total })
+      if(res["data"].data){
+        const {list,total}=res["data"].data
+        this.setState({ dataList: list, total })
+      }
     })
   }
 

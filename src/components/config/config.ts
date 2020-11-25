@@ -224,7 +224,7 @@ export const Tools = [
     group: '基本形状',
     children: [
       {
-        name: 'rectangle',
+        name: '圆角矩形',
         icon: 'icon-rectangle',
         data: {
           text: '圆角矩形',
@@ -241,7 +241,7 @@ export const Tools = [
         },
       },
       {
-        name: 'circle',
+        name: '圆',
         icon: 'icon-circle',
         data: {
           text: '圆',
@@ -408,10 +408,10 @@ export const Tools = [
       //   },
       // },
       {
-        name: 'text',
+        name: '文本',
         icon: 'icon-text',
         data: {
-          text: 'le5le-topology',
+          text: '文本',
           rect: {
             width: 160,
             height: 30,

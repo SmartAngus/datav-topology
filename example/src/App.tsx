@@ -21,6 +21,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     { key: 2, img: preBgImg2 },
     { key: 3, img: preBgImg3 },
   ];
+  const token = 'development_of_special_token_by_star_quest';
   const industrialLibrary = [
     {
       type: 'mk',
@@ -95,7 +96,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     baseURL: 'http://qt.test.bicisims.com',
     self: {
       baseURL: 'http://qt.test.bicisims.com',
-      token: 'development_of_special_token_by_star_quest',
+      token: token,
       url: '/api/file/file/uploadReturnPath',
       apiUrl: {
         list: '/applications/custom/component/componentList',
@@ -107,7 +108,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     },
     preInstall: {
       baseURL: 'http://qt.test.bicisims.com',
-      token: 'development_of_special_token_by_star_quest',
+      token: token,
       url: '/api/file/file/uploadReturnPath',
       data: {
         mappingId: 'ooip6ffe388d487db754b885b8aa65b9',
@@ -130,7 +131,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
         params: {},
       },
       rename: {
-        url: '/applications/customComponent/rename',
+        url: '/applications/customComponent/update',
         params: {},
       },
     },
@@ -228,8 +229,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     const formData = new FormData();
-    api.defaults.headers.common['token'] =
-      'development_of_special_token_by_star_quest';
+    api.defaults.headers.common['token'] = '5KmTbcul1R4RNxnSiwTlpr';
     formData.append('file', data.screenshot);
     formData.append('mappingId', 'ooip6ffe388d487db754b885b8aa65b9');
 
@@ -342,9 +342,10 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
         uploadConfig={uploadConfig}
         onPoweroff={handlePoweroff}
         preInstallBgImages={preInstallBgImages}
-        autoSaveInterval={20}
+        autoSaveInterval={30}
         websocketConf={websocketConf}
         apiURL={apiURL}
+        token={token}
         // onPreview={handlePreview}
       />
     </div>
@@ -354,8 +355,8 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
 const App = () => {
   return (
     <BrowserRouter>
-      <Route exact path="/" component={EditorLayoutCanvas} />
-      <Route path="/preview" component={Preview} />
+      <Route exact path="/" component={EditorLayoutCanvas} key={1} />
+      <Route path="/preview" component={Preview} key={2} />
     </BrowserRouter>
   );
 };

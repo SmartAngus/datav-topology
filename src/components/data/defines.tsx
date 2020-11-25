@@ -296,6 +296,8 @@ export class BgImagesProps{
 export class DataVEditorProps{
   // api域名
   apiURL?:string;
+  // token
+  token?:string;
   // 数据保存到本地后的回掉的是
   onEditorSaveCb?:(data:any)=>void;
   // 用户自定义图库

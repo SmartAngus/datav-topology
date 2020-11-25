@@ -1893,11 +1893,11 @@ export class Topology {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
     if (this.data.bkColor) {
-      // ctx.fillStyle = this.data.bkColor;
-      // ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = this.data.bkColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
     if (this.data.bkImage) {
-      // ctx.drawImage(this.canvas.bkImg, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(this.canvas.bkImg, 0, 0, canvas.width, canvas.height);
     }
 
     for (const item of this.data.pens) {
@@ -2695,6 +2695,16 @@ export class Topology {
       const svg = document.querySelector('.svg-grid');
       svg.parentNode.parentNode.removeChild(svg.parentNode);
       this.parentElem.prepend(this.gridElem);
+    }
+    this.data.gridSize=size;
+    this.data.gridColor=gridColor;
+  }
+  setGrid(gridSize?:number,gridColor?:string){
+    if(gridSize!=undefined){
+      this.data.gridSize = gridSize;
+    }
+    if(gridColor!=undefined){
+      this.data.gridColor = gridColor;
     }
   }
 

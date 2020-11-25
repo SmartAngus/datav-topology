@@ -52,15 +52,15 @@ export class RenderLayer extends Canvas {
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     if (this.data.bkColor) {
       // 修改将背景渲染到容器div元素上，解决设置背景后网格不显示的问题
-      // ctx.fillStyle = this.data.bkColor;
-      // ctx.fillRect(0, 0, this.width, this.height);
+      ctx.fillStyle = this.data.bkColor;
+      ctx.fillRect(0, 0, this.width, this.height);
       this.parentElem.style.backgroundColor=this.data.bkColor
     }
 
     if (this.bkImg && this.bkImgRect) {
-      // ctx.drawImage(this.bkImg, this.bkImgRect.x, this.bkImgRect.y, this.bkImgRect.width,
-      //   this.bkImgRect.height, 0, 0, this.width, this.height);
-      // ctx.drawImage(this.bkImg, 0, 0, this.width, this.height);
+      ctx.drawImage(this.bkImg, this.bkImgRect.x, this.bkImgRect.y, this.bkImgRect.width,
+        this.bkImgRect.height, 0, 0, this.width, this.height);
+      ctx.drawImage(this.bkImg, 0, 0, this.width, this.height);
     }
 
     ctx.drawImage(this.offscreen, 0, 0, this.width, this.height);
