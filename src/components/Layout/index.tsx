@@ -26,7 +26,7 @@ import SystemComponent from './LeftAreaComponent/SystemComponent';
 import CustomComponent from './LeftAreaComponent/CustomComponent';
 import MyComponent from './LeftAreaComponent/PicComponent';
 
-import './index.css';
+import styles from './index.module.css';
 import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines';
 import { calcCanvas } from '../utils/cacl';
@@ -52,8 +52,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     minHeight: 2289,
     left: 1168,
     top: 560,
-    width: 826,
-    height: 1168,
+    width: props?.editorData?.width || 826,
+    height: props?.editorData?.height || 1168,
   });
 
   const [selected, setSelected] = useState({
@@ -84,10 +84,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     rotateCursor: '/rotate.cur',
     locked: 1,
     autoExpandDistance: 0,
-    viewPadding: [100],
+    viewPadding: [0],
     autoAnchor: false,
     cacheLen: 50,
-    hideInput: true,
+    hideInput: false,
   };
 
   useClickAway(() => {
@@ -123,29 +123,28 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     async function getNodeData() {
       const data = await getNodeById(history.location.state.id);
       canvas.open(data.data);
-      console.log('history.location.state==', history.location.state);
     }
-
-    if (history.location.state && history.location.state.from === '/preview') {
-      confirm({
-        title: '是否要保存预览前的数据?',
-        okText: '保存',
-        cancelText: '取消',
-        onOk() {
-          history.location.state.data.locked = 0;
-          canvas.open(history.location.state.data);
-        },
-        onCancel() {
-          getNodeData();
-        },
-      });
-    } else {
-      if (history.location?.state?.id) {
-        getNodeData();
-      }
+    if (props.editorData != undefined && typeof props.editorData == 'object') {
+      props.editorData.locked = 0;
+      canvas.open(props.editorData);
+    }
+    // if (history.location.state && history.location.state.from === '/preview') {
+    //   history.location.state.data.locked = 0;
+    //   canvas.open(history.location.state.data);
+    // } else {
+    //
+    // }
+    console.log('props.editorData---', props.editorData);
+    if (props.editorData) {
+      const w = props.editorData.width as number;
+      const h = props.editorData.height as number;
+      const r = calcCanvas(w, h);
+      setCanvasSizeInfo({ ...r, width: w, height: h });
+      canvas.resize({ width: w, height: h });
+      canvas.render();
     }
     setIsLoadCanvas(true);
-  }, [history]);
+  }, [props.editorData]);
 
   useEffect(() => {
     scrollCenter();
@@ -231,7 +230,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }
         }
       }
-
       canvas.updateProps(false, [selected.node]);
     },
     [selected]
@@ -561,6 +559,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
             }}
           ></svg>
           <div
+            className={styles.topology_canvas}
             ref={canvasRef}
             id="topology-canvas"
             style={{

@@ -16,6 +16,8 @@ export class TopologyData {
   grid?: boolean;
   gridColor?: string;
   gridSize?: number;
+  width?:number;
+  height?:number;
   websocket?: string;
   mqttUrl?: string;
   mqttOptions?: {
@@ -50,6 +52,10 @@ export class TopologyData {
       this.gridColor = json.gridColor;
       this.gridSize = json.gridSize;
       this.manualCps = json.manualCps;
+
+      this.width=json.width;
+      this.height=json.height;
+
 
       this.websocket = json.websocket;
       this.mqttUrl = json.mqttUrl;

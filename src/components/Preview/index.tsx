@@ -4,25 +4,47 @@ import { PageHeader, Button } from 'antd';
 import moment from 'moment'
 let canvas;
 let x, y;
-const Preview = ({ history }) => {
+export class PreviewProps {
+  history?: any;
+  key?:number;
+  ref?:any;
+  // 画布数据 json对象
+  data?:any;
+  websocketConf?:{
+    url:string,
+  }
+}
+const Preview = ({ history,data,websocketConf }:PreviewProps) => {
   useEffect(() => {
     const canvasOptions = {
       rotateCursor: '/rotate.cur',
       locked: 1
     };
     canvas = new Topology('topology-canvas-preview', canvasOptions);
-    history.location.state.data.locked = 1;
-    console.log("----++++",history.location.state.data)
+    if(history){
+      history.location.state.data.locked = 1;
+    }
+    // 渲染页面数据
+    if(data!=undefined&&typeof data=='object'){
+      data.locked=1;
+      canvas.open(data)
+    }
+    // if(history){
+    //   canvas.open(history.location.state.data);
+    // }else{
+    //   canvas.open(data)
+    // }
     initWebsocketData()
     return ()=>{
       canvas.closeSocket()
     }
-  }, [history.location.state.data]);
+  }, [history?.location.state.data,data]);
 
   const initWebsocketData=()=>{
-    console.log("initWebsocketData")
-    canvas.open(history.location.state.data);
-    //canvas.openSocket("ws://47.96.159.115:51060/ws?token=1NU6lvRQmTVfx4c7ppOFJb");
+    canvas.closeSocket()
+    if(websocketConf!==undefined){
+      canvas.openSocket(`${websocketConf.url}`);
+    }
     if(canvas!=undefined&&canvas.socket!=undefined){
       console.log("preview websocket")
       canvas.socket.socket.onopen=()=> {
@@ -30,7 +52,7 @@ const Preview = ({ history }) => {
         if (canvas.data && canvas.data.pens.length > 0) {
           // 有数据，去遍历有websocket的组件，并订阅
           if(canvas.socket!=undefined){
-            (history.location.state.data.pens||[]).map((node)=>{
+            (canvas.data.pens||[]).map((node)=>{
               if(node.property?.dataPointParam?.qtDataList?.length>0){
                 canvas.socket.socket.send(JSON.stringify(({...node.property.dataPointParam,tid:node.TID,id:node.id})))
               }

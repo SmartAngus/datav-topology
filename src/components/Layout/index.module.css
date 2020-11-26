@@ -72,3 +72,6 @@
   position: absolute;
   background-image: none;
 }
+.topology_canvas{
+  overflow: hidden!important;
+}

@@ -14,7 +14,7 @@ import { Point } from './models/point';
 import { Line } from './models/line';
 import { TopologyData } from './models/data';
 import { Lock, AnchorMode } from './models/status';
-import { drawNodeFns, drawLineFns } from './middles/index';
+import { drawNodeFns, drawLineFns, rectangle } from './middles/index'
 import { Offscreen } from './offscreen';
 import { RenderLayer } from './renderLayer';
 import { HoverLayer } from './hoverLayer';
@@ -29,6 +29,16 @@ import { formatPadding } from './utils/padding';
 import { Socket } from './socket';
 import { MQTT } from './mqtt';
 import { Direction } from './models';
+import echarts from 'echarts/lib/echarts';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
+import 'echarts/lib/chart/pie';
+import 'echarts/lib/chart/bar';
+import 'echarts/lib/chart/line';
+import 'echarts/lib/chart/gauge';
+import 'echarts/lib/chart/scatter';
+import html2canvas from "html2canvas"
+import * as _ from 'lodash'
 
 const resizeCursors = ['nw-resize', 'ne-resize', 'se-resize', 'sw-resize'];
 enum MoveInType {
@@ -311,6 +321,9 @@ export class Topology {
   };
 
   resize(size?: { width: number; height: number }) {
+    this.data.width=size?.width||826;
+    this.data.height=size?.height||1168;
+
     this.canvas.resize(size);
     this.offscreen.resize(size);
     this.divLayer.resize(size);
@@ -435,7 +448,6 @@ export class Topology {
       this.cache();
       this.dispatch('addNode', node);
     }
-
     return node;
   }
 
@@ -1872,6 +1884,7 @@ export class Topology {
     callback: any = null
   ): string {
     const rect = this.getRect();
+    console.log("rect",rect)
     const p = formatPadding(padding || 0);
     rect.x -= p[3];
     rect.y -= p[0];
@@ -1909,7 +1922,22 @@ export class Topology {
       }
 
       pen.translate(-rect.x, -rect.y);
+      // 渲染第三方图表
+      // if (pen.name == "echarts") {
+      //   const oldPen = _.cloneDeep(item)
+      //   console.log("-------",item)
+      //   console.log("-------",JSON.stringify(oldPen))
+      //   console.log(document.getElementById((oldPen as Node).elementId))
+      //
+      //   html2canvas(document.getElementById((oldPen as Node).elementId)).then(canv=>{
+      //     const imgData = canv.toDataURL('image/png');
+      //     let oImg = new Image();
+      //     oImg.src=imgData;
+      //     ctx.drawImage(oImg, pen.rect.x, pen.rect.y, pen.rect.width, pen.rect.height);
+      //   })
+      // }
       pen.render(ctx);
+
     }
 
     if (callback) {
@@ -1917,6 +1945,7 @@ export class Topology {
     }
     return canvas.toDataURL(type, quality);
   }
+
 
   saveAsImage(
     name?: string,

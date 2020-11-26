@@ -1,5 +1,4 @@
 import { s8, Node, createDiv, rectangle } from '../../../core';
-import { Stomp } from '@stomp/stompjs';
 import { reviver } from '../../../../components/utils/serializing';
 export const echartsObjs: any = {};
 
@@ -48,32 +47,6 @@ export function echarts(ctx: CanvasRenderingContext2D, node: Node) {
   if (!node.elementRendered) {
     // 初始化时，等待父div先渲染完成，避免初始图表控件太大。
     setTimeout(() => {
-      var stompClient = null;
-
-      function connect() {
-        var socket = new WebSocket('ws://localhost/gs-guide-websocket');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function (frame) {
-          stompClient.subscribe(
-            'http://localhost/app/topic/greetings',
-            function (greeting) {}
-          );
-        });
-      }
-
-      function disconnect() {
-        if (stompClient !== null) {
-          stompClient.disconnect();
-        }
-      }
-
-      function sendName() {
-        stompClient.send(
-          'http://localhost/app/hello',
-          {},
-          JSON.stringify({ name: 'majy' })
-        );
-      }
       echartsObjs[node.id].chart.setOption(
         JSON.parse(JSON.stringify(node.data.echarts.option), reviver)
       );
