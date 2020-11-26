@@ -1,6 +1,5 @@
 import React from 'react';
 import { Row, Col } from 'antd';
-import IndustrialLibraryUpload from '../../../common/IndustrialLibraryUpload';
 
 const Layout = ({ Tools, onDrag }) => {
   return Tools.map((item, index) => (
@@ -11,9 +10,12 @@ const Layout = ({ Tools, onDrag }) => {
           {item.children.map((item, idx) => {
             // eslint-disable-next-line jsx-a11y/anchor-is-valid
             return (
-              <Col span={8} style={{ marginBottom: 20, textAlign: 'center' }}>
+              <Col
+                span={8}
+                key={idx}
+                style={{ marginBottom: 20, textAlign: 'center' }}
+              >
                 <a
-                  key={idx}
                   title={item.name}
                   draggable
                   href="/#"
@@ -39,7 +41,6 @@ const Layout = ({ Tools, onDrag }) => {
             );
           })}
         </Row>
-        {/* {item.group == '自定义图片' ? <IndustrialLibraryUpload /> : ''} */}
       </div>
     </div>
   ));

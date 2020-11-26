@@ -1189,8 +1189,10 @@ export class Topology {
     switch (key.key) {
       case 'a':
       case 'A':
-        this.activeLayer.setPens(this.data.pens);
-        done = true;
+        if (key.ctrlKey) {
+          this.activeLayer.setPens(this.data.pens);
+          done = true;
+        }
         break;
       case 'Delete':
       case 'Backspace':
@@ -1226,15 +1228,21 @@ export class Topology {
         break;
       case 'x':
       case 'X':
-        this.cut();
+        if (key.ctrlKey) {
+          this.cut();
+        }
         break;
       case 'c':
       case 'C':
-        this.copy();
+        if (key.ctrlKey) {
+          this.copy();
+        }
         break;
       case 'v':
       case 'V':
-        this.paste();
+        if (key.ctrlKey) {
+          this.paste();
+        }
         break;
       case 'y':
       case 'Y':
@@ -1244,10 +1252,38 @@ export class Topology {
         break;
       case 'z':
       case 'Z':
-        if (key.shiftKey) {
-          this.redo();
-        } else {
+        if (key.ctrlKey) {
           this.undo();
+        }
+        break;
+      case 'g':
+      case 'G':
+        if (key.ctrlKey) {
+          this.combine(this.activeLayer.pens);
+          key.returnValue = false;
+        }
+        break;
+      case 'u':
+      case 'U':
+        if (key.ctrlKey) {
+          this.activeLayer.pens
+            .filter((pen) => pen.name === 'combine')
+            .forEach((pen) => this.uncombine(pen));
+          key.returnValue = false;
+        }
+        break;
+      case '[':
+        if (key.ctrlKey && key.altKey) {
+          this.activeLayer.pens.forEach((pen) => this.bottom(pen));
+        } else if (key.ctrlKey) {
+          this.activeLayer.pens.forEach((pen) => this.down(pen));
+        }
+        break;
+      case ']':
+        if (key.ctrlKey && key.altKey) {
+          this.activeLayer.pens.forEach((pen) => this.top(pen));
+        } else if (key.ctrlKey) {
+          this.activeLayer.pens.forEach((pen) => this.up(pen));
         }
         break;
     }
@@ -2657,10 +2693,10 @@ export class Topology {
     pen[attr] = val;
   }
 
-  createGrid(out=false) {
-    const size = this.data.gridSize||60;
-    const minSize = size/4;
-    const gridColor = this.data.gridColor||'#000';
+  createGrid(out = false) {
+    const size = this.data.gridSize || 60;
+    const minSize = size / 4;
+    const gridColor = this.data.gridColor || '#000';
     this.gridElem.style.position = 'absolute';
     this.gridElem.style.display = 'none';
     this.gridElem.style.left = '0';
@@ -2678,10 +2714,10 @@ export class Topology {
     <rect width="100%" height="100%" fill="url(#grid2)" />
     <rect width="100%" height="100%" fill="url(#grid1)" />
     </svg>`;
-    if(!out){
+    if (!out) {
       this.parentElem.appendChild(this.gridElem);
-    }else{
-      const svg=document.querySelector(".svg-grid");
+    } else {
+      const svg = document.querySelector('.svg-grid');
       svg.parentNode.parentNode.removeChild(svg.parentNode);
       this.parentElem.prepend(this.gridElem);
     }
