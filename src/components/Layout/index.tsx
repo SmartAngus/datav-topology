@@ -52,8 +52,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     minHeight: 2289,
     left: 1168,
     top: 560,
-    width: props?.editorData?.width||826,
-    height: props?.editorData?.height||1168,
+    width: props?.editorData?.width || 826,
+    height: props?.editorData?.height || 1168,
   });
 
   const [selected, setSelected] = useState({
@@ -123,28 +123,25 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     async function getNodeData() {
       const data = await getNodeById(history.location.state.id);
       canvas.open(data.data);
-      console.log('history.location.state==', history.location.state);
     }
-
-    if(props.editorData!=undefined&&typeof props.editorData=='object'){
-      console.log("props.editorData",props.editorData)
-      props.editorData.locked=0
-      canvas.open(props.editorData)
+    if (props.editorData != undefined && typeof props.editorData == 'object') {
+      props.editorData.locked = 0;
+      canvas.open(props.editorData);
     }
-    if (history.location.state && history.location.state.from === '/preview') {
-      history.location.state.data.locked = 0;
-      canvas.open(history.location.state.data);
-    } else {
-
-    }
-    console.log("props.editorData---",props.editorData)
-    if(props.editorData){
-      const w  = props.editorData.width as number
-      const h  = props.editorData.height as number
-      const r = calcCanvas(w,h)
-      setCanvasSizeInfo({...r,width:w, height:h})
-      canvas.resize({width:w, height:h})
-      canvas.render()
+    // if (history.location.state && history.location.state.from === '/preview') {
+    //   history.location.state.data.locked = 0;
+    //   canvas.open(history.location.state.data);
+    // } else {
+    //
+    // }
+    console.log('props.editorData---', props.editorData);
+    if (props.editorData) {
+      const w = props.editorData.width as number;
+      const h = props.editorData.height as number;
+      const r = calcCanvas(w, h);
+      setCanvasSizeInfo({ ...r, width: w, height: h });
+      canvas.resize({ width: w, height: h });
+      canvas.render();
     }
     setIsLoadCanvas(true);
   }, [props.editorData]);
@@ -200,6 +197,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         fillStyle,
         strokeStyle,
         lineWidth,
+        text,
       } = value;
       const changedProps = {
         rect: {
@@ -217,6 +215,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         strokeStyle,
         lineWidth: lineWidth ? Number(lineWidth) : undefined,
         fillStyle,
+        text,
       };
       for (const key in changedProps) {
         if (typeof changedProps[key] === 'object') {
@@ -231,7 +230,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }
         }
       }
-
       canvas.updateProps(false, [selected.node]);
     },
     [selected]
@@ -239,7 +237,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   /*当自定义的属性发生变化时*/
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
-      // console.log('自定义的属性>>>', value);
+      console.log('自定义的属性>>>', value);
       // console.log('selected.node>>>', selected.node);
       // 只能两层嵌套，后期需要更改，如果有多层的话
       canvas.setValue(selected.node.id, 'setValue');

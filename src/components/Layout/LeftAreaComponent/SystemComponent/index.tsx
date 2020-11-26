@@ -6,7 +6,7 @@ const Layout = ({ Tools, onDrag }) => {
     <div key={index}>
       <div className="title">{item.group}</div>
       <div className="button">
-        <Row justify="space-between" align="middle">
+        <Row align="middle">
           {item.children.map((item, idx) => {
             // eslint-disable-next-line jsx-a11y/anchor-is-valid
             return (

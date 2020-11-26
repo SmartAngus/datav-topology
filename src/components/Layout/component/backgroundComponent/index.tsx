@@ -69,7 +69,6 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   const [wsAddress, setWsAddress] = useState(websocketConf.url);
 
   useEffect(() => {
-    console.log('data.data>>>', data.data);
     // 回显数值
     const w = data.canvas.width;
     const h = data.canvas.height;
@@ -165,7 +164,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     const height = parseInt(h);
     const r = calcCanvas(width, height);
     data.resize({ width, height });
-    canvas.render()
+    canvas.render();
     onChangeCanvasSize && onChangeCanvasSize({ ...r, width, height });
     form.setFieldsValue({ sizeVal: `自定义` });
   };
@@ -178,7 +177,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     const height = data.canvas.width;
     const r = calcCanvas(width, height);
     data.resize({ width, height });
-    canvas.render()
+    canvas.render();
     onChangeCanvasSize && onChangeCanvasSize({ ...r, width, height });
     form.setFieldsValue({
       w: width,
@@ -200,7 +199,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     setPopoverVisible({ ...popoverVisible, resolution: false });
     const r = calcCanvas(width, height);
     canvas.resize({ width, height });
-    canvas.render()
+    canvas.render();
     onChangeCanvasSize && onChangeCanvasSize({ ...r, width, height });
   };
 

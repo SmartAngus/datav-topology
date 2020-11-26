@@ -35,6 +35,7 @@
   display: inline-block;
   color: #333;
   line-height: 1;
+  width: 100%;
   text-align: center;
   text-decoration: none !important;
 }
@@ -60,7 +61,7 @@
   overflow-y: auto;
   position: relative;
 }
-.svg{
+.svg {
   left: 0px;
   top: 0px;
   width: 100%;

@@ -150,7 +150,6 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
       const saveData = new Blob([JSON.stringify(canvas.data)], {
         type: 'text/plain;charset=utf-8',
       });
-      console.log("handleSave",canvas.toImage())
       const screenshot = base64ToFile(canvas.toImage());
       // canvas.saveAsImage();
       saveData.text().then((r) => {

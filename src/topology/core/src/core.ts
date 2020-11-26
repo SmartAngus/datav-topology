@@ -30,7 +30,6 @@ import { Socket } from './socket';
 import { MQTT } from './mqtt';
 import { Direction } from './models';
 import echarts from 'echarts/lib/echarts';
-import { reviver } from '../../../components/utils/serializing'
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/chart/pie';

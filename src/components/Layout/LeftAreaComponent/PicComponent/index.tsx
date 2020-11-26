@@ -1,11 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Upload } from 'antd';
+import React, { useState, useEffect, useRef, CSSProperties } from 'react';
+import { Row, Col, Upload, Form, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { clientParam } from '../../../data/api';
-import styles from './index.module.css';
+import { useClickAway } from 'ahooks';
+import CompContextMenu from '../../../common/CompContextMenu';
+import styles from './index.module.scss';
 
 const Layout = ({ uploaConfig }) => {
+  const [formRef] = Form.useForm();
+  // 是否显示右键菜单
+  const [showContextmenu, setShowContextmenu] = useState(false);
   const [list, setList] = useState([]);
+  const [contextmenu, setContextmenu] = useState({
+    position: 'fixed',
+    zIndex: '10',
+    display: 'none',
+    left: '',
+    top: '',
+    bottom: '',
+  });
+  const [selectedItem, setSelectedItem] = useState(null);
+  const contextMenuRef = useRef();
+  useClickAway(() => {
+    setShowContextmenu(false);
+  }, contextMenuRef);
 
   useEffect(() => {
     requstPicList();
@@ -25,6 +43,7 @@ const Layout = ({ uploaConfig }) => {
         if (data) {
           data.map((item: any) => {
             item.name = item.name.substring(0, item.name.lastIndexOf('.'));
+            item.type = item.name.substring(item.name.lastIndexOf('.') + 1);
             getBase64(item.url, (data: string) => {
               item.url = data;
             });
@@ -51,15 +70,66 @@ const Layout = ({ uploaConfig }) => {
     };
   }
 
+  const beforeUpload = (file) => {
+    const isLt512K = file.size / 1024 < 512;
+    if (!isLt512K) {
+      message.error('图片上传小于512K!');
+    }
+    return isLt512K;
+  };
+
   const onHandleUpload = ({ file }) => {
     if (file.status === 'done') {
       const url = file.response.data[0];
       getBase64(url, (data: string) => {
         let _data = [...list];
-        _data.push({ name: file.name, url: data });
+        _data.unshift({ name: file.name, url: data });
         setList(_data);
       });
     }
+  };
+  // 确定重命名
+  const handleOk = async () => {
+    try {
+      const values = await formRef.validateFields(['componentName']);
+      clientParam(uploaConfig.baseURL)
+        .post(
+          uploaConfig.self.apiUrl.update,
+          {
+            id: selectedItem.id,
+            name: values.componentName + '.' + selectedItem.type,
+          },
+          {
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              token: uploaConfig.self.token,
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+        .then((res) => {
+          message.success('重命名成功！');
+          requstPicList();
+        });
+    } catch (errorInfo) {
+      console.log('Failed:', errorInfo);
+    }
+  };
+
+  const handleDelete = () => {
+    clientParam(uploaConfig.baseURL)
+      .get(uploaConfig.self.apiUrl.delete, {
+        headers: {
+          token: uploaConfig.self.token,
+        },
+        params: {
+          id: selectedItem?.id,
+        },
+      })
+      .then((res) => {
+        message.success('删除组件成功！');
+        requstPicList();
+      });
   };
 
   const onDrag = (event, image: string) => {
@@ -76,6 +146,33 @@ const Layout = ({ uploaConfig }) => {
     );
   };
 
+  // 右键菜单
+  const handleContextMenu = (event, item: any) => {
+    setShowContextmenu(!showContextmenu);
+    setSelectedItem(item);
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.clientY + 360 < document.body.clientHeight) {
+      setContextmenu({
+        position: 'fixed',
+        zIndex: '10',
+        display: 'block',
+        left: event.clientX + 'px',
+        top: event.clientY + 'px',
+        bottom: '',
+      });
+    } else {
+      setContextmenu({
+        position: 'fixed',
+        zIndex: '10',
+        display: 'block',
+        left: event.clientX + 'px',
+        top: '',
+        bottom: document.body.clientHeight - event.clientY + 'px',
+      });
+    }
+  };
+
   return (
     <div className={styles.container}>
       <Row>
@@ -85,6 +182,7 @@ const Layout = ({ uploaConfig }) => {
             span={12}
             className={styles.colStyle}
             style={{ textAlign: 'center' }}
+            onContextMenu={(event) => handleContextMenu(event, item)}
           >
             <a
               title={item.name}
@@ -131,6 +229,7 @@ const Layout = ({ uploaConfig }) => {
             headers={{
               token: uploaConfig.self.token,
             }}
+            beforeUpload={beforeUpload}
             onChange={onHandleUpload}
           >
             <div>
@@ -140,27 +239,15 @@ const Layout = ({ uploaConfig }) => {
           </Upload>
         </Col>
       </Row>
-      {/* <div style={{ paddingLeft: 10 }}>
-        <Upload
-          listType="picture-card"
-          showUploadList={false}
-          action={`${uploaConfig.self.baseURL}${uploaConfig.self.url}`}
-          accept="image/*"
-          data={{
-            mappingType: uploaConfig.self.data.mappingType,
-            mappingId: uploaConfig.self.data.mappingId,
-          }}
-          headers={{
-            token: uploaConfig.self.token,
-          }}
-          onChange={onHandleUpload}
-        >
-          <div>
-            <PlusOutlined />
-            <div style={{ marginTop: 8 }}>Upload</div>
-          </div>
-        </Upload>
-      </div> */}
+      <CompContextMenu
+        contextMenuRef={contextMenuRef}
+        showContextmenu={showContextmenu}
+        contextmenu={contextmenu as CSSProperties}
+        name={selectedItem?.name}
+        form={formRef}
+        handleOk={handleOk}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };

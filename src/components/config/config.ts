@@ -457,7 +457,7 @@ export const Tools = [
         name: '折线图', // 用name来区分不同的组件
         icon: 'icon-line-chart',
         data: {
-          text: '折线图',
+          text: '',
           rect: {
             width: 300,
             height: 200,
@@ -610,152 +610,152 @@ export const Tools = [
           },
         },
       },
-      {
-        name: '柱状图',
-        icon: 'icon-bar-chart',
-        data: {
-          text: '柱状图',
-          rect: {
-            width: 300,
-            height: 200,
-          },
-          name: 'echarts',
-          data: {
-            echarts: {
-              option: {
-                legend: {},
-                tooltip: {},
-                dataset: {
-                  dimensions: ['product', '2015', '2016', '2017'],
-                  source: [
-                    {
-                      product: 'Matcha Latte',
-                      '2015': 43.3,
-                      '2016': 85.8,
-                      '2017': 93.7,
-                    },
-                    {
-                      product: 'Milk Tea',
-                      '2015': 83.1,
-                      '2016': 73.4,
-                      '2017': 55.1,
-                    },
-                    {
-                      product: 'Cheese Cocoa',
-                      '2015': 86.4,
-                      '2016': 65.2,
-                      '2017': 82.5,
-                    },
-                    {
-                      product: 'Walnut Brownie',
-                      '2015': 72.4,
-                      '2016': 53.9,
-                      '2017': 39.1,
-                    },
-                  ],
-                },
-                xAxis: { type: 'category' },
-                yAxis: {},
-                series: [{ type: 'bar' }, { type: 'bar' }, { type: 'bar' }],
-              }, // end echarts option
-            },
-            property: {
-              echartsType: 'bar',
-              dataMethod: 'aa',
-              dataDot: 1,
-              dataPointParam: {
-                qtDataList: [
-                  {
-                    id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
-                    type: 1,
-                  },
-                ],
-                subscribe: true,
-              },
-            },
-          },
-        },
-      },
-      {
-        name: '饼图',
-        icon: 'icon-pie-chart',
-        data: {
-          text: '饼图',
-          rect: {
-            width: 200,
-            height: 200,
-          },
-          name: 'echarts',
-          data: {
-            echarts: {
-              option: {
-                tooltip: {
-                  trigger: 'item',
-                  formatter: '{a} <br/>{b}: {c} ({d}%)',
-                },
-                legend: {
-                  orient: 'vertical',
-                  x: 'left',
-                  data: [
-                    '直接访问',
-                    '邮件营销',
-                    '联盟广告',
-                    '视频广告',
-                    '搜索引擎',
-                  ],
-                },
-                series: [
-                  {
-                    name: '访问来源',
-                    type: 'pie',
-                    radius: ['50%', '70%'],
-                    avoidLabelOverlap: false,
-                    label: {
-                      normal: {
-                        show: false,
-                        position: 'center',
-                      },
-                      emphasis: {
-                        show: true,
-                        textStyle: {
-                          fontSize: '30',
-                          fontWeight: 'bold',
-                        },
-                      },
-                    },
-                    labelLine: {
-                      normal: {
-                        show: false,
-                      },
-                    },
-                    data: [
-                      { value: 335, name: '直接访问' },
-                      { value: 310, name: '邮件营销' },
-                      { value: 234, name: '联盟广告' },
-                      { value: 135, name: '视频广告' },
-                      { value: 1548, name: '搜索引擎' },
-                    ],
-                  },
-                ],
-              },
-            },
-            property: {
-              echartsType: 'pie',
-              dataMethod: 'aa',
-              dataDot: 1,
-              dataPointParam: {
-                qtDataList: [
-                  {
-                    id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
-                    type: 1,
-                  },
-                ],
-                subscribe: true,
-              },
-            },
-          },
-        },
-      },
+      // {
+      //   name: '柱状图',
+      //   icon: 'icon-bar-chart',
+      //   data: {
+      //     text: '柱状图',
+      //     rect: {
+      //       width: 300,
+      //       height: 200,
+      //     },
+      //     name: 'echarts',
+      //     data: {
+      //       echarts: {
+      //         option: {
+      //           legend: {},
+      //           tooltip: {},
+      //           dataset: {
+      //             dimensions: ['product', '2015', '2016', '2017'],
+      //             source: [
+      //               {
+      //                 product: 'Matcha Latte',
+      //                 '2015': 43.3,
+      //                 '2016': 85.8,
+      //                 '2017': 93.7,
+      //               },
+      //               {
+      //                 product: 'Milk Tea',
+      //                 '2015': 83.1,
+      //                 '2016': 73.4,
+      //                 '2017': 55.1,
+      //               },
+      //               {
+      //                 product: 'Cheese Cocoa',
+      //                 '2015': 86.4,
+      //                 '2016': 65.2,
+      //                 '2017': 82.5,
+      //               },
+      //               {
+      //                 product: 'Walnut Brownie',
+      //                 '2015': 72.4,
+      //                 '2016': 53.9,
+      //                 '2017': 39.1,
+      //               },
+      //             ],
+      //           },
+      //           xAxis: { type: 'category' },
+      //           yAxis: {},
+      //           series: [{ type: 'bar' }, { type: 'bar' }, { type: 'bar' }],
+      //         }, // end echarts option
+      //       },
+      //       property: {
+      //         echartsType: 'bar',
+      //         dataMethod: 'aa',
+      //         dataDot: 1,
+      //         dataPointParam: {
+      //           qtDataList: [
+      //             {
+      //               id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
+      //               type: 1,
+      //             },
+      //           ],
+      //           subscribe: true,
+      //         },
+      //       },
+      //     },
+      //   },
+      // },
+      // {
+      //   name: '饼图',
+      //   icon: 'icon-pie-chart',
+      //   data: {
+      //     text: '饼图',
+      //     rect: {
+      //       width: 200,
+      //       height: 200,
+      //     },
+      //     name: 'echarts',
+      //     data: {
+      //       echarts: {
+      //         option: {
+      //           tooltip: {
+      //             trigger: 'item',
+      //             formatter: '{a} <br/>{b}: {c} ({d}%)',
+      //           },
+      //           legend: {
+      //             orient: 'vertical',
+      //             x: 'left',
+      //             data: [
+      //               '直接访问',
+      //               '邮件营销',
+      //               '联盟广告',
+      //               '视频广告',
+      //               '搜索引擎',
+      //             ],
+      //           },
+      //           series: [
+      //             {
+      //               name: '访问来源',
+      //               type: 'pie',
+      //               radius: ['50%', '70%'],
+      //               avoidLabelOverlap: false,
+      //               label: {
+      //                 normal: {
+      //                   show: false,
+      //                   position: 'center',
+      //                 },
+      //                 emphasis: {
+      //                   show: true,
+      //                   textStyle: {
+      //                     fontSize: '30',
+      //                     fontWeight: 'bold',
+      //                   },
+      //                 },
+      //               },
+      //               labelLine: {
+      //                 normal: {
+      //                   show: false,
+      //                 },
+      //               },
+      //               data: [
+      //                 { value: 335, name: '直接访问' },
+      //                 { value: 310, name: '邮件营销' },
+      //                 { value: 234, name: '联盟广告' },
+      //                 { value: 135, name: '视频广告' },
+      //                 { value: 1548, name: '搜索引擎' },
+      //               ],
+      //             },
+      //           ],
+      //         },
+      //       },
+      //       property: {
+      //         echartsType: 'pie',
+      //         dataMethod: 'aa',
+      //         dataDot: 1,
+      //         dataPointParam: {
+      //           qtDataList: [
+      //             {
+      //               id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
+      //               type: 1,
+      //             },
+      //           ],
+      //           subscribe: true,
+      //         },
+      //       },
+      //     },
+      //   },
+      // },
       {
         name: '仪表盘',
         icon: 'icon-dashboard-chart',
@@ -814,7 +814,7 @@ export const Tools = [
         name: '计量器',
         icon: 'icon-line-chart',
         data: {
-          text: '计量器',
+          text: '',
           rect: {
             width: 300,
             height: 500,
@@ -843,434 +843,4 @@ export const Tools = [
       },
     ],
   },
-  // {
-  //   group: '流程图',
-  //   children: [
-  //     {
-  //       name: '开始/结束',
-  //       icon: 'icon-flow-start',
-  //       data: {
-  //         text: '开始',
-  //         rect: {
-  //           width: 120,
-  //           height: 40,
-  //         },
-  //         borderRadius: 0.5,
-  //         name: 'rectangle',
-  //       },
-  //     },
-  //     {
-  //       name: '流程',
-  //       icon: 'icon-rectangle',
-  //       data: {
-  //         text: '流程',
-  //         rect: {
-  //           width: 120,
-  //           height: 40,
-  //         },
-  //         name: 'rectangle',
-  //       },
-  //     },
-  //     {
-  //       name: '判定',
-  //       icon: 'icon-diamond',
-  //       data: {
-  //         text: '判定',
-  //         rect: {
-  //           width: 120,
-  //           height: 60,
-  //         },
-  //         name: 'diamond',
-  //       },
-  //     },
-  //     {
-  //       name: '数据',
-  //       icon: 'icon-flow-data',
-  //       data: {
-  //         text: '数据',
-  //         rect: {
-  //           width: 120,
-  //           height: 50,
-  //         },
-  //         name: 'flowData',
-  //       },
-  //     },
-  //     {
-  //       name: '准备',
-  //       icon: 'icon-flow-ready',
-  //       data: {
-  //         text: '准备',
-  //         rect: {
-  //           width: 120,
-  //           height: 50,
-  //         },
-  //         name: 'hexagon',
-  //       },
-  //     },
-  //     {
-  //       name: '子流程',
-  //       icon: 'icon-flow-subprocess',
-  //       data: {
-  //         text: '子流程',
-  //         rect: {
-  //           width: 120,
-  //           height: 50,
-  //         },
-  //         name: 'flowSubprocess',
-  //       },
-  //     },
-  //     {
-  //       name: '数据库',
-  //       icon: 'icon-db',
-  //       data: {
-  //         text: '数据库',
-  //         rect: {
-  //           width: 80,
-  //           height: 120,
-  //         },
-  //         name: 'flowDb',
-  //       },
-  //     },
-  //     {
-  //       name: '文档',
-  //       icon: 'icon-flow-document',
-  //       data: {
-  //         text: '文档',
-  //         rect: {
-  //           width: 120,
-  //           height: 100,
-  //         },
-  //         name: 'flowDocument',
-  //       },
-  //     },
-  //     {
-  //       name: '内部存储',
-  //       icon: 'icon-internal-storage',
-  //       data: {
-  //         text: '内部存储',
-  //         rect: {
-  //           width: 120,
-  //           height: 80,
-  //         },
-  //         name: 'flowInternalStorage',
-  //       },
-  //     },
-  //     {
-  //       name: '外部存储',
-  //       icon: 'icon-extern-storage',
-  //       data: {
-  //         text: '外部存储',
-  //         rect: {
-  //           width: 120,
-  //           height: 80,
-  //         },
-  //         name: 'flowExternStorage',
-  //       },
-  //     },
-  //     {
-  //       name: '队列',
-  //       icon: 'icon-flow-queue',
-  //       data: {
-  //         text: '队列',
-  //         rect: {
-  //           width: 100,
-  //           height: 100,
-  //         },
-  //         name: 'flowQueue',
-  //       },
-  //     },
-  //     {
-  //       name: '手动输入',
-  //       icon: 'icon-flow-manually',
-  //       data: {
-  //         text: '手动输入',
-  //         rect: {
-  //           width: 120,
-  //           height: 80,
-  //         },
-  //         name: 'flowManually',
-  //       },
-  //     },
-  //     {
-  //       name: '展示',
-  //       icon: 'icon-flow-display',
-  //       data: {
-  //         text: '展示',
-  //         rect: {
-  //           width: 120,
-  //           height: 80,
-  //         },
-  //         name: 'flowDisplay',
-  //       },
-  //     },
-  //     {
-  //       name: '并行模式',
-  //       icon: 'icon-flow-parallel',
-  //       data: {
-  //         text: '并行模式',
-  //         rect: {
-  //           width: 120,
-  //           height: 50,
-  //         },
-  //         name: 'flowParallel',
-  //       },
-  //     },
-  //     {
-  //       name: '注释',
-  //       icon: 'icon-flow-comment',
-  //       data: {
-  //         text: '注释',
-  //         rect: {
-  //           width: 100,
-  //           height: 100,
-  //         },
-  //         name: 'flowComment',
-  //       },
-  //     },
-  //   ],
-  // },
-  // {
-  //   group: '活动图',
-  //   children: [
-  //     {
-  //       name: '开始',
-  //       icon: 'icon-inital',
-  //       data: {
-  //         text: 'kaishi',
-  //         rect: {
-  //           width: 30,
-  //           height: 30,
-  //         },
-  //         name: 'circle',
-  //         fillStyle: '#555',
-  //         strokeStyle: 'transparent',
-  //       },
-  //     },
-  //     {
-  //       name: '结束',
-  //       icon: 'icon-final',
-  //       data: {
-  //         text: '',
-  //         rect: {
-  //           width: 30,
-  //           height: 30,
-  //         },
-  //         name: 'activityFinal',
-  //       },
-  //     },
-  //     {
-  //       name: '活动',
-  //       icon: 'icon-action',
-  //       data: {
-  //         text: '活动',
-  //         rect: {
-  //           width: 120,
-  //           height: 50,
-  //         },
-  //         borderRadius: 0.25,
-  //         name: 'rectangle',
-  //       },
-  //     },
-  //     {
-  //       name: '决策/合并',
-  //       icon: 'icon-diamond',
-  //       data: {
-  //         text: '决策',
-  //         rect: {
-  //           width: 120,
-  //           height: 50,
-  //         },
-  //         name: 'diamond',
-  //       },
-  //     },
-  //     {
-  //       name: '垂直泳道',
-  //       icon: 'icon-swimlane-v',
-  //       data: {
-  //         text: '垂直泳道',
-  //         rect: {
-  //           width: 200,
-  //           height: 500,
-  //         },
-  //         name: 'swimlaneV',
-  //       },
-  //     },
-  //     {
-  //       name: '水平泳道',
-  //       icon: 'icon-swimlane-h',
-  //       data: {
-  //         text: '水平泳道',
-  //         rect: {
-  //           width: 500,
-  //           height: 200,
-  //         },
-  //         name: 'swimlaneH',
-  //       },
-  //     },
-  //     {
-  //       name: '垂直分岔/汇合',
-  //       icon: 'icon-fork-v',
-  //       data: {
-  //         text: '',
-  //         rect: {
-  //           width: 10,
-  //           height: 150,
-  //         },
-  //         name: 'forkV',
-  //         fillStyle: '#555',
-  //         strokeStyle: 'transparent',
-  //       },
-  //     },
-  //     {
-  //       name: '水平分岔/汇合',
-  //       icon: 'icon-fork',
-  //       data: {
-  //         text: '',
-  //         rect: {
-  //           width: 150,
-  //           height: 10,
-  //         },
-  //         name: 'forkH',
-  //         fillStyle: '#555',
-  //         strokeStyle: 'transparent',
-  //       },
-  //     },
-  //   ],
-  // },
-  // {
-  //   group: '时序图和类图',
-  //   children: [
-  //     {
-  //       name: '生命线',
-  //       icon: 'icon-lifeline',
-  //       data: {
-  //         text: '生命线',
-  //         rect: {
-  //           width: 150,
-  //           height: 400,
-  //         },
-  //         name: 'lifeline',
-  //       },
-  //     },
-  //     {
-  //       name: '激活',
-  //       icon: 'icon-focus',
-  //       data: {
-  //         text: '',
-  //         rect: {
-  //           width: 12,
-  //           height: 200,
-  //         },
-  //         name: 'sequenceFocus',
-  //       },
-  //     },
-  //     {
-  //       name: '简单类',
-  //       icon: 'icon-simple-class',
-  //       data: {
-  //         text: 'Topolgoy',
-  //         rect: {
-  //           width: 270,
-  //           height: 200,
-  //         },
-  //         paddingTop: 40,
-  //         font: {
-  //           fontFamily: 'Arial',
-  //           color: '#222',
-  //           fontWeight: 'bold',
-  //         },
-  //         fillStyle: '#ffffba',
-  //         strokeStyle: '#7e1212',
-  //         name: 'simpleClass',
-  //         children: [
-  //           {
-  //             text: '- name: string\n+ setName(name: string): void',
-  //             name: 'text',
-  //             paddingLeft: 10,
-  //             paddingRight: 10,
-  //             paddingTop: 10,
-  //             paddingBottom: 10,
-  //             rectInParent: {
-  //               x: 0,
-  //               y: 0,
-  //               width: '100%',
-  //               height: '100%',
-  //               rotate: 0,
-  //             },
-  //             font: {
-  //               fontFamily: 'Arial',
-  //               color: '#222',
-  //               textAlign: 'left',
-  //               textBaseline: 'top',
-  //             },
-  //           },
-  //         ],
-  //       },
-  //     },
-  //     {
-  //       name: '类',
-  //       icon: 'icon-class',
-  //       data: {
-  //         text: 'Topolgoy',
-  //         rect: {
-  //           width: 270,
-  //           height: 200,
-  //         },
-  //         paddingTop: 40,
-  //         font: {
-  //           fontFamily: 'Arial',
-  //           color: '#222',
-  //           fontWeight: 'bold',
-  //         },
-  //         fillStyle: '#ffffba',
-  //         strokeStyle: '#7e1212',
-  //         name: 'interfaceClass',
-  //         children: [
-  //           {
-  //             text: '- name: string',
-  //             name: 'text',
-  //             paddingLeft: 10,
-  //             paddingRight: 10,
-  //             paddingTop: 10,
-  //             paddingBottom: 10,
-  //             rectInParent: {
-  //               x: 0,
-  //               y: 0,
-  //               width: '100%',
-  //               height: '50%',
-  //               rotate: 0,
-  //             },
-  //             font: {
-  //               fontFamily: 'Arial',
-  //               color: '#222',
-  //               textAlign: 'left',
-  //               textBaseline: 'top',
-  //             },
-  //           },
-  //           {
-  //             text: '+ setName(name: string): void',
-  //             name: 'text',
-  //             paddingLeft: 10,
-  //             paddingRight: 10,
-  //             paddingTop: 10,
-  //             paddingBottom: 10,
-  //             rectInParent: {
-  //               x: 0,
-  //               y: '50%',
-  //               width: '100%',
-  //               height: '50%',
-  //               rotate: 0,
-  //             },
-  //             font: {
-  //               fontFamily: 'Arial',
-  //               color: '#222',
-  //               textAlign: 'left',
-  //               textBaseline: 'top',
-  //             },
-  //           },
-  //         ],
-  //       },
-  //     },
-  //   ],
-  // },
 ];
