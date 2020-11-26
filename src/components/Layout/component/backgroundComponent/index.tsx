@@ -14,9 +14,7 @@ import {
   Switch,
 } from 'antd';
 import { DownOutlined, UploadOutlined } from '@ant-design/icons';
-import MQTTComponent from './MQTTComponent';
 import { Topology } from '../../../../topology/core';
-import LayoutComponent from './LayoutComponent';
 import ColorPicker from '../../../common/ColorPicker/ColorPicker';
 import ReactSwitch from '../../../common/ReactSwitch';
 import { canvas } from '../../index';
@@ -122,7 +120,8 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
       selectedBgImg(bkUrl);
     } else {
       canvas.clearBkImg();
-      data.data['bkImage'] = ''
+      delete data.data['bkImage']
+      canvas.render()
       onChangeBkImage && onChangeBkImage('');
     }
   };
@@ -151,6 +150,9 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   const bkColorCheckChange = (e: CheckboxChangeEvent) => {
     const result = e.target.checked ? form.getFieldValue('bgColor') : '#ccc';
     data.data['bkColor'] = result;
+    if(!e.target.checked){
+      delete data.data['bkColor']
+    }
     canvas.render();
   };
 

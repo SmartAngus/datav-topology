@@ -5,7 +5,7 @@ export const Tools = [
     children: [
       {
         name: 'timer',
-        icon: 'icon-triangle',
+        icon: 'icon-timer',
         data: {
           text: '1970-01-01 00:00:00',
           rect: {

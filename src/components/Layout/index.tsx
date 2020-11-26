@@ -540,7 +540,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
             </TabPane>
           </Tabs>
         </div>
-        <div className="full">
+        <div className="full" style={{background:"#f8f9fa"}}>
           <svg
             className="svg"
             ref={svgRef}
@@ -561,10 +561,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
               top: canvasSizeInfo.top,
               width: canvasSizeInfo.width,
               height: canvasSizeInfo.height,
-              background: '#ccc',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundImage: `url(${bkImageUrl})`,
+              background: '#f1f1f1',
+              // backgroundSize: 'cover',
+              // backgroundRepeat: 'no-repeat',
+              // backgroundImage: `url(${bkImageUrl})`,
+              border:"1px solid #f3f3f3"
             }}
             onContextMenu={handleContextMenu}
           />
