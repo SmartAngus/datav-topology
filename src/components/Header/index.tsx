@@ -8,8 +8,7 @@ import { BasicTarget } from 'ahooks/lib/utils/dom';
 import CustomIcon from '../config/iconConfig';
 import styles from './index.module.scss';
 import { base64ToFile } from '../utils/cacl';
-import { clientParam } from '../data/api'
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+
 
 
 const {confirm}=Modal;
@@ -151,6 +150,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
       const saveData = new Blob([JSON.stringify(canvas.data)], {
         type: 'text/plain;charset=utf-8',
       });
+      console.log("handleSave",canvas.toImage())
       const screenshot = base64ToFile(canvas.toImage());
       // canvas.saveAsImage();
       saveData.text().then((r) => {

@@ -322,6 +322,9 @@ export class Topology {
   };
 
   resize(size?: { width: number; height: number }) {
+    this.data.width=size?.width||826;
+    this.data.height=size?.height||1168;
+
     this.canvas.resize(size);
     this.offscreen.resize(size);
     this.divLayer.resize(size);
@@ -1882,6 +1885,7 @@ export class Topology {
     callback: any = null
   ): string {
     const rect = this.getRect();
+    console.log("rect",rect)
     const p = formatPadding(padding || 0);
     rect.x -= p[3];
     rect.y -= p[0];
