@@ -87,7 +87,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     viewPadding: [100],
     autoAnchor: false,
     cacheLen: 50,
-    hideInput: true,
+    hideInput: false,
   };
 
   useClickAway(() => {
@@ -125,27 +125,19 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       canvas.open(data.data);
       console.log('history.location.state==', history.location.state);
     }
-
-    if (history.location.state && history.location.state.from === '/preview') {
-      confirm({
-        title: '是否要保存预览前的数据?',
-        okText: '保存',
-        cancelText: '取消',
-        onOk() {
-          history.location.state.data.locked = 0;
-          canvas.open(history.location.state.data);
-        },
-        onCancel() {
-          getNodeData();
-        },
-      });
-    } else {
-      if (history.location?.state?.id) {
-        getNodeData();
-      }
+    if(props.editorData!=undefined&&typeof props.editorData=='object'){
+      console.log("props.editorData",props.editorData)
+      props.editorData.locked=0
+      canvas.open(props.editorData)
     }
+    // if (history.location.state && history.location.state.from === '/preview') {
+    //   history.location.state.data.locked = 0;
+    //   canvas.open(history.location.state.data);
+    // } else {
+    //
+    // }
     setIsLoadCanvas(true);
-  }, [history]);
+  }, [props.editorData]);
 
   useEffect(() => {
     scrollCenter();

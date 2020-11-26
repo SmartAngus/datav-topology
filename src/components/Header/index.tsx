@@ -1,13 +1,18 @@
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { Topology } from '../../topology/core';
 import { History } from 'history';
-import { Button, Menu, Popover, Tag, Space, Tooltip } from 'antd';
+import { Button, Menu, Popover, Tag, Space, Tooltip, Modal, message } from 'antd'
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { useFullscreen } from 'ahooks';
 import { BasicTarget } from 'ahooks/lib/utils/dom';
 import CustomIcon from '../config/iconConfig';
 import styles from './index.module.scss';
 import { base64ToFile } from '../utils/cacl';
+import { clientParam } from '../data/api'
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+
+
+const {confirm}=Modal;
 
 const headTools = [
   {
@@ -146,11 +151,8 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
       const saveData = new Blob([JSON.stringify(canvas.data)], {
         type: 'text/plain;charset=utf-8',
       });
-      console.log('save data>>>');
       const screenshot = base64ToFile(canvas.toImage());
-
-      console.log('screenShot=', screenshot);
-      canvas.saveAsImage();
+      // canvas.saveAsImage();
       saveData.text().then((r) => {
         const json = JSON.parse(r);
         json.screenshot = screenshot;
@@ -252,17 +254,21 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
      * 预览
      */
     const handlePreview = () => {
-      let reader = new FileReader();
-      const result = new Blob([JSON.stringify(canvas.data)], {
-        type: 'text/plain;charset=utf-8',
-      });
-      reader.readAsText(result, 'text/plain;charset=utf-8');
-      reader.onload = (e) => {
-        history.push({
-          pathname: '/preview',
-          state: { data: JSON.parse(reader.result as any) },
+      if(!isSave){
+        message.warn("预览之前请先保存数据！")
+      }else{
+        let reader = new FileReader();
+        const result = new Blob([JSON.stringify(canvas.data)], {
+          type: 'text/plain;charset=utf-8',
         });
-      };
+        reader.readAsText(result, 'text/plain;charset=utf-8');
+        reader.onload = (e) => {
+          history.push({
+            pathname: '/preview',
+            state: { data: JSON.parse(reader.result as any) },
+          });
+        };
+      }
     };
     /**
      * 点击额外配置

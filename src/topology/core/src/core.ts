@@ -38,8 +38,8 @@ import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/chart/gauge';
 import 'echarts/lib/chart/scatter';
-import { createDiv } from './utils'
 import html2canvas from "html2canvas"
+import * as _ from 'lodash'
 
 const resizeCursors = ['nw-resize', 'ne-resize', 'se-resize', 'sw-resize'];
 enum MoveInType {
@@ -1920,18 +1920,19 @@ export class Topology {
 
       pen.translate(-rect.x, -rect.y);
       // 渲染第三方图表
-      if (pen.name == "echarts") {
-        console.log("-------",pen)
-        console.log("-------",JSON.stringify(pen))
-        console.log(document.getElementById((pen as Node).elementId))
-
-        // html2canvas(document.querySelector("#"+(pen as Node).elementId)).then(canv=>{
-        //   const imgData = canv.toDataURL('image/png');
-        //   let oImg = new Image();
-        //   oImg.src=imgData;
-        //   ctx.drawImage(oImg, pen.rect.x, pen.rect.y, pen.rect.width, pen.rect.height);
-        // })
-      }
+      // if (pen.name == "echarts") {
+      //   const oldPen = _.cloneDeep(item)
+      //   console.log("-------",item)
+      //   console.log("-------",JSON.stringify(oldPen))
+      //   console.log(document.getElementById((oldPen as Node).elementId))
+      //
+      //   html2canvas(document.getElementById((oldPen as Node).elementId)).then(canv=>{
+      //     const imgData = canv.toDataURL('image/png');
+      //     let oImg = new Image();
+      //     oImg.src=imgData;
+      //     ctx.drawImage(oImg, pen.rect.x, pen.rect.y, pen.rect.width, pen.rect.height);
+      //   })
+      // }
       pen.render(ctx);
 
     }

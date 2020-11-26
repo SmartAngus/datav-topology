@@ -21,7 +21,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     { key: 2, img: preBgImg2 },
     { key: 3, img: preBgImg3 },
   ];
-  const token = 'development_of_special_token_by_star_quest';
+  const token = '9XO2Khne0e18KCiDEl8sC';
   const industrialLibrary = [
     {
       type: 'mk',
@@ -117,7 +117,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     },
     combineCom: {
       apiURL: 'http://qt.test.bicisims.com',
-      token: '5KmTbcul1R4RNxnSiwTlpr',
+      token: '9XO2Khne0e18KCiDEl8sC',
       list: {
         url: '/applications/customComponent/list',
         params: {},
@@ -151,19 +151,20 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       maxContentLength: 1000000000,
     });
     // 获取面板数据
+    // 获取面板数据
     instance
       .get('/api/applications/newBoard/detail', {
         method: 'get',
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
-          token: 'development_of_special_token_by_star_quest',
+          token: '9XO2Khne0e18KCiDEl8sC',
           'Content-Type': 'application/json',
         },
         params: {
-          id: '1a99aa5c58144a7b8ce8230ace2c53b6',
+          id: '31c6e27b5b634a48a2b12ca39c643856',
         },
       })
-      .then((res) => {
+      .then(res => {
         console.log('detail', res);
         if (res.data?.data != null) {
           if (
@@ -229,7 +230,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     const formData = new FormData();
-    api.defaults.headers.common['token'] = '5KmTbcul1R4RNxnSiwTlpr';
+    api.defaults.headers.common['token'] = '9XO2Khne0e18KCiDEl8sC';
     formData.append('file', data.screenshot);
     formData.append('mappingId', 'ooip6ffe388d487db754b885b8aa65b9');
 
@@ -244,25 +245,23 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       timeout: 10000000,
       maxContentLength: 1000000000,
     });
+    delete data.screenshot
     instance
-      .post(
-        '/api/applications/newBoard/updateProperty',
-        {
-          id: '1a99aa5c58144a7b8ce8230ace2c53b6',
-          property: window.btoa(
-            unescape(encodeURIComponent(JSON.stringify(data.data)))
-          ),
+      .request({
+        url:"/api/applications/newBoard/updateProperty",
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          token: '9XO2Khne0e18KCiDEl8sC',
+          'Content-Type': 'application/json;charset=UTF-8',
         },
-        {
-          method: 'POST',
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            token: 'development_of_special_token_by_star_quest',
-            'Content-Type': 'application/json;charset=UTF-8',
-          },
+        data:{
+          id: '31c6e27b5b634a48a2b12ca39c643856',
+          property: window.btoa(
+            unescape(encodeURIComponent(JSON.stringify(data)))
+          )
         }
-      )
-      .then((res) => {
+      }).then((res) => {
         console.log('update==', res);
       });
   };
@@ -352,11 +351,53 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   );
 };
 
+const PreviewLayout: React.FC<any>=({history})=>{
+  const [editorData,setEditorData]=useState<any>()
+  const websocketConf = {
+    url: 'ws://47.96.159.115:51060/ws?token=9XO2Khne0e18KCiDEl8sC',
+  };
+  useEffect(()=>{
+    const instance = axios.create({
+      baseURL: 'http://qt.test.bicisims.com',
+      timeout: 10000000,
+      maxContentLength: 1000000000,
+    });
+    // 获取面板数据
+    instance
+      .get('/api/applications/newBoard/detail', {
+        method: 'get',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          token: '9XO2Khne0e18KCiDEl8sC',
+          'Content-Type': 'application/json',
+        },
+        params: {
+          id: '31c6e27b5b634a48a2b12ca39c643856',
+        },
+      })
+      .then(res => {
+        console.log('detail', res);
+        if (res.data?.data != null) {
+          if (
+            res.data.data.property != null &&
+            res.data.data.property != null
+          ) {
+            const getEditorData = JSON.parse(
+              decodeURIComponent(escape(window.atob(res.data.data.property)))
+            );
+            setEditorData(getEditorData);
+          }
+        }
+      });
+  },[])
+  return (<Preview history={history} data={editorData} websocketConf={websocketConf}></Preview>)
+}
+
 const App = () => {
   return (
     <BrowserRouter>
       <Route exact path="/" component={EditorLayoutCanvas} key={1} />
-      <Route path="/preview" component={Preview} key={2} />
+      <Route path="/preview" component={PreviewLayout} key={2} />
     </BrowserRouter>
   );
 };
