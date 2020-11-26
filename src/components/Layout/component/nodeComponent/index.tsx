@@ -12,7 +12,6 @@ import {
   Checkbox,
   Button,
   Space,
-  Modal,
   Tooltip,
   Radio,
 } from 'antd';
@@ -21,23 +20,21 @@ import {
   MinusCircleOutlined,
   DeleteOutlined,
 } from '@ant-design/icons';
-// import AnimateComponent from './AnimateComponent';
 import EventComponent from './EventComponent';
 import { FormProps } from 'antd/lib/form/Form';
-import './index.css';
 import ColorPicker from '../../../common/ColorPicker/ColorPicker';
 import { canvas } from '../../index';
 import { alignNodes } from '../../../../topology/layout/src/align';
-import AnimateComponent from './AnimateComponent';
 import DataPointTable from '../../../common/DataPointTable';
 import CustomIcon from '../../../config/iconConfig';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import DataBindModal from '../../../FilterDataPoint';
 
+import styles from './index.module.scss';
+
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 const { Option } = Select;
-const { TextArea } = Input;
 // 对齐方式 key 对齐方式 val 图标名称
 const alignObj = {
   left: ['左对齐', 'icon-zuoduiqi'],
@@ -1024,7 +1021,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   }, [property]);
 
   return (
-    <div className="rightArea">
+    <div className={styles.rightArea}>
       {renderAlign}
       <Tabs defaultActiveKey="1" centered>
         <TabPane tab="外观" key="1" style={{ margin: 0 }}>

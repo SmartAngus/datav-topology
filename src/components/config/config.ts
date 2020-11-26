@@ -175,6 +175,7 @@ export const Tools = [
             width: 30,
             height: 30,
           },
+          hideAnchor: true,
           name: 'biciPilot',
           property: {
             color: '',
