@@ -171,9 +171,10 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
             res.data.data.property != null &&
             res.data.data.property != null
           ) {
-            const getEditorData = JSON.parse(
-              decodeURIComponent(escape(window.atob(res.data.data.property)))
-            );
+            // const getEditorData = JSON.parse(
+            //   decodeURIComponent(escape(window.atob(res.data.data.property)))
+            // );
+            const getEditorData = JSON.parse(res.data.data.property)
             setEditorData(getEditorData);
           }
         }
@@ -257,9 +258,10 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
         },
         data:{
           id: '31c6e27b5b634a48a2b12ca39c643856',
-          property: window.btoa(
-            unescape(encodeURIComponent(JSON.stringify(data)))
-          )
+          // property: window.btoa(
+          //   unescape(encodeURIComponent(JSON.stringify(data)))
+          // )
+          property:JSON.stringify(data)
         }
       }).then((res) => {
         console.log('update==', res);
@@ -382,9 +384,10 @@ const PreviewLayout: React.FC<any>=({history})=>{
             res.data.data.property != null &&
             res.data.data.property != null
           ) {
-            const getEditorData = JSON.parse(
-              decodeURIComponent(escape(window.atob(res.data.data.property)))
-            );
+            // const getEditorData = JSON.parse(
+            //   decodeURIComponent(escape(window.atob(res.data.data.property)))
+            // );
+            const getEditorData = JSON.parse(res.data.data.property)
             setEditorData(getEditorData);
           }
         }
