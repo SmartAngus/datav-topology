@@ -111,30 +111,15 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   );
 
   useEffect(() => {
-    // console.log('Tools>>>', Tools);
-
     window['API_URL'] = props.apiURL;
     window['token'] = props.token;
-    // console.log('apiURL', props.apiURL);
-
     canvasOptions.on = onMessage;
     canvasRegister();
     canvas = new Topology('topology-canvas', canvasOptions);
-    async function getNodeData() {
-      const data = await getNodeById(history.location.state.id);
-      canvas.open(data.data);
-    }
     if (props.editorData != undefined && typeof props.editorData == 'object') {
       props.editorData.locked = 0;
       canvas.open(props.editorData);
     }
-    // if (history.location.state && history.location.state.from === '/preview') {
-    //   history.location.state.data.locked = 0;
-    //   canvas.open(history.location.state.data);
-    // } else {
-    //
-    // }
-    console.log('props.editorData---', props.editorData);
     if (props.editorData) {
       const w = props.editorData.width as number;
       const h = props.editorData.height as number;
@@ -185,6 +170,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const onHandleFormValueChange = useCallback(
     (value) => {
+      setIsSave(false)
       const {
         x,
         y,
@@ -238,6 +224,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
       console.log('自定义的属性>>>', value);
+      setIsSave(false)
       // console.log('selected.node>>>', selected.node);
       // 只能两层嵌套，后期需要更改，如果有多层的话
       canvas.setValue(selected.node.id, 'setValue');
@@ -264,6 +251,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const onEventValueChange = useCallback(
     (value) => {
+      setIsSave(false)
       selected.node.events = value;
       canvas.updateProps(selected.node);
     },
@@ -273,12 +261,14 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    * 切换画布大小
    */
   const handleChangeCanvasSize = useCallback((sizeInfo) => {
+    setIsSave(false)
     setCanvasSizeInfo(sizeInfo);
   }, []);
   /**
    * 切换画布背景图片
    */
   const handleChangeBkImage = useCallback((imgUrl) => {
+    setIsSave(false)
     setBkImageUrl(imgUrl);
   }, []);
   /**
@@ -299,6 +289,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const onHandleLineFormValueChange = useCallback(
     (value) => {
+      setIsSave(false)
       const {
         dash,
         lineWidth,
