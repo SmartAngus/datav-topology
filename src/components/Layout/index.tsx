@@ -198,6 +198,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         fillStyle,
         strokeStyle,
         lineWidth,
+        text,
       } = value;
       const changedProps = {
         rect: {
@@ -215,6 +216,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         strokeStyle,
         lineWidth: lineWidth ? Number(lineWidth) : undefined,
         fillStyle,
+        text,
       };
       for (const key in changedProps) {
         if (typeof changedProps[key] === 'object') {
@@ -237,7 +239,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   /*当自定义的属性发生变化时*/
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
-      // console.log('自定义的属性>>>', value);
+      console.log('自定义的属性>>>', value);
       // console.log('selected.node>>>', selected.node);
       // 只能两层嵌套，后期需要更改，如果有多层的话
       canvas.setValue(selected.node.id, 'setValue');

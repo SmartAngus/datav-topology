@@ -48,10 +48,17 @@ const alignObj = {
   middle: ['水平居中', 'icon-shuipingjuzhong'],
 };
 // 需要显示文件填充的节点列表
-const fillStyleNodeList = [''];
-//
-const fontStyleNodeList = ['biciPilot'];
-
+const fillStyleNodeList = ['circle', 'rectangle', 'biciVarer'];
+// 字体样式
+const fontStyleNodeList = [
+  'biciPilot',
+  'circle',
+  'rectangle',
+  'text',
+  'biciVarer',
+];
+// 边框样式
+const boardStyleNodeList = ['circle', 'rectangle', 'biciVarer'];
 interface ICanvasProps extends FormProps {
   data?: any;
   onFormValueChange?: any;
@@ -76,6 +83,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const { property } = data?.node; // 用户自定义数据片段
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
+    console.log(data.node);
     form.setFieldsValue({
       x,
       y,
@@ -304,11 +312,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <InputNumber />
             </Form.Item>
           </Col>
-          {/* <Col span={24}>
+          <Col span={24}>
             <Form.Item name="text" label="内容">
-              <TextArea />
+              <Input />
             </Form.Item>
-          </Col> */}
+          </Col>
         </Form>
       </Panel>
     );
@@ -734,7 +742,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    */
   const renderMeter = useMemo(() => {
     return (
-      <Panel header="样式" key="meterStyle">
+      <Panel header="样式" key="style">
         <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
           <Row>
             <Col>
@@ -742,8 +750,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
             <Col>
               <Input.Group compact>
-                <Form.Item name="meterValMin">
-                  <InputNumber style={{ width: 90 }} placeholder="下限" />
+                <Form.Item name="rangeValMin">
+                  <InputNumber style={{ width: 85 }} placeholder="下限" />
                 </Form.Item>
                 <Input
                   style={{
@@ -753,10 +761,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   placeholder="~"
                   disabled
                 />
-                <Form.Item name="meterValMax">
+                <Form.Item name="rangeValMax">
                   <InputNumber
                     style={{
-                      width: 90,
+                      width: 85,
                     }}
                     placeholder="上限"
                   />
@@ -764,7 +772,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               </Input.Group>
             </Col>
           </Row>
-          <Form.Item name="meterNum" label="刻度">
+          <Form.Item name="scale" label="刻度">
             <Input placeholder="请输入个数" suffix="个" />
           </Form.Item>
           <Row>
@@ -785,7 +793,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <Col span={15}>
                 <Input.Group compact>
                   <Form.Item>
-                    <Input style={{ width: 65 }} placeholder="下限" />
+                    <Input style={{ width: 60 }} placeholder="下限" />
                   </Form.Item>
                   <Input
                     style={{
@@ -798,7 +806,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   <Form.Item>
                     <Input
                       style={{
-                        width: 65,
+                        width: 60,
                       }}
                       placeholder="上限"
                     />
@@ -810,7 +818,58 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, []);
+  }, [property]);
+
+  /**
+   * 渲染仪表盘样式
+   */
+  const renderGauge = useMemo(() => {
+    return (
+      <Fragment>
+        <Panel header="基本信息" key="info">
+          <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
+            <Row>
+              <Col span={10}>
+                <Form.Item
+                  label="标题"
+                  name="showTitle"
+                  labelCol={{ span: 12 }}
+                  labelAlign="left"
+                  valuePropName="checked"
+                >
+                  <Checkbox />
+                </Form.Item>
+              </Col>
+              <Col span={14}>
+                <Form.Item name="title">
+                  <Input placeholder="标题名称" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={10}>
+                <Form.Item
+                  label="单位"
+                  name="showUnit"
+                  labelCol={{ span: 12 }}
+                  labelAlign="left"
+                  valuePropName="checked"
+                >
+                  <Checkbox />
+                </Form.Item>
+              </Col>
+              <Col span={14}>
+                <Form.Item name="unit">
+                  <Input placeholder="单位" maxLength={20} />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        </Panel>
+        {renderMeter}
+      </Fragment>
+    );
+  }, [property]);
 
   /**
    * 渲染曲线图样式
@@ -962,7 +1021,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
       </Fragment>
     );
-  }, []);
+  }, [property]);
+
   return (
     <div className="rightArea">
       {renderAlign}
@@ -970,16 +1030,17 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         <TabPane tab="外观" key="1" style={{ margin: 0 }}>
           <Collapse defaultActiveKey={['pos']}>
             {renderPositionForm}
-            {/* {fontStyleNodeList.includes(name) && renderFontForm} */}
-            {/* {renderFontForm} */}
-            {/* {renderFillStyle} */}
-            {/* {renderBorderStyle} */}
+            {fontStyleNodeList.includes(name) && renderFontForm}
+            {fillStyleNodeList.includes(name) && renderFillStyle}
+            {boardStyleNodeList.includes(name) && renderBorderStyle}
             {name === 'biciPilot' && renderLight}
-            {/* {renderMeter} */}
-            {/* {renderLineGraph} */}
-            {/** 渲染时间组件属性 */}
             {name === 'biciTimer' && renderBiciTimerDataForm}
             {name === 'biciCard' && renderDataCard}
+            {data.node.data?.property?.echartsType === 'chartMeasure' &&
+              renderMeter}
+            {data.node.data?.property?.echartsType === 'timeLine' &&
+              renderLineGraph}
+            {data.node.data?.property?.echartsType === 'gauge' && renderGauge}
           </Collapse>
         </TabPane>
         <TabPane tab="数据" key="2" style={{ margin: 0 }}>

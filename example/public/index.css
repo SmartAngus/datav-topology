@@ -36,6 +36,7 @@
   color: #333;
   line-height: 1;
   /* width: 40px; */
+  width: 100%;
   /* height: 40px; */
   text-align: center;
   text-decoration: none !important;
@@ -62,7 +63,7 @@
   overflow-y: auto;
   position: relative;
 }
-.svg{
+.svg {
   left: 0px;
   top: 0px;
   width: 100%;
@@ -72,4 +73,8 @@
   min-height: 2289px;
   position: absolute;
   background-image: none;
+}
+
+.props .ant-tabs-nav {
+  margin: 0 !important;
 }
