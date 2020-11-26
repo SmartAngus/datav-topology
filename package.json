@@ -70,6 +70,7 @@
     "bici-transformers": "^0.19.7",
     "echarts": "^4.9.0",
     "file-saver": "^2.0.2",
+    "html2canvas": "^1.0.0-rc.7",
     "mitt": "^2.1.0",
     "node-sass": "^5.0.0",
     "react-color": "^2.19.3",
