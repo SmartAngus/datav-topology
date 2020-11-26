@@ -125,17 +125,18 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       canvas.open(data.data);
       console.log('history.location.state==', history.location.state);
     }
+
     if(props.editorData!=undefined&&typeof props.editorData=='object'){
       console.log("props.editorData",props.editorData)
       props.editorData.locked=0
       canvas.open(props.editorData)
     }
-    // if (history.location.state && history.location.state.from === '/preview') {
-    //   history.location.state.data.locked = 0;
-    //   canvas.open(history.location.state.data);
-    // } else {
-    //
-    // }
+    if (history.location.state && history.location.state.from === '/preview') {
+      history.location.state.data.locked = 0;
+      canvas.open(history.location.state.data);
+    } else {
+
+    }
     console.log("props.editorData---",props.editorData)
     if(props.editorData){
       const w  = props.editorData.width as number
