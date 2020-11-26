@@ -1050,12 +1050,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Panel>
           </Collapse>
         </TabPane>
-        {/*<TabPane tab="事件" key="3" style={{ margin: 0 }}>
-          <EventComponent
-            canvasData={data}
-            onEventValueChange={onEventValueChange}
-          />
-        </TabPane> */}
       </Tabs>
       {renderDataPointModal()}
     </div>
