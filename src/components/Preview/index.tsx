@@ -29,11 +29,6 @@ const Preview = ({ history,data,websocketConf }:PreviewProps) => {
       data.locked=1;
       canvas.open(data)
     }
-    // if(history){
-    //   canvas.open(history.location.state.data);
-    // }else{
-    //   canvas.open(data)
-    // }
     initWebsocketData()
     return ()=>{
       canvas.closeSocket()

@@ -122,6 +122,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
       selectedBgImg(bkUrl);
     } else {
       canvas.clearBkImg();
+      data.data['bkImage'] = ''
       onChangeBkImage && onChangeBkImage('');
     }
   };
@@ -143,6 +144,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     setPopoverVisible({ ...popoverVisible, bgSelect: false });
     onChangeBkImage && onChangeBkImage(url);
     form.setFieldsValue({ bgImgCheck: true });
+    canvas.render()
   };
 
   // 背景颜色显示隐藏

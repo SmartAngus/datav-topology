@@ -140,23 +140,25 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
     }, [isSave]);
 
     const handleSave = () => {
-      setIsSave(true);
-      // FileSaver.saveAs(
-      //   new Blob([JSON.stringify(canvas.data)], {
-      //     type: 'text/plain;charset=utf-8',
-      //   }),
-      //   `le5le.topology.json`
-      // );
-      const saveData = new Blob([JSON.stringify(canvas.data)], {
-        type: 'text/plain;charset=utf-8',
-      });
-      const screenshot = base64ToFile(canvas.toImage());
-      // canvas.saveAsImage();
-      saveData.text().then((r) => {
-        const json = JSON.parse(r);
-        json.screenshot = screenshot;
-        props.onEditorSaveCb && props.onEditorSaveCb(json);
-      });
+      if(!isSave){
+        setIsSave(true);
+        // FileSaver.saveAs(
+        //   new Blob([JSON.stringify(canvas.data)], {
+        //     type: 'text/plain;charset=utf-8',
+        //   }),
+        //   `le5le.topology.json`
+        // );
+        const saveData = new Blob([JSON.stringify(canvas.data)], {
+          type: 'text/plain;charset=utf-8',
+        });
+        const screenshot = base64ToFile(canvas.toImage());
+        // canvas.saveAsImage();
+        saveData.text().then((r) => {
+          const json = JSON.parse(r);
+          json.screenshot = screenshot;
+          props.onEditorSaveCb && props.onEditorSaveCb(json);
+        });
+      }
     };
 
     // 处理退出按钮
