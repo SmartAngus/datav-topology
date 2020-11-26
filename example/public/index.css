@@ -78,3 +78,7 @@
 .props .ant-tabs-nav {
   margin: 0 !important;
 }
+
+.page .tool .ant-collapse-content-box {
+  padding: 0;
+}

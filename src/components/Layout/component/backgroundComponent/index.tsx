@@ -259,7 +259,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   );
 
   const renderDefultOptions = (
-    <Collapse defaultActiveKey={['1']} expandIconPosition="right">
+    <Collapse defaultActiveKey={['1']}>
       <Panel header="基础属性" key="1">
         <Form form={form}>
           <Popover

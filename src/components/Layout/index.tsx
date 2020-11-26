@@ -13,7 +13,7 @@ import {
   echartsObjs,
 } from '../../topology/chart-diagram';
 import { register as registerBiciComp } from '../../topology/bici-diagram';
-import { Modal, Tabs } from 'antd';
+import { Modal, Tabs, Collapse } from 'antd';
 import { Tools } from '../config/config';
 import { getNodeById } from '../Service/topologyService';
 import { useClickAway } from 'ahooks';
@@ -26,7 +26,7 @@ import SystemComponent from './LeftAreaComponent/SystemComponent';
 import CustomComponent from './LeftAreaComponent/CustomComponent';
 import MyComponent from './LeftAreaComponent/PicComponent';
 
-import styles from './index.module.css';
+import styles from './index.module.scss';
 import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines';
 import { calcCanvas } from '../utils/cacl';
@@ -138,7 +138,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    * 滚动条居中
    */
   const scrollCenter = () => {
-    const fullDiv = document.querySelector('.full') as HTMLElement;
+    const fullDiv = document.querySelector('#full') as HTMLElement;
     fullDiv.scrollTo(
       (fullDiv.scrollWidth - fullDiv.offsetWidth) / 2,
       (fullDiv.scrollHeight - fullDiv.offsetHeight) / 2
@@ -524,25 +524,25 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   return (
     <div id="layout" ref={layoutRef}>
       {renderHeader}
-      <div className="page">
-        <div className="tool">
+      <div className={styles.page}>
+        <div className={styles.tool}>
           <Tabs defaultActiveKey="1" centered>
             <TabPane tab="组件" key="1" style={{ margin: 0 }}>
               <SystemComponent onDrag={onDrag} Tools={Tools} />
-              <CustomComponent
-                onDrag={onDrag}
-                Tools={Tools}
-                combineCom={props.uploadConfig.combineCom}
-              />
+              {/* <CustomComponent
+                  onDrag={onDrag}
+                  Tools={Tools}
+                  combineCom={props.uploadConfig.combineCom}
+                /> */}
             </TabPane>
             <TabPane tab="图库" key="2" style={{ margin: 0 }}>
               <MyComponent uploaConfig={props.uploadConfig} />
             </TabPane>
           </Tabs>
         </div>
-        <div className="full" style={{background:"#f8f9fa"}}>
+        <div className={styles.full} id="full" style={{background:"#f8f9fa"}}>
           <svg
-            className="svg"
+            className={styles.svg}
             ref={svgRef}
             style={{
               minWidth: canvasSizeInfo.minWidth,
@@ -570,7 +570,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
             onContextMenu={handleContextMenu}
           />
         </div>
-        <div className="props">{renderRightArea}</div>
+        <div className={styles.props}>{renderRightArea}</div>
         {renderContextMenu}
       </div>
     </div>
