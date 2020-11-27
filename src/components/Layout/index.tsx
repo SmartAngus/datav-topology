@@ -534,6 +534,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         data={selected}
         canvas={canvas}
         show={showContextmenu}
+        onNeedHide={()=>setShowContextmenu(false)}
         combineCom={props.uploadConfig.combineCom}
       />
     </div>
