@@ -4,8 +4,50 @@ export const Tools = [
     group: '通用组件',
     children: [
       {
-        name: 'timer',
-        icon: 'icon-timer',
+        name: '矩形',
+        icon: 'iconjuxing',
+        data: {
+          text: '',
+          rect: {
+            width: 200,
+            height: 50,
+          },
+          paddingLeft: 10,
+          paddingRight: 10,
+          paddingTop: 10,
+          paddingBottom: 10,
+          borderRadius: 0.1,
+          name: 'rectangle',
+        },
+      },
+      {
+        name: '圆',
+        icon: 'iconyuanxing',
+        data: {
+          text: '',
+          rect: {
+            width: 100,
+            height: 100,
+          },
+          name: 'circle',
+          textMaxLine: 1,
+        },
+      },
+      {
+        name: '文本',
+        icon: 'iconwenben',
+        data: {
+          text: '文本',
+          rect: {
+            width: 160,
+            height: 30,
+          },
+          name: 'text',
+        },
+      },
+      {
+        name: '时间',
+        icon: 'iconshijian',
         data: {
           text: '1970-01-01 00:00:00',
           rect: {
@@ -28,8 +70,8 @@ export const Tools = [
         },
       },
       {
-        name: 'varer',
-        icon: 'icon-triangle',
+        name: '变量值',
+        icon: 'iconbianliangzhi',
         data: {
           text: '00:00:00',
           rect: {
@@ -56,7 +98,7 @@ export const Tools = [
       },
       {
         name: '数据卡片',
-        icon: 'icon-class',
+        icon: 'iconshujukapian',
         data: {
           text: '数据卡片',
           rect: {
@@ -168,7 +210,7 @@ export const Tools = [
       },
       {
         name: '指示灯',
-        icon: 'icon-final',
+        icon: 'iconzhishideng',
         data: {
           text: '指示灯',
           rect: {
@@ -221,316 +263,274 @@ export const Tools = [
   //     },
   //   ],
   // },
-  {
-    group: '基本形状',
-    children: [
-      {
-        name: '圆角矩形',
-        icon: 'icon-rectangle',
-        data: {
-          text: '圆角矩形',
-          rect: {
-            width: 200,
-            height: 50,
-          },
-          paddingLeft: 10,
-          paddingRight: 10,
-          paddingTop: 10,
-          paddingBottom: 10,
-          borderRadius: 0.1,
-          name: 'rectangle',
-        },
-      },
-      {
-        name: '圆',
-        icon: 'icon-circle',
-        data: {
-          text: '圆',
-          rect: {
-            width: 100,
-            height: 100,
-          },
-          name: 'circle',
-          textMaxLine: 1,
-        },
-      },
-      // {
-      //   name: 'triangle',
-      //   icon: 'icon-triangle',
-      //   data: {
-      //     text: '三角形',
-      //     rect: {
-      //       width: 100,
-      //       height: 100,
-      //     },
-      //     name: 'triangle',
-      //   },
-      // },
-      // {
-      //   name: 'diamond',
-      //   icon: 'icon-diamond',
-      //   data: {
-      //     text: '菱形',
-      //     rect: {
-      //       width: 100,
-      //       height: 100,
-      //     },
-      //     name: 'diamond',
-      //   },
-      // },
-      // {
-      //   name: 'pentagon',
-      //   icon: 'icon-pentagon',
-      //   data: {
-      //     text: '五边形',
-      //     rect: {
-      //       width: 100,
-      //       height: 100,
-      //     },
-      //     name: 'pentagon',
-      //   },
-      // },
-      // {
-      //   name: 'hexagon',
-      //   icon: 'icon-hexagon',
-      //   data: {
-      //     text: '六边形',
-      //     rect: {
-      //       width: 100,
-      //       height: 100,
-      //     },
-      //     paddingTop: 10,
-      //     paddingBottom: 10,
-      //     name: 'hexagon',
-      //   },
-      // },
-      // {
-      //   name: 'pentagram',
-      //   icon: 'icon-pentagram',
-      //   data: {
-      //     text: '五角星',
-      //     rect: {
-      //       width: 100,
-      //       height: 100,
-      //     },
-      //     name: 'pentagram',
-      //   },
-      // },
-      // {
-      //   name: 'leftArrow',
-      //   icon: 'icon-arrow-left',
-      //   data: {
-      //     text: '左箭头',
-      //     rect: {
-      //       width: 200,
-      //       height: 100,
-      //     },
-      //     name: 'leftArrow',
-      //   },
-      // },
-      // {
-      //   name: 'rightArrow',
-      //   icon: 'icon-arrow-right',
-      //   data: {
-      //     text: '右箭头',
-      //     rect: {
-      //       width: 200,
-      //       height: 100,
-      //     },
-      //     name: 'rightArrow',
-      //   },
-      // },
-      // {
-      //   name: 'twowayArrow',
-      //   icon: 'icon-twoway-arrow',
-      //   data: {
-      //     text: '双向箭头',
-      //     rect: {
-      //       width: 200,
-      //       height: 100,
-      //     },
-      //     name: 'twowayArrow',
-      //   },
-      // },
-      // {
-      //   name: 'line',
-      //   icon: 'icon-line',
-      //   data: {
-      //     text: '直线',
-      //     rect: {
-      //       width: 100,
-      //       height: 100,
-      //     },
-      //     name: 'line',
-      //   },
-      // },
-      // {
-      //   name: 'cloud',
-      //   icon: 'icon-cloud',
-      //   data: {
-      //     text: '云',
-      //     rect: {
-      //       width: 100,
-      //       height: 100,
-      //     },
-      //     name: 'cloud',
-      //   },
-      // },
-      // {
-      //   name: 'message',
-      //   icon: 'icon-msg',
-      //   data: {
-      //     text: '消息框',
-      //     rect: {
-      //       width: 100,
-      //       height: 100,
-      //     },
-      //     paddingLeft: 10,
-      //     paddingRight: 10,
-      //     paddingTop: 10,
-      //     paddingBottom: 10,
-      //     name: 'message',
-      //   },
-      // },
-      // {
-      //   name: 'file',
-      //   icon: 'icon-file',
-      //   data: {
-      //     text: '文档',
-      //     rect: {
-      //       width: 80,
-      //       height: 100,
-      //     },
-      //     paddingLeft: 10,
-      //     paddingRight: 10,
-      //     paddingTop: 10,
-      //     paddingBottom: 10,
-      //     name: 'file',
-      //   },
-      // },
-      {
-        name: '文本',
-        icon: 'icon-text',
-        data: {
-          text: '文本',
-          rect: {
-            width: 160,
-            height: 30,
-          },
-          name: 'text',
-        },
-      },
-      // {
-      //   name: 'people',
-      //   icon: 'icon-people',
-      //   data: {
-      //     rect: {
-      //       width: 70,
-      //       height: 100,
-      //     },
-      //     name: 'people',
-      //   },
-      // },
-      // {
-      //   name: '视频/网页',
-      //   icon: 'icon-pc',
-      //   data: {
-      //     text: '视频/网页',
-      //     rect: {
-      //       width: 200,
-      //       height: 200,
-      //     },
-      //     paddingLeft: 10,
-      //     paddingRight: 10,
-      //     paddingTop: 10,
-      //     paddingBottom: 10,
-      //     strokeStyle: 'transparent',
-      //     name: 'div',
-      //   },
-      // },
-    ],
-  },
+  // {
+  //   group: '基本形状',
+  //   children: [
+  // {
+  //   name: 'triangle',
+  //   icon: 'icon-triangle',
+  //   data: {
+  //     text: '三角形',
+  //     rect: {
+  //       width: 100,
+  //       height: 100,
+  //     },
+  //     name: 'triangle',
+  //   },
+  // },
+  // {
+  //   name: 'diamond',
+  //   icon: 'icon-diamond',
+  //   data: {
+  //     text: '菱形',
+  //     rect: {
+  //       width: 100,
+  //       height: 100,
+  //     },
+  //     name: 'diamond',
+  //   },
+  // },
+  // {
+  //   name: 'pentagon',
+  //   icon: 'icon-pentagon',
+  //   data: {
+  //     text: '五边形',
+  //     rect: {
+  //       width: 100,
+  //       height: 100,
+  //     },
+  //     name: 'pentagon',
+  //   },
+  // },
+  // {
+  //   name: 'hexagon',
+  //   icon: 'icon-hexagon',
+  //   data: {
+  //     text: '六边形',
+  //     rect: {
+  //       width: 100,
+  //       height: 100,
+  //     },
+  //     paddingTop: 10,
+  //     paddingBottom: 10,
+  //     name: 'hexagon',
+  //   },
+  // },
+  // {
+  //   name: 'pentagram',
+  //   icon: 'icon-pentagram',
+  //   data: {
+  //     text: '五角星',
+  //     rect: {
+  //       width: 100,
+  //       height: 100,
+  //     },
+  //     name: 'pentagram',
+  //   },
+  // },
+  // {
+  //   name: 'leftArrow',
+  //   icon: 'icon-arrow-left',
+  //   data: {
+  //     text: '左箭头',
+  //     rect: {
+  //       width: 200,
+  //       height: 100,
+  //     },
+  //     name: 'leftArrow',
+  //   },
+  // },
+  // {
+  //   name: 'rightArrow',
+  //   icon: 'icon-arrow-right',
+  //   data: {
+  //     text: '右箭头',
+  //     rect: {
+  //       width: 200,
+  //       height: 100,
+  //     },
+  //     name: 'rightArrow',
+  //   },
+  // },
+  // {
+  //   name: 'twowayArrow',
+  //   icon: 'icon-twoway-arrow',
+  //   data: {
+  //     text: '双向箭头',
+  //     rect: {
+  //       width: 200,
+  //       height: 100,
+  //     },
+  //     name: 'twowayArrow',
+  //   },
+  // },
+  // {
+  //   name: 'line',
+  //   icon: 'icon-line',
+  //   data: {
+  //     text: '直线',
+  //     rect: {
+  //       width: 100,
+  //       height: 100,
+  //     },
+  //     name: 'line',
+  //   },
+  // },
+  // {
+  //   name: 'cloud',
+  //   icon: 'icon-cloud',
+  //   data: {
+  //     text: '云',
+  //     rect: {
+  //       width: 100,
+  //       height: 100,
+  //     },
+  //     name: 'cloud',
+  //   },
+  // },
+  // {
+  //   name: 'message',
+  //   icon: 'icon-msg',
+  //   data: {
+  //     text: '消息框',
+  //     rect: {
+  //       width: 100,
+  //       height: 100,
+  //     },
+  //     paddingLeft: 10,
+  //     paddingRight: 10,
+  //     paddingTop: 10,
+  //     paddingBottom: 10,
+  //     name: 'message',
+  //   },
+  // },
+  // {
+  //   name: 'file',
+  //   icon: 'icon-file',
+  //   data: {
+  //     text: '文档',
+  //     rect: {
+  //       width: 80,
+  //       height: 100,
+  //     },
+  //     paddingLeft: 10,
+  //     paddingRight: 10,
+  //     paddingTop: 10,
+  //     paddingBottom: 10,
+  //     name: 'file',
+  //   },
+  // },
+  // {
+  //   name: 'people',
+  //   icon: 'icon-people',
+  //   data: {
+  //     rect: {
+  //       width: 70,
+  //       height: 100,
+  //     },
+  //     name: 'people',
+  //   },
+  // },
+  // {
+  //   name: '视频/网页',
+  //   icon: 'icon-pc',
+  //   data: {
+  //     text: '视频/网页',
+  //     rect: {
+  //       width: 200,
+  //       height: 200,
+  //     },
+  //     paddingLeft: 10,
+  //     paddingRight: 10,
+  //     paddingTop: 10,
+  //     paddingBottom: 10,
+  //     strokeStyle: 'transparent',
+  //     name: 'div',
+  //   },
+  // },
+  //   ],
+  // },
   {
     group: '图表控件',
     children: [
-      {
-        elementRendered: false,
-        name: '折线图', // 用name来区分不同的组件
-        icon: 'icon-line-chart',
-        data: {
-          text: '',
-          rect: {
-            width: 300,
-            height: 200,
-          },
-          name: 'echarts',
-          data: {
-            echarts: {
-              option: {
-                title: {
-                  text: '曲线图',
-                },
-                legend: {},
-                tooltip: {},
-                dataset: {
-                  // 用 dimensions 指定了维度的顺序。直角坐标系中，
-                  // 默认把第一个维度映射到 X 轴上，第二个维度映射到 Y 轴上。
-                  // 如果不指定 dimensions，也可以通过指定 series.encode
-                  // 完成映射，参见后文。
-                  dimensions: ['product', '2015', '2016', '2017'],
-                  source: [
-                    {
-                      product: 'Matcha Latte',
-                      '2015': 43.3,
-                      '2016': 85.8,
-                      '2017': 93.7,
-                    },
-                    {
-                      product: 'Milk Tea',
-                      '2015': 83.1,
-                      '2016': 73.4,
-                      '2017': 55.1,
-                    },
-                    {
-                      product: 'Cheese Cocoa',
-                      '2015': 86.4,
-                      '2016': 65.2,
-                      '2017': 82.5,
-                    },
-                    {
-                      product: 'Walnut Brownie',
-                      '2015': 72.4,
-                      '2016': 53.9,
-                      '2017': 39.1,
-                    },
-                  ],
-                },
-                xAxis: { type: 'category' },
-                yAxis: {},
-                series: [{ type: 'line' }, { type: 'line' }, { type: 'line' }],
-              },
-            },
-            property: {
-              echartsType: 'line',
-              dataMethod: 'aa',
-              dataDot: 1,
-              dataPointParam: {
-                qtDataList: [
-                  {
-                    id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
-                    type: 1,
-                  },
-                ],
-                subscribe: true,
-              },
-            },
-          },
-        },
-      },
+      // {
+      //   elementRendered: false,
+      //   name: '折线图', // 用name来区分不同的组件
+      //   icon: 'icon-line-chart',
+      //   data: {
+      //     text: '',
+      //     rect: {
+      //       width: 300,
+      //       height: 200,
+      //     },
+      //     name: 'echarts',
+      //     data: {
+      //       echarts: {
+      //         option: {
+      //           title: {
+      //             text: '曲线图',
+      //           },
+      //           legend: {},
+      //           tooltip: {},
+      //           dataset: {
+      //             // 用 dimensions 指定了维度的顺序。直角坐标系中，
+      //             // 默认把第一个维度映射到 X 轴上，第二个维度映射到 Y 轴上。
+      //             // 如果不指定 dimensions，也可以通过指定 series.encode
+      //             // 完成映射，参见后文。
+      //             dimensions: ['product', '2015', '2016', '2017'],
+      //             source: [
+      //               {
+      //                 product: 'Matcha Latte',
+      //                 '2015': 43.3,
+      //                 '2016': 85.8,
+      //                 '2017': 93.7,
+      //               },
+      //               {
+      //                 product: 'Milk Tea',
+      //                 '2015': 83.1,
+      //                 '2016': 73.4,
+      //                 '2017': 55.1,
+      //               },
+      //               {
+      //                 product: 'Cheese Cocoa',
+      //                 '2015': 86.4,
+      //                 '2016': 65.2,
+      //                 '2017': 82.5,
+      //               },
+      //               {
+      //                 product: 'Walnut Brownie',
+      //                 '2015': 72.4,
+      //                 '2016': 53.9,
+      //                 '2017': 39.1,
+      //               },
+      //             ],
+      //           },
+      //           xAxis: { type: 'category' },
+      //           yAxis: {},
+      //           series: [{ type: 'line' }, { type: 'line' }, { type: 'line' }],
+      //         },
+      //       },
+      //       property: {
+      //         echartsType: 'line',
+      //         dataMethod: 'aa',
+      //         dataDot: 1,
+      //         dataPointParam: {
+      //           qtDataList: [
+      //             {
+      //               id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
+      //               type: 1,
+      //             },
+      //           ],
+      //           subscribe: true,
+      //         },
+      //       },
+      //     },
+      //   },
+      // },
       {
         elementRendered: false,
         name: '实时曲线图', // 用name来区分不同的组件
-        icon: 'icon-line-chart',
+        icon: 'iconquxiantu',
         data: {
           text: '',
           rect: {
@@ -759,7 +759,7 @@ export const Tools = [
       // },
       {
         name: '仪表盘',
-        icon: 'icon-dashboard-chart',
+        icon: 'iconyibiaopan',
         data: {
           text: '',
           rect: {
@@ -813,7 +813,7 @@ export const Tools = [
       {
         elementRendered: false,
         name: '计量器',
-        icon: 'icon-line-chart',
+        icon: 'iconjiliangqi',
         data: {
           text: '',
           rect: {

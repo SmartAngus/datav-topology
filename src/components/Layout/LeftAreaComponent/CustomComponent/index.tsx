@@ -1,8 +1,13 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import { clientParam } from '../../../data/api';
-import { Row, Col, Form, message } from 'antd';
+import { Row, Col, Form, message, Collapse } from 'antd';
 import { useClickAway } from 'ahooks';
 import CompContextMenu from '../../../common/CompContextMenu';
+
+import styles from '../../index.module.scss';
+import CustomIcon from '../../../config/iconConfig';
+
+const { Panel } = Collapse;
 
 const Layout = ({ Tools, onDrag, combineCom }) => {
   const [formRef] = Form.useForm();
@@ -117,51 +122,48 @@ const Layout = ({ Tools, onDrag, combineCom }) => {
   };
 
   return (
-    <div>
-      <div className="title">自定义组件</div>
-      <div className="button">
-        <Row align="middle">
-          {(componentList || []).map((item, key) => {
-            return (
-              <Col
-                key={key}
-                span={8}
-                style={{
-                  marginBottom: 20,
-                  textAlign: 'center',
-                }}
-                onContextMenu={(event) => handleContextMenu(event, item)}
-              >
-                <a
-                  draggable
-                  href="/#"
-                  title={item.componentName}
-                  onDragStart={(ev) =>
-                    onDrag(ev, JSON.parse(item.componentProperty), true)
-                  }
+    <Collapse style={{ borderTop: 0 }}>
+      <Panel header="自定义组件" key={'custom'}>
+        <div className={styles.button}>
+          <Row align="middle">
+            {(componentList || []).map((item, key) => {
+              return (
+                <Col
+                  key={key}
+                  span={8}
+                  style={{
+                    marginBottom: 20,
+                    textAlign: 'center',
+                  }}
+                  onContextMenu={(event) => handleContextMenu(event, item)}
                 >
-                  <i
-                    className="iconfont icon-triangle"
-                    style={{ fontSize: 13 }}
-                  ></i>
-                  <span
-                    style={{
-                      marginTop: 5,
-                      overflow: 'hidden',
-                      display: 'block',
-                      whiteSpace: 'nowrap',
-                      textOverflow: 'ellipsis',
-                    }}
+                  <a
+                    draggable
+                    href="/#"
+                    title={item.componentName}
+                    onDragStart={(ev) =>
+                      onDrag(ev, JSON.parse(item.componentProperty), true)
+                    }
                   >
-                    {item.componentName}
-                  </span>
-                </a>
-              </Col>
-            );
-          })}
-        </Row>
-      </div>
-
+                    <CustomIcon type="iconzidingyi" style={{ fontSize: 28 }} />
+                    <span
+                      style={{
+                        marginTop: 5,
+                        overflow: 'hidden',
+                        display: 'block',
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
+                      }}
+                    >
+                      {item.componentName}
+                    </span>
+                  </a>
+                </Col>
+              );
+            })}
+          </Row>
+        </div>
+      </Panel>
       <CompContextMenu
         contextMenuRef={contextMenuRef}
         showContextmenu={showContextmenu}
@@ -171,7 +173,7 @@ const Layout = ({ Tools, onDrag, combineCom }) => {
         handleOk={handleOk}
         handleDelete={handleDelete}
       />
-    </div>
+    </Collapse>
   );
 };
 

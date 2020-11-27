@@ -11,7 +11,7 @@ import {
   Image,
   Upload,
   Checkbox,
-  Switch,
+  message,
 } from 'antd';
 import { DownOutlined, UploadOutlined } from '@ant-design/icons';
 import { Topology } from '../../../../topology/core';
@@ -122,10 +122,18 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
       selectedBgImg(bkUrl);
     } else {
       canvas.clearBkImg();
-      delete data.data['bkImage']
-      canvas.render()
+      delete data.data['bkImage'];
+      canvas.render();
       onChangeBkImage && onChangeBkImage('');
     }
+  };
+
+  const beforeUpload = (file) => {
+    const isLt512K = file.size / 1024 < 512;
+    if (!isLt512K) {
+      message.error('图片上传小于512K!');
+    }
+    return isLt512K;
   };
 
   // 画布背景图片上传
@@ -145,26 +153,26 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     setPopoverVisible({ ...popoverVisible, bgSelect: false });
     onChangeBkImage && onChangeBkImage(url);
     form.setFieldsValue({ bgImgCheck: true });
-    canvas.render()
-    props.setIsSave(false)
+    canvas.render();
+    props.setIsSave(false);
   };
 
   // 背景颜色显示隐藏
   const bkColorCheckChange = (e: CheckboxChangeEvent) => {
     const result = e.target.checked ? form.getFieldValue('bgColor') : '#ccc';
     data.data['bkColor'] = result;
-    if(!e.target.checked){
-      console.log("背景颜色隐藏")
-      delete data.data['bkColor']
+    if (!e.target.checked) {
+      console.log('背景颜色隐藏');
+      delete data.data['bkColor'];
     }
     canvas.render();
-    props.setIsSave(false)
+    props.setIsSave(false);
   };
 
   // 网格选择切换
   const gridOnChange = (e: CheckboxChangeEvent) => {
     canvas.showGrid(e.target.checked);
-    props.setIsSave(false)
+    props.setIsSave(false);
   };
 
   // 设置宽高
@@ -374,6 +382,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
                     token: 'development_of_special_token_by_star_quest',
                   }}
                   showUploadList={false}
+                  beforeUpload={beforeUpload}
                   onChange={bgUploadChange}
                 >
                   <Button icon={<UploadOutlined />}>Upload</Button>

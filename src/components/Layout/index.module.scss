@@ -14,6 +14,25 @@
   overflow-y: auto;
 }
 
+.button {
+  padding: 10px 0;
+}
+
+.button a {
+  display: inline-block;
+  color: #333;
+  line-height: 1;
+  width: 100%;
+  text-align: center;
+  text-decoration: none !important;
+}
+
+.button {
+  :global(.iconfont) {
+    font-size: 20px !important;
+  }
+}
+
 .full {
   flex: 1;
   width: initial;
@@ -49,6 +68,12 @@
 .tool {
   :global(.ant-collapse-content-box) {
     padding: 0;
+  }
+}
+
+.tool {
+  :global(.ant-tabs-nav) {
+    margin: 0;
   }
 }
 

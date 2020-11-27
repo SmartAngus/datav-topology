@@ -1,7 +1,16 @@
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { Topology } from '../../topology/core';
 import { History } from 'history';
-import { Button, Menu, Popover, Tag, Space, Tooltip, Modal, message } from 'antd'
+import {
+  Button,
+  Menu,
+  Popover,
+  Tag,
+  Space,
+  Tooltip,
+  Modal,
+  message,
+} from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { useFullscreen } from 'ahooks';
 import { BasicTarget } from 'ahooks/lib/utils/dom';
@@ -9,75 +18,73 @@ import CustomIcon from '../config/iconConfig';
 import styles from './index.module.scss';
 import { base64ToFile } from '../utils/cacl';
 
-
-
-const {confirm}=Modal;
+const { confirm } = Modal;
 
 const headTools = [
   {
     key: 'cut',
     name: '剪切',
-    icon: 'icon-jianqie',
+    icon: 'iconjianqie',
     title: 'Ctrl+X',
   },
   {
     key: 'copy',
     name: '复制',
-    icon: 'icon-fuzhi',
+    icon: 'iconfuzhi',
     title: 'Ctrl+C',
   },
   {
     key: 'paste',
     name: '粘贴',
-    icon: 'icon-niantie',
+    icon: 'iconniantie',
     title: 'Ctrl+V',
   },
   {
     key: 'undo',
     name: '撤销',
-    icon: 'icon-chexiao',
+    icon: 'iconchexiao',
     title: 'Ctrl+Z',
   },
   {
     key: 'redo',
     name: '恢复',
-    icon: 'icon-icon_huifu',
+    icon: 'iconhuifu',
     title: 'Ctrl+Z',
   },
   {
     key: 'bottom',
     name: '置于底层',
-    icon: 'icon-zhiyudiceng',
+    icon: 'iconzhiyudiceng',
     title: 'Ctrl+Alt+[',
   },
   {
     key: 'down',
     name: '后置一层',
-    icon: 'icon-zhiyudiceng',
+    icon: 'iconhouzhiyiceng',
     title: 'Ctrl+[',
   },
   {
     key: 'up',
     name: '前置一层',
-    icon: 'icon-ziyuan',
+    icon: 'iconqianzhiyiceng',
     title: 'Ctrl+]',
   },
   {
     key: 'top',
     name: '置于顶层',
-    icon: 'icon-ziyuan',
+    icon: 'iconzhiyudingceng',
     title: 'Ctrl+Alt+]',
   },
   {
     key: 'combo',
     name: '编组',
-    icon: 'icon-jianlizuhe',
+    icon: 'iconbianzu1',
     title: 'Ctrl+G',
   },
   {
     key: 'unCombo',
     name: '解组',
-    icon: 'icon-quxiaozuhe',
+    icon: 'iconjiechubianzu1',
     title: 'Ctrl+U',
   },
 ];
@@ -140,7 +147,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
     }, [isSave]);
 
     const handleSave = () => {
-      if(!isSave){
+      if (!isSave) {
         setIsSave(true);
         // FileSaver.saveAs(
         //   new Blob([JSON.stringify(canvas.data)], {
@@ -255,9 +262,9 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
      * 预览
      */
     const handlePreview = () => {
-      if(!isSave){
-        message.warn("预览之前请先保存数据！")
-      }else{
+      if (!isSave) {
+        message.warn('预览之前请先保存数据！');
+      } else {
         let reader = new FileReader();
         const result = new Blob([JSON.stringify(canvas.data)], {
           type: 'text/plain;charset=utf-8',
@@ -299,7 +306,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
     return (
       <div className={styles.toolsHeader}>
         <a className={styles.toolItem} onClick={handleExitEditor}>
-          <CustomIcon type="icon-exit" />
+          <CustomIcon type="icontuichu" />
           <span>退出</span>
         </a>
         {/* <a className={styles.toolItem}>
@@ -367,14 +374,14 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           style={{ margin: '0 30px' }}
           onClick={toggleFull}
         >
-          <CustomIcon type="icon-quanping" />
+          <CustomIcon type="iconquanping1" />
           <span>{isFullscreen ? '退出全屏' : '全屏'}</span>
         </a>
         <a
           style={{ lineHeight: '48px', marginRight: 30 }}
           onClick={handleExtraSetting}
         >
-          <CustomIcon type="icon-peizhi-" />
+          <CustomIcon type="iconpeizhikanban" />
           <span style={{ marginLeft: 5 }}>配置看板</span>
         </a>
 
