@@ -173,10 +173,10 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
             res.data.data.property != null &&
             res.data.data.property != null
           ) {
-            const getEditorData = JSON.parse(
-              decodeURIComponent(escape(window.atob(res.data.data.property)))
-            );
-            // const getEditorData = JSON.parse(res.data.data.property)
+            // const getEditorData = JSON.parse(
+            //   decodeURIComponent(escape(window.atob(res.data.data.property)))
+            // );
+            const getEditorData = JSON.parse(res.data.data.property)
             setEditorData(getEditorData);
           }
         }
@@ -387,10 +387,10 @@ const PreviewLayout: React.FC<any>=({history})=>{
             res.data.data.property != null &&
             res.data.data.property != null
           ) {
-            const getEditorData = JSON.parse(
-              decodeURIComponent(escape(window.atob(res.data.data.property)))
-            );
-            // const getEditorData = JSON.parse(res.data.data.property)
+            // const getEditorData = JSON.parse(
+            //   decodeURIComponent(escape(window.atob(res.data.data.property)))
+            // );
+            const getEditorData = JSON.parse(res.data.data.property)
             setEditorData(getEditorData);
           }
         }
