@@ -45,6 +45,8 @@ interface ICanvasProps extends FormProps {
   canvasRef?: any;
   onChangeCanvasSize?: (sizeInfo: any) => void;
   onChangeBkImage?: (imageUrl: string) => void;
+  isSave?: boolean;
+  setIsSave?: (value: boolean) => void;
 }
 const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   data,
@@ -144,6 +146,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     onChangeBkImage && onChangeBkImage(url);
     form.setFieldsValue({ bgImgCheck: true });
     canvas.render()
+    props.setIsSave(false)
   };
 
   // 背景颜色显示隐藏
@@ -151,14 +154,17 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     const result = e.target.checked ? form.getFieldValue('bgColor') : '#ccc';
     data.data['bkColor'] = result;
     if(!e.target.checked){
+      console.log("背景颜色隐藏")
       delete data.data['bkColor']
     }
     canvas.render();
+    props.setIsSave(false)
   };
 
   // 网格选择切换
   const gridOnChange = (e: CheckboxChangeEvent) => {
     canvas.showGrid(e.target.checked);
+    props.setIsSave(false)
   };
 
   // 设置宽高
