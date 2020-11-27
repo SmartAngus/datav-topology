@@ -87,18 +87,13 @@ moment.locale('zh-cn', {
 
 export function dynamicWebSocketData() {
   canvas.socket.socket.onerror = () => {
-    console.log('socket onerror');
   };
   canvas.socket.socket.onopen = () => {
-    console.log('onopen');
     if (canvas.data && canvas.data.pens.length > 0) {
-      console.log('websocket.....');
       // 有数据，去遍历有websocket的组件，并订阅
       if (canvas.socket != undefined) {
-        console.log('websokcet....', canvas.data.pens);
         (canvas.data.pens || []).map((node: Node) => {
           if (node.property?.dataPointParam?.qtDataList?.length > 0) {
-            console.log('.........websocket send', node);
             canvas.socket.socket.send(
               JSON.stringify({
                 ...node.property.dataPointParam,
@@ -111,7 +106,6 @@ export function dynamicWebSocketData() {
             node.data != undefined &&
             node.data.property?.dataPointParam?.qtDataList?.length > 0
           ) {
-            console.log('.........websocket send', node);
             canvas.socket.socket.send(
               JSON.stringify({
                 ...node.data.property.dataPointParam,
@@ -126,7 +120,6 @@ export function dynamicWebSocketData() {
   };
   const times = [];
   canvas.socket.socket.onmessage = (data) => {
-    // console.log("socket onmessage",data.data)
     if (canvas.data && canvas.data.pens.length > 0) {
       // 有数据，去遍历有websocket的组件，并订阅
       if (canvas.socket != undefined) {
@@ -172,7 +165,6 @@ export function dynamicWebSocketData() {
                 canvas.updateProps(false);
                 break;
               default:
-                console.log('----');
             }
           }
         });

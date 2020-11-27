@@ -41,9 +41,7 @@ const Preview = ({ history,data,websocketConf }:PreviewProps) => {
       canvas.openSocket(`${websocketConf.url}`);
     }
     if(canvas!=undefined&&canvas.socket!=undefined){
-      console.log("preview websocket")
       canvas.socket.socket.onopen=()=> {
-        console.log("onopen")
         if (canvas.data && canvas.data.pens.length > 0) {
           // 有数据，去遍历有websocket的组件，并订阅
           if(canvas.socket!=undefined){
@@ -56,7 +54,6 @@ const Preview = ({ history,data,websocketConf }:PreviewProps) => {
         }
       }
       canvas.socket.socket.onmessage=(data)=>{
-        console.log("socket onmessage",data.data)
         if (canvas.data && canvas.data.pens.length > 0) {
           // 有数据，去遍历有websocket的组件，并订阅
           if(canvas.socket!=undefined){
@@ -76,7 +73,6 @@ const Preview = ({ history,data,websocketConf }:PreviewProps) => {
       }
     }
     (canvas.data.pens||[]).map(node=>{
-      console.log("init timer")
       if(node.name=='biciTimer'){
         setInterval(()=>{
           formatTimer(node)

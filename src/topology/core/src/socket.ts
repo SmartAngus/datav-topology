@@ -11,13 +11,11 @@ export class Socket {
     this.socket.onmessage = this.onmessage;
 
     this.socket.onclose = () => {
-      console.log('Canvas websocket closed and reconneting...');
       this.init();
     };
   }
 
   onmessage = (e: MessageEvent) => {
-    console.log("socket init onmessage")
     if (!this.data.pens.length || !e || !e.data) {
       return;
     }

@@ -167,7 +167,6 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
         },
       })
       .then(res => {
-        console.log('detail', res);
         if (res.data?.data != null) {
           if (
             res.data.data.property != null &&
@@ -195,7 +194,6 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     //     }
     //   )
     //   .then((res) => {
-    //     console.log('背景图片=', res);
     //   });
     // 获取获取当前租户下 指定自定义组件图片列表
     // instance
@@ -211,7 +209,6 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     //     }
     //   )
     //   .then((res) => {
-    //     console.log('组件图片列表=', res);
     //     (res.data.data || []).map((image: any) => {
     //       const newImg = {
     //         ...image,
@@ -229,7 +226,6 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   }, []);
   // 保存数据到数据库
   const handleSaveEditorData = (data: any) => {
-    console.log(data);
     const api = axios.create({
       headers: { 'Content-Type': 'multipart/form-data' },
     });
@@ -267,17 +263,13 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
           property:JSON.stringify(data)
         }
       }).then((res) => {
-        console.log('update==', res);
       });
   };
   // 自定义预览，多数为打开一个新页面，路由，内置的预览是弹窗
   // const handlePreview = (data:any)=>{
-  //   console.log(data)
   //   html2canvas(document.querySelector(".haha") as HTMLElement).then(canvas => {
-  //     console.log(canvas)
   //     document?.querySelector(".haha")?.appendChild(canvas)
   //     var imgData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-  //     console.log(imgData)
   //   });
   // }
 

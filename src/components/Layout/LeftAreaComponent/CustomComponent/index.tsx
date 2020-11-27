@@ -1,4 +1,11 @@
-import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import React, {
+  CSSProperties,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { clientParam } from '../../../data/api';
 import { Row, Col, Form, message, Collapse } from 'antd';
 import { useClickAway } from 'ahooks';
@@ -9,7 +16,14 @@ import CustomIcon from '../../../config/iconConfig';
 
 const { Panel } = Collapse;
 
-const Layout = ({ Tools, onDrag, combineCom }) => {
+interface Props {
+  onDrag?: (event, data, custom) => void;
+  combineCom?: any;
+  ref?: any;
+}
+
+const Layout = forwardRef((props: Props, ref) => {
+  const { onDrag, combineCom } = props;
   const [formRef] = Form.useForm();
   // 是否显示右键菜单
   const [showContextmenu, setShowContextmenu] = useState(false);
@@ -27,18 +41,26 @@ const Layout = ({ Tools, onDrag, combineCom }) => {
   useClickAway(() => {
     setShowContextmenu(false);
   }, contextMenuRef);
+
+  useImperativeHandle(ref, () => ({
+    getNewComponents: () => {
+      getNewComponents();
+    },
+  }));
+
+  // 获取自定义组件
   function getNewComponents() {
-    return clientParam(combineCom.apiURL).post(
-      combineCom.list.url,
-      combineCom.list.params,
-      {
+    clientParam(combineCom.apiURL)
+      .post(combineCom.list.url, combineCom.list.params, {
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
           token: combineCom.token,
           'Content-Type': 'application/json',
         },
-      }
-    );
+      })
+      .then((r) => {
+        setComponentList(r.data.data);
+      });
   }
 
   const handleDelete = () => {
@@ -52,17 +74,13 @@ const Layout = ({ Tools, onDrag, combineCom }) => {
       })
       .then((res) => {
         message.success('删除组件成功！');
-        getNewComponents().then((r) => {
-          setComponentList(r.data.data);
-        });
+        getNewComponents();
       });
   };
 
   const [componentList, setComponentList] = useState([]);
   useEffect(() => {
-    getNewComponents().then((r) => {
-      setComponentList(r.data.data);
-    });
+    getNewComponents();
   }, []);
   // 右键菜单
   const handleContextMenu = (event, item: any) => {
@@ -112,12 +130,10 @@ const Layout = ({ Tools, onDrag, combineCom }) => {
         })
         .then((res) => {
           message.success('重命名组件成功！');
-          getNewComponents().then((r) => {
-            setComponentList(r.data.data);
-          });
+          getNewComponents();
         });
     } catch (errorInfo) {
-      console.log('Failed:', errorInfo);
+      console.error('Failed:', errorInfo);
     }
   };
 
@@ -175,6 +191,6 @@ const Layout = ({ Tools, onDrag, combineCom }) => {
       />
     </Collapse>
   );
-};
+});
 
 export default Layout;

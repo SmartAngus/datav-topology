@@ -1884,7 +1884,6 @@ export class Topology {
     callback: any = null
   ): string {
     const rect = this.getRect();
-    console.log("rect",rect)
     const p = formatPadding(padding || 0);
     rect.x -= p[3];
     rect.y -= p[0];
