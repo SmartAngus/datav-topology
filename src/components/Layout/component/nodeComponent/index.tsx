@@ -24,7 +24,6 @@ import { FormProps } from 'antd/lib/form/Form';
 import ColorPicker from '../../../common/ColorPicker/ColorPicker';
 import { canvas } from '../../index';
 import { alignNodes } from '../../../../topology/layout/src/align';
-import DataPointTable from '../../../common/DataPointTable';
 import CustomIcon from '../../../config/iconConfig';
 import DataBindModal from '../../../FilterDataPoint';
 
@@ -79,7 +78,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const { property } = data?.node; // 用户自定义数据片段
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
-    console.log('node>>>>', data.node);
     form.setFieldsValue({
       x,
       y,
@@ -117,7 +115,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       dataMethod,
       dataDot,
     });
-    console.log('property====', data);
   }, [property]);
 
   // 字段值更新时触发的回掉
