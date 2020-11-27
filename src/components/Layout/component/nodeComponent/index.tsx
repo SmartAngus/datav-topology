@@ -170,8 +170,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       });
     }
   };
-  const onDataPointBind = (selectedRowKeys, selectedRows) => {
-  };
+  const onDataPointBind = (selectedRowKeys, selectedRows) => {};
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
   const renderDataPointModal = () => {
     return (
@@ -459,7 +458,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       <Row justify="space-around" style={{ borderBottom: '1px solid #d9d9d9' }}>
         {Object.keys(alignObj).map((key: string, index: number) => {
           return (
-            <Col key={index}>
+            <Col key={index} span={4}>
               <Tooltip
                 title={alignObj[key][0]}
                 getPopupContainer={() => document.querySelector('#layout')}
