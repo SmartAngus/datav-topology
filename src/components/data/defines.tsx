@@ -307,7 +307,7 @@ export class DataVEditorProps{
   // 面板数据和配置
   editorData?: any;// json对象
   // 自定义预览按钮的功能
-  onPreview?:(editorData:any)=>void;
+  onPreview?:()=>void;
   // 当点击退出按钮时
   onPoweroff?:()=>void;
   /** 间隔几分钟保存数据 */

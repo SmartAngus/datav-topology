@@ -502,6 +502,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           onEditorSaveCb={props.onEditorSaveCb}
           onPoweroff={props.onPoweroff}
           autoSaveInterval={props.autoSaveInterval}
+          onPreview={props.onPreview}
         />
       );
   }, [isLoadCanvas, history, layoutRef, isSave]);

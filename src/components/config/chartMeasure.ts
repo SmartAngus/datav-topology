@@ -1,12 +1,15 @@
 import echarts from 'echarts/lib/echarts';
 
-export function getMeasureOption() {
+export function getMeasureOption(option?:
+  {
+     min:number,
+     max:number
+  }){
   let TP_value = 40;
   let kd = [];
   let Gradient = [];
   let leftColor = '';
   let showValue = 0;
-  let boxPosition = [65, 0];
   let TP_txt = '';
   // 刻度使用柱状图模拟，短设置1，长的设置3；构造一个数据
   for (var i = 0, len = 135; i <= len; i++) {
@@ -68,16 +71,18 @@ export function getMeasureOption() {
       showValue = TP_value;
     }
   }
-  if (TP_value < -10) {
-    boxPosition = [65, -120];
-  }
   leftColor = Gradient[Gradient.length - 1].color;
   // 因为柱状初始化为0，温度存在负值，所以加上负值60和空出距离10
   let measureOption = {
-    backgroundColor: '#0C2F6F',
     title: {
       text: '温度计',
       show: false,
+    },
+    grid:{
+      top:0,
+      left:0,
+      right:0,
+      bottom:50
     },
     yAxis: [
       {
@@ -96,9 +101,9 @@ export function getMeasureOption() {
       },
       {
         type: 'category',
-        data: ['', '', '', '', '', '', '', '', '', '', '°C'],
+        data: ['', '', ''],
         position: 'left',
-        offset: -80,
+        offset: -40,
         axisLabel: {
           fontSize: 10,
           color: 'white',
@@ -114,26 +119,26 @@ export function getMeasureOption() {
     xAxis: [
       {
         show: false,
-        min: -10,
-        max: 80,
+        min: -45,
+        max: 45,
         data: [],
       },
       {
         show: false,
-        min: -10,
-        max: 80,
+        min: -45,
+        max: 45,
         data: [],
       },
       {
         show: false,
-        min: -10,
-        max: 80,
+        min: -45,
+        max: 45,
         data: [],
       },
       {
         show: false,
-        min: -5,
-        max: 80,
+        min: -30,
+        max: 50,
       },
     ],
     series: [
@@ -185,7 +190,7 @@ export function getMeasureOption() {
           },
         ],
 
-        barWidth: 18,
+        barWidth: 8,
         itemStyle: {
           normal: {
             color: new echarts.graphic.LinearGradient(0, 1, 0, 0, Gradient),
@@ -199,7 +204,7 @@ export function getMeasureOption() {
         xAxisIndex: 1,
         barGap: '-100%',
         data: [134],
-        barWidth: 28,
+        barWidth: 18,
         itemStyle: {
           normal: {
             color: '#0C2E6D',
@@ -214,7 +219,7 @@ export function getMeasureOption() {
         xAxisIndex: 2,
         barGap: '-100%',
         data: [135],
-        barWidth: 38,
+        barWidth: 28,
         itemStyle: {
           normal: {
             color: '#4577BA',
@@ -229,7 +234,7 @@ export function getMeasureOption() {
         hoverAnimation: false,
         data: [0],
         xAxisIndex: 0,
-        symbolSize: 48,
+        symbolSize: 18,
         itemStyle: {
           normal: {
             color: '#93FE94',
@@ -244,7 +249,7 @@ export function getMeasureOption() {
         hoverAnimation: false,
         data: [0],
         xAxisIndex: 1,
-        symbolSize: 60,
+        symbolSize: 30,
         itemStyle: {
           normal: {
             color: '#0C2E6D',
@@ -259,7 +264,7 @@ export function getMeasureOption() {
         hoverAnimation: false,
         data: [0],
         xAxisIndex: 2,
-        symbolSize: 70,
+        symbolSize: 40,
         itemStyle: {
           normal: {
             color: '#4577BA',

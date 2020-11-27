@@ -100,6 +100,7 @@ interface HeaderProps {
   onEditorSaveCb?: (canvasData: any) => void;
   onPoweroff?: () => void;
   autoSaveInterval?: number;
+  onPreview?:(data:any)=>void;
   ref?: any;
 }
 
@@ -265,17 +266,22 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
       if (!isSave) {
         message.warn('预览之前请先保存数据！');
       } else {
-        let reader = new FileReader();
-        const result = new Blob([JSON.stringify(canvas.data)], {
-          type: 'text/plain;charset=utf-8',
-        });
-        reader.readAsText(result, 'text/plain;charset=utf-8');
-        reader.onload = (e) => {
-          history.push({
-            pathname: '/preview',
-            state: { data: JSON.parse(reader.result as any) },
+        if(props.onPreview&&typeof props.onPreview=='function'){
+          props.onPreview({})
+        }else{
+          let reader = new FileReader();
+          const result = new Blob([JSON.stringify(canvas.data)], {
+            type: 'text/plain;charset=utf-8',
           });
-        };
+          reader.readAsText(result, 'text/plain;charset=utf-8');
+          reader.onload = (e) => {
+            history.push({
+              pathname: '/preview',
+              state: { data: JSON.parse(reader.result as any) },
+            });
+          };
+        }
+
       }
     };
     /**

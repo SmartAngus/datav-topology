@@ -149,4 +149,5 @@ const Preview = ({ history,data,websocketConf }:PreviewProps) => {
   );
 };
 
+// @ts-ignore
 export default Preview;

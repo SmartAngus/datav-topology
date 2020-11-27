@@ -267,14 +267,8 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       });
   };
   // 自定义预览，多数为打开一个新页面，路由，内置的预览是弹窗
-  // const handlePreview = (data:any)=>{
-  //   console.log(data)
-  //   html2canvas(document.querySelector(".haha") as HTMLElement).then(canvas => {
-  //     console.log(canvas)
-  //     document?.querySelector(".haha")?.appendChild(canvas)
-  //     var imgData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-  //     console.log(imgData)
-  //   });
+  // const handlePreview = ()=>{
+  //
   // }
 
   //
