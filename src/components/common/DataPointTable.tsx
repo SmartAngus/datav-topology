@@ -118,12 +118,10 @@ const DataPointTable = ({ onSelectedDataPoint }: DataPointTable) => {
         },
       })
       .then((res) => {
-        console.log('detail', res);
       }); // end then
   });
 
   const onSelectChange = (selectedRowKeys) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
     setSelectedRowKeys(selectedRowKeys);
     onSelectedDataPoint && onSelectedDataPoint(selectedRowKeys);
   };

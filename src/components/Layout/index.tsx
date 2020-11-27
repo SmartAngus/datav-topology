@@ -7,17 +7,18 @@ import React, {
   useRef,
   useImperativeHandle,
 } from 'react';
-import { Topology, registerNode, Options, Node } from '../../topology/core';
+import { Topology, Options, Node } from '../../topology/core';
 import {
   register as registerChart,
   echartsObjs,
 } from '../../topology/chart-diagram';
 import { register as registerBiciComp } from '../../topology/bici-diagram';
-import { Modal, Tabs, Collapse } from 'antd';
+import { Modal, Tabs } from 'antd';
 import { Tools } from '../config/config';
 import { getNodeById } from '../Service/topologyService';
 import { useClickAway } from 'ahooks';
 import { replacer } from '../utils/serializing';
+import { s8 } from '../../topology/core/src/utils/uuid';
 import Header from '../Header';
 import NodeComponent from './component/nodeComponent';
 import BackgroundComponent from './component/backgroundComponent';
@@ -79,6 +80,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const [isLoadCanvas, setIsLoadCanvas] = useState(false);
   const svgRef = useRef();
   const canvasRef = useRef();
+  const customCompRef = useRef<any>();
 
   const canvasOptions: Options = {
     rotateCursor: '/rotate.cur',
@@ -88,7 +90,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     autoAnchor: false,
     cacheLen: 50,
     hideInput: false,
-    disableEmptyLine:true,
+    disableEmptyLine: true,
   };
 
   useClickAway(() => {
@@ -142,6 +144,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   useEffect(() => {
     scrollCenter();
   }, [canvasSizeInfo]);
+
   /**
    * 滚动条居中
    */
@@ -163,7 +166,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const onDrag = (event, node, custom = false) => {
     if (custom) {
-      event.dataTransfer.setData('Topology', JSON.stringify(node, replacer));
+      let data = node;
+      data.id = s8();
+      event.dataTransfer.setData('Topology', JSON.stringify(node));
     } else {
       event.dataTransfer.setData(
         'Topology',
@@ -234,10 +239,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   /*当自定义的属性发生变化时*/
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
-      console.log('自定义的属性>>>', value);
       setIsSave(false);
       canvas.cache();
-      // console.log('selected.node>>>', selected.node);
       // 只能两层嵌套，后期需要更改，如果有多层的话
       canvas.setValue(selected.node.id, 'setValue');
       // 通知有数据属性更新,会重新渲染画布
@@ -291,7 +294,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    * @param scaleKey 缩放系数
    */
   const handleScaleCanvas = (scaleKey) => {
-    console.log('scaleKey', scaleKey);
     // const  width=canvasSizeInfo.width*scaleKey;
     // const height=canvasSizeInfo.height*scaleKey;
     // const r = calcCanvas(width,height)
@@ -352,7 +354,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const onMessage = (event: string, data: Node) => {
     const node = data;
-    // console.log('监听画布上元素的事件>>>', event);
     switch (event) {
       case 'node': // 节点
       case 'addNode':
@@ -535,8 +536,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         data={selected}
         canvas={canvas}
         show={showContextmenu}
-        onNeedHide={()=>setShowContextmenu(false)}
+        onNeedHide={() => setShowContextmenu(false)}
         combineCom={props.uploadConfig.combineCom}
+        getNewComponents={customCompRef.current?.getNewComponents}
       />
     </div>
   );
@@ -549,8 +551,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
             <TabPane tab="组件" key="1" style={{ margin: 0 }}>
               <SystemComponent onDrag={onDrag} Tools={Tools} />
               <CustomComponent
+                ref={customCompRef}
                 onDrag={onDrag}
-                Tools={Tools}
                 combineCom={props.uploadConfig.combineCom}
               />
             </TabPane>

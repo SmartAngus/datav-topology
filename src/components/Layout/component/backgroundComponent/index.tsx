@@ -91,8 +91,6 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
    * 渲染位置和大小的表单
    */
   const handleFormValueChange = (changeValues) => {
-    // console.log('handleFormValueChange>>>', changeValues);
-    // console.log('allValues>>>', allValues);
     if (changeValues.bgColor) {
       data.data['bkColor'] = changeValues.bgColor;
       data.render();
@@ -162,7 +160,6 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     const result = e.target.checked ? form.getFieldValue('bgColor') : '#ccc';
     data.data['bkColor'] = result;
     if (!e.target.checked) {
-      console.log('背景颜色隐藏');
       delete data.data['bkColor'];
     }
     canvas.render();
@@ -313,10 +310,10 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
                   offColor="#ccc"
                   onColor="#ccc"
                   uncheckedIcon={
-                    <CustomIcon style={{ lineHeight: 2 }} type="icon-shu" />
+                    <CustomIcon style={{ lineHeight: 2 }} type="iconshu" />
                   }
                   checkedIcon={
-                    <CustomIcon style={{ lineHeight: 2 }} type="icon-heng" />
+                    <CustomIcon style={{ lineHeight: 2 }} type="iconheng" />
                   }
                 />
               </Form.Item>
@@ -428,7 +425,6 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     // const index = new WebSocket(wsAddress);
     // //打开事件
     // index.onopen = function() {
-    //   console.log("Socket 已打开");
     //
     //   index.send(JSON.stringify({
     //     qtDataList: [{id: "6413f3a606754c31987ec584ed56d5b7", type: 2},{id: "b32723eaebfe48aaa0f85970c3a39036", type: 2}],
@@ -437,13 +433,10 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     // };
     // //获得消息事件
     // index.onmessage = function(msg) {
-    //   console.log("返回消息")
-    //   console.log(msg);
     //   //发现消息进入    开始处理前端触发逻辑
     // };
     // //关闭事件
     // index.onclose = function() {
-    //   console.log("Socket已关闭");
     // };
     // //发生了错误事件
     // index.onerror = function() {

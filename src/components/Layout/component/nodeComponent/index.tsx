@@ -133,7 +133,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
 
   const handlePropertyValuesChange = (changedValues, allValues) => {
-    // console.log('allValues', allValues);
     onPropertyFormValueChange && onPropertyFormValueChange(allValues);
   };
   //
@@ -142,7 +141,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const handleAlign = (key: string) => {
     const pens = canvas.activeLayer.pens;
     const rect = canvas.activeLayer.rect;
-    console.log(canvas);
     if (pens.length >= 2) {
       alignNodes(pens, rect, key);
       canvas.render();
@@ -173,8 +171,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     }
   };
   const onDataPointBind = (selectedRowKeys, selectedRows) => {
-    console.log('onDataPointBind');
-    console.log(selectedRowKeys, selectedRows);
   };
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
   const renderDataPointModal = () => {

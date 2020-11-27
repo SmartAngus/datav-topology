@@ -54,7 +54,6 @@ export default class DataPointTable extends Component<any,any> {
   }
 
   componentDidMount() {
-    console.log('1')
     this.requestList()
   }
 

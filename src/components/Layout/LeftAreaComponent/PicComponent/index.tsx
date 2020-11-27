@@ -112,7 +112,7 @@ const Layout = ({ uploaConfig }) => {
           requstPicList();
         });
     } catch (errorInfo) {
-      console.log('Failed:', errorInfo);
+      console.error('Failed:', errorInfo);
     }
   };
 
