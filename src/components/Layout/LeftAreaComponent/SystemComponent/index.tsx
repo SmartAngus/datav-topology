@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Collapse } from 'antd';
 
-import styles from './index.moudle.scss';
+import styles from '../../index.module.scss';
 
 const { Panel } = Collapse;
 

@@ -170,7 +170,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const onHandleFormValueChange = useCallback(
     (value) => {
-      setIsSave(false)
+      setIsSave(false);
       const {
         x,
         y,
@@ -224,7 +224,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
       console.log('自定义的属性>>>', value);
-      setIsSave(false)
+      setIsSave(false);
       // console.log('selected.node>>>', selected.node);
       // 只能两层嵌套，后期需要更改，如果有多层的话
       canvas.setValue(selected.node.id, 'setValue');
@@ -251,7 +251,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const onEventValueChange = useCallback(
     (value) => {
-      setIsSave(false)
+      setIsSave(false);
       selected.node.events = value;
       canvas.updateProps(selected.node);
     },
@@ -261,14 +261,14 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    * 切换画布大小
    */
   const handleChangeCanvasSize = useCallback((sizeInfo) => {
-    setIsSave(false)
+    setIsSave(false);
     setCanvasSizeInfo(sizeInfo);
   }, []);
   /**
    * 切换画布背景图片
    */
   const handleChangeBkImage = useCallback((imgUrl) => {
-    setIsSave(false)
+    setIsSave(false);
     setBkImageUrl(imgUrl);
   }, []);
   /**
@@ -289,7 +289,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const onHandleLineFormValueChange = useCallback(
     (value) => {
-      setIsSave(false)
+      setIsSave(false);
       const {
         dash,
         lineWidth,
@@ -529,11 +529,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           <Tabs defaultActiveKey="1" centered>
             <TabPane tab="组件" key="1" style={{ margin: 0 }}>
               <SystemComponent onDrag={onDrag} Tools={Tools} />
-              {/* <CustomComponent
-                  onDrag={onDrag}
-                  Tools={Tools}
-                  combineCom={props.uploadConfig.combineCom}
-                /> */}
+              <CustomComponent
+                onDrag={onDrag}
+                Tools={Tools}
+                combineCom={props.uploadConfig.combineCom}
+              />
             </TabPane>
             <TabPane tab="图库" key="2" style={{ margin: 0 }}>
               <MyComponent uploaConfig={props.uploadConfig} />
