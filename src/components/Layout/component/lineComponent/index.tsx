@@ -24,10 +24,18 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
 }) => {
   const [form] = Form.useForm();
 
-  const { lineWidth, dash, strokeStyle, name, fromArrow, toArrow } = data?.line || {};
+  const { lineWidth, dash, strokeStyle, name, fromArrow, toArrow } =
+    data?.line || {};
 
   useEffect(() => {
-    form.setFieldsValue({lineWidth, dash, strokeStyle, name, fromArrow, toArrow})
+    form.setFieldsValue({
+      lineWidth,
+      dash,
+      strokeStyle,
+      name,
+      fromArrow,
+      toArrow,
+    });
   }, [form]);
 
   /**
@@ -109,7 +117,7 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
 
   return (
     <div className="rightArea">
-      <Tabs defaultActiveKey="1">
+      <Tabs defaultActiveKey="1" centered>
         <TabPane tab="外观" key="1" style={{ margin: 0 }}>
           <Collapse defaultActiveKey={['1']}>
             <Panel header="样式" key="1">
