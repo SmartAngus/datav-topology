@@ -154,10 +154,10 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
     return (
       <div className={styles.menus} style={{display:this.props.show?'block':'none'}}>
         <div>
-          <a className={(this.props.data.node || this.props.data.nodes) ? '' : styles.disabled} onClick={this.onTop}>置顶</a>
+          <a className={(this.props.data.node || this.props.data.nodes) ? '' : styles.disabled} onClick={this.onTop.bind(this)}>置顶</a>
         </div>
         <div>
-          <a className={(this.props.data.node || this.props.data.nodes) ? '' : styles.disabled} onClick={this.onBottom}>置底</a>
+          <a className={(this.props.data.node || this.props.data.nodes) ? '' : styles.disabled} onClick={this.onBottom.bind(this)}>置底</a>
         </div>
         <div className={styles.line} />
         {
@@ -165,7 +165,7 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
             <div>
               <a onClick={() => { this.onCombine(false) }}>组合</a>
               <a onClick={() => { this.onNewComponent() }}>新建节点</a>
-              <a onClick={() => { this.onCombine(true) }}>包含</a>
+              {/*<a onClick={() => { this.onCombine(true) }}>包含</a>*/}
             </div>
           ) : null
         }
@@ -177,12 +177,12 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
           ) : null
 
         }
-        <div>
-          <a
-            className={(this.props.data.node || this.props.data.nodes) ? '' : styles.disabled}
-            onClick={this.onLock}
-          >{this.props.data.locked ? '解锁' : '锁定'}</a>
-        </div>
+        {/*<div>*/}
+        {/*  <a*/}
+        {/*    className={(this.props.data.node || this.props.data.nodes) ? '' : styles.disabled}*/}
+        {/*    onClick={this.onLock}*/}
+        {/*  >{this.props.data.locked ? '解锁' : '锁定'}</a>*/}
+        {/*</div>*/}
         {this.renderNewComponentModal()}
       </div >
     );
