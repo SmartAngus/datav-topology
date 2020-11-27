@@ -24,7 +24,7 @@ export function getMeasureOption() {
   }
   //中间线的渐变色和文本内容
   if (TP_value > 20) {
-    TP_txt = '温度偏高';
+    TP_txt = '高';
     Gradient.push(
       {
         offset: 0,
@@ -148,37 +148,36 @@ export function getMeasureOption() {
             label: {
               normal: {
                 show: true,
-                position: boxPosition,
+                position: "bottom",
+                distance:30,
                 backgroundColor: {
                   image: 'plugin/subway_beijing/images/power/bg5Valuebg.png', //文字框背景图
                 },
-                width: 200,
-                height: 100,
                 formatter:
                   '{back| ' +
                   TP_value +
-                  ' }{unit|°C}\n{downTxt|' +
+                  ' }{unit|°C} {downTxt|' +
                   TP_txt +
                   '}',
                 rich: {
                   back: {
                     align: 'center',
-                    lineHeight: 50,
-                    fontSize: 40,
+                    lineHeight: 20,
+                    fontSize: 15,
                     fontFamily: 'digifacewide',
                     color: leftColor,
                   },
                   unit: {
                     fontFamily: '微软雅黑',
                     fontSize: 15,
-                    lineHeight: 50,
+                    lineHeight: 20,
                     color: leftColor,
                   },
                   downTxt: {
-                    lineHeight: 50,
-                    fontSize: 25,
+                    lineHeight: 20,
+                    fontSize: 16,
                     align: 'center',
-                    color: '#fff',
+                    color: leftColor,
                   },
                 },
               },

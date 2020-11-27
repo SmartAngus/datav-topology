@@ -817,8 +817,8 @@ export const Tools = [
         data: {
           text: '',
           rect: {
-            width: 300,
-            height: 500,
+            width: 100,
+            height: 250,
           },
           name: 'echarts',
           data: {
