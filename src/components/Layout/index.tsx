@@ -125,9 +125,16 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       const h = props.editorData.height as number;
       const r = calcCanvas(w, h);
       setCanvasSizeInfo({ ...r, width: w, height: h });
+      canvas.data['gridColor'] = props.editorData.gridColor;
+      canvas.setGrid(undefined, props.editorData.gridColor);
+      canvas.createGrid(true);
+      if (canvas.data.grid) {
+        canvas.showGrid(true);
+      }
       canvas.resize({ width: w, height: h });
       canvas.render();
     }
+
     setIsLoadCanvas(true);
   }, [props.editorData]);
 
@@ -171,6 +178,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const onHandleFormValueChange = useCallback(
     (value) => {
       setIsSave(false);
+      canvas.cache();
       const {
         x,
         y,
@@ -184,6 +192,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         strokeStyle,
         lineWidth,
         text,
+        showBoardColor,
+        showFillStyle,
       } = value;
       const changedProps = {
         rect: {
@@ -225,6 +235,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     (value) => {
       console.log('自定义的属性>>>', value);
       setIsSave(false);
+      canvas.cache();
       // console.log('selected.node>>>', selected.node);
       // 只能两层嵌套，后期需要更改，如果有多层的话
       canvas.setValue(selected.node.id, 'setValue');
@@ -252,6 +263,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const onEventValueChange = useCallback(
     (value) => {
       setIsSave(false);
+      canvas.cache();
       selected.node.events = value;
       canvas.updateProps(selected.node);
     },
@@ -262,6 +274,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const handleChangeCanvasSize = useCallback((sizeInfo) => {
     setIsSave(false);
+    canvas.cache();
     setCanvasSizeInfo(sizeInfo);
   }, []);
   /**
@@ -269,6 +282,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const handleChangeBkImage = useCallback((imgUrl) => {
     setIsSave(false);
+    canvas.cache();
     setBkImageUrl(imgUrl);
   }, []);
   /**
@@ -290,6 +304,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const onHandleLineFormValueChange = useCallback(
     (value) => {
       setIsSave(false);
+      canvas.cache();
       const {
         dash,
         lineWidth,
@@ -445,6 +460,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           canvasRef={canvasRef}
           onChangeCanvasSize={handleChangeCanvasSize}
           onChangeBkImage={handleChangeBkImage}
+          isSave={isSave}
+          setIsSave={setIsSave}
         />
       ), // 渲染画布背景的组件
     };
@@ -540,7 +557,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
             </TabPane>
           </Tabs>
         </div>
-        <div className={styles.full} id="full">
+        <div
+          className={styles.full}
+          id="full"
+          style={{ background: '#f8f9fa' }}
+        >
           <svg
             className={styles.svg}
             ref={svgRef}
@@ -561,10 +582,12 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
               top: canvasSizeInfo.top,
               width: canvasSizeInfo.width,
               height: canvasSizeInfo.height,
-              background: '#ccc',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundImage: `url(${bkImageUrl})`,
+              background: '#fff',
+              boxShadow: '0px 0px 2px 1px #d1d1d1',
+              // backgroundSize: 'cover',
+              // backgroundRepeat: 'no-repeat',
+              // backgroundImage: `url(${bkImageUrl})`,
+              border: '1px solid #f3f3f3',
             }}
             onContextMenu={handleContextMenu}
           />

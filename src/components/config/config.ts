@@ -4,8 +4,8 @@ export const Tools = [
     group: '通用组件',
     children: [
       {
-        name: '圆角矩形',
-        icon: 'icon-rectangle',
+        name: '矩形',
+        icon: 'iconjuxing',
         data: {
           text: '',
           rect: {
@@ -22,7 +22,7 @@ export const Tools = [
       },
       {
         name: '圆',
-        icon: 'icon-circle',
+        icon: 'iconyuanxing',
         data: {
           text: '',
           rect: {
@@ -35,7 +35,7 @@ export const Tools = [
       },
       {
         name: '文本',
-        icon: 'icon-text',
+        icon: 'iconwenben',
         data: {
           text: '文本',
           rect: {
@@ -46,8 +46,8 @@ export const Tools = [
         },
       },
       {
-        name: 'timer',
-        icon: 'icon-triangle',
+        name: '时间',
+        icon: 'iconshijian',
         data: {
           text: '1970-01-01 00:00:00',
           rect: {
@@ -70,8 +70,8 @@ export const Tools = [
         },
       },
       {
-        name: 'varer',
-        icon: 'icon-triangle',
+        name: '变量值',
+        icon: 'iconbianliangzhi',
         data: {
           text: '00:00:00',
           rect: {
@@ -98,7 +98,7 @@ export const Tools = [
       },
       {
         name: '数据卡片',
-        icon: 'icon-class',
+        icon: 'iconshujukapian',
         data: {
           text: '数据卡片',
           rect: {
@@ -210,7 +210,7 @@ export const Tools = [
       },
       {
         name: '指示灯',
-        icon: 'icon-final',
+        icon: 'iconzhishideng',
         data: {
           text: '指示灯',
           rect: {
@@ -453,84 +453,84 @@ export const Tools = [
   {
     group: '图表控件',
     children: [
-      {
-        elementRendered: false,
-        name: '折线图', // 用name来区分不同的组件
-        icon: 'icon-line-chart',
-        data: {
-          text: '',
-          rect: {
-            width: 300,
-            height: 200,
-          },
-          name: 'echarts',
-          data: {
-            echarts: {
-              option: {
-                title: {
-                  text: '曲线图',
-                },
-                legend: {},
-                tooltip: {},
-                dataset: {
-                  // 用 dimensions 指定了维度的顺序。直角坐标系中，
-                  // 默认把第一个维度映射到 X 轴上，第二个维度映射到 Y 轴上。
-                  // 如果不指定 dimensions，也可以通过指定 series.encode
-                  // 完成映射，参见后文。
-                  dimensions: ['product', '2015', '2016', '2017'],
-                  source: [
-                    {
-                      product: 'Matcha Latte',
-                      '2015': 43.3,
-                      '2016': 85.8,
-                      '2017': 93.7,
-                    },
-                    {
-                      product: 'Milk Tea',
-                      '2015': 83.1,
-                      '2016': 73.4,
-                      '2017': 55.1,
-                    },
-                    {
-                      product: 'Cheese Cocoa',
-                      '2015': 86.4,
-                      '2016': 65.2,
-                      '2017': 82.5,
-                    },
-                    {
-                      product: 'Walnut Brownie',
-                      '2015': 72.4,
-                      '2016': 53.9,
-                      '2017': 39.1,
-                    },
-                  ],
-                },
-                xAxis: { type: 'category' },
-                yAxis: {},
-                series: [{ type: 'line' }, { type: 'line' }, { type: 'line' }],
-              },
-            },
-            property: {
-              echartsType: 'line',
-              dataMethod: 'aa',
-              dataDot: 1,
-              dataPointParam: {
-                qtDataList: [
-                  {
-                    id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
-                    type: 1,
-                  },
-                ],
-                subscribe: true,
-              },
-            },
-          },
-        },
-      },
+      // {
+      //   elementRendered: false,
+      //   name: '折线图', // 用name来区分不同的组件
+      //   icon: 'icon-line-chart',
+      //   data: {
+      //     text: '',
+      //     rect: {
+      //       width: 300,
+      //       height: 200,
+      //     },
+      //     name: 'echarts',
+      //     data: {
+      //       echarts: {
+      //         option: {
+      //           title: {
+      //             text: '曲线图',
+      //           },
+      //           legend: {},
+      //           tooltip: {},
+      //           dataset: {
+      //             // 用 dimensions 指定了维度的顺序。直角坐标系中，
+      //             // 默认把第一个维度映射到 X 轴上，第二个维度映射到 Y 轴上。
+      //             // 如果不指定 dimensions，也可以通过指定 series.encode
+      //             // 完成映射，参见后文。
+      //             dimensions: ['product', '2015', '2016', '2017'],
+      //             source: [
+      //               {
+      //                 product: 'Matcha Latte',
+      //                 '2015': 43.3,
+      //                 '2016': 85.8,
+      //                 '2017': 93.7,
+      //               },
+      //               {
+      //                 product: 'Milk Tea',
+      //                 '2015': 83.1,
+      //                 '2016': 73.4,
+      //                 '2017': 55.1,
+      //               },
+      //               {
+      //                 product: 'Cheese Cocoa',
+      //                 '2015': 86.4,
+      //                 '2016': 65.2,
+      //                 '2017': 82.5,
+      //               },
+      //               {
+      //                 product: 'Walnut Brownie',
+      //                 '2015': 72.4,
+      //                 '2016': 53.9,
+      //                 '2017': 39.1,
+      //               },
+      //             ],
+      //           },
+      //           xAxis: { type: 'category' },
+      //           yAxis: {},
+      //           series: [{ type: 'line' }, { type: 'line' }, { type: 'line' }],
+      //         },
+      //       },
+      //       property: {
+      //         echartsType: 'line',
+      //         dataMethod: 'aa',
+      //         dataDot: 1,
+      //         dataPointParam: {
+      //           qtDataList: [
+      //             {
+      //               id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
+      //               type: 1,
+      //             },
+      //           ],
+      //           subscribe: true,
+      //         },
+      //       },
+      //     },
+      //   },
+      // },
       {
         elementRendered: false,
         name: '实时曲线图', // 用name来区分不同的组件
-        icon: 'icon-line-chart',
+        icon: 'iconquxiantu',
         data: {
           text: '',
           rect: {
@@ -759,7 +759,7 @@ export const Tools = [
       // },
       {
         name: '仪表盘',
-        icon: 'icon-dashboard-chart',
+        icon: 'iconyibiaopan',
         data: {
           text: '',
           rect: {
@@ -813,7 +813,7 @@ export const Tools = [
       {
         elementRendered: false,
         name: '计量器',
-        icon: 'icon-line-chart',
+        icon: 'iconjiliangqi',
         data: {
           text: '',
           rect: {

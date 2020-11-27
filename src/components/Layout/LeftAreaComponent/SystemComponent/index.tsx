@@ -1,13 +1,15 @@
 import React from 'react';
 import { Row, Col, Collapse } from 'antd';
 
+
 import styles from '../../index.module.scss';
+import CustomIcon from '../../../config/iconConfig';
 
 const { Panel } = Collapse;
 
 const Layout = ({ Tools, onDrag }) => {
   return (
-    <Collapse>
+    <Collapse defaultActiveKey={['0']}>
       {Tools.map((item, index) => (
         <Panel header={item.group} key={index}>
           <div className={styles.button}>
@@ -25,10 +27,10 @@ const Layout = ({ Tools, onDrag }) => {
                       href="/#"
                       onDragStart={(ev) => onDrag(ev, item)}
                     >
-                      <i
-                        className={'iconfont ' + item.icon}
-                        style={{ fontSize: 13 }}
-                      ></i>
+                      <CustomIcon
+                        type={item.icon}
+                        style={{ fontSize: 28 }}
+                      />
                       <span
                         style={{
                           marginTop: 5,

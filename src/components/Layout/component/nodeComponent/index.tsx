@@ -20,29 +20,28 @@ import {
   MinusCircleOutlined,
   DeleteOutlined,
 } from '@ant-design/icons';
-import EventComponent from './EventComponent';
 import { FormProps } from 'antd/lib/form/Form';
 import ColorPicker from '../../../common/ColorPicker/ColorPicker';
 import { canvas } from '../../index';
 import { alignNodes } from '../../../../topology/layout/src/align';
 import DataPointTable from '../../../common/DataPointTable';
 import CustomIcon from '../../../config/iconConfig';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import DataBindModal from '../../../FilterDataPoint';
 
 import styles from './index.module.scss';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 const { Option } = Select;
 // 对齐方式 key 对齐方式 val 图标名称
 const alignObj = {
-  left: ['左对齐', 'icon-zuoduiqi'],
-  right: ['右对齐', 'icon-youduiqi'],
-  top: ['顶部对齐', 'icon-dingbuduiqi'],
-  bottom: ['底部对齐', 'icon-dibuduiqi'],
-  center: ['垂直居中', 'icon-chuizhijuzhong'],
-  middle: ['水平居中', 'icon-shuipingjuzhong'],
+  left: ['左对齐', 'iconzuoduiqi'],
+  right: ['右对齐', 'iconyouduiqi'],
+  top: ['顶部对齐', 'iconshangduiqi'],
+  bottom: ['底部对齐', 'iconxiaduiqi'],
+  center: ['垂直居中', 'iconzongxiangjuzhong'],
+  middle: ['水平居中', 'iconhengxiangjuzhong'],
 };
 // 需要显示文件填充的节点列表
 const fillStyleNodeList = ['circle', 'rectangle', 'biciVarer'];
@@ -80,7 +79,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const { property } = data?.node; // 用户自定义数据片段
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
-    console.log(data.node);
+    console.log('node>>>>', data.node);
     form.setFieldsValue({
       x,
       y,
@@ -123,6 +122,16 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
 
   // 字段值更新时触发的回掉
   const handleValuesChange = (changedValues) => {
+    if ('showFillStyle' in changedValues) {
+      changedValues.fillStyle = changedValues.showFillStyle
+        ? form.getFieldValue('fillStyle')
+        : '';
+    }
+    if ('showBoardColor' in changedValues) {
+      changedValues.strokeStyle = changedValues.showBoardColor
+        ? form.getFieldValue('strokeStyle')
+        : '';
+    }
     onFormValueChange && onFormValueChange(changedValues);
   };
 
@@ -243,14 +252,16 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
             <Col push={1}>
               <Form.Item name="fillStyle">
-                <ColorPicker />
+                <ColorPicker
+                  onChange={() => form.setFieldsValue({ showFillStyle: true })}
+                />
               </Form.Item>
             </Col>
           </Row>
         </Form>
       </Panel>
     );
-  }, [form]);
+  }, [form, fillStyle]);
 
   /**
    * 渲染边框样式
@@ -273,7 +284,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
             <Col span={6} push={1}>
               <Form.Item name="strokeStyle">
-                <ColorPicker />
+                <ColorPicker
+                  onChange={() => form.setFieldsValue({ showBoardColor: true })}
+                />
               </Form.Item>
             </Col>
             <Col push={2}>
@@ -285,7 +298,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [strokeStyle, lineWidth]);
+  }, [form, strokeStyle, lineWidth]);
 
   /**
    * 渲染字体的表单

@@ -225,7 +225,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     //       return null;
     //     });
     //   });
-    
+
   }, []);
   // 保存数据到数据库
   const handleSaveEditorData = (data: any) => {

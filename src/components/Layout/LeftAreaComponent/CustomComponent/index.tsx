@@ -5,6 +5,7 @@ import { useClickAway } from 'ahooks';
 import CompContextMenu from '../../../common/CompContextMenu';
 
 import styles from '../../index.module.scss';
+import CustomIcon from '../../../config/iconConfig';
 
 const { Panel } = Collapse;
 
@@ -122,7 +123,7 @@ const Layout = ({ Tools, onDrag, combineCom }) => {
 
   return (
     <Collapse style={{ borderTop: 0 }}>
-      <Panel header="自定义组件" key={'1'}>
+      <Panel header="自定义组件" key={'custom'}>
         <div className={styles.button}>
           <Row align="middle">
             {(componentList || []).map((item, key) => {
@@ -144,10 +145,7 @@ const Layout = ({ Tools, onDrag, combineCom }) => {
                       onDrag(ev, JSON.parse(item.componentProperty), true)
                     }
                   >
-                    <i
-                      className="iconfont icon-triangle"
-                      style={{ fontSize: 13 }}
-                    ></i>
+                    <CustomIcon type="iconzidingyi" style={{ fontSize: 28 }} />
                     <span
                       style={{
                         marginTop: 5,
