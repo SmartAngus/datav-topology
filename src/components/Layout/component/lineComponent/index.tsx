@@ -24,11 +24,10 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
 }) => {
   const [form] = Form.useForm();
 
-  const { lineWidth, dash, strokeStyle, name, fromArrow, toArrow } =
-    data?.line || {};
+  const { lineWidth, dash, strokeStyle, name, fromArrow, toArrow } = data?.line || {};
 
   useEffect(() => {
-    console.log(data);
+    form.setFieldsValue({lineWidth, dash, strokeStyle, name, fromArrow, toArrow})
   }, [form]);
 
   /**
@@ -48,7 +47,7 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item label="线条类型">
+            <Form.Item name="name" label="线条类型">
               <Select style={{ width: '95%' }}>
                 <Option value="curve">贝塞尔曲线</Option>
                 <Option value="polyline">折线</Option>
@@ -56,8 +55,8 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
               </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item name="lineDash" label="线条样式">
+          <Col span={24}>
+            <Form.Item name="dash" label="线条样式">
               <Select style={{ width: '95%' }}>
                 <Option value={0}>_________</Option>
                 <Option value={1}>---------</Option>
@@ -66,13 +65,13 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
               </Select>
             </Form.Item>
           </Col>
-          <Col offset={1} span={11}>
+          <Col span={24}>
             <Form.Item name="lineWidth" label="线条宽度">
               <InputNumber style={{ width: '100%' }} />
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item label="起点箭头">
+            <Form.Item name="fromArrow" label="起点箭头">
               <Select style={{ width: '95%' }}>
                 <Option value="">无箭头</Option>
                 <Option value="triangleSolid">实心三角形</Option>
@@ -88,7 +87,7 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item label="结束箭头">
+            <Form.Item name="toArrow" label="结束箭头">
               <Select style={{ width: '95%' }}>
                 <Option value="">无箭头</Option>
                 <Option value="triangleSolid">实心三角形</Option>

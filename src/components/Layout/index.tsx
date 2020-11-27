@@ -88,6 +88,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     autoAnchor: false,
     cacheLen: 50,
     hideInput: false,
+    disableEmptyLine:true,
   };
 
   useClickAway(() => {
