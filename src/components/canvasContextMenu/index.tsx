@@ -18,12 +18,13 @@ export interface CanvasContextMenuProps {
   canvas: Topology;
   show?:boolean;
   combineCom?:any;
+  onNeedHide?:()=>void
 }
 
 export default class CanvasContextMenu extends Component<CanvasContextMenuProps> {
   state={
     newComVisible:false,
-    componentName:'新建组件'
+    componentName:'新建组件',
   }
   formRef = React.createRef<FormInstance>();
   saveNewComponent (params) {
@@ -47,6 +48,7 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
     }
 
     this.props.canvas.render()
+    this.props.onNeedHide()
   }
 
   onBottom() {
@@ -61,6 +63,7 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
     }
 
     this.props.canvas.render()
+    this.props.onNeedHide()
   }
 
   onCombine(stand: boolean) {
@@ -69,6 +72,7 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
     }
     this.props.canvas.combine(this.props.data.nodes, stand)
     this.props.canvas.render()
+    this.props.onNeedHide()
   }
 
   onUncombine = () => {
@@ -77,6 +81,7 @@ export default class CanvasContextMenu extends Component<CanvasContextMenuProps>
     }
     this.props.canvas.uncombine(this.props.data.node)
     this.props.canvas.render()
+    this.props.onNeedHide()
   }
 
   onLock = () => {
