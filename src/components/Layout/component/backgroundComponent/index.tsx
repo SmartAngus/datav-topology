@@ -313,10 +313,10 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
                   offColor="#ccc"
                   onColor="#ccc"
                   uncheckedIcon={
-                    <CustomIcon style={{ lineHeight: 2 }} type="icon-shu" />
+                    <CustomIcon style={{ lineHeight: 2 }} type="iconshu" />
                   }
                   checkedIcon={
-                    <CustomIcon style={{ lineHeight: 2 }} type="icon-heng" />
+                    <CustomIcon style={{ lineHeight: 2 }} type="iconheng" />
                   }
                 />
               </Form.Item>
