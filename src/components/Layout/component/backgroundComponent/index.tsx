@@ -230,7 +230,10 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
                 {panelSizeObj[key].map((val: string, index: number) => {
                   return (
                     <Col span={12} key={index}>
-                      <a href="#" onClick={() => selectedResolution(val)}>
+                      <a
+                        href="javascript:void(0);"
+                        onClick={() => selectedResolution(val)}
+                      >
                         {val}
                       </a>
                     </Col>
@@ -276,12 +279,13 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
           <Popover
             placement="bottom"
             trigger="click"
+            autoAdjustOverflow={false}
             content={resolutionContent}
             visible={popoverVisible.resolution}
             onVisibleChange={(visible) =>
               setPopoverVisible({ ...popoverVisible, resolution: visible })
             }
-            getPopupContainer={() => document.querySelector('#props')}
+            getPopupContainer={() => document.querySelector('#editLayout')}
             arrowPointAtCenter
           >
             <Form.Item name="sizeVal" initialValue="自定义">
@@ -328,11 +332,12 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
             trigger="click"
             content={bgSeletedContent}
             arrowPointAtCenter
+            autoAdjustOverflow={false}
             visible={popoverVisible.bgSelect}
             onVisibleChange={(visible) =>
               setPopoverVisible({ ...popoverVisible, bgSelect: visible })
             }
-            getPopupContainer={() => document.querySelector('#props')}
+            getPopupContainer={() => document.querySelector('#editLayout')}
             arrowContent
           >
             <Form.Item name="bgVal" initialValue="预设背景">

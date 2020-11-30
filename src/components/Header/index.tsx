@@ -100,7 +100,7 @@ interface HeaderProps {
   onEditorSaveCb?: (canvasData: any) => void;
   onPoweroff?: () => void;
   autoSaveInterval?: number;
-  onPreview?:(data:any)=>void;
+  onPreview?: (data: any) => void;
   ref?: any;
 }
 
@@ -266,9 +266,9 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
       if (!isSave) {
         message.warn('预览之前请先保存数据！');
       } else {
-        if(props.onPreview&&typeof props.onPreview=='function'){
-          props.onPreview({})
-        }else{
+        if (props.onPreview && typeof props.onPreview == 'function') {
+          props.onPreview({});
+        } else {
           let reader = new FileReader();
           const result = new Blob([JSON.stringify(canvas.data)], {
             type: 'text/plain;charset=utf-8',
@@ -281,7 +281,6 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
             });
           };
         }
-
       }
     };
     /**
@@ -404,9 +403,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           修改未保存
         </Tag>
 
-        <ButtonGroup
-          style={{ flex: 1, flexDirection: 'row-reverse', right: 20 }}
-        >
+        <ButtonGroup style={{ flex: 1, flexDirection: 'row-reverse', right: 20 }}>
           <Space size="large">
             <Button onClick={handlePreview}>预览</Button>
             <Button type="primary" onClick={handleSave}>

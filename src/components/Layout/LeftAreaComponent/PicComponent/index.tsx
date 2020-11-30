@@ -187,7 +187,7 @@ const Layout = ({ uploaConfig }) => {
             <a
               title={item.name}
               draggable
-              href="/#"
+              href="javascript:void(0);"
               onDragStart={(ev) => onDrag(ev, item.url)}
             >
               <img

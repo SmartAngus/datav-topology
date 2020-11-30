@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col, Collapse } from 'antd';
 
-
 import styles from '../../index.module.scss';
 import CustomIcon from '../../../config/iconConfig';
 
@@ -24,13 +23,10 @@ const Layout = ({ Tools, onDrag }) => {
                     <a
                       title={item.name}
                       draggable
-                      href="/#"
+                      href="javascript:void(0);"
                       onDragStart={(ev) => onDrag(ev, item)}
                     >
-                      <CustomIcon
-                        type={item.icon}
-                        style={{ fontSize: 28 }}
-                      />
+                      <CustomIcon type={item.icon} style={{ fontSize: 28 }} />
                       <span
                         style={{
                           marginTop: 5,
