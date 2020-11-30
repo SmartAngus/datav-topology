@@ -74,7 +74,7 @@ const Preview = ({ data,websocketConf }:PreviewProps) => {
     (canvas.data.pens||[]).map(node=>{
       if(node.name=='biciTimer'){
         setInterval(()=>{
-          formatTimer(node)
+          formatTimer(node,canvas)
         },1000)
       }
     })

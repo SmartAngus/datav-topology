@@ -1,5 +1,4 @@
 import moment from 'moment'
-import {canvas } from '../Layout/index'
 
 // 里面的字符可以根据自己的需要进行调整
 moment.locale('zh-cn', {
@@ -83,7 +82,7 @@ moment.locale('zh-cn', {
   }
 })
 
-export function formatTimer(node) {
+export function formatTimer(node,canvas) {
   let y=''
   let h=''
   if(node.property.date.show){

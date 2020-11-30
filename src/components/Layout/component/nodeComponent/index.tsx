@@ -114,6 +114,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     propertyForm.setFieldsValue({
       dataMethod,
       dataDot,
+      "date.show":property?.date?.show,
+      "date.format":property?.date?.format,
+      "time.show":property?.date?.show,
+      "time.format":property?.date?.format,
     });
   }, [property]);
 
@@ -351,6 +355,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     return (
       <React.Fragment>
         {renderFillStyle}
+        {renderFontForm}
       <Panel header="时间格式" key="biciTimer">
         <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
           <Row>
