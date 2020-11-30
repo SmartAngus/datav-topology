@@ -201,7 +201,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         showBoardColor,
         showFillStyle,
       } = value;
-      console.log("selected node",selected,fillStyle)
+      console.log('selected node', selected, fillStyle);
 
       const changedProps = {
         rect: {
@@ -241,6 +241,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   /*当自定义的属性发生变化时*/
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
+      console.log('自定义属性:', value);
       setIsSave(false);
       canvas.cache();
       // 只能两层嵌套，后期需要更改，如果有多层的话
