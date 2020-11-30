@@ -82,6 +82,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     data?.node || {};
   const { color, fontSize, fontFamily } = data?.node?.font || {};
   const { property } = data?.node; // 用户自定义数据片段
+  const [dataPointSelectedRows,setDataPointSelectedRows]=useState(property?.dataPointSelectedRows||[])
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
     // 设置基本表单
@@ -208,7 +209,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
   // 获得选中的数据点
   const onDataPointBind = (selectedRowKeys, selectedRows) => {
-    console.log('onDataPointBind', selectedRows);
+    console.log("onDataPointBind",selectedRows)
+    if(property&&property.dataPointSelectedRows){
+      data.node.property.dataPointSelectedRows=selectedRows;
+      setDataPointSelectedRows(selectedRows);
+    }
   };
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
   const renderDataPointModal = useCallback(() => {
@@ -455,6 +460,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    * 渲染元素额外数据 {"qtDataList":[{"id":"6413f3a606754c31987ec584ed56d5b7","type":2}],"subscribe":true,"page":"动态曲线"}
    */
   const renderExtraDataForm = useMemo(() => {
+    console.log("node...",data)
     return (
       <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
         <Col>
@@ -481,17 +487,23 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               添加数据点
             </Button>
           </Form.Item>
-          <Form.Item label="数据点1">
-            <span>擎天哈哈哈</span>
-            <Button type="link" icon={<DeleteOutlined />}></Button>
-          </Form.Item>
+          {
+            (property?.dataPointSelectedRows||[]).map((item,index)=>{
+              return (
+                <Form.Item label={`数据点${index}`} key={index}>
+                  <span>{item.dataName}</span>
+                  <Button type="link" icon={<DeleteOutlined />}></Button>
+                </Form.Item>
+              )
+            })
+          }
           <Form.Item name="dataDot" label="显示精度">
             <InputNumber min={0} max={5} />
           </Form.Item>
         </Col>
       </Form>
     );
-  }, [property]);
+  }, [data?.node,dataPointSelectedRows]);
 
   /**
    * 渲染对齐方式
@@ -1092,9 +1104,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             <Panel header="本身数据" key="1">
               {renderDataForm}
             </Panel>
-            <Panel header="自定义数据" key="2">
-              {renderExtraDataForm}
-            </Panel>
+            {
+              (data.node.name=='biciVarer'||data.node.name=='echarts'||data.node.name=='biciCard'||data.node.name=='biciPilot')&&(<Panel header="自定义数据" key="2">
+                {renderExtraDataForm}
+              </Panel>)
+            }
           </Collapse>
         </TabPane>
       </Tabs>
