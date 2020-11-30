@@ -23,7 +23,8 @@ const Layout = ({ Tools, onDrag }) => {
                     <a
                       title={item.name}
                       draggable
-                      href="javascript:void(0);"
+                      href="#"
+                      onClick={(e) => e.preventDefault()}
                       onDragStart={(ev) => onDrag(ev, item)}
                     >
                       <CustomIcon type={item.icon} style={{ fontSize: 28 }} />

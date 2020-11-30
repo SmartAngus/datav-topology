@@ -155,7 +155,8 @@ const Layout = forwardRef((props: Props, ref) => {
                 >
                   <a
                     draggable
-                    href="javascript:void(0);"
+                    href="#"
+                    onClick={(e) => e.preventDefault()}
                     title={item.componentName}
                     onDragStart={(ev) =>
                       onDrag(ev, JSON.parse(item.componentProperty), true)
