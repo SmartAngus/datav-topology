@@ -49,7 +49,7 @@ const headTools = [
     key: 'redo',
     name: '恢复',
     icon: 'iconhuifu',
-    title: 'Ctrl+Z',
+    title: 'Ctrl+Y',
   },
   {
     key: 'bottom',
@@ -403,7 +403,9 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           修改未保存
         </Tag>
 
-        <ButtonGroup style={{ flex: 1, flexDirection: 'row-reverse', right: 20 }}>
+        <ButtonGroup
+          style={{ flex: 1, flexDirection: 'row-reverse', right: 20 }}
+        >
           <Space size="large">
             <Button onClick={handlePreview}>预览</Button>
             <Button type="primary" onClick={handleSave}>
