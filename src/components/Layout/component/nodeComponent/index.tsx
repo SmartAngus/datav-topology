@@ -114,6 +114,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     propertyForm.setFieldsValue({
       dataMethod,
       dataDot,
+      "date.show":property?.date?.show,
+      "date.format":property?.date?.format,
+      "time.show":property?.date?.show,
+      "time.format":property?.date?.format,
     });
   }, [property]);
 
