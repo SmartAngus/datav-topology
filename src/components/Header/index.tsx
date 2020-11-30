@@ -324,7 +324,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
             placement="bottom"
             title={item.title}
             key={item.key}
-            getPopupContainer={() => document.querySelector('#layout')}
+            getPopupContainer={() => document.querySelector('#editLayout')}
           >
             <a
               className={styles.toolItem}

@@ -281,7 +281,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
             onVisibleChange={(visible) =>
               setPopoverVisible({ ...popoverVisible, resolution: visible })
             }
-            getPopupContainer={() => document.querySelector('#layout')}
+            getPopupContainer={() => document.querySelector('#props')}
             arrowPointAtCenter
           >
             <Form.Item name="sizeVal" initialValue="自定义">
@@ -332,7 +332,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
             onVisibleChange={(visible) =>
               setPopoverVisible({ ...popoverVisible, bgSelect: visible })
             }
-            getPopupContainer={() => document.querySelector('#layout')}
+            getPopupContainer={() => document.querySelector('#props')}
             arrowContent
           >
             <Form.Item name="bgVal" initialValue="预设背景">
@@ -450,14 +450,14 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
       <Tabs defaultActiveKey="1" centered>
         <TabPane tab="图文设置" key="1" style={{ margin: 0 }}>
           {renderDefultOptions}
-          <ul className={styles.bottomTip}>
+          {/* <ul className={styles.bottomTip}>
             <li>← ↑ → ↓ ：移动5个像素</li>
             <li>Ctrl + 鼠标点击：多选</li>
             <li>Ctrl + 鼠标滚轮：缩放画布</li>
             <li>Ctrl + ← ↑ → ↓ ：移动1个像素</li>
             <li>Ctrl + 鼠标拖拽空白：移动整个画布</li>
             <li>Shift/Alt + 鼠标拖拽节点：独立拖拽（子）节点</li>
-          </ul>
+          </ul> */}
         </TabPane>
         <TabPane tab="消息通信" key="2" style={{ margin: 0 }}>
           <Collapse defaultActiveKey={['1']}>
