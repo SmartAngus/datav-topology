@@ -102,6 +102,7 @@ export const Tools = [
         icon: 'iconshujukapian',
         data: {
           text: '数据卡片',
+          hideInput:true,
           rect: {
             width: 278,
             height: 128,
@@ -120,6 +121,7 @@ export const Tools = [
             {
               text: '10000',
               name: 'text',
+              hideInput:true,
               hideAnchor: true,
               paddingLeft: 10,
               paddingRight: 10,
@@ -143,6 +145,7 @@ export const Tools = [
             {
               text: '上限: 10000   下限: 300',
               name: 'text',
+              hideInput:true,
               hideAnchor: true,
               paddingLeft: 10,
               paddingRight: 10,
@@ -226,6 +229,7 @@ export const Tools = [
         icon: 'iconzhishideng',
         data: {
           text: '指示灯',
+          hideInput:true,
           rect: {
             width: 30,
             height: 30,
@@ -558,6 +562,7 @@ export const Tools = [
         icon: 'iconquxiantu',
         data: {
           text: '',
+          hideInput:true,
           rect: {
             width: 300,
             height: 200,
@@ -801,6 +806,7 @@ export const Tools = [
         icon: 'iconyibiaopan',
         data: {
           text: '',
+          hideInput:true,
           rect: {
             width: 300,
             height: 300,
@@ -860,6 +866,7 @@ export const Tools = [
             height: 250,
           },
           name: 'echarts',
+          hideInput:true,
           data: {
             echarts: {
               option: getMeasureOption(),
