@@ -199,10 +199,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         strokeStyle,
         lineWidth,
         text,
-        showBoardColor,
-        showFillStyle,
       } = value;
-      console.log('selected node', selected, fillStyle);
 
       const changedProps = {
         rect: {
