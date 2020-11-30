@@ -31,6 +31,7 @@ import styles from './index.module.scss';
 import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines';
 import { calcCanvas } from '../utils/cacl';
+import ResizePanel from '../common/resizeSidebar'
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
@@ -550,21 +551,23 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     <div id="editLayout" ref={layoutRef}>
       {renderHeader}
       <div className={styles.page}>
-        <div className={styles.tool}>
-          <Tabs defaultActiveKey="1" centered>
-            <TabPane tab="组件" key="1" style={{ margin: 0 }}>
-              <SystemComponent onDrag={onDrag} Tools={Tools} />
-              <CustomComponent
-                ref={customCompRef}
-                onDrag={onDrag}
-                combineCom={props.uploadConfig.combineCom}
-              />
-            </TabPane>
-            <TabPane tab="图库" key="2" style={{ margin: 0 }}>
-              <MyComponent uploaConfig={props.uploadConfig} />
-            </TabPane>
-          </Tabs>
-        </div>
+        <ResizePanel direction="e" style={{width:250}}>
+          <div className={styles.tool}>
+            <Tabs defaultActiveKey="1" centered>
+              <TabPane tab="组件" key="1" style={{ margin: 0 }}>
+                <SystemComponent onDrag={onDrag} Tools={Tools} />
+                <CustomComponent
+                  ref={customCompRef}
+                  onDrag={onDrag}
+                  combineCom={props.uploadConfig.combineCom}
+                />
+              </TabPane>
+              <TabPane tab="图库" key="2" style={{ margin: 0 }}>
+                <MyComponent uploaConfig={props.uploadConfig} />
+              </TabPane>
+            </Tabs>
+          </div>
+        </ResizePanel>
         <div
           className={styles.full}
           id="full"

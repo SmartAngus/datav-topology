@@ -8,9 +8,5 @@ export function biciTimer(ctx: CanvasRenderingContext2D, node: Node) {
   ctx.lineTo(node.rect.x, node.rect.ey);
   ctx.lineTo(node.rect.x, node.rect.y);
   ctx.stroke();
-  if (node.fillStyle) {
-    ctx.fillStyle = node.fillStyle;
-  }
-  ctx.fill();
 }
 

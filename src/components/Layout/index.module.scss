@@ -8,10 +8,11 @@
 
 .tool {
   flex-shrink: 0;
-  width: 250px;
+  width: 100%;
   background-color: #f8f8f8;
   border-right: 1px solid #d9d9d9;
   overflow-y: auto;
+  position: relative;
 }
 
 .button {
@@ -87,4 +88,12 @@
   :global(.ant-btn) {
     min-width: auto;
   }
+}
+.resizeSideBar{
+  position: absolute;
+  width: 20px;
+  heigth:100%;
+  background: #333333;
+  top: 0;
+  right:0;
 }

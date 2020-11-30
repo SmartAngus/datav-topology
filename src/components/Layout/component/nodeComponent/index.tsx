@@ -351,6 +351,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     return (
       <React.Fragment>
         {renderFillStyle}
+        {renderFontForm}
       <Panel header="时间格式" key="biciTimer">
         <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
           <Row>
