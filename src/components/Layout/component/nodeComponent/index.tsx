@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState, Fragment } from 'react';
+import React, { useMemo, useEffect, useState, Fragment, useCallback } from 'react'
 import {
   Form,
   InputNumber,
@@ -200,19 +200,23 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       });
     }
   };
-  const onDataPointBind = (selectedRowKeys, selectedRows) => {};
+  // 获得选中的数据点
+  const onDataPointBind = (selectedRowKeys, selectedRows) => {
+    console.log("onDataPointBind",selectedRows)
+  };
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
-  const renderDataPointModal = () => {
+  const renderDataPointModal = useCallback(() => {
     return (
       <DataBindModal
-        visible={visible}
+        visible={true}
         disableSource={['react']}
         selectedRows={[]}
         onCancel={addDataPoint}
         onGetSelectRow={onDataPointBind}
+        node={data.node}
       ></DataBindModal>
     );
-  };
+  },[visible]);
 
   /**
    * 渲染位置和大小的表单
@@ -1089,7 +1093,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Collapse>
         </TabPane>
       </Tabs>
-      {renderDataPointModal()}
+      {visible&&renderDataPointModal()}
     </div>
   );
 };

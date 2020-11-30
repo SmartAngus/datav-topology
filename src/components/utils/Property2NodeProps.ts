@@ -94,3 +94,15 @@ export function formatTimer(node,canvas) {
   node.text=y+' '+h
   canvas.updateProps(false)
 }
+
+/**
+ * 返回节点的真实类型
+ * @param node
+ */
+export function getNodeType(node:any):string {
+  if(node.name=="echarts"){
+    return node.property.echartsType
+  }else{
+    return node.name
+  }
+}

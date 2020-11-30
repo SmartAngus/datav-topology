@@ -28,6 +28,7 @@ export default class FilterDataPoint extends React.PureComponent<any,any> {
     selectedRows: PropsTypes.array,
     selectedRowKeys: PropsTypes.array,
     isOnlyNumber: PropsTypes.bool, // 是否仅选择数字类型的数据点
+    node:PropsTypes.any,// 选择的节点信息
   }
 
   static defaultProps = {
@@ -40,6 +41,10 @@ export default class FilterDataPoint extends React.PureComponent<any,any> {
   }
 
   state = {...initialState}
+
+  componentDidMount(): void {
+    console.log("selected node",this.props.node)
+  }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
     if (this.props.visible !== prevProps.visible) {
@@ -123,15 +128,15 @@ export default class FilterDataPoint extends React.PureComponent<any,any> {
       <Tabs defaultActiveKey='dataPoint'>
         {!disableSource.includes('dataPoint') &&
         <TabPane tab='数据点' key='dataPoint'>
-          <DataPointTable isOnlyNumber={isOnlyNumber} {...childrenProps} />
+          <DataPointTable isOnlyNumber={isOnlyNumber} {...childrenProps} node={this.props.node} />
         </TabPane>}
         {!disableSource.includes('complex') &&
         <TabPane tab='复杂感知点' key='complex'>
-          <ComplexTable {...childrenProps} />
+          <ComplexTable {...childrenProps} node={this.props.node}/>
         </TabPane>}
         {!disableSource.includes('react') &&
         <TabPane tab='数字机理' key='react'>
-          <ReactTable {...childrenProps} />
+          <ReactTable {...childrenProps} node={this.props.node}/>
         </TabPane>}
       </Tabs>
     </Modal>
