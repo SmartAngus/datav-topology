@@ -78,6 +78,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const { property } = data?.node; // 用户自定义数据片段
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
+    // 设置基本表单
     form.setFieldsValue({
       x,
       y,
@@ -108,17 +109,42 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     fontFamily,
     text,
     fillStyle,
+    property,
   ]);
 
   useEffect(() => {
     propertyForm.setFieldsValue({
       dataMethod,
       dataDot,
-      "date.show":property?.date?.show,
-      "date.format":property?.date?.format,
-      "time.show":property?.date?.show,
-      "time.format":property?.date?.format,
+      'date.show': property?.date?.show,
+      'date.format': property?.date?.format,
+      'time.show': property?.date?.show,
+      'time.format': property?.date?.format,
     });
+    console.log('property', property);
+    if (data.node.name === 'biciCard') {
+      // 设置数据卡片
+      propertyForm.setFieldsValue({
+        showTitle: property.showTitle,
+        cardTitle: property.title,
+        limitType: property.limitType,
+        showLimit: property.showLimit,
+        'limit.bottom': property.limit.bottom,
+        'limit.top': property.limit.top,
+        'normal.fontFamily': property.normal.fontFamily,
+        'normal.fontSize': property.normal.fontSize,
+        'normal.showBkColor': property.normal.showBkColor,
+        'normal.bkColor': property.normal.bkColor,
+        'topLimit.fontFamily': property.topLimit.fontFamily,
+        'topLimit.fontSize': property.topLimit.fontSize,
+        'topLimit.showBkColor': property.topLimit.showBkColor,
+        'topLimit.bkColor': property.topLimit.bkColor,
+        'bottomLimit.fontFamily': property.bottomLimit.fontFamily,
+        'bottomLimit.fontSize': property.bottomLimit.fontSize,
+        'bottomLimit.showBkColor': property.bottomLimit.showBkColor,
+        'bottomLimit.bkColor': property.bottomLimit.bkColor,
+      });
+    }
   }, [property]);
 
   // 字段值更新时触发的回掉
@@ -356,61 +382,61 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       <React.Fragment>
         {renderFillStyle}
         {renderFontForm}
-      <Panel header="时间格式" key="biciTimer">
-        <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-          <Row>
-            <Col span={10}>
-              <Form.Item
-                name="date.show"
-                valuePropName="checked"
-                label="日期"
-                labelCol={{ span: 14 }}
-                labelAlign="left"
-              >
-                <Checkbox />
-              </Form.Item>
-            </Col>
-            <Col span={14}>
-              <Form.Item name="date.format" rules={[{ required: true }]}>
-                <Select
-                  placeholder="设置日期格式"
-                  onChange={onSetBiciTimerDataFmt}
-                  allowClear
+        <Panel header="时间格式" key="biciTimer">
+          <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
+            <Row>
+              <Col span={10}>
+                <Form.Item
+                  name="date.show"
+                  valuePropName="checked"
+                  label="日期"
+                  labelCol={{ span: 14 }}
+                  labelAlign="left"
                 >
-                  <Option value="L">YYYY-MM-DD</Option>
-                  <Option value="LL">YYYY/MM/DD</Option>
-                  <Option value="l">YY/MM/DD</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={10}>
-              <Form.Item
-                name="time.show"
-                valuePropName="checked"
-                label="时间"
-                labelCol={{ span: 14 }}
-                labelAlign="left"
-              >
-                <Checkbox />
-              </Form.Item>
-            </Col>
-            <Col span={14}>
-              <Form.Item name="time.format" rules={[{ required: true }]}>
-                <Select
-                  placeholder="设置时间格式"
-                  onChange={onSetBiciTimerDataFmt}
-                  allowClear
+                  <Checkbox />
+                </Form.Item>
+              </Col>
+              <Col span={14}>
+                <Form.Item name="date.format" rules={[{ required: true }]}>
+                  <Select
+                    placeholder="设置日期格式"
+                    onChange={onSetBiciTimerDataFmt}
+                    allowClear
+                  >
+                    <Option value="L">YYYY-MM-DD</Option>
+                    <Option value="LL">YYYY/MM/DD</Option>
+                    <Option value="l">YY/MM/DD</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={10}>
+                <Form.Item
+                  name="time.show"
+                  valuePropName="checked"
+                  label="时间"
+                  labelCol={{ span: 14 }}
+                  labelAlign="left"
                 >
-                  <Option value="LTS">hh：mm：ss</Option>
-                  <Option value="LT">hh:mm(24h)</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </Panel>
+                  <Checkbox />
+                </Form.Item>
+              </Col>
+              <Col span={14}>
+                <Form.Item name="time.format" rules={[{ required: true }]}>
+                  <Select
+                    placeholder="设置时间格式"
+                    onChange={onSetBiciTimerDataFmt}
+                    allowClear
+                  >
+                    <Option value="LTS">hh：mm：ss</Option>
+                    <Option value="LT">hh:mm(24h)</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        </Panel>
       </React.Fragment>
     );
   }, [property]);
@@ -510,7 +536,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Form.Item>
               </Col>
               <Col span={14}>
-                <Form.Item name="title">
+                <Form.Item name="cardTitle">
                   <Input placeholder="标题名称" />
                 </Form.Item>
               </Col>
@@ -571,7 +597,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 onValuesChange={handlePropertyValuesChange}
               >
                 <Form.Item
-                  name={`${key}.font.fontFamily`}
+                  name={`${key}.fontFamily`}
                   label="字体"
                   labelCol={{ span: 8 }}
                   labelAlign="left"
@@ -579,7 +605,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   <Input />
                 </Form.Item>
                 <Form.Item
-                  name={`${key}.font.size`}
+                  name={`${key}.fontSize`}
                   label="字号"
                   labelCol={{ span: 8 }}
                   labelAlign="left"
@@ -610,7 +636,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         })}
       </Fragment>
     );
-  }, [property]);
+  }, [form, property]);
 
   /**
    * 渲染指示灯样式
