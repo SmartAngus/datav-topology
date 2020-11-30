@@ -1,4 +1,10 @@
-import React, { useMemo, useEffect, useState, Fragment, useCallback } from 'react'
+import React, {
+  useMemo,
+  useEffect,
+  useState,
+  Fragment,
+  useCallback,
+} from 'react';
 import {
   Form,
   InputNumber,
@@ -202,7 +208,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
   // 获得选中的数据点
   const onDataPointBind = (selectedRowKeys, selectedRows) => {
-    console.log("onDataPointBind",selectedRows)
+    console.log('onDataPointBind', selectedRows);
   };
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
   const renderDataPointModal = useCallback(() => {
@@ -216,7 +222,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         node={data.node}
       ></DataBindModal>
     );
-  },[visible]);
+  }, [visible]);
 
   /**
    * 渲染位置和大小的表单
@@ -384,8 +390,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const renderBiciTimerDataForm = useMemo(() => {
     return (
       <React.Fragment>
-        {renderFillStyle}
-        {renderFontForm}
+        {/* {renderFillStyle} */}
+        {/* {renderFontForm} */}
         <Panel header="时间格式" key="biciTimer">
           <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
             <Row>
@@ -523,77 +529,77 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       bottomLimit: '低于下限',
       topLimit: '高于上限',
     };
+
     return (
-      <Fragment>
-        <Panel header="基本信息" key="info">
-          <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-            <Row>
-              <Col span={10}>
-                <Form.Item
-                  label="标题"
-                  name="showTitle"
-                  labelCol={{ span: 12 }}
-                  labelAlign="left"
-                  valuePropName="checked"
-                >
-                  <Checkbox />
+      <Panel header="基本信息" key="info">
+        <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
+          <Row>
+            <Col span={10}>
+              <Form.Item
+                label="标题"
+                name="showTitle"
+                labelCol={{ span: 12 }}
+                labelAlign="left"
+                valuePropName="checked"
+              >
+                <Checkbox />
+              </Form.Item>
+            </Col>
+            <Col span={14}>
+              <Form.Item name="cardTitle">
+                <Input placeholder="标题名称" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item
+            name="limitType"
+            label="上下限"
+            labelCol={{ span: 9 }}
+            labelAlign="left"
+            initialValue="dataPoint"
+          >
+            <Radio.Group
+              options={[
+                { label: '数据点', value: 'dataPoint' },
+                { label: '自定义', value: 'custom' },
+              ]}
+              optionType="button"
+              buttonStyle="solid"
+            />
+          </Form.Item>
+          <Row>
+            <Col span={4}>
+              <Form.Item name="showLimit" valuePropName="checked">
+                <Checkbox />
+              </Form.Item>
+            </Col>
+            <Col span={20}>
+              <Input.Group compact>
+                <Form.Item name="limit.bottom">
+                  <Input style={{ width: 80 }} placeholder="下限" />
                 </Form.Item>
-              </Col>
-              <Col span={14}>
-                <Form.Item name="cardTitle">
-                  <Input placeholder="标题名称" />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Form.Item
-              name="limitType"
-              label="上下限"
-              labelCol={{ span: 9 }}
-              labelAlign="left"
-              initialValue="dataPoint"
-            >
-              <Radio.Group
-                options={[
-                  { label: '数据点', value: 'dataPoint' },
-                  { label: '自定义', value: 'custom' },
-                ]}
-                optionType="button"
-                buttonStyle="solid"
-              />
-            </Form.Item>
-            <Row>
-              <Col span={4}>
-                <Form.Item name="showLimit" valuePropName="checked">
-                  <Checkbox />
-                </Form.Item>
-              </Col>
-              <Col span={20}>
-                <Input.Group compact>
-                  <Form.Item name="limit.bottom">
-                    <Input style={{ width: 80 }} placeholder="下限" />
-                  </Form.Item>
+                <Input
+                  style={{
+                    width: 30,
+                    pointerEvents: 'none',
+                  }}
+                  placeholder="~"
+                  disabled
+                />
+                <Form.Item name="limit.top">
                   <Input
                     style={{
-                      width: 30,
-                      pointerEvents: 'none',
+                      width: 80,
                     }}
-                    placeholder="~"
-                    disabled
+                    placeholder="上限"
                   />
-                  <Form.Item name="limit.top">
-                    <Input
-                      style={{
-                        width: 80,
-                      }}
-                      placeholder="上限"
-                    />
-                  </Form.Item>
-                </Input.Group>
-              </Col>
-            </Row>
-          </Form>
-        </Panel>
-        {Object.keys(statusObj).map((key) => {
+                </Form.Item>
+              </Input.Group>
+            </Col>
+          </Row>
+        </Form>
+      </Panel>
+      /*  <Fragment> {Object.keys(statusObj).map((key) => {
           return (
             <Panel header={`样式-${statusObj[key]}`} key={key}>
               <Form
@@ -637,10 +643,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               </Form>
             </Panel>
           );
-        })}
-      </Fragment>
+        })} </Fragment> */
     );
-  }, [form, property]);
+  }, [propertyForm, property]);
 
   /**
    * 渲染指示灯样式
@@ -1093,7 +1098,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Collapse>
         </TabPane>
       </Tabs>
-      {visible&&renderDataPointModal()}
+      {visible && renderDataPointModal()}
     </div>
   );
 };
