@@ -230,7 +230,10 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
                 {panelSizeObj[key].map((val: string, index: number) => {
                   return (
                     <Col span={12} key={index}>
-                      <a href="#" onClick={() => selectedResolution(val)}>
+                      <a
+                        href="javascript:void(0);"
+                        onClick={() => selectedResolution(val)}
+                      >
                         {val}
                       </a>
                     </Col>
