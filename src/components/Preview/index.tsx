@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Topology } from '../../topology/core';
 import { PageHeader, Button } from 'antd';
 import moment from 'moment'
+import { formatTimer } from '../utils/Property2NodeProps'
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -14,16 +15,14 @@ export class PreviewProps {
     url:string,
   }
 }
-const Preview = ({ history,data,websocketConf }:PreviewProps) => {
+const Preview = ({ data,websocketConf }:PreviewProps) => {
   useEffect(() => {
     const canvasOptions = {
       rotateCursor: '/rotate.cur',
       locked: 1
     };
     canvas = new Topology('topology-canvas-preview', canvasOptions);
-    if(history){
-      history.location.state.data.locked = 1;
-    }
+
     // 渲染页面数据
     if(data!=undefined&&typeof data=='object'){
       data.locked=1;
@@ -33,7 +32,7 @@ const Preview = ({ history,data,websocketConf }:PreviewProps) => {
     return ()=>{
       canvas.closeSocket()
     }
-  }, [history?.location.state.data,data]);
+  }, [data]);
 
   const initWebsocketData=()=>{
     canvas.closeSocket()
@@ -80,18 +79,7 @@ const Preview = ({ history,data,websocketConf }:PreviewProps) => {
       }
     })
   }
-  function formatTimer(node) {
-    let y=''
-    let h=''
-    if(node.property.date.show){
-      y=moment().format(node.property.date.format)
-    }
-    if(node.property.time.show){
-      h=moment().format(node.property.time.format)
-    }
-    node.text=y+' '+h
-    canvas.updateProps(false)
-  }
+
 
   /**
    * 自动适应窗口大小
@@ -119,31 +107,31 @@ const Preview = ({ history,data,websocketConf }:PreviewProps) => {
 
   return (
     <React.Fragment>
-      <PageHeader
-        style={{
-          border: '1px solid rgb(235, 237, 240)'
-        }}
-        extra={[
-          <Button type="primary" key="2" onClick={() => onHandleFit()}>
-            自动适应窗口大小
-          </Button>,
-          <Button key="1" onClick={() => onHandlePre()}>
-            实际大小
-          </Button>
-        ]}
-        onBack={() =>
-          history.push({
-            pathname: '/',
-            state: { data: history.location.state.data, from: '/preview' }
-          })
-        }
-        title="返回画板"
-        subTitle="预览"
-      />
+      {/*<PageHeader*/}
+      {/*  style={{*/}
+      {/*    border: '1px solid rgb(235, 237, 240)'*/}
+      {/*  }}*/}
+      {/*  extra={[*/}
+      {/*    <Button type="primary" key="2" onClick={() => onHandleFit()}>*/}
+      {/*      自动适应窗口大小*/}
+      {/*    </Button>,*/}
+      {/*    <Button key="1" onClick={() => onHandlePre()}>*/}
+      {/*      实际大小*/}
+      {/*    </Button>*/}
+      {/*  ]}*/}
+      {/*  onBack={() =>*/}
+      {/*    history.push({*/}
+      {/*      pathname: '/',*/}
+      {/*      state: { data: history.location.state.data, from: '/preview' }*/}
+      {/*    })*/}
+      {/*  }*/}
+      {/*  title="返回画板"*/}
+      {/*  subTitle="预览"*/}
+      {/*/>*/}
       <div id="topology-canvas-preview" style={{
-        height: 'calc(100vh - 66px)',
+        height: '100vh',
         width: '100vw',
-        backgroundImage:`url(${history.location.state.data.bkImage})`
+        backgroundImage:`url(${data?.bkImage})`
       }} />
     </React.Fragment>
   );

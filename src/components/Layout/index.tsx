@@ -201,6 +201,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         showBoardColor,
         showFillStyle,
       } = value;
+      console.log("selected node",selected,fillStyle)
+
       const changedProps = {
         rect: {
           x: x ? Number(x) : undefined,
@@ -242,7 +244,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       setIsSave(false);
       canvas.cache();
       // 只能两层嵌套，后期需要更改，如果有多层的话
-      canvas.setValue(selected.node.id, 'setValue');
+      // canvas.setValue(selected.node.id, 'setValue');
       // 通知有数据属性更新,会重新渲染画布
       canvas.updateProps(false);
       for (const key in value) {
@@ -260,6 +262,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }
         }
       }
+      // 更新属性变化
     },
     [selected]
   );
