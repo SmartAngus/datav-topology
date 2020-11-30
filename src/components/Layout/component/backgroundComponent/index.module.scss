@@ -21,4 +21,8 @@
   text-align: -webkit-match-parent;
 }
 
-
+#editLayout {
+  :global(.ant-image-img) {
+    width: 100%;
+  }
+}

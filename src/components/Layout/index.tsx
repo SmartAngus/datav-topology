@@ -547,7 +547,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     </div>
   );
   return (
-    <div id="layout" ref={layoutRef}>
+    <div id="editLayout" ref={layoutRef}>
       {renderHeader}
       <div className={styles.page}>
         <div className={styles.tool}>
@@ -600,7 +600,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
             onContextMenu={handleContextMenu}
           />
         </div>
-        <div className={styles.props}>{renderRightArea}</div>
+        <div className={styles.props} id="props">
+          {renderRightArea}
+        </div>
         {renderContextMenu}
       </div>
     </div>
