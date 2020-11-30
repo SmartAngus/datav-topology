@@ -84,6 +84,7 @@ export const Tools = [
           property: {
             dataMethod: 'aa',
             dataDot: 1,
+            dataPointSelectedRows:[],
             dataPointParam: {
               qtDataList: [
                 {
@@ -205,6 +206,18 @@ export const Tools = [
               showBkColor: true,
               bkColor: '#fff',
             },
+            dataMethod: 'aa',
+            dataDot: 1,
+            dataPointSelectedRows:[],
+            dataPointParam: {
+              qtDataList: [
+                {
+                  id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
+                  type: 1,
+                },
+              ],
+              subscribe: true,
+            },
           },
         },
       },
@@ -226,6 +239,18 @@ export const Tools = [
             showText: true,
             stateType: 'single', // 状态定义: single 单点值,  range 范围值
             lightRange: [], // 指示灯 状态定义 列表
+            dataMethod: 'aa',
+            dataDot: 1,
+            dataPointSelectedRows:[],
+            dataPointParam: {
+              qtDataList: [
+                {
+                  id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
+                  type: 1,
+                },
+              ],
+              subscribe: true,
+            },
           },
         },
       },
@@ -609,6 +634,20 @@ export const Tools = [
               },
             },
           },
+          property: {
+            dataMethod: 'aa',
+            dataDot: 1,
+            dataPointSelectedRows:[],
+            dataPointParam: {
+              qtDataList: [
+                {
+                  id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
+                  type: 1,
+                },
+              ],
+              subscribe: true,
+            },
+          }
         },
       },
       // {
