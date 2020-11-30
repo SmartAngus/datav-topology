@@ -31,7 +31,7 @@ import styles from './index.module.scss';
 import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines';
 import { calcCanvas } from '../utils/cacl';
-import ResizePanel from '../common/resizeSidebar'
+import ResizePanel from '../common/resizeSidebar';
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
@@ -179,6 +179,21 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   };
 
   /**
+   * 数据卡片自定义数据逻辑处理
+   */
+  const handleBiciCard = (value) => {
+    console.log('seleted node:', selected.node);
+    const { cardTitle, showTitle } = value;
+    if (cardTitle) {
+      selected.node.text = cardTitle;
+    }
+    if (showTitle !== undefined) {
+      const titleVal = showTitle ? selected.node.property.cardTitle : '';
+      selected.node.text = titleVal;
+    }
+  };
+
+  /**
    * 当表单数据变化时, 重新渲染canvas
    * @params {object} value - 图形的宽度,高度, x, y等等
    */
@@ -246,6 +261,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // canvas.setValue(selected.node.id, 'setValue');
       // 通知有数据属性更新,会重新渲染画布
       canvas.updateProps(false);
+
+      const { name } = selected.node;
+      if (name === 'biciCard') {
+        handleBiciCard(value);
+      }
       for (const key in value) {
         if (key.indexOf('.') > 0) {
           if (key != undefined) {
@@ -549,7 +569,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     <div id="editLayout" ref={layoutRef}>
       {renderHeader}
       <div className={styles.page}>
-        <ResizePanel direction="e" style={{width:250}}>
+        <ResizePanel direction="e" style={{ width: 250 }}>
           <div className={styles.tool}>
             <Tabs defaultActiveKey="1" centered>
               <TabPane tab="组件" key="1" style={{ margin: 0 }}>

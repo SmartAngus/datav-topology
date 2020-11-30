@@ -168,46 +168,40 @@ export const Tools = [
             },
           ],
           property: {
-            title: '',
+            title: '数据卡片',
             showTitle: true,
-            limitType: '', // 数据类型：dataPoint 数据点  custom 自定义
-            showLimit: true, // 展示上下限
+            limitType: 'dataPoint', // 数据类型：dataPoint 数据点  custom 自定义
+            showLimit: false, // 展示上下限
             limit: {
               bottom: '', // 下限
               top: '', // 上限
             },
             normal: {
-              font: {
-                fontFamily: 'Arial',
-                size: 18,
-                color: '#222',
-                textAlign: 'center',
-                textBaseline: 'middle',
-              },
+              fontFamily: 'Arial',
+              fontSize: 18,
+              color: '#222',
+              textAlign: 'center',
+              textBaseline: 'middle',
               showBkColor: true,
-              bkColor: '#fff',
+              bkColor: '#6236FF',
             },
             topLimit: {
-              font: {
-                fontFamily: 'Arial',
-                size: 18,
-                color: '#222',
-                textAlign: 'center',
-                textBaseline: 'middle',
-              },
+              fontFamily: 'Arial',
+              fontSize: 18,
+              color: '#222',
+              textAlign: 'center',
+              textBaseline: 'middle',
               showBkColor: true,
-              bkColor: '#fff',
+              bkColor: '#FF0000',
             },
             bottomLimit: {
-              font: {
-                fontFamily: 'Arial',
-                size: 18,
-                color: '#222',
-                textAlign: 'center',
-                textBaseline: 'middle',
-              },
+              fontFamily: 'Arial',
+              fontSize: 18,
+              color: '#222',
+              textAlign: 'center',
+              textBaseline: 'middle',
               showBkColor: true,
-              bkColor: '#fff',
+              bkColor: '#FFFF00',
             },
             dataMethod: 'aa',
             dataDot: 1,
