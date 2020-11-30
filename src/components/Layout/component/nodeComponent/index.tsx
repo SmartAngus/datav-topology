@@ -349,6 +349,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    */
   const renderBiciTimerDataForm = useMemo(() => {
     return (
+      <React.Fragment>
+        {renderFillStyle}
       <Panel header="时间格式" key="biciTimer">
         <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
           <Row>
@@ -370,9 +372,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   onChange={onSetBiciTimerDataFmt}
                   allowClear
                 >
-                  <Option value="YYYY-MM-DD">YYYY-MM-DD</Option>
-                  <Option value="female">female</Option>
-                  <Option value="other">other</Option>
+                  <Option value="L">YYYY-MM-DD</Option>
+                  <Option value="LL">YYYY/MM/DD</Option>
+                  <Option value="l">YY/MM/DD</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -396,15 +398,15 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   onChange={onSetBiciTimerDataFmt}
                   allowClear
                 >
-                  <Option value="hh：mm：ss">hh：mm：ss</Option>
-                  <Option value="female">female</Option>
-                  <Option value="other">other</Option>
+                  <Option value="LTS">hh：mm：ss</Option>
+                  <Option value="LT">hh:mm(24h)</Option>
                 </Select>
               </Form.Item>
             </Col>
           </Row>
         </Form>
       </Panel>
+      </React.Fragment>
     );
   }, [property]);
 
