@@ -72,8 +72,20 @@ export default class DataPointTable extends Component<any,any> {
       statusList,
     } = this.state
     let params = { dataType: 1, pagination, sorterList } as any;
-    if (this.props.isOnlyNumber) {
+    // if (this.props.isOnlyNumber) {
+    //   params.dataTypeList = [1]
+    // }
+    // 根据node返回的type决定查询的数据类型
+    if(this.props.node.name=="echarts"){
       params.dataTypeList = [1]
+    }else{
+      const nodeType = this.props.node.name;
+      switch (nodeType) {
+        case 'biciPilot': // 指示灯
+          params.dataTypeList = [1,2]
+          break;
+        default:
+      }
     }
     if (dataName) {
       params.dataName = dataName
