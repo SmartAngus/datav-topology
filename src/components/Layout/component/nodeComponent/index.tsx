@@ -140,20 +140,20 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         cardTitle: property.title,
         limitType: property.limitType,
         showLimit: property.showLimit,
-        'limit.bottom': property.limit.bottom,
-        'limit.top': property.limit.top,
-        'normal.fontFamily': property.normal.fontFamily,
-        'normal.fontSize': property.normal.fontSize,
-        'normal.showBkColor': property.normal.showBkColor,
-        'normal.bkColor': property.normal.bkColor,
-        'topLimit.fontFamily': property.topLimit.fontFamily,
-        'topLimit.fontSize': property.topLimit.fontSize,
-        'topLimit.showBkColor': property.topLimit.showBkColor,
-        'topLimit.bkColor': property.topLimit.bkColor,
-        'bottomLimit.fontFamily': property.bottomLimit.fontFamily,
-        'bottomLimit.fontSize': property.bottomLimit.fontSize,
-        'bottomLimit.showBkColor': property.bottomLimit.showBkColor,
-        'bottomLimit.bkColor': property.bottomLimit.bkColor,
+        'limitBottom': property.limit.bottom,
+        'limitTop': property.limit.top,
+        'normalFontFamily': property.normal.fontFamily,
+        'normalFontSize': property.normal.fontSize,
+        'normalShowBkColor': property.normal.showBkColor,
+        'normalBkColor': property.normal.bkColor,
+        'topLimitFontFamily': property.topLimit.fontFamily,
+        'topLimitFontSize': property.topLimit.fontSize,
+        'topLimitShowBkColor': property.topLimit.showBkColor,
+        'topLimitBkColor': property.topLimit.bkColor,
+        'bottomLimitFontFamily': property.bottomLimit.fontFamily,
+        'bottomLimitFontSize': property.bottomLimit.fontSize,
+        'bottomLimitShowBkColor': property.bottomLimit.showBkColor,
+        'bottomLimitBkColor': property.bottomLimit.bkColor,
       });
     }
   }, [property]);
@@ -600,7 +600,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               </Col>
               <Col span={20}>
                 <Input.Group compact>
-                  <Form.Item name="limit.bottom">
+                  <Form.Item name="limitBottom">
                     <Input style={{ width: 80 }} placeholder="下限" />
                   </Form.Item>
                   <Input
@@ -611,7 +611,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     placeholder="~"
                     disabled
                   />
-                  <Form.Item name="limit.top">
+                  <Form.Item name="limitTop">
                     <Input
                       style={{
                         width: 80,
@@ -632,7 +632,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 onValuesChange={handlePropertyValuesChange}
               >
                 <Form.Item
-                  name={`${key}.fontFamily`}
+                  name={`${key}FontFamily`}
                   label="字体"
                   labelCol={{ span: 8 }}
                   labelAlign="left"
@@ -640,7 +640,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   <Input />
                 </Form.Item>
                 <Form.Item
-                  name={`${key}.fontSize`}
+                  name={`${key}FontSize`}
                   label="字号"
                   labelCol={{ span: 8 }}
                   labelAlign="left"
@@ -650,7 +650,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 <Row>
                   <Col span={10}>
                     <Form.Item
-                      name={`${key}.showBkColor`}
+                      name={`${key}ShowBkColor`}
                       label="背景颜色"
                       labelCol={{ span: 18 }}
                       labelAlign="left"
@@ -660,7 +660,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     </Form.Item>
                   </Col>
                   <Col span={13} push={1}>
-                    <Form.Item name={`${key}.bkColor`}>
+                    <Form.Item name={`${key}BkColor`}>
                       <ColorPicker />
                     </Form.Item>
                   </Col>

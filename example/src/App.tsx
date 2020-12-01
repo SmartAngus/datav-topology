@@ -21,7 +21,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     { key: 2, img: preBgImg2 },
     { key: 3, img: preBgImg3 },
   ];
-  const token = '9XO2Khne0e18KCiDEl8sC';
+  const token = '5Yin6wBp0lPSKj0J5wLUAr';
   const industrialLibrary = [
     {
       type: 'mk',
@@ -166,7 +166,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
           id: 'aeeded41ccd34422ab9591d69bde21ec',
         },
       })
-      .then(res => {
+      .then((res) => {
         if (res.data?.data != null) {
           if (
             res.data.data.property != null &&
@@ -175,7 +175,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
             // const getEditorData = JSON.parse(
             //   decodeURIComponent(escape(window.atob(res.data.data.property)))
             // );
-            const getEditorData = JSON.parse(res.data.data.property)
+            const getEditorData = JSON.parse(res.data.data.property);
             setEditorData(getEditorData);
           }
         }
@@ -222,7 +222,6 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     //       return null;
     //     });
     //   });
-
   }, []);
   // 保存数据到数据库
   const handleSaveEditorData = (data: any) => {
@@ -245,24 +244,25 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       timeout: 10000000,
       maxContentLength: 1000000000,
     });
-    delete data.screenshot
+    delete data.screenshot;
     instance
       .request({
-        url:"/api/applications/newBoard/updateProperty",
+        url: '/api/applications/newBoard/updateProperty',
         method: 'POST',
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
           token: '9XO2Khne0e18KCiDEl8sC',
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        data:{
+        data: {
           id: 'aeeded41ccd34422ab9591d69bde21ec',
           // property: window.btoa(
           //   unescape(encodeURIComponent(JSON.stringify(data)))
           // )
-          property:JSON.stringify(data)
-        }
-      }).then((res) => {
+          property: JSON.stringify(data),
+        },
+      })
+      .then((res) => {
         console.log('update==', res);
       });
   };
@@ -346,12 +346,12 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   );
 };
 
-const PreviewLayout: React.FC<any>=({history})=>{
-  const [editorData,setEditorData]=useState<any>()
+const PreviewLayout: React.FC<any> = ({ history }) => {
+  const [editorData, setEditorData] = useState<any>();
   const websocketConf = {
     url: 'ws://47.96.159.115:51060/ws?token=9XO2Khne0e18KCiDEl8sC',
   };
-  useEffect(()=>{
+  useEffect(() => {
     const instance = axios.create({
       baseURL: 'http://qt.test.bicisims.com',
       timeout: 10000000,
@@ -370,7 +370,7 @@ const PreviewLayout: React.FC<any>=({history})=>{
           id: 'aeeded41ccd34422ab9591d69bde21ec',
         },
       })
-      .then(res => {
+      .then((res) => {
         console.log('detail', res);
         if (res.data?.data != null) {
           if (
@@ -380,14 +380,20 @@ const PreviewLayout: React.FC<any>=({history})=>{
             // const getEditorData = JSON.parse(
             //   decodeURIComponent(escape(window.atob(res.data.data.property)))
             // );
-            const getEditorData = JSON.parse(res.data.data.property)
+            const getEditorData = JSON.parse(res.data.data.property);
             setEditorData(getEditorData);
           }
         }
       });
-  },[])
-  return (<Preview history={history} data={editorData} websocketConf={websocketConf}></Preview>)
-}
+  }, []);
+  return (
+    <Preview
+      history={history}
+      data={editorData}
+      websocketConf={websocketConf}
+    ></Preview>
+  );
+};
 
 const App = () => {
   return (

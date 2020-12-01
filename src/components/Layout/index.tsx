@@ -181,15 +181,64 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   /**
    * 数据卡片自定义数据逻辑处理
    */
+  const setCardStyle = (fontFamily: string, size: number, bkColor: string) => {
+    if (fontFamily) {
+      selected.node.font.fontFamily = fontFamily;
+      selected.node.children[0].font.fontFamily = fontFamily;
+      selected.node.children[1].font.fontFamily = fontFamily;
+    }
+    if (size) {
+      selected.node.font.fontSize = size;
+      selected.node.children[0].font.fontSize = size;
+      selected.node.children[1].font.fontSize = size;
+    }
+    if (bkColor) {
+      selected.node.fillStyle = bkColor;
+    }
+  };
   const handleBiciCard = (value) => {
     console.log('seleted node:', selected.node);
-    const { cardTitle, showTitle } = value;
-    if (cardTitle) {
-      selected.node.text = cardTitle;
-    }
+    const {
+      cardTitle,
+      showTitle,
+      showLimit,
+      limitBottom,
+      limitTop,
+      normalFontFamily,
+      normalFontSize,
+      normalBkColor,
+      bottomLimitFontFamily,
+      bottomLimitFontSize,
+      bottomLimitBkColor,
+      topLimitFontFamily,
+      topLimitFontSize,
+      topLimitBkColor,
+    } = value;
     if (showTitle !== undefined) {
-      const titleVal = showTitle ? selected.node.property.cardTitle : '';
+      const titleVal = showTitle ? cardTitle : '';
       selected.node.text = titleVal;
+    }
+    if (showLimit !== undefined) {
+      const limitText = showLimit
+        ? `上限: ${limitTop}   下限: ${limitBottom}`
+        : '';
+      selected.node.children[1].text = limitText;
+    }
+    setCardStyle(normalFontFamily, parseInt(normalFontSize), normalBkColor);
+    const val = selected.node.children[0].text;
+    if (parseFloat(val) < parseFloat(limitBottom)) {
+      // 低于下限
+      setCardStyle(
+        bottomLimitFontFamily,
+        parseInt(bottomLimitFontSize),
+        bottomLimitBkColor
+      );
+    } else if (parseFloat(val) > parseFloat(limitTop)) {
+      setCardStyle(
+        topLimitFontFamily,
+        parseInt(topLimitFontSize),
+        topLimitBkColor
+      );
     }
   };
 
@@ -260,7 +309,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // 只能两层嵌套，后期需要更改，如果有多层的话
       // canvas.setValue(selected.node.id, 'setValue');
       // 通知有数据属性更新,会重新渲染画布
-      canvas.updateProps(false);
 
       const { name } = selected.node;
       if (name === 'biciCard') {
@@ -282,6 +330,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         }
       }
       // 更新属性变化
+      canvas.updateProps(false, [selected.node]);
     },
     [selected]
   );

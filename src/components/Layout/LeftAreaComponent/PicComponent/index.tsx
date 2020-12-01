@@ -71,9 +71,9 @@ const Layout = ({ uploaConfig }) => {
   }
 
   const beforeUpload = (file) => {
-    const isLt512K = file.size / 1024 < 512;
+    const isLt512K = file.size / 1024 / 1024 < 1;
     if (!isLt512K) {
-      message.error('图片上传小于512K!');
+      message.error('上传图片不可大于1M');
     }
     return isLt512K;
   };
@@ -176,7 +176,7 @@ const Layout = ({ uploaConfig }) => {
   return (
     <div className={styles.container}>
       <Row>
-        {list.map((item, index) => (
+        {list?.map((item, index) => (
           <Col
             key={index}
             span={12}

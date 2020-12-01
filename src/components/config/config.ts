@@ -84,7 +84,7 @@ export const Tools = [
           property: {
             dataMethod: 'point',
             dataDot: 1,
-            dataPointSelectedRows:[],
+            dataPointSelectedRows: [],
             dataPointParam: {
               qtDataList: [
                 {
@@ -102,7 +102,7 @@ export const Tools = [
         icon: 'iconshujukapian',
         data: {
           text: '数据卡片',
-          hideInput:true,
+          hideInput: true,
           rect: {
             width: 278,
             height: 128,
@@ -119,9 +119,9 @@ export const Tools = [
           name: 'biciCard',
           children: [
             {
-              text: '10000',
+              text: '0.00',
               name: 'text',
-              hideInput:true,
+              hideInput: true,
               hideAnchor: true,
               paddingLeft: 10,
               paddingRight: 10,
@@ -143,9 +143,9 @@ export const Tools = [
               },
             },
             {
-              text: '上限: 10000   下限: 300',
+              text: '',
               name: 'text',
-              hideInput:true,
+              hideInput: true,
               hideAnchor: true,
               paddingLeft: 10,
               paddingRight: 10,
@@ -170,11 +170,11 @@ export const Tools = [
           property: {
             title: '数据卡片',
             showTitle: true,
-            limitType: 'dataPoint', // 数据类型：dataPoint 数据点  custom 自定义
+            limitType: 'custom', // 数据类型：dataPoint 数据点  custom 自定义
             showLimit: false, // 展示上下限
             limit: {
-              bottom: '', // 下限
-              top: '', // 上限
+              bottom: '0', // 下限
+              top: '0', // 上限
             },
             normal: {
               fontFamily: 'Arial',
@@ -205,7 +205,7 @@ export const Tools = [
             },
             dataMethod: 'point',
             dataDot: 1,
-            dataPointSelectedRows:[],
+            dataPointSelectedRows: [],
             dataPointParam: {
               qtDataList: [
                 {
@@ -223,7 +223,7 @@ export const Tools = [
         icon: 'iconzhishideng',
         data: {
           text: '指示灯',
-          hideInput:true,
+          hideInput: true,
           rect: {
             width: 30,
             height: 30,
@@ -239,7 +239,7 @@ export const Tools = [
             lightRange: [], // 指示灯 状态定义 列表
             dataMethod: 'point',
             dataDot: 1,
-            dataPointSelectedRows:[],
+            dataPointSelectedRows: [],
             dataPointParam: {
               qtDataList: [
                 {
@@ -556,7 +556,7 @@ export const Tools = [
         icon: 'iconquxiantu',
         data: {
           text: '',
-          hideInput:true,
+          hideInput: true,
           rect: {
             width: 300,
             height: 200,
@@ -637,7 +637,7 @@ export const Tools = [
             echartsType: 'timeLine',
             dataMethod: 'point',
             dataDot: 1,
-            dataPointSelectedRows:[],
+            dataPointSelectedRows: [],
             dataPointParam: {
               qtDataList: [
                 {
@@ -647,7 +647,7 @@ export const Tools = [
               ],
               subscribe: true,
             },
-          }
+          },
         },
       },
       // {
@@ -801,7 +801,7 @@ export const Tools = [
         icon: 'iconyibiaopan',
         data: {
           text: '',
-          hideInput:true,
+          hideInput: true,
           rect: {
             width: 300,
             height: 300,
@@ -838,7 +838,7 @@ export const Tools = [
             echartsType: 'gauge',
             dataMethod: 'point',
             dataDot: 1,
-            dataPointSelectedRows:[],
+            dataPointSelectedRows: [],
             dataPointParam: {
               qtDataList: [
                 {
@@ -862,7 +862,7 @@ export const Tools = [
             height: 250,
           },
           name: 'echarts',
-          hideInput:true,
+          hideInput: true,
           data: {
             echarts: {
               option: getMeasureOption(),
@@ -871,7 +871,7 @@ export const Tools = [
           property: {
             echartsType: 'chartMeasure',
             dataMethod: 'point',
-            dataPointSelectedRows:[],
+            dataPointSelectedRows: [],
             dataDot: 1,
             dataPointParam: {
               qtDataList: [

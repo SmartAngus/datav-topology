@@ -131,6 +131,11 @@ export function dynamicWebSocketData() {
                 node.text = r.value;
                 canvas.updateProps(false);
               }
+            }else if (node.name === 'biciCard') {
+              if (node.text != r.value) {
+                node.children[0].text = r.value;
+                canvas.updateProps(false);
+              }
             }
           } else if (node.name == 'echarts') {
             // 如果是图表组件，下面就需要判断具体的是那种图表组件

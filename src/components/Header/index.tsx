@@ -264,6 +264,9 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
      */
     const handlePreview = () => {
       if (!isSave) {
+        message.config({
+          getContainer: () => document.querySelector('#layout'),
+        });
         message.warn('预览之前请先保存数据！');
       } else {
         if (props.onPreview && typeof props.onPreview == 'function') {
