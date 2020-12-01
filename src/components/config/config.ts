@@ -618,22 +618,23 @@ export const Tools = [
                 ],
               },
             },
-            property: {
-              echartsType: 'timeLine',
-              dataMethod: 'point',
-              dataDot: 1,
-              dataPointParam: {
-                qtDataList: [
-                  {
-                    id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
-                    type: 1,
-                  },
-                ],
-                subscribe: true,
-              },
-            },
+            // property: {
+            //   echartsType: 'timeLine',
+            //   dataMethod: 'point',
+            //   dataDot: 1,
+            //   dataPointParam: {
+            //     qtDataList: [
+            //       {
+            //         id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
+            //         type: 1,
+            //       },
+            //     ],
+            //     subscribe: true,
+            //   },
+            // },
           },
           property: {
+            echartsType: 'timeLine',
             dataMethod: 'point',
             dataDot: 1,
             dataPointSelectedRows:[],
@@ -832,19 +833,20 @@ export const Tools = [
                 ],
               },
             },
-            property: {
-              echartsType: 'gauge',
-              dataMethod: 'point',
-              dataDot: 1,
-              dataPointParam: {
-                qtDataList: [
-                  {
-                    id: '02399e78150d4ac5b68bd5516e1a6851', // id 为数据点id
-                    type: 1,
-                  },
-                ],
-                subscribe: true,
-              },
+          },
+          property: {
+            echartsType: 'gauge',
+            dataMethod: 'point',
+            dataDot: 1,
+            dataPointSelectedRows:[],
+            dataPointParam: {
+              qtDataList: [
+                {
+                  id: '02399e78150d4ac5b68bd5516e1a6851', // id 为数据点id
+                  type: 1,
+                },
+              ],
+              subscribe: true,
             },
           },
         },
@@ -865,19 +867,20 @@ export const Tools = [
             echarts: {
               option: getMeasureOption(),
             },
-            property: {
-              echartsType: 'chartMeasure',
-              dataMethod: 'point',
-              dataDot: 1,
-              dataPointParam: {
-                qtDataList: [
-                  {
-                    id: '6413f3a606754c31987ec584ed56d5b7', // id 为数据点id
-                    type: 2,
-                  },
-                ],
-                subscribe: true,
-              },
+          },
+          property: {
+            echartsType: 'chartMeasure',
+            dataMethod: 'point',
+            dataPointSelectedRows:[],
+            dataDot: 1,
+            dataPointParam: {
+              qtDataList: [
+                {
+                  id: '6413f3a606754c31987ec584ed56d5b7', // id 为数据点id
+                  type: 2,
+                },
+              ],
+              subscribe: true,
             },
           },
         },

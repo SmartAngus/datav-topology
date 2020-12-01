@@ -35,6 +35,7 @@ import DataBindModal from '../../../FilterDataPoint';
 
 import styles from './index.module.scss';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { getNodeType } from '../../../utils/Property2NodeProps'
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -210,9 +211,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   // 获得选中的数据点
   const onDataPointBind = (selectedRowKeys, selectedRows) => {
     console.log("onDataPointBind",selectedRows)
+    const nodeType = getNodeType(data.node)
+    console.log("nodeType,",nodeType)
     if(property&&property.dataPointSelectedRows){
-      data.node.property.dataPointSelectedRows=selectedRows;
-      setDataPointSelectedRows(selectedRows);
+
+      if(nodeType=="timeLine"){// 最多可绑定十个数据点
+        if(data.node.property.dataPointSelectedRows.length<10){
+          data.node.property.dataPointSelectedRows.concat(selectedRows);
+          setDataPointSelectedRows(selectedRows);
+        }
+      }else{
+        data.node.property.dataPointSelectedRows=selectedRows;
+        setDataPointSelectedRows(selectedRows);
+      }
     }
   };
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
