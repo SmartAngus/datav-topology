@@ -11,6 +11,7 @@ import preBgImg2 from './bg02.png';
 import preBgImg3 from './bg03.png';
 
 const { confirm } = Modal;
+const token = '4crQK2JyLj1Z1rymIJwnwf';
 
 const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   const history = props.history;
@@ -21,7 +22,6 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     { key: 2, img: preBgImg2 },
     { key: 3, img: preBgImg3 },
   ];
-  const token = '5Yin6wBp0lPSKj0J5wLUAr';
   const industrialLibrary = [
     {
       type: 'mk',
@@ -140,7 +140,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   };
   const apiURL = 'http://qt.test.bicisims.com';
   const websocketConf = {
-    url: 'ws://47.96.159.115:51060/ws?token=5Yin6wBp0lPSKj0J5wLUAr',
+    url: 'ws://47.96.159.115:51060/ws?token='+token,
   };
   useEffect(() => {
     // 获取数据
@@ -230,7 +230,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     const formData = new FormData();
-    api.defaults.headers.common['token'] = '5Yin6wBp0lPSKj0J5wLUAr';
+    api.defaults.headers.common['token'] = token;
     formData.append('file', data.screenshot);
     formData.append('mappingId', 'ooip6ffe388d487db754b885b8aa65b9');
 
@@ -349,7 +349,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
 const PreviewLayout: React.FC<any>=({history})=>{
   const [editorData,setEditorData]=useState<any>()
   const websocketConf = {
-    url: 'ws://47.96.159.115:51060/ws?token=5Yin6wBp0lPSKj0J5wLUAr',
+    url: 'ws://47.96.159.115:51060/ws?token='+token,
   };
   useEffect(()=>{
     const instance = axios.create({
@@ -363,7 +363,7 @@ const PreviewLayout: React.FC<any>=({history})=>{
         method: 'get',
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
-          token: "5Yin6wBp0lPSKj0J5wLUAr",
+          token: token,
           'Content-Type': 'application/json',
         },
         params: {
