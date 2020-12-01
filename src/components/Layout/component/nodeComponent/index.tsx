@@ -474,8 +474,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               onChange={handlePropertyDataMethodChange}
               allowClear
             >
-              <Option value="male">绑定数据点</Option>
-              <Option value="female">接口传入</Option>
+              <Option value="point">绑定数据点</Option>
+              <Option value="restful">接口传入</Option>
             </Select>
           </Form.Item>
           <Form.Item label="数据点">
@@ -1105,7 +1105,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               {renderDataForm}
             </Panel>
             {
-              (data.node.name=='biciVarer'||data.node.name=='echarts'||data.node.name=='biciCard'||data.node.name=='biciPilot')&&(<Panel header="自定义数据" key="2">
+              (data.node.name=='biciVarer'
+                ||data.node.name=='echarts'
+                ||data.node.name=='biciCard'
+                ||data.node.name=='biciPilot')
+                &&(<Panel header="自定义数据" key="2">
                 {renderExtraDataForm}
               </Panel>)
             }
