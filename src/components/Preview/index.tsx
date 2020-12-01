@@ -44,11 +44,14 @@ const Preview = ({ data,websocketConf }:PreviewProps) => {
         if (canvas.data && canvas.data.pens.length > 0) {
           // 有数据，去遍历有websocket的组件，并订阅
           if(canvas.socket!=undefined){
+            const activePens = [];
             (canvas.data.pens||[]).map((node)=>{// 循环遍历
               if(node.property?.dataPointParam?.qtDataList?.length>0){
+                activePens.push(node)
                 canvas.socket.socket.send(JSON.stringify(({...node.property.dataPointParam,tid:node.TID,id:node.id})))
               }
             })
+            canvas.activeLayer.setPens(activePens)
           }
         }
       }
