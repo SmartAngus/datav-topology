@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Topology } from '../../topology/core';
+import { Node, Topology } from '../../topology/core'
 import { PageHeader, Button } from 'antd';
 import moment from 'moment'
 import { formatTimer } from '../utils/Property2NodeProps'
@@ -44,7 +44,7 @@ const Preview = ({ data,websocketConf }:PreviewProps) => {
         if (canvas.data && canvas.data.pens.length > 0) {
           // 有数据，去遍历有websocket的组件，并订阅
           if(canvas.socket!=undefined){
-            (canvas.data.pens||[]).map((node)=>{
+            (canvas.data.pens||[]).map((node)=>{// 循环遍历
               if(node.property?.dataPointParam?.qtDataList?.length>0){
                 canvas.socket.socket.send(JSON.stringify(({...node.property.dataPointParam,tid:node.TID,id:node.id})))
               }
@@ -53,20 +53,54 @@ const Preview = ({ data,websocketConf }:PreviewProps) => {
         }
       }
       canvas.socket.socket.onmessage=(data)=>{
+        console.log("onmessage==",data)
         if (canvas.data && canvas.data.pens.length > 0) {
           // 有数据，去遍历有websocket的组件，并订阅
-          if(canvas.socket!=undefined){
-            (canvas.data.pens||[]).map((node)=> {
-              if (node.property?.dataPointParam?.qtDataList?.length > 0) {
-                const r = JSON.parse(data.data)
-                if(node.name=='biciVarer'){
-                  if(node.text!=r.value){
-                    node.text=r.value;
-                    canvas.updateProps(false)
-                  }
+          if (canvas.socket != undefined) {
+            (canvas.data.pens || []).map((node: Node) => {
+               if (node.name == 'echarts') {
+                // 如果是图表组件，下面就需要判断具体的是那种图表组件
+                const theChart = node.property.echartsType;
+                const r = JSON.parse(data.data);
+                switch (theChart) {
+                  case 'gauge':
+                    if(node.property.dataPointSelectedRows[0].id==r.id){
+                      node.data.echarts.option.series[0].data[0].value = r.value;
+                      canvas.updateProps(false);
+                    }
+                    break;
+                  case 'timeLine':
+                    const lastPoint=node.property.dataPointSelectedRows.slice(-1)[0];
+                    console.log("lastPoint",lastPoint)
+                    if(lastPoint&&lastPoint.id==r.id) {
+                      const xAxisData = node.data.echarts.option.xAxis.data;
+                      const yAxisData = node.data.echarts.option.series[0].data;
+                      if (xAxisData.length > 10) {
+                        xAxisData.shift();
+                      }
+                      if (yAxisData.length > 10) {
+                        yAxisData.shift();
+                      }
+                      xAxisData.push(moment(r.time).format('LTS'));
+                      yAxisData.push(r.value);
+                      node.data.echarts.option.xAxis.data = xAxisData;
+                      node.data.echarts.option.series[0].data = yAxisData;
+                      canvas.updateProps(false);
+                      canvas.render()
+                    }
+                    break;
+                  default:
                 }
-              }
-            })
+              }else if (node.property?.dataPointParam?.qtDataList?.length > 0) {
+                 const r = JSON.parse(data.data);
+                 if (node.name == 'biciVarer') {
+                   if (node.text != r.value) {
+                     node.text = r.value;
+                     canvas.updateProps(false);
+                   }
+                 }
+               }
+            });
           }
         }
       }

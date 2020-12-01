@@ -217,11 +217,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
 
       if(nodeType=="timeLine"){// 最多可绑定十个数据点
         if(data.node.property.dataPointSelectedRows.length<10){
-          data.node.property.dataPointSelectedRows.concat(selectedRows);
+          data.node.property.dataPointSelectedRows=data.node.property.dataPointSelectedRows.concat(selectedRows);
+          data.node.property.dataPointParam.qtDataList.push({
+            id: selectedRows[0].id,
+            type:selectedRows[0].dataType
+          })
           setDataPointSelectedRows(selectedRows);
         }
       }else{
         data.node.property.dataPointSelectedRows=selectedRows;
+        data.node.property.dataPointParam.qtDataList[0]={
+          id: selectedRows[0].id,
+          type:selectedRows[0].dataType
+        }
         setDataPointSelectedRows(selectedRows);
       }
     }
