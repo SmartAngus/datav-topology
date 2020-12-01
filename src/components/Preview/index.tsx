@@ -73,24 +73,54 @@ const Preview = ({ data,websocketConf }:PreviewProps) => {
                     }
                     break;
                   case 'timeLine':
-                    const lastPoint=node.property.dataPointSelectedRows.slice(-1)[0];
-                    console.log("lastPoint",lastPoint)
-                    if(lastPoint&&lastPoint.id==r.id) {
-                      const xAxisData = node.data.echarts.option.xAxis.data;
-                      const yAxisData = node.data.echarts.option.series[0].data;
-                      if (xAxisData.length > 10) {
-                        xAxisData.shift();
+                    (node.property.dataPointSelectedRows||[]).map((row,index)=>{
+                      const seria = {
+                        symbol: 'none',
+                        name: '当前流量',
+                        type: 'line',
+                        smoothMonotone: 'x',
+                        smooth: true,
+                        markLine: {
+                          silent: true,
+                          data: [
+                            {
+                              yAxis: 20,
+                            },
+                            {
+                              yAxis: 40,
+                            },
+                            {
+                              yAxis: 60,
+                            },
+                            {
+                              yAxis: 100,
+                            },
+                            {
+                              yAxis: 120,
+                            },
+                          ],
+                        },
+                        data: []
+                      };
+                      if(row.id==r.id){
+                        const xAxisData = node.data.echarts.option.xAxis.data;
+                        const yAxisData = node.data.echarts.option.series[index]||seria;
+                        if (xAxisData.length > 10) {
+                          xAxisData.shift();
+                        }
+                        if (yAxisData&&yAxisData.data.length > 10) {
+                          yAxisData.data.shift();
+                        }
+                        xAxisData.push(moment(r.time).format('LTS'));
+                        yAxisData.data.push(r.value);
+                        yAxisData.name=row.dataName
+                        node.data.echarts.option.xAxis.data = xAxisData;
+
+                       node.data.echarts.option.series.push(yAxisData)
+                        console.log(node.data.echarts.option.series)
+                       canvas.updateProps(false);
                       }
-                      if (yAxisData.length > 10) {
-                        yAxisData.shift();
-                      }
-                      xAxisData.push(moment(r.time).format('LTS'));
-                      yAxisData.push(r.value);
-                      node.data.echarts.option.xAxis.data = xAxisData;
-                      node.data.echarts.option.series[0].data = yAxisData;
-                      canvas.updateProps(false);
-                      canvas.render()
-                    }
+                    })
                     break;
                   default:
                 }

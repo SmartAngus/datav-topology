@@ -583,39 +583,10 @@ export const Tools = [
                 },
                 xAxis: {
                   boundaryGap: false,
-                  data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                  data: [],
                 },
                 yAxis: { boundaryGap: false },
-                series: [
-                  {
-                    symbol: 'none' /*去掉小圆点*/,
-                    name: '当前流量',
-                    type: 'line',
-                    smoothMonotone: 'x',
-                    smooth: true,
-                    markLine: {
-                      silent: true,
-                      data: [
-                        {
-                          yAxis: 20,
-                        },
-                        {
-                          yAxis: 40,
-                        },
-                        {
-                          yAxis: 60,
-                        },
-                        {
-                          yAxis: 100,
-                        },
-                        {
-                          yAxis: 120,
-                        },
-                      ],
-                    },
-                    data: [] /*,             smooth:true//显示为平滑的曲线*/,
-                  },
-                ],
+                series: [],
               },
             },
             // property: {
