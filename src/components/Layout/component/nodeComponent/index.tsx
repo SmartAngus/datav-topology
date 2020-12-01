@@ -476,8 +476,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               onChange={handlePropertyDataMethodChange}
               allowClear
             >
-              <Option value="male">绑定数据点</Option>
-              <Option value="female">接口传入</Option>
+              <Option value="point">绑定数据点</Option>
+              <Option value="restful">接口传入</Option>
             </Select>
           </Form.Item>
           <Form.Item label="数据点">

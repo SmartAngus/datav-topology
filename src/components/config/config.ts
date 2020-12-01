@@ -82,7 +82,7 @@ export const Tools = [
           elementRendered: false,
           iconColor: '#ccc',
           property: {
-            dataMethod: 'aa',
+            dataMethod: 'point',
             dataDot: 1,
             dataPointSelectedRows:[],
             dataPointParam: {
@@ -203,7 +203,7 @@ export const Tools = [
               showBkColor: true,
               bkColor: '#FFFF00',
             },
-            dataMethod: 'aa',
+            dataMethod: 'point',
             dataDot: 1,
             dataPointSelectedRows:[],
             dataPointParam: {
@@ -237,7 +237,7 @@ export const Tools = [
             showText: true,
             stateType: 'single', // 状态定义: single 单点值,  range 范围值
             lightRange: [], // 指示灯 状态定义 列表
-            dataMethod: 'aa',
+            dataMethod: 'point',
             dataDot: 1,
             dataPointSelectedRows:[],
             dataPointParam: {
@@ -620,7 +620,7 @@ export const Tools = [
             },
             property: {
               echartsType: 'timeLine',
-              dataMethod: 'aa',
+              dataMethod: 'point',
               dataDot: 1,
               dataPointParam: {
                 qtDataList: [
@@ -634,7 +634,7 @@ export const Tools = [
             },
           },
           property: {
-            dataMethod: 'aa',
+            dataMethod: 'point',
             dataDot: 1,
             dataPointSelectedRows:[],
             dataPointParam: {
@@ -834,7 +834,7 @@ export const Tools = [
             },
             property: {
               echartsType: 'gauge',
-              dataMethod: 'aa',
+              dataMethod: 'point',
               dataDot: 1,
               dataPointParam: {
                 qtDataList: [
@@ -867,7 +867,7 @@ export const Tools = [
             },
             property: {
               echartsType: 'chartMeasure',
-              dataMethod: 'aa',
+              dataMethod: 'point',
               dataDot: 1,
               dataPointParam: {
                 qtDataList: [
