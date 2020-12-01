@@ -35,7 +35,7 @@ import DataBindModal from '../../../FilterDataPoint';
 
 import styles from './index.module.scss';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import { getNodeType } from '../../../utils/Property2NodeProps'
+import { getNodeType } from '../../../utils/Property2NodeProps';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -83,9 +83,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     data?.node || {};
   const { color, fontSize, fontFamily } = data?.node?.font || {};
   const { property } = data?.node; // 用户自定义数据片段
-  const [dataPointSelectedRows,setDataPointSelectedRows]=useState(property?.dataPointSelectedRows||[])
+  const [dataPointSelectedRows, setDataPointSelectedRows] = useState(
+    property?.dataPointSelectedRows || []
+  );
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
+    console.log(property);
     // 设置基本表单
     form.setFieldsValue({
       x,
@@ -210,18 +213,18 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
   // 获得选中的数据点
   const onDataPointBind = (selectedRowKeys, selectedRows) => {
-    console.log("onDataPointBind",selectedRows)
-    const nodeType = getNodeType(data.node)
-    console.log("nodeType,",nodeType)
-    if(property&&property.dataPointSelectedRows){
-
-      if(nodeType=="timeLine"){// 最多可绑定十个数据点
-        if(data.node.property.dataPointSelectedRows.length<10){
+    console.log('onDataPointBind', selectedRows);
+    const nodeType = getNodeType(data.node);
+    console.log('nodeType,', nodeType);
+    if (property && property.dataPointSelectedRows) {
+      if (nodeType == 'timeLine') {
+        // 最多可绑定十个数据点
+        if (data.node.property.dataPointSelectedRows.length < 10) {
           data.node.property.dataPointSelectedRows.concat(selectedRows);
           setDataPointSelectedRows(selectedRows);
         }
-      }else{
-        data.node.property.dataPointSelectedRows=selectedRows;
+      } else {
+        data.node.property.dataPointSelectedRows = selectedRows;
         setDataPointSelectedRows(selectedRows);
       }
     }
@@ -498,23 +501,21 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               添加数据点
             </Button>
           </Form.Item>
-          {
-            (property?.dataPointSelectedRows||[]).map((item,index)=>{
-              return (
-                <Form.Item label={`数据点${index}`} key={index}>
-                  <span>{item.dataName}</span>
-                  <Button type="link" icon={<DeleteOutlined />}></Button>
-                </Form.Item>
-              )
-            })
-          }
+          {(property?.dataPointSelectedRows || []).map((item, index) => {
+            return (
+              <Form.Item label={`数据点${index}`} key={index}>
+                <span>{item.dataName}</span>
+                <Button type="link" icon={<DeleteOutlined />}></Button>
+              </Form.Item>
+            );
+          })}
           <Form.Item name="dataDot" label="显示精度">
             <InputNumber min={0} max={5} />
           </Form.Item>
         </Col>
       </Form>
     );
-  }, [data?.node,dataPointSelectedRows]);
+  }, [data?.node, dataPointSelectedRows]);
 
   /**
    * 渲染对齐方式
@@ -1105,11 +1106,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             {name === 'biciPilot' && renderLight}
             {name === 'biciTimer' && renderBiciTimerDataForm}
             {name === 'biciCard' && renderDataCard}
-            {data.node.data?.property?.echartsType === 'chartMeasure' &&
-              renderMeter}
-            {data.node.data?.property?.echartsType === 'timeLine' &&
-              renderLineGraph}
-            {data.node.data?.property?.echartsType === 'gauge' && renderGauge}
+            {property?.echartsType === 'chartMeasure' && renderMeter}
+            {property?.echartsType === 'timeLine' && renderLineGraph}
+            {property?.echartsType === 'gauge' && renderGauge}
           </Collapse>
         </TabPane>
         <TabPane tab="数据" key="2" style={{ margin: 0 }}>
@@ -1117,15 +1116,14 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             <Panel header="本身数据" key="1">
               {renderDataForm}
             </Panel>
-            {
-              (data.node.name=='biciVarer'
-                ||data.node.name=='echarts'
-                ||data.node.name=='biciCard'
-                ||data.node.name=='biciPilot')
-                &&(<Panel header="自定义数据" key="2">
+            {(data.node.name == 'biciVarer' ||
+              data.node.name == 'echarts' ||
+              data.node.name == 'biciCard' ||
+              data.node.name == 'biciPilot') && (
+              <Panel header="自定义数据" key="2">
                 {renderExtraDataForm}
-              </Panel>)
-            }
+              </Panel>
+            )}
           </Collapse>
         </TabPane>
       </Tabs>
