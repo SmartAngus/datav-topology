@@ -173,8 +173,8 @@ export const Tools = [
             limitType: 'custom', // 数据类型：dataPoint 数据点  custom 自定义
             showLimit: false, // 展示上下限
             limit: {
-              bottom: '0', // 下限
-              top: '0', // 上限
+              bottom: 0, // 下限
+              top: 100, // 上限
             },
             normal: {
               fontFamily: 'Arial',

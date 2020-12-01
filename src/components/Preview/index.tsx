@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Node, Topology } from '../../topology/core';
 import { PageHeader, Button } from 'antd';
+import { roundFun } from '../utils/cacl';
 import moment from 'moment';
 import { formatTimer } from '../utils/Property2NodeProps';
 let canvas;
@@ -33,6 +34,28 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       canvas.closeSocket();
     };
   }, [data]);
+
+  // 数据卡片颜色根据数据变化
+  const setCardStyle = (
+    node: Node,
+    fontFamily: string,
+    size: number,
+    bkColor: string
+  ) => {
+    if (fontFamily) {
+      node.font.fontFamily = fontFamily;
+      node.children[0].font.fontFamily = fontFamily;
+      node.children[1].font.fontFamily = fontFamily;
+    }
+    if (size) {
+      node.font.fontSize = size;
+      node.children[0].font.fontSize = size;
+      node.children[1].font.fontSize = size;
+    }
+    if (bkColor) {
+      node.fillStyle = bkColor;
+    }
+  };
 
   const initWebsocketData = () => {
     canvas.closeSocket();
@@ -115,9 +138,36 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                   }
                 } else if (node.name === 'biciCard') {
                   if (node.property.dataPointParam.qtDataList[0].id == r.id) {
-                    console.log('rrrrr', r);
-                    console.log('selectd.node', node);
-                    node.children[0].text = r.value;
+                    const n = node.property.dataDot;
+                    const val = roundFun(parseFloat(r.value), n);
+                    node.children[0].text = val;
+                    const bottom = parseFloat(node.property.limit.bottom);
+                    const top = parseFloat(node.property.limit.top);
+                    const tempVal = parseFloat(val);
+                    if (tempVal < bottom) {
+                      // 小于下限
+                      setCardStyle(
+                        node,
+                        node.property.bottomLimit.fontFamily,
+                        parseInt(node.property.bottomLimit.fontSize),
+                        node.property.bottomLimit.bkColor
+                      );
+                    } else if (tempVal > top) {
+                      // 高于上限
+                      setCardStyle(
+                        node,
+                        node.property.topLimit.fontFamily,
+                        parseInt(node.property.topLimit.fontSize),
+                        node.property.topLimit.bkColor
+                      );
+                    } else {
+                      setCardStyle(
+                        node,
+                        node.property.normal.fontFamily,
+                        parseInt(node.property.normal.fontSize),
+                        node.property.normal.bkColor
+                      );
+                    }
                     canvas.updateProps(false);
                   }
                 }

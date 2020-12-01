@@ -181,65 +181,18 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   /**
    * 数据卡片自定义数据逻辑处理
    */
-  const setCardStyle = (fontFamily: string, size: number, bkColor: string) => {
-    if (fontFamily) {
-      selected.node.font.fontFamily = fontFamily;
-      selected.node.children[0].font.fontFamily = fontFamily;
-      selected.node.children[1].font.fontFamily = fontFamily;
-    }
-    if (size) {
-      selected.node.font.fontSize = size;
-      selected.node.children[0].font.fontSize = size;
-      selected.node.children[1].font.fontSize = size;
-    }
-    if (bkColor) {
-      selected.node.fillStyle = bkColor;
-    }
-  };
   const handleBiciCard = (value) => {
     console.log('seleted node:', selected.node);
-    const {
-      cardTitle,
-      showTitle,
-      showLimit,
-      limitBottom,
-      limitTop,
-      normalFontFamily,
-      normalFontSize,
-      normalBkColor,
-      bottomLimitFontFamily,
-      bottomLimitFontSize,
-      bottomLimitBkColor,
-      topLimitFontFamily,
-      topLimitFontSize,
-      topLimitBkColor,
-      dataDot,
-    } = value;
+    const { cardTitle, showTitle, showLimit } = value;
     if (showTitle !== undefined) {
       const titleVal = showTitle ? cardTitle : '';
       selected.node.text = titleVal;
     }
     if (showLimit !== undefined) {
       const limitText = showLimit
-        ? `上限: ${limitTop}   下限: ${limitBottom}`
+        ? `上限: ${value['limit.top']}   下限: ${value['limit.bottom']}`
         : '';
       selected.node.children[1].text = limitText;
-    }
-    setCardStyle(normalFontFamily, parseInt(normalFontSize), normalBkColor);
-    const val = selected.node.children[0].text;
-    if (parseFloat(val) < parseFloat(limitBottom)) {
-      // 低于下限
-      setCardStyle(
-        bottomLimitFontFamily,
-        parseInt(bottomLimitFontSize),
-        bottomLimitBkColor
-      );
-    } else if (parseFloat(val) > parseFloat(limitTop)) {
-      setCardStyle(
-        topLimitFontFamily,
-        parseInt(topLimitFontSize),
-        topLimitBkColor
-      );
     }
   };
 
