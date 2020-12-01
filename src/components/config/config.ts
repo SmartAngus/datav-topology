@@ -204,7 +204,7 @@ export const Tools = [
               bkColor: '#FFFF00',
             },
             dataMethod: 'point',
-            dataDot: 1,
+            dataDot: 2,
             dataPointSelectedRows: [],
             dataPointParam: {
               qtDataList: [

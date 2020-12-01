@@ -213,6 +213,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       topLimitFontFamily,
       topLimitFontSize,
       topLimitBkColor,
+      dataDot,
     } = value;
     if (showTitle !== undefined) {
       const titleVal = showTitle ? cardTitle : '';
