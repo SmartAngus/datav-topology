@@ -183,13 +183,16 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const handleBiciCard = (value) => {
     console.log('seleted node:', selected.node);
-    const { cardTitle, showTitle } = value;
-    if (cardTitle) {
-      selected.node.text = cardTitle;
-    }
+    const { cardTitle, showTitle, showLimit } = value;
     if (showTitle !== undefined) {
-      const titleVal = showTitle ? selected.node.property.cardTitle : '';
+      const titleVal = showTitle ? cardTitle : '';
       selected.node.text = titleVal;
+    }
+    if (showLimit !== undefined) {
+      const limitText = showLimit
+        ? `上限: ${value['limit.top']}   下限: ${value['limit.bottom']}`
+        : '';
+      selected.node.children[1].text = limitText;
     }
   };
 
@@ -260,7 +263,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // 只能两层嵌套，后期需要更改，如果有多层的话
       // canvas.setValue(selected.node.id, 'setValue');
       // 通知有数据属性更新,会重新渲染画布
-      canvas.updateProps(false);
 
       const { name } = selected.node;
       if (name === 'biciCard') {
@@ -282,6 +284,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         }
       }
       // 更新属性变化
+      canvas.updateProps(false, [selected.node]);
     },
     [selected]
   );

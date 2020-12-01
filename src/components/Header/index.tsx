@@ -1,16 +1,7 @@
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { Topology } from '../../topology/core';
 import { History } from 'history';
-import {
-  Button,
-  Menu,
-  Popover,
-  Tag,
-  Space,
-  Tooltip,
-  Modal,
-  message,
-} from 'antd';
+import { Button, Menu, Popover, Tag, Space, Tooltip, message } from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { useFullscreen } from 'ahooks';
 import { BasicTarget } from 'ahooks/lib/utils/dom';
@@ -18,7 +9,9 @@ import CustomIcon from '../config/iconConfig';
 import styles from './index.module.scss';
 import { base64ToFile } from '../utils/cacl';
 
-const { confirm } = Modal;
+message.config({
+  getContainer: () => document.querySelector('#editLayout'),
+});
 
 const headTools = [
   {

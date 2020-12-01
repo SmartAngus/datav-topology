@@ -212,26 +212,28 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
   // 获得选中的数据点
   const onDataPointBind = (selectedRowKeys, selectedRows) => {
-    console.log("onDataPointBind",selectedRows)
-    const nodeType = getNodeType(data.node)
-    console.log("nodeType,",nodeType)
-    if(property&&property.dataPointSelectedRows){
-
-      if(nodeType=="timeLine"){// 最多可绑定十个数据点
-        if(data.node.property.dataPointSelectedRows.length<10){
-          data.node.property.dataPointSelectedRows=data.node.property.dataPointSelectedRows.concat(selectedRows);
+    console.log('onDataPointBind', selectedRows);
+    const nodeType = getNodeType(data.node);
+    console.log('nodeType,', nodeType);
+    if (property && property.dataPointSelectedRows) {
+      if (nodeType == 'timeLine') {
+        // 最多可绑定十个数据点
+        if (data.node.property.dataPointSelectedRows.length < 10) {
+          data.node.property.dataPointSelectedRows = data.node.property.dataPointSelectedRows.concat(
+            selectedRows
+          );
           data.node.property.dataPointParam.qtDataList.push({
             id: selectedRows[0].id,
-            type:selectedRows[0].dataType
-          })
+            type: selectedRows[0].dataType,
+          });
           setDataPointSelectedRows(selectedRows);
         }
-      }else{
-        data.node.property.dataPointSelectedRows=selectedRows;
-        data.node.property.dataPointParam.qtDataList[0]={
+      } else {
+        data.node.property.dataPointSelectedRows = selectedRows;
+        data.node.property.dataPointParam.qtDataList[0] = {
           id: selectedRows[0].id,
-          type:selectedRows[0].dataType
-        }
+          type: selectedRows[0].dataType,
+        };
         setDataPointSelectedRows(selectedRows);
       }
     }
@@ -349,7 +351,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
             <Col push={2}>
               <Form.Item name="lineWidth" initialValue={1}>
-                <InputNumber />
+                <InputNumber min={0} />
               </Form.Item>
             </Col>
           </Row>
@@ -377,7 +379,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Col>
           <Col span={24}>
             <Form.Item name="fontSize" label="大小">
-              <InputNumber />
+              <InputNumber min={0} />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -508,23 +510,21 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               添加数据点
             </Button>
           </Form.Item>
-          {
-            (property?.dataPointSelectedRows||[]).map((item,index)=>{
-              return (
-                <Form.Item label={`数据点${index}`} key={index}>
-                  <span>{item.dataName}</span>
-                  <Button type="link" icon={<DeleteOutlined />}></Button>
-                </Form.Item>
-              )
-            })
-          }
+          {(property?.dataPointSelectedRows || []).map((item, index) => {
+            return (
+              <Form.Item label={`数据点${index}`} key={index}>
+                <span>{item.dataName}</span>
+                <Button type="link" icon={<DeleteOutlined />}></Button>
+              </Form.Item>
+            );
+          })}
           <Form.Item name="dataDot" label="显示精度">
             <InputNumber min={0} max={5} />
           </Form.Item>
         </Col>
       </Form>
     );
-  }, [data?.node,dataPointSelectedRows]);
+  }, [data?.node, propertyForm, dataPointSelectedRows]);
 
   /**
    * 渲染对齐方式
@@ -654,7 +654,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   labelCol={{ span: 8 }}
                   labelAlign="left"
                 >
-                  <Input />
+                  <InputNumber min={12} />
                 </Form.Item>
                 <Row>
                   <Col span={10}>
@@ -701,7 +701,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Col>
           <Col span={24}>
             <Form.Item name="size" label="尺寸">
-              <InputNumber placeholder="请输入直径" style={{ width: '100%' }} />
+              <InputNumber
+                placeholder="请输入直径"
+                min={0}
+                style={{ width: '100%' }}
+              />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -994,7 +998,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <Col push={2}>
                 <Input.Group compact>
                   <Form.Item>
-                    <InputNumber style={{ width: 90 }} placeholder="下限" />
+                    <InputNumber
+                      style={{ width: 90 }}
+                      min={0}
+                      placeholder="下限"
+                    />
                   </Form.Item>
                   <Input
                     style={{
@@ -1009,6 +1017,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       style={{
                         width: 90,
                       }}
+                      min={0}
                       placeholder="上限"
                     />
                   </Form.Item>
