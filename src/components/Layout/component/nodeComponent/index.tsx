@@ -82,7 +82,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     data?.node || {};
   const { color, fontSize, fontFamily } = data?.node?.font || {};
   const { property } = data?.node; // 用户自定义数据片段
-  const [dataPointSelectedRows,setDataPointSelectedRows]=useState(property?.dataPointSelectedRows||[])
+  const [dataPointSelectedRows, setDataPointSelectedRows] = useState(
+    property?.dataPointSelectedRows || []
+  );
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
     // 设置基本表单
@@ -209,9 +211,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
   // 获得选中的数据点
   const onDataPointBind = (selectedRowKeys, selectedRows) => {
-    console.log("onDataPointBind",selectedRows)
-    if(property&&property.dataPointSelectedRows){
-      data.node.property.dataPointSelectedRows=selectedRows;
+    console.log('onDataPointBind', selectedRows);
+    if (property && property.dataPointSelectedRows) {
+      data.node.property.dataPointSelectedRows = selectedRows;
       setDataPointSelectedRows(selectedRows);
     }
   };
@@ -395,8 +397,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const renderBiciTimerDataForm = useMemo(() => {
     return (
       <React.Fragment>
-        {/* {renderFillStyle} */}
-        {/* {renderFontForm} */}
+        {renderFillStyle}
+        {renderFontForm}
         <Panel header="时间格式" key="biciTimer">
           <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
             <Row>
@@ -460,7 +462,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    * 渲染元素额外数据 {"qtDataList":[{"id":"6413f3a606754c31987ec584ed56d5b7","type":2}],"subscribe":true,"page":"动态曲线"}
    */
   const renderExtraDataForm = useMemo(() => {
-    console.log("node...",data)
+    console.log('node...', data);
     return (
       <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
         <Col>
@@ -487,23 +489,21 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               添加数据点
             </Button>
           </Form.Item>
-          {
-            (property?.dataPointSelectedRows||[]).map((item,index)=>{
-              return (
-                <Form.Item label={`数据点${index}`} key={index}>
-                  <span>{item.dataName}</span>
-                  <Button type="link" icon={<DeleteOutlined />}></Button>
-                </Form.Item>
-              )
-            })
-          }
+          {(property?.dataPointSelectedRows || []).map((item, index) => {
+            return (
+              <Form.Item label={`数据点${index}`} key={index}>
+                <span>{item.dataName}</span>
+                <Button type="link" icon={<DeleteOutlined />}></Button>
+              </Form.Item>
+            );
+          })}
           <Form.Item name="dataDot" label="显示精度">
             <InputNumber min={0} max={5} />
           </Form.Item>
         </Col>
       </Form>
     );
-  }, [data?.node,dataPointSelectedRows]);
+  }, [data?.node, dataPointSelectedRows]);
 
   /**
    * 渲染对齐方式
@@ -543,75 +543,76 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     };
 
     return (
-      <Panel header="基本信息" key="info">
-        <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-          <Row>
-            <Col span={10}>
-              <Form.Item
-                label="标题"
-                name="showTitle"
-                labelCol={{ span: 12 }}
-                labelAlign="left"
-                valuePropName="checked"
-              >
-                <Checkbox />
-              </Form.Item>
-            </Col>
-            <Col span={14}>
-              <Form.Item name="cardTitle">
-                <Input placeholder="标题名称" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Form.Item
-            name="limitType"
-            label="上下限"
-            labelCol={{ span: 9 }}
-            labelAlign="left"
-            initialValue="dataPoint"
-          >
-            <Radio.Group
-              options={[
-                { label: '数据点', value: 'dataPoint' },
-                { label: '自定义', value: 'custom' },
-              ]}
-              optionType="button"
-              buttonStyle="solid"
-            />
-          </Form.Item>
-          <Row>
-            <Col span={4}>
-              <Form.Item name="showLimit" valuePropName="checked">
-                <Checkbox />
-              </Form.Item>
-            </Col>
-            <Col span={20}>
-              <Input.Group compact>
-                <Form.Item name="limit.bottom">
-                  <Input style={{ width: 80 }} placeholder="下限" />
+      <Fragment>
+        <Panel header="基本信息" key="info">
+          <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
+            <Row>
+              <Col span={10}>
+                <Form.Item
+                  label="标题"
+                  name="showTitle"
+                  labelCol={{ span: 12 }}
+                  labelAlign="left"
+                  valuePropName="checked"
+                >
+                  <Checkbox />
                 </Form.Item>
-                <Input
-                  style={{
-                    width: 30,
-                    pointerEvents: 'none',
-                  }}
-                  placeholder="~"
-                  disabled
-                />
-                <Form.Item name="limit.top">
+              </Col>
+              <Col span={14}>
+                <Form.Item name="cardTitle">
+                  <Input placeholder="标题名称" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Form.Item
+              name="limitType"
+              label="上下限"
+              labelCol={{ span: 9 }}
+              labelAlign="left"
+              initialValue="dataPoint"
+            >
+              <Radio.Group
+                options={[
+                  { label: '数据点', value: 'dataPoint' },
+                  { label: '自定义', value: 'custom' },
+                ]}
+                optionType="button"
+                buttonStyle="solid"
+              />
+            </Form.Item>
+            <Row>
+              <Col span={4}>
+                <Form.Item name="showLimit" valuePropName="checked">
+                  <Checkbox />
+                </Form.Item>
+              </Col>
+              <Col span={20}>
+                <Input.Group compact>
+                  <Form.Item name="limit.bottom">
+                    <Input style={{ width: 80 }} placeholder="下限" />
+                  </Form.Item>
                   <Input
                     style={{
-                      width: 80,
+                      width: 30,
+                      pointerEvents: 'none',
                     }}
-                    placeholder="上限"
+                    placeholder="~"
+                    disabled
                   />
-                </Form.Item>
-              </Input.Group>
-            </Col>
-          </Row>
-        </Form>
-      </Panel>
-      /*  <Fragment> {Object.keys(statusObj).map((key) => {
+                  <Form.Item name="limit.top">
+                    <Input
+                      style={{
+                        width: 80,
+                      }}
+                      placeholder="上限"
+                    />
+                  </Form.Item>
+                </Input.Group>
+              </Col>
+            </Row>
+          </Form>
+        </Panel>
+        {Object.keys(statusObj).map((key) => {
           return (
             <Panel header={`样式-${statusObj[key]}`} key={key}>
               <Form
@@ -655,7 +656,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               </Form>
             </Panel>
           );
-        })} </Fragment> */
+        })}
+      </Fragment>
     );
   }, [propertyForm, property]);
 
@@ -1104,11 +1106,14 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             <Panel header="本身数据" key="1">
               {renderDataForm}
             </Panel>
-            {
-              (data.node.name=='biciVarer'||data.node.name=='echarts'||data.node.name=='biciCard'||data.node.name=='biciPilot')&&(<Panel header="自定义数据" key="2">
+            {(data.node.name == 'biciVarer' ||
+              data.node.name == 'echarts' ||
+              data.node.name == 'biciCard' ||
+              data.node.name == 'biciPilot') && (
+              <Panel header="自定义数据" key="2">
                 {renderExtraDataForm}
-              </Panel>)
-            }
+              </Panel>
+            )}
           </Collapse>
         </TabPane>
       </Tabs>
