@@ -524,7 +524,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Col>
       </Form>
     );
-  }, [data?.node, dataPointSelectedRows]);
+  }, [data?.node, propertyForm, dataPointSelectedRows]);
 
   /**
    * 渲染对齐方式

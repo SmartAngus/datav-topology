@@ -83,7 +83,7 @@ export const Tools = [
           iconColor: '#ccc',
           property: {
             dataMethod: 'point',
-            dataDot: 1,
+            dataDot: 2,
             dataPointSelectedRows: [],
             dataPointParam: {
               qtDataList: [
@@ -238,7 +238,7 @@ export const Tools = [
             stateType: 'single', // 状态定义: single 单点值,  range 范围值
             lightRange: [], // 指示灯 状态定义 列表
             dataMethod: 'point',
-            dataDot: 1,
+            dataDot: 2,
             dataPointSelectedRows: [],
             dataPointParam: {
               qtDataList: [
