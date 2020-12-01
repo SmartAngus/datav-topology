@@ -119,7 +119,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     },
     combineCom: {
       apiURL: 'http://qt.test.bicisims.com',
-      token: '9XO2Khne0e18KCiDEl8sC',
+      token: token,
       list: {
         url: '/applications/customComponent/list',
         params: {},
@@ -140,7 +140,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   };
   const apiURL = 'http://qt.test.bicisims.com';
   const websocketConf = {
-    url: 'ws://47.96.159.115:51060/ws?token=5KmTbcul1R4RNxnSiwTlpr',
+    url: 'ws://47.96.159.115:51060/ws?token=5Yin6wBp0lPSKj0J5wLUAr',
   };
   useEffect(() => {
     // 获取数据
@@ -159,7 +159,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
         method: 'get',
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
-          token: '9XO2Khne0e18KCiDEl8sC',
+          token: token,
           'Content-Type': 'application/json',
         },
         params: {
@@ -229,7 +229,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     const formData = new FormData();
-    api.defaults.headers.common['token'] = '9XO2Khne0e18KCiDEl8sC';
+    api.defaults.headers.common['token'] = '5Yin6wBp0lPSKj0J5wLUAr';
     formData.append('file', data.screenshot);
     formData.append('mappingId', 'ooip6ffe388d487db754b885b8aa65b9');
 
@@ -251,7 +251,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
         method: 'POST',
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
-          token: '9XO2Khne0e18KCiDEl8sC',
+          token: token,
           'Content-Type': 'application/json;charset=UTF-8',
         },
         data: {
@@ -349,7 +349,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
 const PreviewLayout: React.FC<any> = ({ history }) => {
   const [editorData, setEditorData] = useState<any>();
   const websocketConf = {
-    url: 'ws://47.96.159.115:51060/ws?token=9XO2Khne0e18KCiDEl8sC',
+    url: 'ws://47.96.159.115:51060/ws?token=5Yin6wBp0lPSKj0J5wLUAr',
   };
   useEffect(() => {
     const instance = axios.create({
@@ -363,7 +363,7 @@ const PreviewLayout: React.FC<any> = ({ history }) => {
         method: 'get',
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
-          token: '9XO2Khne0e18KCiDEl8sC',
+          token: "5Yin6wBp0lPSKj0J5wLUAr",
           'Content-Type': 'application/json',
         },
         params: {
