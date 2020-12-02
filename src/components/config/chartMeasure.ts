@@ -3,7 +3,8 @@ import echarts from 'echarts/lib/echarts';
 export function getMeasureOption(option?:
   {
      min:number,
-     max:number
+     max:number,
+     value:number,
   }){
   let TP_value = 40;
   let kd = [];
@@ -74,6 +75,7 @@ export function getMeasureOption(option?:
   leftColor = Gradient[Gradient.length - 1].color;
   // 因为柱状初始化为0，温度存在负值，所以加上负值60和空出距离10
   let measureOption = {
+    backgroundColor: 'blue',
     title: {
       text: '温度计',
       show: false,

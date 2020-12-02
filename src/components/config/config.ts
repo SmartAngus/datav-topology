@@ -1,4 +1,4 @@
-import { getMeasureOption } from './chartMeasure';
+import {getMeasureOption} from './chartMeasure';
 export const Tools = [
   {
     group: '通用组件',
@@ -779,6 +779,12 @@ export const Tools = [
                 tooltip: {
                   formatter: '{a} <br/>{b} : {c}%',
                 },
+                grid:{
+                  top:0,
+                  left:0,
+                  right:0,
+                  bottom:50
+                },
                 toolbox: {
                   feature: {
                     restore: {
@@ -793,10 +799,28 @@ export const Tools = [
                   {
                     name: '业务指标',
                     type: 'gauge',
+                    max:90,
+                    min:-20,
                     detail: { formatter: '{value}%' },
-                    data: [{ value: 0, name: '' }],
-                  },
-                ],
+                    data: [{ value: 40, name: '' }],
+                    axisLine: {
+                      lineStyle: {
+                        color: [ //数组第一个属性是颜色所占line百分比
+                          [0.4, "#49afff"],
+                          [0.6, "#68A54A"],
+                          [1, "#f56c6c"]
+                        ],
+                        width: 22
+                      }
+                    },
+                    splitLine: {
+                      length: 12,
+                      lineStyle: {
+                        width: 1
+                      }
+                    }
+                  }
+                ]
               },
             },
           },
@@ -806,14 +830,27 @@ export const Tools = [
             dataDot: 1,
             dataPointSelectedRows: [],
             dataPointParam: {
-              qtDataList: [
-                {
-                  id: '02399e78150d4ac5b68bd5516e1a6851', // id 为数据点id
-                  type: 1,
-                },
-              ],
+              qtDataList: [],
               subscribe: true,
             },
+            dataColors:[{
+              checked:false,
+              color:'#ccc',
+              top:100,
+              bottom:-10
+            },{
+              checked:false,
+              color:'#ccc',
+              top:100,
+              bottom:-10
+            },{
+              checked:false,
+              color:'#ccc',
+              top:100,
+              bottom:-10
+            }],
+            dataMax:100,
+            dataMin:0
           },
         },
       },
@@ -840,14 +877,17 @@ export const Tools = [
             dataPointSelectedRows: [],
             dataDot: 1,
             dataPointParam: {
-              qtDataList: [
-                {
-                  id: '6413f3a606754c31987ec584ed56d5b7', // id 为数据点id
-                  type: 2,
-                },
-              ],
+              qtDataList: [],
               subscribe: true,
             },
+            dataColors:[{
+              checked:false,
+              color:'#ccc',
+              top:100,
+              bottom:-10
+            }],
+            dataMax:100,
+            dataMin:0
           },
         },
       },
