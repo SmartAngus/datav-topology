@@ -191,7 +191,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     (selected.node.property.dataColors||[]).map(item=>{
       if(item.checked){
         let lineColor=[];
-        lineColor[0]=item.top/selected.node.property.dataMax
+        lineColor[0]=Math.abs(item.top/(selected.node.property.dataMax));
         lineColor[1]=item.color;
         lineColors.push(lineColor)
       }
