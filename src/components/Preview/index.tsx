@@ -3,7 +3,7 @@ import { Node, Topology } from '../../topology/core';
 import { PageHeader, Button } from 'antd';
 import { roundFun } from '../utils/cacl';
 import moment from 'moment';
-import { formatTimer } from '../utils/Property2NodeProps';
+import {formatTimer, getNodeType} from '../utils/Property2NodeProps';
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -103,6 +103,9 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                       canvas.updateProps(false);
                     }
                     break;
+                  case 'chartMeasure':
+                    console.log("chartMeasure",node)
+                    break;
                   case 'timeLine':
                     (node.property.dataPointSelectedRows||[]).map((row,index)=>{
                       const seria = {
@@ -154,10 +157,9 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                     break;
                   default:
                 }
-              } else if (
-                node.property?.dataPointParam?.qtDataList?.length > 0
-              ) {
+              } else if (node.property?.dataPointParam?.qtDataList?.length > 0) {// 非图表组件
                 const r = JSON.parse(data.data);
+                const nodeType=getNodeType(node);
                 if (node.name == 'biciVarer') {
                   if (node.text != r.value && node.property.dataPointParam.qtDataList[0].id == r.id) {
                     node.text = r.value;

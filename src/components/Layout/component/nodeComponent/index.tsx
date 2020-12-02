@@ -833,7 +833,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
             <Col>
               <Input.Group compact>
-                <Form.Item name="rangeValMin">
+                <Form.Item name="dataMin">
                   <InputNumber style={{ width: 85 }} placeholder="下限" />
                 </Form.Item>
                 <Input
@@ -844,7 +844,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   placeholder="~"
                   disabled
                 />
-                <Form.Item name="rangeValMax">
+                <Form.Item name="dataMax">
                   <InputNumber
                     style={{
                       width: 85,
@@ -861,22 +861,22 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           <Row>
             <Form.Item label="颜色分区"></Form.Item>
           </Row>
-          {[1, 2, 3, 4, 5].map((item) => (
-            <Row key={item}>
+          {(property.dataColors||[]).map((item,index) => (
+            <Row key={index}>
               <Col span={3}>
-                <Form.Item>
-                  <Checkbox />
+                <Form.Item name="checked">
+                  <Checkbox defaultChecked={item.checked} />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item>
-                  <ColorPicker />
+                <Form.Item name="color">
+                  <ColorPicker value={item.color}/>
                 </Form.Item>
               </Col>
               <Col span={15}>
                 <Input.Group compact>
-                  <Form.Item>
-                    <Input style={{ width: 60 }} placeholder="下限" />
+                  <Form.Item name="bottom">
+                    <Input style={{ width: 60 }} placeholder="下限" value={item.bottom} />
                   </Form.Item>
                   <Input
                     style={{
@@ -886,11 +886,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     placeholder="~"
                     disabled
                   />
-                  <Form.Item>
+                  <Form.Item name="top">
                     <Input
                       style={{
                         width: 60,
                       }}
+                      value={item.top}
                       placeholder="上限"
                     />
                   </Form.Item>
