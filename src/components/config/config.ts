@@ -1,4 +1,4 @@
-import {getMeasureOption} from './chartMeasure';
+import {getMeasureOption,getGaugeOption} from './chartMeasure';
 export const Tools = [
   {
     group: '通用组件',
@@ -779,6 +779,7 @@ export const Tools = [
           paddingLeftNum:0,
           data: {
             echarts: {
+<<<<<<< HEAD
               option: {
                 tooltip: {
                   formatter: '{a} <br/>{b} : {c}%',
@@ -827,6 +828,9 @@ export const Tools = [
                   },
                 ],
               },
+=======
+              option: getGaugeOption(),
+>>>>>>> 47f1c258055e89a343a62be974da91501a8283d8
             },
           },
           property: {
@@ -838,6 +842,7 @@ export const Tools = [
               qtDataList: [],
               subscribe: true,
             },
+<<<<<<< HEAD
             dataColors: [
               {
                 checked: false,
@@ -860,6 +865,36 @@ export const Tools = [
             ],
             dataMax: 100,
             dataMin: 0,
+=======
+            dataColors:[{
+              checked:false,
+              color:'#ccc',
+              top:100,
+              bottom:-10
+            },{
+              checked:false,
+              color:'#ccc',
+              top:100,
+              bottom:-10
+            },{
+              checked:false,
+              color:'#02df35',
+              top:100,
+              bottom:-10
+            },{
+              checked:true,
+              color:'#02df23',
+              top:100,
+              bottom:-10
+            },{
+              checked:false,
+              color:'#02df31',
+              top:100,
+              bottom:-10
+            }],
+            dataMax:100,
+            dataMin:0
+>>>>>>> 47f1c258055e89a343a62be974da91501a8283d8
           },
         },
       },

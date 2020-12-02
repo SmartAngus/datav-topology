@@ -31,6 +31,7 @@ import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines';
 import { calcCanvas } from '../utils/cacl';
 import ResizePanel from '../common/resizeSidebar';
+import { getGaugeOption } from '../config/chartMeasure';
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
@@ -176,6 +177,21 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       );
     }
   };
+  const handleChartMeasure = (values) => {
+    for (let k in values) {
+      let kindex = k.split('-');
+      let index = parseInt(kindex[1]);
+      if (k.indexOf('-') > 0) {
+        selected.node.property.dataColors[index][kindex[0]] = values[k];
+      }
+    }
+    selected.node.property.dataMax = values.dataMax || 100;
+    selected.node.property.dataMin = values.dataMin || 0;
+    selected.node.data.echarts.option = getGaugeOption({
+      max: selected.node.property.dataMax,
+      min: selected.node.property.dataMin,
+    });
+  };
 
   /**
    * 数据卡片自定义数据逻辑处理
@@ -299,6 +315,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           break;
         case 'biciPilot':
           handlePilot(value);
+          break;
+        case 'echarts':
+          handleChartMeasure(value);
           break;
       }
 

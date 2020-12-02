@@ -157,6 +157,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         'bottomLimit.showBkColor': property.bottomLimit.showBkColor,
         'bottomLimit.bkColor': property.bottomLimit.bkColor,
       });
+<<<<<<< HEAD
     } else if (data.node.name === 'biciPilot') {
       propertyForm.setFieldsValue({
         color: property.color,
@@ -174,6 +175,37 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         dataMax: property.dataMax,
         dataMin: property.dataMin,
       });
+=======
+    }else if (data.node.name === 'biciPilot') {
+        propertyForm.setFieldsValue({
+          
+        })
+    }else if(data.node.name=="echarts"){
+      propertyForm.setFieldsValue({
+        'dataMax': property.dataMax,
+        'dataMin': property.dataMin,
+        'checked-0':property.dataColors&&property.dataColors[0]?.checked,
+        'color-0':property.dataColors&&property.dataColors[0]?.color,
+        'top-0':property.dataColors&&property.dataColors[0]?.top,
+        'bottom-0':property.dataColors&&property.dataColors[0]?.bottom,
+        'checked-1':property.dataColors&&property.dataColors[1]?.checked,
+        'color-1':property.dataColors&&property.dataColors[1]?.color,
+        'top-1':property.dataColors&&property.dataColors[1]?.top,
+        'bottom-1':property.dataColors&&property.dataColors[1]?.bottom,
+        'checked-2':property.dataColors&&property.dataColors[2]?.checked,
+        'color-2':property.dataColors&&property.dataColors[2]?.color,
+        'top-2':property.dataColors&&property.dataColors[2]?.top,
+        'bottom-2':property.dataColors&&property.dataColors[2]?.bottom,
+        'checked-3':property.dataColors&&property.dataColors[3]?.checked,
+        'color-3':property.dataColors&&property.dataColors[3]?.color,
+        'top-3':property.dataColors&&property.dataColors[3]?.top,
+        'bottom-3':property.dataColors&&property.dataColors[3]?.bottom,
+        'checked-4':property.dataColors&&property.dataColors[4]?.checked,
+        'color-4':property.dataColors&&property.dataColors[4]?.color,
+        'top-4':property.dataColors&&property.dataColors[4]?.top,
+        'bottom-4':property.dataColors&&property.dataColors[4]?.bottom,
+      })
+>>>>>>> 47f1c258055e89a343a62be974da91501a8283d8
     }
   }, [property]);
 
@@ -924,39 +956,22 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             <Row key={index}>
               <Col span={3}>
                 <Form.Item name={`checked-${index}`} valuePropName="checked">
-                  <Checkbox defaultChecked={item.checked} />
+                  <Checkbox  />
                 </Form.Item>
               </Col>
               <Col span={6}>
                 <Form.Item name={`color-${index}`}>
-                  <ColorPicker value={item.color} />
+                  <ColorPicker/>
                 </Form.Item>
               </Col>
               <Col span={15}>
                 <Input.Group compact>
                   <Form.Item name={`bottom-${index}`}>
-                    <Input
-                      style={{ width: 60 }}
-                      placeholder="下限"
-                      value={item.bottom}
-                    />
+                    <InputNumber style={{ width: 60 }} placeholder="下限" min={-100} max={500}  />
                   </Form.Item>
-                  <Input
-                    style={{
-                      width: 30,
-                      pointerEvents: 'none',
-                    }}
-                    placeholder="~"
-                    disabled
-                  />
+                  <Input style={{width: 30, pointerEvents: 'none',}} placeholder="~" disabled/>
                   <Form.Item name={`top-${index}`}>
-                    <Input
-                      style={{
-                        width: 60,
-                      }}
-                      value={item.top}
-                      placeholder="上限"
-                    />
+                    <InputNumber style={{width: 60,}} placeholder="上限" min={-100} max={500} />
                   </Form.Item>
                 </Input.Group>
               </Col>
