@@ -185,14 +185,26 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         selected.node.property.dataColors[index][kindex[0]] = values[k];
       }
     }
-    selected.node.property.dataMax = values.dataMax || 100;
-    selected.node.property.dataMin = values.dataMin || 0;
-    selected.node.data.echarts.option = getGaugeOption({
-      max: selected.node.property.dataMax,
-      min: selected.node.property.dataMin,
-      lineColors: null,
-    });
-  };
+    selected.node.property.dataMax=values.dataMax||100;
+    selected.node.property.dataMin=values.dataMin||0;
+    let lineColors=[];
+    (selected.node.property.dataColors||[]).map(item=>{
+      if(item.checked){
+        let lineColor=[];
+        lineColor[0]=Math.abs(item.top/(selected.node.property.dataMax));
+        lineColor[1]=item.color;
+        lineColors.push(lineColor)
+      }
+    })
+    if(lineColors.length==0){
+      lineColors=undefined;
+    }
+    selected.node.data.echarts.option=getGaugeOption({
+      max:selected.node.property.dataMax,
+      min:selected.node.property.dataMin,
+      lineColors:lineColors
+    })
+  }
 
   /**
    * 数据卡片自定义数据逻辑处理

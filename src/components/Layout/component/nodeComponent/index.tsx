@@ -19,12 +19,13 @@ import {
   Button,
   Space,
   Tooltip,
-  Radio,
+  Radio, Modal,
 } from 'antd';
 import {
   PlusOutlined,
   MinusCircleOutlined,
   DeleteOutlined,
+  ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import { FormProps } from 'antd/lib/form/Form';
 import ColorPicker from '../../../common/ColorPicker/ColorPicker';
@@ -275,6 +276,22 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       }
     }
   };
+  // 删除数据点
+  const handleDeleteDataPoint=(item)=>{
+    Modal.confirm({
+      title: '删除提示',
+      icon: <ExclamationCircleOutlined />,
+      content: '确认删除数据点吗？',
+      okText: '确认',
+      cancelText: '取消',
+      onOk() {
+        console.log('OK',item);
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
   const renderDataPointModal = useCallback(() => {
     return (
@@ -551,7 +568,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             return (
               <Form.Item label={`数据点${index}`} key={index}>
                 <span>{item.dataName}</span>
-                <Button type="link" icon={<DeleteOutlined />}></Button>
+                <Button type="link" icon={<DeleteOutlined />} onClick={()=>handleDeleteDataPoint(item)}></Button>
               </Form.Item>
             );
           })}
