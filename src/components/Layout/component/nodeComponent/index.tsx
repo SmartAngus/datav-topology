@@ -36,6 +36,7 @@ import DataBindModal from '../../../FilterDataPoint';
 import styles from './index.module.scss';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { getNodeType } from '../../../utils/Property2NodeProps';
+import { Rect } from '../../../../topology/core';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -164,6 +165,14 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         text: property.text,
         stateType: property.stateType,
         lightRange: property.lightRange,
+      });
+    } else if (
+      data.node.name == 'echarts' &&
+      data.node.property.echartsType == 'chartMeasure'
+    ) {
+      propertyForm.setFieldsValue({
+        dataMax: property.dataMax,
+        dataMin: property.dataMin,
       });
     }
   }, [property]);
@@ -705,12 +714,15 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
 
   // 改变指示灯大小
   const changePolitSize = (size: number) => {
-    console.log(data.node);
-    data.node.rect.width = size * 2;
-    data.node.rect.height = size * 2;
-    data.node.property.size = size;
+    let { node } = data;
+    node.text = propertyForm.getFieldValue('text');
+    node.rect.width = size * 2;
+    node.rect.height = size * 2;
+    form.setFieldsValue({ width: size * 2, height: size * 2 });
+    node.property.size = size;
     propertyForm.setFieldsValue({ size });
-    canvas.updateProps(false, [data.node]);
+    canvas.updateProps(false, [node]);
+    // canvas.updateProps(false, [node]);
   };
 
   /**
@@ -736,6 +748,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 placeholder="请输入直径"
                 min={0}
                 style={{ width: '100%' }}
+                onChange={changePolitSize}
               />
             </Form.Item>
           </Col>
@@ -907,21 +920,21 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           <Row>
             <Form.Item label="颜色分区"></Form.Item>
           </Row>
-          {(property.dataColors || []).map((item, index) => (
+          {(property?.dataColors || []).map((item, index) => (
             <Row key={index}>
               <Col span={3}>
-                <Form.Item name="checked">
+                <Form.Item name={`checked-${index}`} valuePropName="checked">
                   <Checkbox defaultChecked={item.checked} />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item name="color">
+                <Form.Item name={`color-${index}`}>
                   <ColorPicker value={item.color} />
                 </Form.Item>
               </Col>
               <Col span={15}>
                 <Input.Group compact>
-                  <Form.Item name="bottom">
+                  <Form.Item name={`bottom-${index}`}>
                     <Input
                       style={{ width: 60 }}
                       placeholder="下限"
@@ -936,7 +949,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     placeholder="~"
                     disabled
                   />
-                  <Form.Item name="top">
+                  <Form.Item name={`top-${index}`}>
                     <Input
                       style={{
                         width: 60,

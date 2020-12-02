@@ -181,7 +181,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    * 数据卡片自定义数据逻辑处理
    */
   const handleBiciCard = (value) => {
-    console.log('seleted node:', selected.node);
     const { cardTitle, showTitle, showLimit } = value;
     if (showTitle !== undefined) {
       const titleVal = showTitle ? cardTitle : '';
@@ -214,6 +213,15 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if ('normal.color' in value) {
       selected.node.children[0].font.color = value['normal.color'];
     }
+  };
+  /**
+   * 指示灯自定义数据处理
+   */
+  const handlePilot = (value) => {
+    console.log('polit>', value);
+    const { color, text, showText } = value;
+    selected.node.strokeStyle = color;
+    selected.node.text = showText ? text : '';
   };
 
   /**
@@ -285,9 +293,15 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // 通知有数据属性更新,会重新渲染画布
 
       const { name } = selected.node;
-      if (name === 'biciCard') {
-        handleBiciCard(value);
+      switch (name) {
+        case 'biciCard':
+          handleBiciCard(value);
+          break;
+        case 'biciPilot':
+          handlePilot(value);
+          break;
       }
+
       for (const key in value) {
         if (key.indexOf('.') > 0) {
           if (key != undefined) {

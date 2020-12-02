@@ -6,12 +6,12 @@ import 'bici-datav-npm/dist/index.css';
 import axios from 'axios';
 import { Route, BrowserRouter } from 'react-router-dom';
 import { Modal } from 'antd';
-import preBgImg1 from './bg01.png';
-import preBgImg2 from './bg02.png';
-import preBgImg3 from './bg03.png';
+import preBgImg1 from './bg01.jpg';
+import preBgImg2 from './bg02.jpg';
+import preBgImg3 from './bg03.jpg';
 
 const { confirm } = Modal;
-const token = '7In0oKCCagQC8r8di8pYHW';
+const token = '2nTNBisG7qm2s3QSCuosrD';
 
 const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   const history = props.history;

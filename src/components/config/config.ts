@@ -773,6 +773,10 @@ export const Tools = [
             height: 300,
           },
           name: 'echarts',
+          paddingTopNum:0,
+          paddingRightNum:0,
+          paddingBottomNum:0,
+          paddingLeftNum:0,
           data: {
             echarts: {
               option: {
