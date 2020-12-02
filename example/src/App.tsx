@@ -140,7 +140,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   };
   const apiURL = 'http://qt.test.bicisims.com';
   const websocketConf = {
-    url: 'ws://47.96.159.115:51060/ws?token='+token,
+    url: 'ws://47.96.159.115:51060/ws?token=' + token,
   };
   useEffect(() => {
     // 获取数据
@@ -349,7 +349,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
 const PreviewLayout: React.FC<any> = ({ history }) => {
   const [editorData, setEditorData] = useState<any>();
   const websocketConf = {
-    url: 'ws://47.96.159.115:51060/ws?token='+token,
+    url: 'ws://47.96.159.115:51060/ws?token=' + token,
   };
   useEffect(() => {
     const instance = axios.create({

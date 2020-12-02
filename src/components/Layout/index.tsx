@@ -13,9 +13,8 @@ import {
   echartsObjs,
 } from '../../topology/chart-diagram';
 import { register as registerBiciComp } from '../../topology/bici-diagram';
-import { Modal, Tabs } from 'antd';
+import { Modal, Tabs, message } from 'antd';
 import { Tools } from '../config/config';
-import { getNodeById } from '../Service/topologyService';
 import { useClickAway } from 'ahooks';
 import { replacer } from '../utils/serializing';
 import { s8 } from '../../topology/core/src/utils/uuid';
@@ -193,6 +192,27 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         ? `上限: ${value['limit.top']}   下限: ${value['limit.bottom']}`
         : '';
       selected.node.children[1].text = limitText;
+    }
+    if ('limit.top' in value) {
+      // 下限不能高于上限
+      const limitTop = value['limit.top'];
+      const limitBottom = value['limit.bottom'];
+      if ((limitTop !== 0 || limitBottom !== 0) && limitTop <= limitBottom) {
+        message.error('上限不能低于或等于下限');
+      }
+    }
+    if ('normal.showBkColor' in value) {
+      if (value['normal.showBkColor']) {
+        selected.node.fillStyle = value['normal.bkColor'];
+      } else {
+        selected.node.fillStyle = '';
+      }
+    }
+    if ('normal.fontSize' in value) {
+      selected.node.children[0].font.fontSize = value['normal.fontSize'];
+    }
+    if ('normal.color' in value) {
+      selected.node.children[0].font.color = value['normal.color'];
     }
   };
 
