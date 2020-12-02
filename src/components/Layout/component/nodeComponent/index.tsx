@@ -160,6 +160,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         propertyForm.setFieldsValue({
           
         })
+    }else if(data.node.name=="echarts"&&data.node.property.echartsType=="chartMeasure"){
+      propertyForm.setFieldsValue({
+        'dataMax': property.dataMax,
+        'dataMin': property.dataMin,
+      })
     }
   }, [property]);
 
@@ -880,18 +885,18 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           {(property?.dataColors||[]).map((item,index) => (
             <Row key={index}>
               <Col span={3}>
-                <Form.Item name="checked">
-                  <Checkbox defaultChecked={item.checked} />
+                <Form.Item name={`checked-${index}`} valuePropName="checked">
+                  <Checkbox defaultChecked={item.checked}  />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item name="color">
+                <Form.Item name={`color-${index}`}>
                   <ColorPicker value={item.color}/>
                 </Form.Item>
               </Col>
               <Col span={15}>
                 <Input.Group compact>
-                  <Form.Item name="bottom">
+                  <Form.Item name={`bottom-${index}`}>
                     <Input style={{ width: 60 }} placeholder="下限" value={item.bottom} />
                   </Form.Item>
                   <Input
@@ -902,7 +907,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     placeholder="~"
                     disabled
                   />
-                  <Form.Item name="top">
+                  <Form.Item name={`top-${index}`}>
                     <Input
                       style={{
                         width: 60,

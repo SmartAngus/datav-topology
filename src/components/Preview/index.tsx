@@ -100,8 +100,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 switch (theChart) {
                   case 'gauge':
                     if (node.property.dataPointSelectedRows[0]?.id == r.id) {
-                      node.data.echarts.option.series[0].data[0].value =
-                        r.value;
+                      node.data.echarts.option.series[0].data[0].value = r.value;
                       canvas.updateProps(false);
                     }
                     break;

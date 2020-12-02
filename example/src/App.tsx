@@ -11,7 +11,7 @@ import preBgImg2 from './bg02.png';
 import preBgImg3 from './bg03.png';
 
 const { confirm } = Modal;
-const token = '38GeBS9MlNnx2VrbeXpBj1';
+const token = '2nTNBisG7qm2s3QSCuosrD';
 
 const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   const history = props.history;
