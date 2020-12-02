@@ -227,8 +227,8 @@ export const Tools = [
           name: 'biciPilot',
           property: {
             color: '#222',
-            size: 5,
-            text: '',
+            size: 15,
+            text: '指示灯',
             showText: true,
             stateType: 'single', // 状态定义: single 单点值,  range 范围值
             lightRange: [], // 指示灯 状态定义 列表
@@ -779,11 +779,11 @@ export const Tools = [
                 tooltip: {
                   formatter: '{a} <br/>{b} : {c}%',
                 },
-                grid:{
-                  top:0,
-                  left:0,
-                  right:0,
-                  bottom:50
+                grid: {
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 50,
                 },
                 toolbox: {
                   feature: {
@@ -799,28 +799,29 @@ export const Tools = [
                   {
                     name: '业务指标',
                     type: 'gauge',
-                    max:90,
-                    min:-20,
+                    max: 90,
+                    min: -20,
                     detail: { formatter: '{value}%' },
                     data: [{ value: 40, name: '' }],
                     axisLine: {
                       lineStyle: {
-                        color: [ //数组第一个属性是颜色所占line百分比
-                          [0.4, "#49afff"],
-                          [0.6, "#68A54A"],
-                          [1, "#f56c6c"]
+                        color: [
+                          //数组第一个属性是颜色所占line百分比
+                          [0.4, '#49afff'],
+                          [0.6, '#68A54A'],
+                          [1, '#f56c6c'],
                         ],
-                        width: 22
-                      }
+                        width: 22,
+                      },
                     },
                     splitLine: {
                       length: 12,
                       lineStyle: {
-                        width: 1
-                      }
-                    }
-                  }
-                ]
+                        width: 1,
+                      },
+                    },
+                  },
+                ],
               },
             },
           },
@@ -833,24 +834,28 @@ export const Tools = [
               qtDataList: [],
               subscribe: true,
             },
-            dataColors:[{
-              checked:false,
-              color:'#ccc',
-              top:100,
-              bottom:-10
-            },{
-              checked:false,
-              color:'#ccc',
-              top:100,
-              bottom:-10
-            },{
-              checked:false,
-              color:'#ccc',
-              top:100,
-              bottom:-10
-            }],
-            dataMax:100,
-            dataMin:0
+            dataColors: [
+              {
+                checked: false,
+                color: '#ccc',
+                top: 100,
+                bottom: -10,
+              },
+              {
+                checked: false,
+                color: '#ccc',
+                top: 100,
+                bottom: -10,
+              },
+              {
+                checked: false,
+                color: '#ccc',
+                top: 100,
+                bottom: -10,
+              },
+            ],
+            dataMax: 100,
+            dataMin: 0,
           },
         },
       },
@@ -880,14 +885,16 @@ export const Tools = [
               qtDataList: [],
               subscribe: true,
             },
-            dataColors:[{
-              checked:false,
-              color:'#ccc',
-              top:100,
-              bottom:-10
-            }],
-            dataMax:100,
-            dataMin:0
+            dataColors: [
+              {
+                checked: false,
+                color: '#ccc',
+                top: 100,
+                bottom: -10,
+              },
+            ],
+            dataMax: 100,
+            dataMin: 0,
           },
         },
       },

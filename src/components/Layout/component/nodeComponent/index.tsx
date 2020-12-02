@@ -156,10 +156,15 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         'bottomLimit.showBkColor': property.bottomLimit.showBkColor,
         'bottomLimit.bkColor': property.bottomLimit.bkColor,
       });
-    }else if (data.node.name === 'biciPilot') {
-        propertyForm.setFieldsValue({
-          
-        })
+    } else if (data.node.name === 'biciPilot') {
+      propertyForm.setFieldsValue({
+        color: property.color,
+        size: property.size,
+        showText: property.showText,
+        text: property.text,
+        stateType: property.stateType,
+        lightRange: property.lightRange,
+      });
     }
   }, [property]);
 
@@ -698,6 +703,16 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     );
   }, [propertyForm, property]);
 
+  // 改变指示灯大小
+  const changePolitSize = (size: number) => {
+    console.log(data.node);
+    data.node.rect.width = size * 2;
+    data.node.rect.height = size * 2;
+    data.node.property.size = size;
+    propertyForm.setFieldsValue({ size });
+    canvas.updateProps(false, [data.node]);
+  };
+
   /**
    * 渲染指示灯样式
    */
@@ -729,13 +744,28 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <Button.Group
                 style={{ width: '100%', backgroundColor: '#E0E7F5' }}
               >
-                <Button block size="small" type="text">
+                <Button
+                  block
+                  size="small"
+                  type="text"
+                  onClick={() => changePolitSize(15)}
+                >
                   小
                 </Button>
-                <Button block size="small" type="text">
+                <Button
+                  block
+                  size="small"
+                  type="text"
+                  onClick={() => changePolitSize(20)}
+                >
                   中
                 </Button>
-                <Button block size="small" type="text">
+                <Button
+                  block
+                  size="small"
+                  type="text"
+                  onClick={() => changePolitSize(30)}
+                >
                   大
                 </Button>
               </Button.Group>
@@ -877,7 +907,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           <Row>
             <Form.Item label="颜色分区"></Form.Item>
           </Row>
-          {(property.dataColors||[]).map((item,index) => (
+          {(property.dataColors || []).map((item, index) => (
             <Row key={index}>
               <Col span={3}>
                 <Form.Item name="checked">
@@ -886,13 +916,17 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               </Col>
               <Col span={6}>
                 <Form.Item name="color">
-                  <ColorPicker value={item.color}/>
+                  <ColorPicker value={item.color} />
                 </Form.Item>
               </Col>
               <Col span={15}>
                 <Input.Group compact>
                   <Form.Item name="bottom">
-                    <Input style={{ width: 60 }} placeholder="下限" value={item.bottom} />
+                    <Input
+                      style={{ width: 60 }}
+                      placeholder="下限"
+                      value={item.bottom}
+                    />
                   </Form.Item>
                   <Input
                     style={{
