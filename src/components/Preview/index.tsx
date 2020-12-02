@@ -39,18 +39,20 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
   const setCardStyle = (
     node: Node,
     fontFamily: string,
+    color: string,
     size: number,
     bkColor: string
   ) => {
     if (fontFamily) {
       node.font.fontFamily = fontFamily;
       node.children[0].font.fontFamily = fontFamily;
-      node.children[1].font.fontFamily = fontFamily;
+    }
+    if (color) {
+      node.font.color = color;
+      node.children[0].font.color = color;
     }
     if (size) {
-      node.font.fontSize = size;
       node.children[0].font.fontSize = size;
-      node.children[1].font.fontSize = size;
     }
     if (bkColor) {
       node.fillStyle = bkColor;
@@ -104,52 +106,55 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                     }
                     break;
                   case 'timeLine':
-                    (node.property.dataPointSelectedRows||[]).map((row,index)=>{
-                      const seria = {
-                        symbol: 'none',
-                        name: '当前流量',
-                        type: 'line',
-                        smoothMonotone: 'x',
-                        smooth: true,
-                        markLine: {
-                          silent: true,
-                          data: [
-                            {
-                              yAxis: 20,
-                            },
-                            {
-                              yAxis: 40,
-                            },
-                            {
-                              yAxis: 60,
-                            },
-                            {
-                              yAxis: 100,
-                            },
-                            {
-                              yAxis: 120,
-                            },
-                          ],
-                        },
-                        data: []
-                      };
-                      if(row.id==r.id){
-                        const xAxisData = node.data.echarts.option.xAxis.data;
-                        const yAxisData = node.data.echarts.option.series[index]||seria;
-                        if (xAxisData.length > 10) {
-                          xAxisData.shift();
-                        }
-                        if (yAxisData&&yAxisData.data.length > 10) {
-                          yAxisData.data.shift();
-                        }
-                        xAxisData.push(moment(r.time).format('LTS'));
-                        yAxisData.data.push(r.value);
-                        yAxisData.name=row.dataName
-                        node.data.echarts.option.xAxis.data = xAxisData;
+                    (node.property.dataPointSelectedRows || []).map(
+                      (row, index) => {
+                        const seria = {
+                          symbol: 'none',
+                          name: '当前流量',
+                          type: 'line',
+                          smoothMonotone: 'x',
+                          smooth: true,
+                          markLine: {
+                            silent: true,
+                            data: [
+                              {
+                                yAxis: 20,
+                              },
+                              {
+                                yAxis: 40,
+                              },
+                              {
+                                yAxis: 60,
+                              },
+                              {
+                                yAxis: 100,
+                              },
+                              {
+                                yAxis: 120,
+                              },
+                            ],
+                          },
+                          data: [],
+                        };
+                        if (row.id == r.id) {
+                          const xAxisData = node.data.echarts.option.xAxis.data;
+                          const yAxisData =
+                            node.data.echarts.option.series[index] || seria;
+                          if (xAxisData.length > 10) {
+                            xAxisData.shift();
+                          }
+                          if (yAxisData && yAxisData.data.length > 10) {
+                            yAxisData.data.shift();
+                          }
+                          xAxisData.push(moment(r.time).format('LTS'));
+                          yAxisData.data.push(r.value);
+                          yAxisData.name = row.dataName;
+                          node.data.echarts.option.xAxis.data = xAxisData;
 
-                       node.data.echarts.option.series[index]=yAxisData;
+                          node.data.echarts.option.series[index] = yAxisData;
+                        }
                       }
-                    })
+                    );
                     canvas.updateProps(false);
                     break;
                   default:
@@ -159,7 +164,10 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
               ) {
                 const r = JSON.parse(data.data);
                 if (node.name == 'biciVarer') {
-                  if (node.text != r.value && node.property.dataPointParam.qtDataList[0].id == r.id) {
+                  if (
+                    node.text != r.value &&
+                    node.property.dataPointParam.qtDataList[0].id == r.id
+                  ) {
                     node.text = r.value;
                     canvas.updateProps(false);
                   }
@@ -171,26 +179,35 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                     const bottom = parseFloat(node.property.limit.bottom);
                     const top = parseFloat(node.property.limit.top);
                     const tempVal = parseFloat(val);
-                    if (tempVal < bottom) {
+                    if (top !== 0 && tempVal < bottom) {
+                      const showColor = node.property.bottomLimit.showBkColor
+                        ? node.property.bottomLimit.bkColor
+                        : node.property.normal.bkColor;
                       // 小于下限
                       setCardStyle(
                         node,
                         node.property.bottomLimit.fontFamily,
+                        node.property.bottomLimit.color,
                         parseInt(node.property.bottomLimit.fontSize),
-                        node.property.bottomLimit.bkColor
+                        showColor
                       );
-                    } else if (tempVal > top) {
+                    } else if (top !== 0 && tempVal > top) {
+                      const showColor = node.property.bottomLimit.showBkColor
+                        ? node.property.topLimit.bkColor
+                        : node.property.normal.bkColor;
                       // 高于上限
                       setCardStyle(
                         node,
                         node.property.topLimit.fontFamily,
+                        node.property.topLimit.color,
                         parseInt(node.property.topLimit.fontSize),
-                        node.property.topLimit.bkColor
+                        showColor
                       );
                     } else {
                       setCardStyle(
                         node,
                         node.property.normal.fontFamily,
+                        node.property.normal.color,
                         parseInt(node.property.normal.fontSize),
                         node.property.normal.bkColor
                       );

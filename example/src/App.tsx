@@ -11,7 +11,7 @@ import preBgImg2 from './bg02.png';
 import preBgImg3 from './bg03.png';
 
 const { confirm } = Modal;
-const token = '4crQK2JyLj1Z1rymIJwnwf';
+const token = '38GeBS9MlNnx2VrbeXpBj1';
 
 const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   const history = props.history;
@@ -140,7 +140,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   };
   const apiURL = 'http://qt.test.bicisims.com';
   const websocketConf = {
-    url: 'ws://47.96.159.115:51060/ws?token='+token,
+    url: 'ws://47.96.159.115:51060/ws?token=' + token,
   };
   useEffect(() => {
     // 获取数据
@@ -349,7 +349,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
 const PreviewLayout: React.FC<any> = ({ history }) => {
   const [editorData, setEditorData] = useState<any>();
   const websocketConf = {
-    url: 'ws://47.96.159.115:51060/ws?token='+token,
+    url: 'ws://47.96.159.115:51060/ws?token=' + token,
   };
   useEffect(() => {
     const instance = axios.create({

@@ -50,6 +50,7 @@ export const Tools = [
         icon: 'iconshijian',
         data: {
           text: '1970-01-01 00:00:00',
+          hideInput: true,
           rect: {
             width: 200,
             height: 45,
@@ -174,32 +175,26 @@ export const Tools = [
             showLimit: false, // 展示上下限
             limit: {
               bottom: 0, // 下限
-              top: 100, // 上限
+              top: 0, // 上限
             },
             normal: {
               fontFamily: 'Arial',
-              fontSize: 18,
-              color: '#222',
-              textAlign: 'center',
-              textBaseline: 'middle',
+              fontSize: 42,
+              color: '#fff',
               showBkColor: true,
               bkColor: '#6236FF',
             },
             topLimit: {
               fontFamily: 'Arial',
-              fontSize: 18,
-              color: '#222',
-              textAlign: 'center',
-              textBaseline: 'middle',
+              fontSize: 42,
+              color: '#fff',
               showBkColor: true,
               bkColor: '#FF0000',
             },
             bottomLimit: {
               fontFamily: 'Arial',
-              fontSize: 18,
-              color: '#222',
-              textAlign: 'center',
-              textBaseline: 'middle',
+              fontSize: 42,
+              color: '#fff',
               showBkColor: true,
               bkColor: '#FFFF00',
             },
@@ -231,7 +226,7 @@ export const Tools = [
           hideAnchor: true,
           name: 'biciPilot',
           property: {
-            color: '',
+            color: '#222',
             size: 5,
             text: '',
             showText: true,

@@ -131,7 +131,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       'time.show': property?.date?.show,
       'time.format': property?.date?.format,
     });
-    console.log('property', property);
     if (data.node.name === 'biciCard') {
       // 设置数据卡片
       propertyForm.setFieldsValue({
@@ -143,17 +142,24 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         'limit.top': property.limit.top,
         'normal.fontFamily': property.normal.fontFamily,
         'normal.fontSize': property.normal.fontSize,
+        'normal.color': property.normal.color,
         'normal.showBkColor': property.normal.showBkColor,
         'normal.bkColor': property.normal.bkColor,
         'topLimit.fontFamily': property.topLimit.fontFamily,
         'topLimit.fontSize': property.topLimit.fontSize,
+        'topLimit.color': property.topLimit.color,
         'topLimit.showBkColor': property.topLimit.showBkColor,
         'topLimit.bkColor': property.topLimit.bkColor,
         'bottomLimit.fontFamily': property.bottomLimit.fontFamily,
         'bottomLimit.fontSize': property.bottomLimit.fontSize,
+        'bottomLimit.color': property.bottomLimit.color,
         'bottomLimit.showBkColor': property.bottomLimit.showBkColor,
         'bottomLimit.bkColor': property.bottomLimit.bkColor,
       });
+    }else if (data.node.name === 'biciPilot') {
+        propertyForm.setFieldsValue({
+          
+        })
     }
   }, [property]);
 
@@ -537,7 +543,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             <Col key={index} span={4}>
               <Tooltip
                 title={alignObj[key][0]}
-                getPopupContainer={() => document.querySelector('#layout')}
+                getPopupContainer={() => document.querySelector('#editLayout')}
               >
                 <Button
                   size="large"
@@ -610,7 +616,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <Col span={20}>
                 <Input.Group compact>
                   <Form.Item name="limit.bottom">
-                    <Input style={{ width: 80 }} placeholder="下限" />
+                    <InputNumber
+                      style={{ width: 80 }}
+                      min={0}
+                      placeholder="下限"
+                    />
                   </Form.Item>
                   <Input
                     style={{
@@ -621,10 +631,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     disabled
                   />
                   <Form.Item name="limit.top">
-                    <Input
-                      style={{
-                        width: 80,
-                      }}
+                    <InputNumber
+                      style={{ width: 80 }}
+                      min={0}
                       placeholder="上限"
                     />
                   </Form.Item>
@@ -648,27 +657,34 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 >
                   <Input />
                 </Form.Item>
-                <Form.Item
-                  name={`${key}.fontSize`}
-                  label="字号"
-                  labelCol={{ span: 8 }}
-                  labelAlign="left"
-                >
-                  <InputNumber min={12} />
-                </Form.Item>
                 <Row>
-                  <Col span={10}>
+                  <Col span={7}>
+                    <Form.Item label="颜色字号"></Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item name={`${key}.color`}>
+                      <ColorPicker />
+                    </Form.Item>
+                  </Col>
+                  <Col span={11}>
+                    <Form.Item name={`${key}.fontSize`}>
+                      <InputNumber min={12} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={7}>
+                    <Form.Item label="背景颜色"></Form.Item>
+                  </Col>
+                  <Col span={4}>
                     <Form.Item
                       name={`${key}.showBkColor`}
-                      label="背景颜色"
-                      labelCol={{ span: 18 }}
-                      labelAlign="left"
                       valuePropName="checked"
                     >
                       <Checkbox />
                     </Form.Item>
                   </Col>
-                  <Col span={13} push={1}>
+                  <Col span={10}>
                     <Form.Item name={`${key}.bkColor`}>
                       <ColorPicker />
                     </Form.Item>
@@ -785,7 +801,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       name={[field.name, 'lightRangeVal']}
                       fieldKey={[field.fieldKey, 'lightRangeVal']}
                     >
-                      <Input placeholder="数值" />
+                      <InputNumber placeholder="数值" min={0} />
                     </Form.Item>
                     <Form.Item
                       {...field}
@@ -818,7 +834,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [property]);
+  }, [propertyForm]);
 
   /**
    * 渲染计量器样式
