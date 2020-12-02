@@ -189,7 +189,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     selected.node.property.dataMin=values.dataMin||0;
     selected.node.data.echarts.option=getGaugeOption({
       max:selected.node.property.dataMax,
-      min:selected.node.property.dataMin
+      min:selected.node.property.dataMin,
+      lineColors:null
     })
   }
 
