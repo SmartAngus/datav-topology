@@ -147,11 +147,10 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                         yAxisData.name=row.dataName
                         node.data.echarts.option.xAxis.data = xAxisData;
 
-                       node.data.echarts.option.series.push(yAxisData)
-                        console.log(node.data.echarts.option.series)
-                       canvas.updateProps(false);
+                       node.data.echarts.option.series[index]=yAxisData;
                       }
                     })
+                    canvas.updateProps(false);
                     break;
                   default:
                 }
@@ -160,7 +159,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
               ) {
                 const r = JSON.parse(data.data);
                 if (node.name == 'biciVarer') {
-                  if (node.text != r.value) {
+                  if (node.text != r.value && node.property.dataPointParam.qtDataList[0].id == r.id) {
                     node.text = r.value;
                     canvas.updateProps(false);
                   }
