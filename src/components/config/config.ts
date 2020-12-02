@@ -1,4 +1,4 @@
-import {getMeasureOption} from './chartMeasure';
+import {getMeasureOption,getGaugeOption} from './chartMeasure';
 export const Tools = [
   {
     group: '通用组件',
@@ -779,53 +779,7 @@ export const Tools = [
           paddingLeftNum:0,
           data: {
             echarts: {
-              option: {
-                tooltip: {
-                  formatter: '{a} <br/>{b} : {c}%',
-                },
-                grid:{
-                  top:0,
-                  left:0,
-                  right:0,
-                  bottom:50
-                },
-                toolbox: {
-                  feature: {
-                    restore: {
-                      show: false,
-                    },
-                    saveAsImage: {
-                      show: false,
-                    },
-                  },
-                },
-                series: [
-                  {
-                    name: '业务指标',
-                    type: 'gauge',
-                    max:90,
-                    min:-20,
-                    detail: { formatter: '{value}%' },
-                    data: [{ value: 40, name: '' }],
-                    axisLine: {
-                      lineStyle: {
-                        color: [ //数组第一个属性是颜色所占line百分比
-                          [0.4, "#49afff"],
-                          [0.6, "#68A54A"],
-                          [1, "#f56c6c"]
-                        ],
-                        width: 22
-                      }
-                    },
-                    splitLine: {
-                      length: 12,
-                      lineStyle: {
-                        width: 1
-                      }
-                    }
-                  }
-                ]
-              },
+              option: getGaugeOption(),
             },
           },
           property: {
@@ -849,7 +803,17 @@ export const Tools = [
               bottom:-10
             },{
               checked:false,
-              color:'#ccc',
+              color:'#02df35',
+              top:100,
+              bottom:-10
+            },{
+              checked:true,
+              color:'#02df23',
+              top:100,
+              bottom:-10
+            },{
+              checked:false,
+              color:'#02df31',
               top:100,
               bottom:-10
             }],

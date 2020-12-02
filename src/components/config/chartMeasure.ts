@@ -316,3 +316,60 @@ export function getMeasureOption(option?:
 
   return measureOption;
 }
+export function getGaugeOption(opt?:{
+  min:number,
+  max:number,
+  lineColors:any[]
+}) {
+  const min = opt?.min || 0;
+  const max = opt?.max || 100;
+  const lineColors = opt?.lineColors||[ //数组第一个属性是颜色所占line百分比
+    [0.4, "#49afff"],
+    [0.6, "#68A54A"],
+    [1, "#f56c6c"]
+  ]
+  const option={
+    tooltip: {
+      formatter: '{a} <br/>{b} : {c}%',
+    },
+    grid:{
+      top:0,
+      left:0,
+      right:0,
+      bottom:50
+    },
+    toolbox: {
+      feature: {
+        restore: {
+          show: false,
+        },
+        saveAsImage: {
+          show: false,
+        },
+      },
+    },
+    series: [
+      {
+        name: '',
+        type: 'gauge',
+        max:max,
+        min:min,
+        detail: { formatter: '{value}' },
+        data: [{ value: 0, name: '' }],
+        axisLine: {
+          lineStyle: {
+            color: lineColors,
+            width: 22
+          }
+        },
+        splitLine: {
+          length: 12,
+          lineStyle: {
+            width: 1
+          }
+        }
+      }
+    ]
+  }
+  return option;
+}
