@@ -230,10 +230,13 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
                 {panelSizeObj[key].map((val: string, index: number) => {
                   return (
                     <Col span={12} key={index}>
-                      <a href="#" onClick={(e) => {
-                        e.preventDefault()
-                        selectedResolution(val);
-                      }}>
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          selectedResolution(val);
+                        }}
+                      >
                         {val}
                       </a>
                     </Col>
@@ -259,9 +262,8 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
             }}
             onClick={() => selectedBgImg(item.img)}
           >
-            <Image
+            <img
               src={item.img}
-              preview={false}
               alt={`预设背景${item}`}
               width={260}
               height={120}
@@ -279,14 +281,12 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
           <Popover
             placement="bottom"
             trigger="click"
-            autoAdjustOverflow={false}
             content={resolutionContent}
             visible={popoverVisible.resolution}
             onVisibleChange={(visible) =>
               setPopoverVisible({ ...popoverVisible, resolution: visible })
             }
             getPopupContainer={() => document.querySelector('#editLayout')}
-            arrowPointAtCenter
           >
             <Form.Item name="sizeVal" initialValue="自定义">
               <Input suffix={<DownOutlined />} readOnly />
@@ -332,13 +332,11 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
             trigger="click"
             content={bgSeletedContent}
             arrowPointAtCenter
-            autoAdjustOverflow={false}
             visible={popoverVisible.bgSelect}
             onVisibleChange={(visible) =>
               setPopoverVisible({ ...popoverVisible, bgSelect: visible })
             }
             getPopupContainer={() => document.querySelector('#editLayout')}
-            arrowContent
           >
             <Form.Item name="bgVal" initialValue="预设背景">
               <Input readOnly suffix={<DownOutlined />} />
