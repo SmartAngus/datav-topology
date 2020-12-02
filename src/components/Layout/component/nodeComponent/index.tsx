@@ -861,7 +861,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           <Row>
             <Form.Item label="颜色分区"></Form.Item>
           </Row>
-          {(property.dataColors||[]).map((item,index) => (
+          {(property?.dataColors||[]).map((item,index) => (
             <Row key={index}>
               <Col span={3}>
                 <Form.Item name="checked">
