@@ -779,58 +779,7 @@ export const Tools = [
           paddingLeftNum:0,
           data: {
             echarts: {
-<<<<<<< HEAD
-              option: {
-                tooltip: {
-                  formatter: '{a} <br/>{b} : {c}%',
-                },
-                grid: {
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 50,
-                },
-                toolbox: {
-                  feature: {
-                    restore: {
-                      show: false,
-                    },
-                    saveAsImage: {
-                      show: false,
-                    },
-                  },
-                },
-                series: [
-                  {
-                    name: '业务指标',
-                    type: 'gauge',
-                    max: 90,
-                    min: -20,
-                    detail: { formatter: '{value}%' },
-                    data: [{ value: 40, name: '' }],
-                    axisLine: {
-                      lineStyle: {
-                        color: [
-                          //数组第一个属性是颜色所占line百分比
-                          [0.4, '#49afff'],
-                          [0.6, '#68A54A'],
-                          [1, '#f56c6c'],
-                        ],
-                        width: 22,
-                      },
-                    },
-                    splitLine: {
-                      length: 12,
-                      lineStyle: {
-                        width: 1,
-                      },
-                    },
-                  },
-                ],
-              },
-=======
               option: getGaugeOption(),
->>>>>>> 47f1c258055e89a343a62be974da91501a8283d8
             },
           },
           property: {
@@ -842,30 +791,6 @@ export const Tools = [
               qtDataList: [],
               subscribe: true,
             },
-<<<<<<< HEAD
-            dataColors: [
-              {
-                checked: false,
-                color: '#ccc',
-                top: 100,
-                bottom: -10,
-              },
-              {
-                checked: false,
-                color: '#ccc',
-                top: 100,
-                bottom: -10,
-              },
-              {
-                checked: false,
-                color: '#ccc',
-                top: 100,
-                bottom: -10,
-              },
-            ],
-            dataMax: 100,
-            dataMin: 0,
-=======
             dataColors:[{
               checked:false,
               color:'#ccc',
@@ -894,7 +819,6 @@ export const Tools = [
             }],
             dataMax:100,
             dataMin:0
->>>>>>> 47f1c258055e89a343a62be974da91501a8283d8
           },
         },
       },

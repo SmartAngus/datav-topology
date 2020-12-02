@@ -157,7 +157,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         'bottomLimit.showBkColor': property.bottomLimit.showBkColor,
         'bottomLimit.bkColor': property.bottomLimit.bkColor,
       });
-<<<<<<< HEAD
     } else if (data.node.name === 'biciPilot') {
       propertyForm.setFieldsValue({
         color: property.color,
@@ -167,45 +166,31 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         stateType: property.stateType,
         lightRange: property.lightRange,
       });
-    } else if (
-      data.node.name == 'echarts' &&
-      data.node.property.echartsType == 'chartMeasure'
-    ) {
+    } else if (data.node.name == 'echarts') {
       propertyForm.setFieldsValue({
         dataMax: property.dataMax,
         dataMin: property.dataMin,
+        'checked-0': property.dataColors && property.dataColors[0]?.checked,
+        'color-0': property.dataColors && property.dataColors[0]?.color,
+        'top-0': property.dataColors && property.dataColors[0]?.top,
+        'bottom-0': property.dataColors && property.dataColors[0]?.bottom,
+        'checked-1': property.dataColors && property.dataColors[1]?.checked,
+        'color-1': property.dataColors && property.dataColors[1]?.color,
+        'top-1': property.dataColors && property.dataColors[1]?.top,
+        'bottom-1': property.dataColors && property.dataColors[1]?.bottom,
+        'checked-2': property.dataColors && property.dataColors[2]?.checked,
+        'color-2': property.dataColors && property.dataColors[2]?.color,
+        'top-2': property.dataColors && property.dataColors[2]?.top,
+        'bottom-2': property.dataColors && property.dataColors[2]?.bottom,
+        'checked-3': property.dataColors && property.dataColors[3]?.checked,
+        'color-3': property.dataColors && property.dataColors[3]?.color,
+        'top-3': property.dataColors && property.dataColors[3]?.top,
+        'bottom-3': property.dataColors && property.dataColors[3]?.bottom,
+        'checked-4': property.dataColors && property.dataColors[4]?.checked,
+        'color-4': property.dataColors && property.dataColors[4]?.color,
+        'top-4': property.dataColors && property.dataColors[4]?.top,
+        'bottom-4': property.dataColors && property.dataColors[4]?.bottom,
       });
-=======
-    }else if (data.node.name === 'biciPilot') {
-        propertyForm.setFieldsValue({
-          
-        })
-    }else if(data.node.name=="echarts"){
-      propertyForm.setFieldsValue({
-        'dataMax': property.dataMax,
-        'dataMin': property.dataMin,
-        'checked-0':property.dataColors&&property.dataColors[0]?.checked,
-        'color-0':property.dataColors&&property.dataColors[0]?.color,
-        'top-0':property.dataColors&&property.dataColors[0]?.top,
-        'bottom-0':property.dataColors&&property.dataColors[0]?.bottom,
-        'checked-1':property.dataColors&&property.dataColors[1]?.checked,
-        'color-1':property.dataColors&&property.dataColors[1]?.color,
-        'top-1':property.dataColors&&property.dataColors[1]?.top,
-        'bottom-1':property.dataColors&&property.dataColors[1]?.bottom,
-        'checked-2':property.dataColors&&property.dataColors[2]?.checked,
-        'color-2':property.dataColors&&property.dataColors[2]?.color,
-        'top-2':property.dataColors&&property.dataColors[2]?.top,
-        'bottom-2':property.dataColors&&property.dataColors[2]?.bottom,
-        'checked-3':property.dataColors&&property.dataColors[3]?.checked,
-        'color-3':property.dataColors&&property.dataColors[3]?.color,
-        'top-3':property.dataColors&&property.dataColors[3]?.top,
-        'bottom-3':property.dataColors&&property.dataColors[3]?.bottom,
-        'checked-4':property.dataColors&&property.dataColors[4]?.checked,
-        'color-4':property.dataColors&&property.dataColors[4]?.color,
-        'top-4':property.dataColors&&property.dataColors[4]?.top,
-        'bottom-4':property.dataColors&&property.dataColors[4]?.bottom,
-      })
->>>>>>> 47f1c258055e89a343a62be974da91501a8283d8
     }
   }, [property]);
 
@@ -373,7 +358,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [form, fillStyle]);
+  }, [form, fillStyle, data.node]);
 
   /**
    * 渲染边框样式
@@ -754,7 +739,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     node.property.size = size;
     propertyForm.setFieldsValue({ size });
     canvas.updateProps(false, [node]);
-    // canvas.updateProps(false, [node]);
   };
 
   /**
@@ -853,17 +837,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 {fields.map((field) => (
                   <Space
                     key={field.key}
-                    style={{ display: 'flex', marginBottom: 8 }}
+                    style={{ display: 'flex', marginBottom: 5 }}
                     align="center"
+                    size="small"
                   >
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'lightRangeCheck']}
-                      fieldKey={[field.fieldKey, 'lightRangeCheck']}
-                      valuePropName="checked"
-                    >
-                      <Checkbox />
-                    </Form.Item>
                     <Form.Item
                       {...field}
                       name={[field.name, 'lightRangeColor']}
@@ -871,20 +848,59 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     >
                       <ColorPicker />
                     </Form.Item>
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'lightRangeVal']}
-                      fieldKey={[field.fieldKey, 'lightRangeVal']}
-                    >
-                      <InputNumber placeholder="数值" min={0} />
-                    </Form.Item>
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'lightRangeText']}
-                      fieldKey={[field.fieldKey, 'lightRangeText']}
-                    >
-                      <Input placeholder="文本" />
-                    </Form.Item>
+                    {propertyForm.getFieldValue('stateType') === 'single' && (
+                      <Fragment>
+                        <Form.Item
+                          {...field}
+                          name={[field.name, 'lightRangeVal']}
+                          fieldKey={[field.fieldKey, 'lightRangeVal']}
+                        >
+                          <InputNumber placeholder="数值" min={0} />
+                        </Form.Item>
+                        <Form.Item
+                          {...field}
+                          name={[field.name, 'lightRangeText']}
+                          fieldKey={[field.fieldKey, 'lightRangeText']}
+                        >
+                          <Input placeholder="文本" />
+                        </Form.Item>
+                      </Fragment>
+                    )}
+
+                    {propertyForm.getFieldValue('stateType') === 'range' && (
+                      <Fragment>
+                        <Form.Item
+                          {...field}
+                          name={[field.name, 'lightRangeBottom']}
+                          fieldKey={[field.fieldKey, 'lightRangeBottom']}
+                        >
+                          <InputNumber
+                            style={{ width: 60 }}
+                            min={0}
+                            placeholder="下限"
+                          />
+                        </Form.Item>
+
+                        <Form.Item
+                          {...field}
+                          name={[field.name, 'lightRangeTop']}
+                          fieldKey={[field.fieldKey, 'lightRangeTop']}
+                        >
+                          <InputNumber
+                            style={{ width: 60 }}
+                            min={0}
+                            placeholder="上限"
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          {...field}
+                          name={[field.name, 'lightRangeText']}
+                          fieldKey={[field.fieldKey, 'lightRangeText']}
+                        >
+                          <Input style={{ width: 50 }} placeholder="文本" />
+                        </Form.Item>
+                      </Fragment>
+                    )}
                     <Form.Item>
                       <MinusCircleOutlined onClick={() => remove(field.name)} />
                     </Form.Item>
@@ -956,22 +972,36 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             <Row key={index}>
               <Col span={3}>
                 <Form.Item name={`checked-${index}`} valuePropName="checked">
-                  <Checkbox  />
+                  <Checkbox />
                 </Form.Item>
               </Col>
               <Col span={6}>
                 <Form.Item name={`color-${index}`}>
-                  <ColorPicker/>
+                  <ColorPicker />
                 </Form.Item>
               </Col>
               <Col span={15}>
                 <Input.Group compact>
                   <Form.Item name={`bottom-${index}`}>
-                    <InputNumber style={{ width: 60 }} placeholder="下限" min={-100} max={500}  />
+                    <InputNumber
+                      style={{ width: 60 }}
+                      placeholder="下限"
+                      min={-100}
+                      max={500}
+                    />
                   </Form.Item>
-                  <Input style={{width: 30, pointerEvents: 'none',}} placeholder="~" disabled/>
+                  <Input
+                    style={{ width: 30, pointerEvents: 'none' }}
+                    placeholder="~"
+                    disabled
+                  />
                   <Form.Item name={`top-${index}`}>
-                    <InputNumber style={{width: 60,}} placeholder="上限" min={-100} max={500} />
+                    <InputNumber
+                      style={{ width: 60 }}
+                      placeholder="上限"
+                      min={-100}
+                      max={500}
+                    />
                   </Form.Item>
                 </Input.Group>
               </Col>

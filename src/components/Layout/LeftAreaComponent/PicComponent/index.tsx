@@ -65,7 +65,7 @@ const Layout = ({ uploaConfig }) => {
       canvas.width = width;
       canvas.height = height;
       canvas.getContext('2d').drawImage(Img, 0, 0, width, height);
-      dataURL = canvas.toDataURL('image/jpeg');
+      dataURL = canvas.toDataURL('image/png');
       return callback ? callback(dataURL) : null;
     };
   }

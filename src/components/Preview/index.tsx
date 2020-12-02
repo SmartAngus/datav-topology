@@ -215,6 +215,8 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                     }
                     canvas.updateProps(false);
                   }
+                }else if (node.name === 'biciPilot') {
+                  
                 }
               }
             });

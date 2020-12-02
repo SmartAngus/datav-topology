@@ -324,8 +324,8 @@ export function getGaugeOption(opt?:{
   const min = opt?.min || 0;
   const max = opt?.max || 100;
   const lineColors = opt?.lineColors||[ //数组第一个属性是颜色所占line百分比
-    [0.4, "#49afff"],
-    [0.6, "#68A54A"],
+    [1.4, "#49afff"],
+    [1.6, "#68A54A"],
     [1, "#f56c6c"]
   ]
   const option={

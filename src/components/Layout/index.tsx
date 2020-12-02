@@ -190,6 +190,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     selected.node.data.echarts.option = getGaugeOption({
       max: selected.node.property.dataMax,
       min: selected.node.property.dataMin,
+      lineColors: null,
     });
   };
 
@@ -272,12 +273,12 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         },
         font: {
           color,
-          fontSize: fontSize ? Number(fontSize) : undefined,
+          fontSize: fontSize ? Number(fontSize) : 12,
           fontFamily,
         },
-        rotate: rotate ? Number(rotate) : undefined,
+        rotate: rotate ? Number(rotate) : 0,
         strokeStyle,
-        lineWidth: lineWidth ? Number(lineWidth) : undefined,
+        lineWidth: lineWidth ? Number(lineWidth) : 1,
         fillStyle,
         text,
       };
@@ -329,10 +330,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }
         } else {
           if (value[key] !== undefined) {
-            if (Array.isArray(value[key])) {
-            } else {
-              selected.node.property[key] = value[key];
-            }
+            selected.node.property[key] = value[key];
           }
         }
       }

@@ -208,6 +208,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         default:
           break;
       }
+      setIsSave(false);
     };
 
     /**

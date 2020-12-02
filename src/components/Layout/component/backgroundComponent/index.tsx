@@ -389,7 +389,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
                   beforeUpload={beforeUpload}
                   onChange={bgUploadChange}
                 >
-                  <Button icon={<UploadOutlined />}>Upload</Button>
+                  <Button icon={<UploadOutlined />}>上传</Button>
                 </Upload>
               </Form.Item>
             </Col>
