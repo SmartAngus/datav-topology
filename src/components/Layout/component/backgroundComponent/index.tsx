@@ -288,7 +288,9 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
             content={resolutionContent}
             visible={popoverVisible.resolution}
             onVisibleChange={(visible) =>
-              setPopoverVisible({ ...popoverVisible, resolution: visible })
+              setTimeout(() => {
+                setPopoverVisible({ ...popoverVisible, resolution: visible });
+              }, 200)
             }
             getPopupContainer={() => document.querySelector('#editLayout')}
           >
@@ -338,7 +340,9 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
             arrowPointAtCenter
             visible={popoverVisible.bgSelect}
             onVisibleChange={(visible) =>
-              setPopoverVisible({ ...popoverVisible, bgSelect: visible })
+              setTimeout(() => {
+                setPopoverVisible({ ...popoverVisible, bgSelect: visible });
+              }, 200)
             }
             getPopupContainer={() => document.querySelector('#editLayout')}
           >

@@ -89,11 +89,25 @@
     min-width: auto;
   }
 }
-.resizeSideBar{
+.resizeSideBar {
   position: absolute;
   width: 20px;
-  heigth:100%;
+  heigth: 100%;
   background: #333333;
   top: 0;
-  right:0;
+  right: 0;
+}
+
+.titleInfo {
+  position: relative;
+  left: 537px;
+  top: 1300px;
+}
+
+.titleInfo span {
+  max-width: 20rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: inline-block;
 }

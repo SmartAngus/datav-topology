@@ -306,6 +306,8 @@ export class DataVEditorProps{
   preInstallBgImages?:BgImagesProps[];
   // 面板数据和配置
   editorData?: any;// json对象
+  // 看板数据
+  boardData?: any;
   // 自定义预览按钮的功能
   onPreview?:()=>void;
   // 当点击退出按钮时

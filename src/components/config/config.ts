@@ -751,6 +751,7 @@ export const Tools = [
         name: '仪表盘',
         icon: 'iconyibiaopan',
         data: {
+          elementRendered: false,
           text: '',
           hideInput: true,
           rect: {

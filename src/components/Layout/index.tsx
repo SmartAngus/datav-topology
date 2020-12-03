@@ -13,7 +13,7 @@ import {
   echartsObjs,
 } from '../../topology/chart-diagram';
 import { register as registerBiciComp } from '../../topology/bici-diagram';
-import { Modal, Tabs, message } from 'antd';
+import { Modal, Tabs, message, Space } from 'antd';
 import { Tools } from '../config/config';
 import { useClickAway } from 'ahooks';
 import { replacer } from '../utils/serializing';
@@ -470,7 +470,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const onMessage = (event: string, data: Node) => {
     const node = data;
-    console.log("onMessage==",event)
+    console.log('onMessage==', event);
     switch (event) {
       case 'node': // 节点切换或者点击
         setSelected({
@@ -708,6 +708,15 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
               minHeight: canvasSizeInfo.minHeight,
             }}
           ></svg>
+          {props.boardData && (
+            <p className={styles.titleInfo}>
+              <span>{props.boardData.name}</span>
+              <span style={{ margin: '0 5px' }}>/</span>
+              <span>{props.boardData.typeName} /</span>
+              <span style={{ margin: '0 5px' }}>/</span>
+              <span>{props.boardData.remark}</span>
+            </p>
+          )}
           <div
             className={styles.topology_canvas}
             ref={canvasRef}
