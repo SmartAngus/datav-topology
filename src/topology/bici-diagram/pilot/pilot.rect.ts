@@ -8,7 +8,7 @@ export function biciPilotTextRect(node: Node) {
   const w = 100;
   const h = 30;
   node.textRect = new Rect(
-    node.rect.x + node.rect.width - w / 4,
+    node.rect.x + node.rect.width,
     node.rect.y + (node.rect.height - h) / 2,
     w,
     h

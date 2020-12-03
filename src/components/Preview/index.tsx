@@ -221,6 +221,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                   }
                 } else if (node.name === 'biciPilot') {
                   if (node.property.dataPointParam.qtDataList[0].id == r.id) {
+                    console.log('biciPilot', r.value)
                     if (node.property.lightRange) {
                       node.property.lightRange.map((item) => {
                         if (node.property.stateType === 'single') {
@@ -232,7 +233,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                         } else {
                           if (
                             item.lightRangeBottom <= r.value &&
-                            item.lightRangeTop >= r.value
+                            item.lightRangeTop > r.value
                           ) {
                             node.strokeStyle = item.lightRangeColor;
                             node.text = item.lightRangeText;

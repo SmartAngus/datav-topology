@@ -213,6 +213,9 @@ export const Tools = [
             width: 30,
             height: 30,
           },
+          font: {
+            textAlign: 'left',
+          },
           hideAnchor: true,
           name: 'biciPilot',
           property: {

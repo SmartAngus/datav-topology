@@ -29,7 +29,7 @@ import MyComponent from './LeftAreaComponent/PicComponent';
 import styles from './index.module.scss';
 import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines';
-import { calcCanvas } from '../utils/cacl';
+import { calcCanvas, eraseOverlapIntervals } from '../utils/cacl';
 import ResizePanel from '../common/resizeSidebar';
 import { getGaugeOption } from '../config/chartMeasure';
 const { confirm } = Modal;
@@ -185,26 +185,26 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         selected.node.property.dataColors[index][kindex[0]] = values[k];
       }
     }
-    selected.node.property.dataMax=values.dataMax||100;
-    selected.node.property.dataMin=values.dataMin||0;
-    let lineColors=[];
-    (selected.node.property.dataColors||[]).map(item=>{
-      if(item.checked){
-        let lineColor=[];
-        lineColor[0]=Math.abs(item.top/(selected.node.property.dataMax));
-        lineColor[1]=item.color;
-        lineColors.push(lineColor)
+    selected.node.property.dataMax = values.dataMax || 100;
+    selected.node.property.dataMin = values.dataMin || 0;
+    let lineColors = [];
+    (selected.node.property.dataColors || []).map((item) => {
+      if (item.checked) {
+        let lineColor = [];
+        lineColor[0] = Math.abs(item.top / selected.node.property.dataMax);
+        lineColor[1] = item.color;
+        lineColors.push(lineColor);
       }
-    })
-    if(lineColors.length==0){
-      lineColors=undefined;
+    });
+    if (lineColors.length == 0) {
+      lineColors = undefined;
     }
-    selected.node.data.echarts.option=getGaugeOption({
-      max:selected.node.property.dataMax,
-      min:selected.node.property.dataMin,
-      lineColors:lineColors
-    })
-  }
+    selected.node.data.echarts.option = getGaugeOption({
+      max: selected.node.property.dataMax,
+      min: selected.node.property.dataMin,
+      lineColors: lineColors,
+    });
+  };
 
   /**
    * 数据卡片自定义数据逻辑处理
@@ -248,9 +248,34 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const handlePilot = (value) => {
     console.log('polit>', value);
-    const { color, text, showText } = value;
+    const { color, text, showText, stateType, lightRange } = value;
     selected.node.strokeStyle = color;
     selected.node.text = showText ? text : '';
+    if (lightRange.length > 0) {
+      message.config({
+        getContainer: () => document.querySelector('#editLayout'),
+      });
+      if (stateType === 'single') {
+        const vals = lightRange.map((item) => item?.lightRangeVal);
+        const tmpSet = new Set(vals);
+        if (tmpSet.size !== vals.length) {
+          message.error('单点值不能重复');
+          selected.node.property.rangeIsOk = false;
+        }
+      } else {
+        const vals = lightRange.map((item) => [
+          item?.lightRangeBottom,
+          item?.lightRangeTop,
+        ]);
+        if (!vals.flat().includes(undefined)) {
+          const nums = eraseOverlapIntervals(vals);
+          if (nums !== 0) {
+            message.error('范围值区间不能重叠');
+            selected.node.property.rangeIsOk = false;
+          }
+        }
+      }
+    }
   };
 
   /**
@@ -307,6 +332,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }
         }
       }
+      setIsSave(false);
       canvas.updateProps(false, [selected.node]);
     },
     [selected]
@@ -322,7 +348,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // 通知有数据属性更新,会重新渲染画布
 
       const { name } = selected.node;
-      console.log(selected.node)
+      console.log(selected.node);
       switch (name) {
         case 'biciCard':
           handleBiciCard(value);
@@ -347,6 +373,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }
         }
       }
+      setIsSave(false);
       // 更新属性变化
       canvas.updateProps(false, [selected.node]);
     },
