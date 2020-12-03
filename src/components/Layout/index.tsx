@@ -470,6 +470,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const onMessage = (event: string, data: Node) => {
     const node = data;
+    console.log("onMessage==",event)
     switch (event) {
       case 'node': // 节点切换或者点击
         setSelected({
@@ -490,8 +491,12 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           locked: data.locked,
         });
         break;
+      case 'delete':
+        setIsSave(false);
+        break;
       case 'line': // 连线
       case 'addLine':
+        setIsSave(false);
         setSelected({
           node: null,
           line: data,
@@ -523,6 +528,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         );
         break;
       case 'resizePens':
+        setIsSave(false);
         setSelected(
           Object.assign(
             {},
@@ -568,6 +574,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           onFormValueChange={onHandleFormValueChange}
           onEventValueChange={onEventValueChange}
           onPropertyFormValueChange={onHandlePropertyFormValueChange}
+          setIsSave={setIsSave}
         />
       ), // 渲染Node节点类型的组件
       line: selected && (

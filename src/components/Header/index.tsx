@@ -159,6 +159,8 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           json.screenshot = screenshot;
           props.onEditorSaveCb && props.onEditorSaveCb(json);
         });
+      }else {
+          message.warn('数据已经保存！');
       }
     };
 

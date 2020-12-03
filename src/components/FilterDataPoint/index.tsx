@@ -124,6 +124,9 @@ export default class FilterDataPoint extends React.PureComponent<any,any> {
                   }}
                   style={{top: 70}}
                   onOk={this.handleOk}
+                  okText="确定"
+                  cancelText="取消"
+                  getContainer={() => document.querySelector('#editLayout')}
                   onCancel={this.props.onCancel}>
       <Tabs defaultActiveKey='dataPoint'>
         {!disableSource.includes('dataPoint') &&

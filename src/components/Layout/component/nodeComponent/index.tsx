@@ -68,12 +68,14 @@ interface ICanvasProps extends FormProps {
   onFormValueChange?: any;
   onPropertyFormValueChange?: any;
   onEventValueChange: any;
+  setIsSave?:(isSave:boolean)=>void;
 }
 
 const NodeCanvasProps: React.FC<ICanvasProps> = ({
   data,
   onFormValueChange,
   onPropertyFormValueChange,
+    setIsSave
 }) => {
   const [form] = Form.useForm();
   const [propertyForm] = Form.useForm();
@@ -274,6 +276,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         };
         setDataPointSelectedRows(selectedRows);
       }
+      setIsSave(false)
     }
   };
   // 删除数据点
@@ -284,19 +287,17 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       content: '确认删除数据点吗？',
       okText: '确认',
       cancelText: '取消',
+      getContainer:() => document.querySelector('#editLayout'),
       onOk() {
-        console.log('OK', item);
-        const itemRowIndex = _.findIndex(
-          property.dataPointSelectedRows,
-          (r: any) => r.id == item.id
-        );
-        const itemQueryIndex = _.findIndex(
-          property.dataPointParam.qtDataList,
-          (r: any) => r.id == item.id
-        );
+        setIsSave(false)
+        const itemRowIndex=_.findIndex(property.dataPointSelectedRows,(r:any)=>r.id==item.id)
+        const itemQueryIndex=_.findIndex(property.dataPointParam.qtDataList,(r:any)=>r.id==item.id)
+        data.node.property.dataPointParam.qtDataList.splice(itemQueryIndex,1)
+        data.node.property.dataPointSelectedRows.splice(itemRowIndex,1)
+        const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
+        setDataPointSelectedRows(newRows);
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };
