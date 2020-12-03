@@ -87,12 +87,7 @@ export const Tools = [
             dataDot: 2,
             dataPointSelectedRows: [],
             dataPointParam: {
-              qtDataList: [
-                {
-                  id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
-                  type: 1,
-                },
-              ],
+              qtDataList: [],
               subscribe: true,
             },
           },
@@ -202,12 +197,7 @@ export const Tools = [
             dataDot: 2,
             dataPointSelectedRows: [],
             dataPointParam: {
-              qtDataList: [
-                {
-                  id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
-                  type: 1,
-                },
-              ],
+              qtDataList: [],
               subscribe: true,
             },
           },
@@ -237,12 +227,7 @@ export const Tools = [
             dataDot: 2,
             dataPointSelectedRows: [],
             dataPointParam: {
-              qtDataList: [
-                {
-                  id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
-                  type: 1,
-                },
-              ],
+              qtDataList: [],
               subscribe: true,
             },
           },
@@ -606,12 +591,7 @@ export const Tools = [
             dataDot: 1,
             dataPointSelectedRows: [],
             dataPointParam: {
-              qtDataList: [
-                {
-                  id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
-                  type: 1,
-                },
-              ],
+              qtDataList: [],
               subscribe: true,
             },
           },

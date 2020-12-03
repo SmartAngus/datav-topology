@@ -322,6 +322,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // 通知有数据属性更新,会重新渲染画布
 
       const { name } = selected.node;
+      console.log(selected.node)
       switch (name) {
         case 'biciCard':
           handleBiciCard(value);
@@ -443,7 +444,15 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const onMessage = (event: string, data: Node) => {
     const node = data;
     switch (event) {
-      case 'node': // 节点
+      case 'node': // 节点切换或者点击
+        setSelected({
+          node: data,
+          line: null,
+          multi: false,
+          nodes: null,
+          locked: data.locked,
+        });
+        break;
       case 'addNode':
         setIsSave(false);
         setSelected({
