@@ -712,7 +712,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
             <p className={styles.titleInfo}>
               <span>{props.boardData.name}</span>
               <span style={{ margin: '0 5px' }}>/</span>
-              <span>{props.boardData.typeName} /</span>
+              <span>{props.boardData.typeName}</span>
               <span style={{ margin: '0 5px' }}>/</span>
               <span>{props.boardData.remark}</span>
             </p>
