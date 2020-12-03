@@ -19,7 +19,8 @@ import {
   Button,
   Space,
   Tooltip,
-  Radio, Modal,
+  Radio,
+  Modal,
 } from 'antd';
 import {
   PlusOutlined,
@@ -36,7 +37,7 @@ import DataBindModal from '../../../FilterDataPoint';
 
 import styles from './index.module.scss';
 import { getNodeType } from '../../../utils/Property2NodeProps';
-import * as _ from 'lodash'
+import * as _ from 'lodash';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -162,7 +163,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     } else if (data.node.name === 'biciPilot') {
       propertyForm.setFieldsValue({
         color: property.color,
-        size: property.size,
+        size: width / 2,
         showText: property.showText,
         text: property.text,
         stateType: property.stateType,
@@ -170,29 +171,29 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       });
     } else if (data.node.name == 'echarts') {
       propertyForm.setFieldsValue({
-        'dataMax': property.dataMax,
-        'dataMin': property.dataMin,
-        'checked-0':property.dataColors&&property.dataColors[0]?.checked,
-        'color-0':property.dataColors&&property.dataColors[0]?.color,
-        'top-0':property.dataColors&&property.dataColors[0]?.top,
-        'bottom-0':property.dataColors&&property.dataColors[0]?.bottom,
-        'checked-1':property.dataColors&&property.dataColors[1]?.checked,
-        'color-1':property.dataColors&&property.dataColors[1]?.color,
-        'top-1':property.dataColors&&property.dataColors[1]?.top,
-        'bottom-1':property.dataColors&&property.dataColors[1]?.bottom,
-        'checked-2':property.dataColors&&property.dataColors[2]?.checked,
-        'color-2':property.dataColors&&property.dataColors[2]?.color,
-        'top-2':property.dataColors&&property.dataColors[2]?.top,
-        'bottom-2':property.dataColors&&property.dataColors[2]?.bottom,
-        'checked-3':property.dataColors&&property.dataColors[3]?.checked,
-        'color-3':property.dataColors&&property.dataColors[3]?.color,
-        'top-3':property.dataColors&&property.dataColors[3]?.top,
-        'bottom-3':property.dataColors&&property.dataColors[3]?.bottom,
-        'checked-4':property.dataColors&&property.dataColors[4]?.checked,
-        'color-4':property.dataColors&&property.dataColors[4]?.color,
-        'top-4':property.dataColors&&property.dataColors[4]?.top,
-        'bottom-4':property.dataColors&&property.dataColors[4]?.bottom,
-      })
+        dataMax: property.dataMax,
+        dataMin: property.dataMin,
+        'checked-0': property.dataColors && property.dataColors[0]?.checked,
+        'color-0': property.dataColors && property.dataColors[0]?.color,
+        'top-0': property.dataColors && property.dataColors[0]?.top,
+        'bottom-0': property.dataColors && property.dataColors[0]?.bottom,
+        'checked-1': property.dataColors && property.dataColors[1]?.checked,
+        'color-1': property.dataColors && property.dataColors[1]?.color,
+        'top-1': property.dataColors && property.dataColors[1]?.top,
+        'bottom-1': property.dataColors && property.dataColors[1]?.bottom,
+        'checked-2': property.dataColors && property.dataColors[2]?.checked,
+        'color-2': property.dataColors && property.dataColors[2]?.color,
+        'top-2': property.dataColors && property.dataColors[2]?.top,
+        'bottom-2': property.dataColors && property.dataColors[2]?.bottom,
+        'checked-3': property.dataColors && property.dataColors[3]?.checked,
+        'color-3': property.dataColors && property.dataColors[3]?.color,
+        'top-3': property.dataColors && property.dataColors[3]?.top,
+        'bottom-3': property.dataColors && property.dataColors[3]?.bottom,
+        'checked-4': property.dataColors && property.dataColors[4]?.checked,
+        'color-4': property.dataColors && property.dataColors[4]?.color,
+        'top-4': property.dataColors && property.dataColors[4]?.top,
+        'bottom-4': property.dataColors && property.dataColors[4]?.bottom,
+      });
     }
   }, [property]);
 
@@ -279,7 +280,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     }
   };
   // 删除数据点
-  const handleDeleteDataPoint=(item)=>{
+  const handleDeleteDataPoint = (item) => {
     Modal.confirm({
       title: '删除提示',
       icon: <ExclamationCircleOutlined />,
@@ -299,7 +300,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       onCancel() {
       },
     });
-  }
+  };
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
   const renderDataPointModal = useCallback(() => {
     return (
@@ -444,11 +445,13 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <InputNumber min={0} />
             </Form.Item>
           </Col>
-          <Col span={24}>
-            <Form.Item name="text" label="内容">
-              <Input />
-            </Form.Item>
-          </Col>
+          {data.node.name !== 'biciPilot' && (
+            <Col span={24}>
+              <Form.Item name="text" label="内容">
+                <Input />
+              </Form.Item>
+            </Col>
+          )}
         </Form>
       </Panel>
     );
@@ -576,7 +579,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             return (
               <Form.Item label={`数据点${index}`} key={index}>
                 <span>{item.dataName}</span>
-                <Button type="link" icon={<DeleteOutlined />} onClick={()=>handleDeleteDataPoint(item)}></Button>
+                <Button
+                  type="link"
+                  icon={<DeleteOutlined />}
+                  onClick={() => handleDeleteDataPoint(item)}
+                ></Button>
               </Form.Item>
             );
           })}
@@ -838,7 +845,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
             <Col span={14}>
               <Form.Item name="text">
-                <Input />
+                <Input maxLength={4} />
               </Form.Item>
             </Col>
           </Row>
@@ -993,26 +1000,40 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           <Row>
             <Form.Item label="颜色分区"></Form.Item>
           </Row>
-          {(property?.dataColors||[]).map((item,index) => (
+          {(property?.dataColors || []).map((item, index) => (
             <Row key={index}>
               <Col span={3}>
                 <Form.Item name={`checked-${index}`} valuePropName="checked">
-                  <Checkbox  />
+                  <Checkbox />
                 </Form.Item>
               </Col>
               <Col span={6}>
                 <Form.Item name={`color-${index}`}>
-                  <ColorPicker/>
+                  <ColorPicker />
                 </Form.Item>
               </Col>
               <Col span={15}>
                 <Input.Group compact>
                   <Form.Item name={`bottom-${index}`}>
-                    <InputNumber style={{ width: 60 }} placeholder="下限" min={-100} max={500}  />
+                    <InputNumber
+                      style={{ width: 60 }}
+                      placeholder="下限"
+                      min={-100}
+                      max={500}
+                    />
                   </Form.Item>
-                  <Input style={{width: 30, pointerEvents: 'none',}} placeholder="~" disabled/>
+                  <Input
+                    style={{ width: 30, pointerEvents: 'none' }}
+                    placeholder="~"
+                    disabled
+                  />
                   <Form.Item name={`top-${index}`}>
-                    <InputNumber style={{width: 60,}} placeholder="上限" min={-100} max={500} />
+                    <InputNumber
+                      style={{ width: 60 }}
+                      placeholder="上限"
+                      min={-100}
+                      max={500}
+                    />
                   </Form.Item>
                 </Input.Group>
               </Col>
