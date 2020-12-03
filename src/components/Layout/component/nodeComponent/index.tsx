@@ -252,9 +252,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
   // 获得选中的数据点
   const onDataPointBind = (selectedRowKeys, selectedRows) => {
-    console.log('onDataPointBind', selectedRows);
     const nodeType = getNodeType(data.node);
-    console.log('nodeType,', nodeType);
     if (property && property.dataPointSelectedRows) {
       if (nodeType == 'timeLine') {
         // 最多可绑定十个数据点
@@ -548,7 +546,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    * 渲染元素额外数据 {"qtDataList":[{"id":"6413f3a606754c31987ec584ed56d5b7","type":2}],"subscribe":true,"page":"动态曲线"}
    */
   const renderExtraDataForm = useMemo(() => {
-    console.log('node...', data);
     return (
       <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
         <Col>

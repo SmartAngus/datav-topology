@@ -259,7 +259,6 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                             item.lightRangeBottom <= r.value &&
                             item.lightRangeTop > r.value
                           ) {
-                            console.log('true::', r.value, item);
                             node.strokeStyle = item.lightRangeColor;
                             node.text =
                               item?.lightRangeText || node.property.text;

@@ -247,7 +247,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    * 指示灯自定义数据处理
    */
   const handlePilot = (value) => {
-    console.log('polit>', value);
     const { color, text, showText, stateType, lightRange } = value;
     selected.node.strokeStyle = color;
     selected.node.text = showText ? text : '';
@@ -340,7 +339,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   /*当自定义的属性发生变化时*/
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
-      console.log('自定义属性:', value);
       setIsSave(false);
       canvas.cache();
       // 只能两层嵌套，后期需要更改，如果有多层的话
@@ -348,7 +346,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // 通知有数据属性更新,会重新渲染画布
 
       const { name } = selected.node;
-      console.log(selected.node);
       switch (name) {
         case 'biciCard':
           handleBiciCard(value);
@@ -470,7 +467,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const onMessage = (event: string, data: Node) => {
     const node = data;
-    console.log('onMessage==', event);
+    // console.log('onMessage==', event);
     switch (event) {
       case 'node': // 节点切换或者点击
         setSelected({
