@@ -75,7 +75,7 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
           </Col>
           <Col span={24}>
             <Form.Item name="lineWidth" label="线条宽度">
-              <InputNumber style={{ width: '100%' }} />
+              <InputNumber style={{ width: '100%' }} min={0} />
             </Form.Item>
           </Col>
           <Col span={24}>

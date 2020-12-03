@@ -74,8 +74,12 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     const h = data.canvas.height;
     const bgColor = data.data.bkColor;
     const bkImage = data.data.bkImage;
+
+    const sizeValText = Object.values(panelSizeObj).flat().includes(`${w}*${h}`)
+      ? `预设·${w}*${h}`
+      : `自定义`;
     form.setFieldsValue({
-      sizeVal: `预设·${w}*${h}`,
+      sizeVal: sizeValText,
       w,
       h,
       bgColor,
@@ -385,7 +389,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
                   beforeUpload={beforeUpload}
                   onChange={bgUploadChange}
                 >
-                  <Button icon={<UploadOutlined />}>Upload</Button>
+                  <Button icon={<UploadOutlined />}>上传</Button>
                 </Upload>
               </Form.Item>
             </Col>

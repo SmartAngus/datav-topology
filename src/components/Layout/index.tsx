@@ -31,7 +31,7 @@ import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines';
 import { calcCanvas } from '../utils/cacl';
 import ResizePanel from '../common/resizeSidebar';
-import {getGaugeOption} from "../config/chartMeasure";
+import { getGaugeOption } from '../config/chartMeasure';
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
@@ -178,11 +178,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     }
   };
   const handleChartMeasure = (values) => {
-    for(let k in values){
-      let kindex = k.split("-")
-      let index = parseInt(kindex[1])
-      if(k.indexOf('-')>0){
-        selected.node.property.dataColors[index][kindex[0]]=values[k]
+    for (let k in values) {
+      let kindex = k.split('-');
+      let index = parseInt(kindex[1]);
+      if (k.indexOf('-') > 0) {
+        selected.node.property.dataColors[index][kindex[0]] = values[k];
       }
     }
     selected.node.property.dataMax=values.dataMax||100;
@@ -210,7 +210,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    * 数据卡片自定义数据逻辑处理
    */
   const handleBiciCard = (value) => {
-    console.log('seleted node:', selected.node);
     const { cardTitle, showTitle, showLimit } = value;
     if (showTitle !== undefined) {
       const titleVal = showTitle ? cardTitle : '';
@@ -243,6 +242,15 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if ('normal.color' in value) {
       selected.node.children[0].font.color = value['normal.color'];
     }
+  };
+  /**
+   * 指示灯自定义数据处理
+   */
+  const handlePilot = (value) => {
+    console.log('polit>', value);
+    const { color, text, showText } = value;
+    selected.node.strokeStyle = color;
+    selected.node.text = showText ? text : '';
   };
 
   /**
@@ -277,12 +285,12 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         },
         font: {
           color,
-          fontSize: fontSize ? Number(fontSize) : undefined,
+          fontSize: fontSize ? Number(fontSize) : 12,
           fontFamily,
         },
-        rotate: rotate ? Number(rotate) : undefined,
+        rotate: rotate ? Number(rotate) : 0,
         strokeStyle,
-        lineWidth: lineWidth ? Number(lineWidth) : undefined,
+        lineWidth: lineWidth ? Number(lineWidth) : 1,
         fillStyle,
         text,
       };
@@ -314,11 +322,18 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // 通知有数据属性更新,会重新渲染画布
 
       const { name } = selected.node;
-      if (name === 'biciCard') {
-        handleBiciCard(value);
-      }else if(name==='echarts'){
-        handleChartMeasure(value)
+      switch (name) {
+        case 'biciCard':
+          handleBiciCard(value);
+          break;
+        case 'biciPilot':
+          handlePilot(value);
+          break;
+        case 'echarts':
+          handleChartMeasure(value);
+          break;
       }
+
       for (const key in value) {
         if (key.indexOf('.') > 0) {
           if (key != undefined) {
@@ -327,10 +342,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }
         } else {
           if (value[key] !== undefined) {
-            if (Array.isArray(value[key])) {
-            } else {
-              selected.node.property[key] = value[key];
-            }
+            selected.node.property[key] = value[key];
           }
         }
       }

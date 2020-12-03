@@ -157,11 +157,16 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         'bottomLimit.showBkColor': property.bottomLimit.showBkColor,
         'bottomLimit.bkColor': property.bottomLimit.bkColor,
       });
-    }else if (data.node.name === 'biciPilot') {
-        propertyForm.setFieldsValue({
-          
-        })
-    }else if(data.node.name=="echarts"){
+    } else if (data.node.name === 'biciPilot') {
+      propertyForm.setFieldsValue({
+        color: property.color,
+        size: property.size,
+        showText: property.showText,
+        text: property.text,
+        stateType: property.stateType,
+        lightRange: property.lightRange,
+      });
+    } else if (data.node.name == 'echarts') {
       propertyForm.setFieldsValue({
         'dataMax': property.dataMax,
         'dataMin': property.dataMin,
@@ -371,7 +376,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [form, fillStyle]);
+  }, [form, fillStyle, data.node]);
 
   /**
    * 渲染边框样式
@@ -742,6 +747,18 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     );
   }, [propertyForm, property]);
 
+  // 改变指示灯大小
+  const changePolitSize = (size: number) => {
+    let { node } = data;
+    node.text = propertyForm.getFieldValue('text');
+    node.rect.width = size * 2;
+    node.rect.height = size * 2;
+    form.setFieldsValue({ width: size * 2, height: size * 2 });
+    node.property.size = size;
+    propertyForm.setFieldsValue({ size });
+    canvas.updateProps(false, [node]);
+  };
+
   /**
    * 渲染指示灯样式
    */
@@ -765,6 +782,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 placeholder="请输入直径"
                 min={0}
                 style={{ width: '100%' }}
+                onChange={changePolitSize}
               />
             </Form.Item>
           </Col>
@@ -773,13 +791,28 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <Button.Group
                 style={{ width: '100%', backgroundColor: '#E0E7F5' }}
               >
-                <Button block size="small" type="text">
+                <Button
+                  block
+                  size="small"
+                  type="text"
+                  onClick={() => changePolitSize(15)}
+                >
                   小
                 </Button>
-                <Button block size="small" type="text">
+                <Button
+                  block
+                  size="small"
+                  type="text"
+                  onClick={() => changePolitSize(20)}
+                >
                   中
                 </Button>
-                <Button block size="small" type="text">
+                <Button
+                  block
+                  size="small"
+                  type="text"
+                  onClick={() => changePolitSize(30)}
+                >
                   大
                 </Button>
               </Button.Group>
@@ -822,17 +855,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 {fields.map((field) => (
                   <Space
                     key={field.key}
-                    style={{ display: 'flex', marginBottom: 8 }}
+                    style={{ display: 'flex', marginBottom: 5 }}
                     align="center"
+                    size="small"
                   >
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'lightRangeCheck']}
-                      fieldKey={[field.fieldKey, 'lightRangeCheck']}
-                      valuePropName="checked"
-                    >
-                      <Checkbox />
-                    </Form.Item>
                     <Form.Item
                       {...field}
                       name={[field.name, 'lightRangeColor']}
@@ -840,20 +866,59 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     >
                       <ColorPicker />
                     </Form.Item>
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'lightRangeVal']}
-                      fieldKey={[field.fieldKey, 'lightRangeVal']}
-                    >
-                      <InputNumber placeholder="数值" min={0} />
-                    </Form.Item>
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'lightRangeText']}
-                      fieldKey={[field.fieldKey, 'lightRangeText']}
-                    >
-                      <Input placeholder="文本" />
-                    </Form.Item>
+                    {propertyForm.getFieldValue('stateType') === 'single' && (
+                      <Fragment>
+                        <Form.Item
+                          {...field}
+                          name={[field.name, 'lightRangeVal']}
+                          fieldKey={[field.fieldKey, 'lightRangeVal']}
+                        >
+                          <InputNumber placeholder="数值" min={0} />
+                        </Form.Item>
+                        <Form.Item
+                          {...field}
+                          name={[field.name, 'lightRangeText']}
+                          fieldKey={[field.fieldKey, 'lightRangeText']}
+                        >
+                          <Input placeholder="文本" />
+                        </Form.Item>
+                      </Fragment>
+                    )}
+
+                    {propertyForm.getFieldValue('stateType') === 'range' && (
+                      <Fragment>
+                        <Form.Item
+                          {...field}
+                          name={[field.name, 'lightRangeBottom']}
+                          fieldKey={[field.fieldKey, 'lightRangeBottom']}
+                        >
+                          <InputNumber
+                            style={{ width: 60 }}
+                            min={0}
+                            placeholder="下限"
+                          />
+                        </Form.Item>
+
+                        <Form.Item
+                          {...field}
+                          name={[field.name, 'lightRangeTop']}
+                          fieldKey={[field.fieldKey, 'lightRangeTop']}
+                        >
+                          <InputNumber
+                            style={{ width: 60 }}
+                            min={0}
+                            placeholder="上限"
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          {...field}
+                          name={[field.name, 'lightRangeText']}
+                          fieldKey={[field.fieldKey, 'lightRangeText']}
+                        >
+                          <Input style={{ width: 50 }} placeholder="文本" />
+                        </Form.Item>
+                      </Fragment>
+                    )}
                     <Form.Item>
                       <MinusCircleOutlined onClick={() => remove(field.name)} />
                     </Form.Item>

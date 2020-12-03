@@ -227,8 +227,8 @@ export const Tools = [
           name: 'biciPilot',
           property: {
             color: '#222',
-            size: 5,
-            text: '',
+            size: 15,
+            text: '指示灯',
             showText: true,
             stateType: 'single', // 状态定义: single 单点值,  range 范围值
             lightRange: [], // 指示灯 状态定义 列表
@@ -848,14 +848,16 @@ export const Tools = [
               qtDataList: [],
               subscribe: true,
             },
-            dataColors:[{
-              checked:false,
-              color:'#ccc',
-              top:100,
-              bottom:-10
-            }],
-            dataMax:100,
-            dataMin:0
+            dataColors: [
+              {
+                checked: false,
+                color: '#ccc',
+                top: 100,
+                bottom: -10,
+              },
+            ],
+            dataMax: 100,
+            dataMin: 0,
           },
         },
       },

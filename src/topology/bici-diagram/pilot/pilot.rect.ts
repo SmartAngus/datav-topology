@@ -7,6 +7,11 @@ export function biciPilotIconRect(node: Node) {
 export function biciPilotTextRect(node: Node) {
   const w = 100;
   const h = 30;
-  node.textRect = new Rect(node.rect.ex-30, node.rect.y + (node.rect.height - h) / 2, w, h);
+  node.textRect = new Rect(
+    node.rect.x + node.rect.width - w / 4,
+    node.rect.y + (node.rect.height - h) / 2,
+    w,
+    h
+  );
   node.fullTextRect = node.textRect;
 }
