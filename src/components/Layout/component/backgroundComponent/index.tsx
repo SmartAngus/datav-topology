@@ -285,6 +285,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
           <Popover
             placement="bottom"
             trigger="click"
+            transitionName=""
             content={resolutionContent}
             visible={popoverVisible.resolution}
             onVisibleChange={(visible) =>
@@ -334,6 +335,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
           <Popover
             placement="bottom"
             trigger="click"
+            transitionName=""
             content={bgSeletedContent}
             arrowPointAtCenter
             autoAdjustOverflow={false}
