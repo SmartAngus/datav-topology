@@ -1,4 +1,4 @@
-import { getMeasureOption, getGaugeOption } from './chartMeasure';
+import { getMeasureOption, getGaugeOption,getMeasureOption2 } from './chartMeasure';
 export const Tools = [
   {
     group: '通用组件',
@@ -758,6 +758,8 @@ export const Tools = [
             width: 300,
             height: 300,
           },
+          strokeStyle:"rgba(0,0,0,0)",
+          lineWidth:0,
           name: 'echarts',
           paddingTopNum: 0,
           paddingRightNum: 0,
@@ -828,7 +830,7 @@ export const Tools = [
           hideInput: true,
           data: {
             echarts: {
-              option: getMeasureOption(),
+              option: getMeasureOption2(),
             },
           },
           property: {
