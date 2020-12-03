@@ -745,7 +745,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         })}
       </Fragment>
     );
-  }, [propertyForm, property]);
+  }, [propertyForm, property,data.node]);
 
   // 改变指示灯大小
   const changePolitSize = (size: number) => {
@@ -943,7 +943,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [propertyForm]);
+  }, [propertyForm,data.node]);
 
   /**
    * 渲染计量器样式
@@ -1014,7 +1014,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [property]);
+  }, [property,data.node]);
 
   /**
    * 渲染仪表盘样式
@@ -1065,7 +1065,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         {renderMeter}
       </Fragment>
     );
-  }, [property]);
+  }, [property,data.node]);
 
   /**
    * 渲染曲线图样式
@@ -1222,7 +1222,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
       </Fragment>
     );
-  }, [property]);
+  }, [property,data.node]);
 
   return (
     <div className={styles.rightArea}>
