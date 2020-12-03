@@ -756,6 +756,8 @@ export const Tools = [
             width: 300,
             height: 300,
           },
+          strokeStyle:"rgba(0,0,0,0)",
+          lineWidth:0,
           name: 'echarts',
           paddingTopNum: 0,
           paddingRightNum: 0,

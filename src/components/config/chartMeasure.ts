@@ -352,6 +352,7 @@ export function getGaugeOption(opt?:{
       {
         name: '',
         type: 'gauge',
+        radius:"100%",
         max:max,
         min:min,
         detail: { formatter: '{value}' },
