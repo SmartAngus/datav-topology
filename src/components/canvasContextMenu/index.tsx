@@ -144,6 +144,9 @@ export default class CanvasContextMenu extends Component<
         onOk={this.handleOk}
         onCancel={this.handleCancel}
         maskClosable={false}
+        okText="确定"
+        cancelText="取消"
+        getContainer={() => document.querySelector('#editLayout')}
       >
         <Form ref={this.formRef}>
           <Form.Item

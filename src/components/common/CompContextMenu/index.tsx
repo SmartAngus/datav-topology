@@ -40,6 +40,7 @@ const CompContextMenu = (props: CompContextMenuProps) => {
       content: '确定删除吗?',
       okText: '确定',
       cancelText: '取消',
+      getContainer:() => document.querySelector('#editLayout'),
       onOk() {
         handleDelete();
       },
@@ -65,6 +66,7 @@ const CompContextMenu = (props: CompContextMenuProps) => {
       maskClosable={false}
       okText="确定"
       cancelText="取消"
+      getContainer={() => document.querySelector('#editLayout')}
     >
       <Form form={form}>
         <Form.Item
