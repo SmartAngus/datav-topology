@@ -35,8 +35,8 @@ import CustomIcon from '../../../config/iconConfig';
 import DataBindModal from '../../../FilterDataPoint';
 
 import styles from './index.module.scss';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { getNodeType } from '../../../utils/Property2NodeProps';
+import * as _ from 'lodash'
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -280,6 +280,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       cancelText: '取消',
       onOk() {
         console.log('OK',item);
+        const itemRowIndex=_.findIndex(property.dataPointSelectedRows,(r:any)=>r.id==item.id)
+        const itemQueryIndex=_.findIndex(property.dataPointParam.qtDataList,(r:any)=>r.id==item.id)
       },
       onCancel() {
         console.log('Cancel');
