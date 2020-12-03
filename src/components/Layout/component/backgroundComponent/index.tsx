@@ -290,7 +290,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
             onVisibleChange={(visible) =>
               setPopoverVisible({ ...popoverVisible, resolution: visible })
             }
-            // getPopupContainer={() => document.querySelector('#editLayout')}
+            getPopupContainer={() => document.querySelector('#editLayout')}
           >
             <Form.Item name="sizeVal" initialValue="自定义">
               <Input suffix={<DownOutlined />} readOnly />
@@ -336,11 +336,12 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
             trigger="click"
             content={bgSeletedContent}
             arrowPointAtCenter
+            autoAdjustOverflow={false}
             visible={popoverVisible.bgSelect}
             onVisibleChange={(visible) =>
               setPopoverVisible({ ...popoverVisible, bgSelect: visible })
             }
-            // getPopupContainer={() => document.querySelector('#editLayout')}
+            getPopupContainer={() => document.querySelector('#editLayout')}
           >
             <Form.Item name="bgVal" initialValue="预设背景">
               <Input readOnly suffix={<DownOutlined />} />
