@@ -375,11 +375,14 @@ export function getGaugeOption(opt?:{
   return option;
 }
 
-export function getMeasureOption2() {
+export function getMeasureOption2(opt?:{
+  associationObject?:string,
+  value?:string|number
+}) {
   function f() {
     /*****设置*****/
-    var TP_name="温度";
-    var TP_value = 76;//值
+    var TP_name=opt?.associationObject||"设备名称";
+    var TP_value = opt?.value||70;//值
     var min = 0;//最小刻度
     var max = 150;//最大刻度
     var offset = 50;//负数设置
@@ -626,7 +629,7 @@ export function getMeasureOption2() {
             show: true,
             position: 'left',
             distance: 10,
-            color: 'white',
+            color: leftColor,
             fontSize: 14,
             formatter: function(params) {
               const max=window["echarts_option_max"];
@@ -651,7 +654,7 @@ export function getMeasureOption2() {
         barWidth: 1,
         itemStyle: {
           normal: {
-            color: 'white',
+            color: leftColor,
             barBorderRadius: 120,
           }
         },
