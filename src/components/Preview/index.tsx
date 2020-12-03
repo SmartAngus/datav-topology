@@ -29,7 +29,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       data.locked = 1;
       canvas.open(data);
     }
-    console.log('canvas', canvas);
+    // console.log('canvas', canvas);
     initWebsocketData();
     return () => {
       canvas.closeSocket();
