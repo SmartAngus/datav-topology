@@ -4,6 +4,12 @@ import { PageHeader, Button } from 'antd';
 import { roundFun } from '../utils/cacl';
 import moment from 'moment';
 import { formatTimer, getNodeType } from '../utils/Property2NodeProps';
+import {getMeasureOption2} from "../config/chartMeasure";
+import {
+  register as registerChart,
+  echartsObjs,
+} from '../../topology/chart-diagram';
+import {reviver} from "../utils/serializing";
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -16,6 +22,7 @@ export class PreviewProps {
     url: string;
   };
 }
+// echartsObjs[node.id].chart
 const Preview = ({ data, websocketConf }: PreviewProps) => {
   useEffect(() => {
     const canvasOptions = {
@@ -84,7 +91,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 );
               }
             });
-            canvas.activeLayer.setPens(activePens);
+           // canvas.activeLayer.setPens(activePens);
           }
         }
       };
@@ -103,11 +110,16 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                     if (node.property.dataPointSelectedRows[0]?.id == r.id) {
                       node.data.echarts.option.series[0].data[0].value =
                         r.value;
-                      canvas.updateProps(false);
                     }
                     break;
                   case 'chartMeasure':
-                    console.log('chartMeasure', node);
+                    if (node.property.dataPointSelectedRows[0]?.id == r.id) {
+                      const option = getMeasureOption2({
+                        associationObject:node.property.dataPointSelectedRows[0]?.associationObject,
+                        value:r.value
+                      })
+                      node.data.echarts.option=option;
+                    }
                     break;
                   case 'timeLine':
                     (node.property.dataPointSelectedRows || []).map(
@@ -159,10 +171,15 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                         }
                       }
                     );
-                    canvas.updateProps(false);
                     break;
                   default:
                 }
+                // 更新图表数据
+                echartsObjs[node.id].chart.setOption(
+                    JSON.parse(JSON.stringify(node.data.echarts.option), reviver)
+                );
+                echartsObjs[node.id].chart.resize();
+                node.elementRendered = true;
               } else if (
                 node.property?.dataPointParam?.qtDataList?.length > 0
               ) {

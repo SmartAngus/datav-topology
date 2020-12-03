@@ -546,6 +546,7 @@ export const Tools = [
             height: 200,
           },
           name: 'echarts',
+          strokeStyle:"rgba(0,0,0,0)",
           data: {
             echarts: {
               option: {
@@ -825,6 +826,8 @@ export const Tools = [
             height: 250,
           },
           name: 'echarts',
+          strokeStyle:"rgba(0,0,0,0)",
+          elementRendered: false,
           hideInput: true,
           data: {
             echarts: {
