@@ -6,7 +6,7 @@ export function getMeasureOption(option?:
      max:number,
      value:number,
   }){
-  let TP_value = 40;
+  let TP_value = 4;
   let kd = [];
   let Gradient = [];
   let leftColor = '';
@@ -44,7 +44,7 @@ export function getMeasureOption(option?:
       }
     );
   } else if (TP_value > -20) {
-    TP_txt = '温度正常';
+    TP_txt = '正常';
     Gradient.push(
       {
         offset: 0,
@@ -56,7 +56,7 @@ export function getMeasureOption(option?:
       }
     );
   } else {
-    TP_txt = '温度偏低';
+    TP_txt = '偏低';
     Gradient.push({
       offset: 1,
       color: '#93FE94',
@@ -324,8 +324,8 @@ export function getGaugeOption(opt?:{
   const min = opt?.min || 0;
   const max = opt?.max || 100;
   const lineColors = opt?.lineColors||[ //数组第一个属性是颜色所占line百分比
-    [1.4, "#49afff"],
-    [1.6, "#68A54A"],
+    [0.4, "#49afff"],
+    [0.6, "#68A54A"],
     [1, "#f56c6c"]
   ]
   const option={
