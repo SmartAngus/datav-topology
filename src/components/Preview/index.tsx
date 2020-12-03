@@ -107,7 +107,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                     }
                     break;
                   case 'chartMeasure':
-                    console.log('chartMeasure', node);
+                    // console.log('chartMeasure', node);
                     break;
                   case 'timeLine':
                     (node.property.dataPointSelectedRows || []).map(
@@ -221,33 +221,42 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                     canvas.updateProps(false);
                   }
                 } else if (node.name === 'biciPilot') {
-                  if (node.property.dataPointParam.qtDataList[0].id == r.id) {
+                  if (
+                    node.property.val !== r.value &&
+                    node.property.dataPointParam.qtDataList[0].id == r.id
+                  ) {
+                    let flag = false;
+                    node.property.val = r.value;
                     if (node.property.lightRange) {
-                      node.property.lightRange.map((item) => {
+                      for (const item of node.property.lightRange) {
                         if (node.property.stateType === 'single') {
                           if (item.lightRangeVal == r.value) {
                             node.strokeStyle = item.lightRangeColor;
-                            node.text = item.lightRangeText;
-                          } else {
-                            node.strokeStyle = node.property.color;
-                            node.text = node.property.text;
+                            node.text =
+                              item?.lightRangeText || node.property.text;
+                            flag = true;
+                            break;
                           }
-                          canvas.updateProps(false);
                         } else {
                           if (
                             item.lightRangeBottom <= r.value &&
                             item.lightRangeTop > r.value
                           ) {
+                            console.log('true::', r.value, item);
                             node.strokeStyle = item.lightRangeColor;
-                            node.text = item.lightRangeText;
-                          } else {
-                            node.strokeStyle = node.property.color;
-                            node.text = node.property.text;
+                            node.text =
+                              item?.lightRangeText || node.property.text;
+                            flag = true;
+                            break;
                           }
-                          canvas.updateProps(false);
                         }
-                      });
+                      }
+                      if (!flag) {
+                        node.strokeStyle = node.property.color;
+                        node.text = node.property.text;
+                      }
                     }
+                    canvas.updateProps(false);
                   }
                 }
               }

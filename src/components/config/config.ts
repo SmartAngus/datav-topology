@@ -219,6 +219,7 @@ export const Tools = [
           hideAnchor: true,
           name: 'biciPilot',
           property: {
+            val: 0,
             color: '#222',
             size: 15,
             text: '指示灯',
