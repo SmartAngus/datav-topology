@@ -1,4 +1,4 @@
-import {getMeasureOption,getGaugeOption} from './chartMeasure';
+import { getMeasureOption, getGaugeOption } from './chartMeasure';
 export const Tools = [
   {
     group: '通用组件',
@@ -232,6 +232,7 @@ export const Tools = [
             showText: true,
             stateType: 'single', // 状态定义: single 单点值,  range 范围值
             lightRange: [], // 指示灯 状态定义 列表
+            rangeIsOk: true,
             dataMethod: 'point',
             dataDot: 2,
             dataPointSelectedRows: [],
@@ -773,10 +774,10 @@ export const Tools = [
             height: 300,
           },
           name: 'echarts',
-          paddingTopNum:0,
-          paddingRightNum:0,
-          paddingBottomNum:0,
-          paddingLeftNum:0,
+          paddingTopNum: 0,
+          paddingRightNum: 0,
+          paddingBottomNum: 0,
+          paddingLeftNum: 0,
           data: {
             echarts: {
               option: getGaugeOption(),
@@ -791,34 +792,40 @@ export const Tools = [
               qtDataList: [],
               subscribe: true,
             },
-            dataColors:[{
-              checked:false,
-              color:'#ccc',
-              top:100,
-              bottom:-10
-            },{
-              checked:false,
-              color:'#ccc',
-              top:100,
-              bottom:-10
-            },{
-              checked:false,
-              color:'#02df35',
-              top:100,
-              bottom:-10
-            },{
-              checked:true,
-              color:'#02df23',
-              top:100,
-              bottom:-10
-            },{
-              checked:false,
-              color:'#02df31',
-              top:100,
-              bottom:-10
-            }],
-            dataMax:100,
-            dataMin:0
+            dataColors: [
+              {
+                checked: false,
+                color: '#ccc',
+                top: 100,
+                bottom: -10,
+              },
+              {
+                checked: false,
+                color: '#ccc',
+                top: 100,
+                bottom: -10,
+              },
+              {
+                checked: false,
+                color: '#02df35',
+                top: 100,
+                bottom: -10,
+              },
+              {
+                checked: true,
+                color: '#02df23',
+                top: 100,
+                bottom: -10,
+              },
+              {
+                checked: false,
+                color: '#02df31',
+                top: 100,
+                bottom: -10,
+              },
+            ],
+            dataMax: 100,
+            dataMin: 0,
           },
         },
       },

@@ -3,7 +3,7 @@ import { Node, Topology } from '../../topology/core';
 import { PageHeader, Button } from 'antd';
 import { roundFun } from '../utils/cacl';
 import moment from 'moment';
-import {formatTimer, getNodeType} from '../utils/Property2NodeProps';
+import { formatTimer, getNodeType } from '../utils/Property2NodeProps';
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -100,12 +100,13 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 switch (theChart) {
                   case 'gauge':
                     if (node.property.dataPointSelectedRows[0]?.id == r.id) {
-                      node.data.echarts.option.series[0].data[0].value = r.value;
+                      node.data.echarts.option.series[0].data[0].value =
+                        r.value;
                       canvas.updateProps(false);
                     }
                     break;
                   case 'chartMeasure':
-                    console.log("chartMeasure",node)
+                    console.log('chartMeasure', node);
                     break;
                   case 'timeLine':
                     (node.property.dataPointSelectedRows || []).map(
@@ -161,9 +162,12 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                     break;
                   default:
                 }
-              } else if (node.property?.dataPointParam?.qtDataList?.length > 0) {// 非图表组件
+              } else if (
+                node.property?.dataPointParam?.qtDataList?.length > 0
+              ) {
+                // 非图表组件
                 const r = JSON.parse(data.data);
-                const nodeType=getNodeType(node);
+                const nodeType = getNodeType(node);
                 if (node.name == 'biciVarer') {
                   if (
                     node.text != r.value &&
@@ -215,9 +219,28 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                     }
                     canvas.updateProps(false);
                   }
-                }else if (node.name === 'biciPilot') {
+                } else if (node.name === 'biciPilot') {
                   if (node.property.dataPointParam.qtDataList[0].id == r.id) {
-                    
+                    if (node.property.lightRange) {
+                      node.property.lightRange.map((item) => {
+                        if (node.property.stateType === 'single') {
+                          if (item.lightRangeVal == r.value) {
+                            node.strokeStyle = item.lightRangeColor;
+                            node.text = item.lightRangeText;
+                            canvas.updateProps(false);
+                          }
+                        } else {
+                          if (
+                            item.lightRangeBottom <= r.value &&
+                            item.lightRangeTop >= r.value
+                          ) {
+                            node.strokeStyle = item.lightRangeColor;
+                            node.text = item.lightRangeText;
+                            canvas.updateProps(false);
+                          }
+                        }
+                      });
+                    }
                   }
                 }
               }

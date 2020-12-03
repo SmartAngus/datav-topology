@@ -36,8 +36,8 @@ import CustomIcon from '../../../config/iconConfig';
 import DataBindModal from '../../../FilterDataPoint';
 
 import styles from './index.module.scss';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { getNodeType } from '../../../utils/Property2NodeProps';
+import * as _ from 'lodash';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -161,7 +161,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     } else if (data.node.name === 'biciPilot') {
       propertyForm.setFieldsValue({
         color: property.color,
-        size: property.size,
+        size: width / 2,
         showText: property.showText,
         text: property.text,
         stateType: property.stateType,
@@ -286,6 +286,14 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       cancelText: '取消',
       onOk() {
         console.log('OK', item);
+        const itemRowIndex = _.findIndex(
+          property.dataPointSelectedRows,
+          (r: any) => r.id == item.id
+        );
+        const itemQueryIndex = _.findIndex(
+          property.dataPointParam.qtDataList,
+          (r: any) => r.id == item.id
+        );
       },
       onCancel() {
         console.log('Cancel');
