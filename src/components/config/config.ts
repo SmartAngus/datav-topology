@@ -1,4 +1,4 @@
-import { getMeasureOption, getGaugeOption } from './chartMeasure';
+import { getMeasureOption, getGaugeOption,getMeasureOption2 } from './chartMeasure';
 export const Tools = [
   {
     group: '通用组件',
@@ -826,7 +826,7 @@ export const Tools = [
           hideInput: true,
           data: {
             echarts: {
-              option: getMeasureOption(),
+              option: getMeasureOption2(),
             },
           },
           property: {
