@@ -29,6 +29,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       data.locked = 1;
       canvas.open(data);
     }
+    console.log('canvas', canvas);
     initWebsocketData();
     return () => {
       canvas.closeSocket();
@@ -221,15 +222,17 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                   }
                 } else if (node.name === 'biciPilot') {
                   if (node.property.dataPointParam.qtDataList[0].id == r.id) {
-                    console.log('biciPilot', r.value)
                     if (node.property.lightRange) {
                       node.property.lightRange.map((item) => {
                         if (node.property.stateType === 'single') {
                           if (item.lightRangeVal == r.value) {
                             node.strokeStyle = item.lightRangeColor;
                             node.text = item.lightRangeText;
-                            canvas.updateProps(false);
+                          } else {
+                            node.strokeStyle = node.property.color;
+                            node.text = node.property.text;
                           }
+                          canvas.updateProps(false);
                         } else {
                           if (
                             item.lightRangeBottom <= r.value &&
@@ -237,8 +240,11 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                           ) {
                             node.strokeStyle = item.lightRangeColor;
                             node.text = item.lightRangeText;
-                            canvas.updateProps(false);
+                          } else {
+                            node.strokeStyle = node.property.color;
+                            node.text = node.property.text;
                           }
+                          canvas.updateProps(false);
                         }
                       });
                     }
