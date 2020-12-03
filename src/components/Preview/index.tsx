@@ -216,7 +216,9 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                     canvas.updateProps(false);
                   }
                 }else if (node.name === 'biciPilot') {
-                  
+                  if (node.property.dataPointParam.qtDataList[0].id == r.id) {
+                    
+                  }
                 }
               }
             });

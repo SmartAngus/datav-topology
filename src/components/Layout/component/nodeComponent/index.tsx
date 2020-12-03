@@ -19,7 +19,8 @@ import {
   Button,
   Space,
   Tooltip,
-  Radio, Modal,
+  Radio,
+  Modal,
 } from 'antd';
 import {
   PlusOutlined,
@@ -37,7 +38,6 @@ import DataBindModal from '../../../FilterDataPoint';
 import styles from './index.module.scss';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { getNodeType } from '../../../utils/Property2NodeProps';
-import { Rect } from '../../../../topology/core';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -277,7 +277,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     }
   };
   // 删除数据点
-  const handleDeleteDataPoint=(item)=>{
+  const handleDeleteDataPoint = (item) => {
     Modal.confirm({
       title: '删除提示',
       icon: <ExclamationCircleOutlined />,
@@ -285,13 +285,13 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       okText: '确认',
       cancelText: '取消',
       onOk() {
-        console.log('OK',item);
+        console.log('OK', item);
       },
       onCancel() {
         console.log('Cancel');
       },
     });
-  }
+  };
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
   const renderDataPointModal = useCallback(() => {
     return (
@@ -436,11 +436,13 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <InputNumber min={0} />
             </Form.Item>
           </Col>
-          <Col span={24}>
-            <Form.Item name="text" label="内容">
-              <Input />
-            </Form.Item>
-          </Col>
+          {data.node.name !== 'biciPilot' && (
+            <Col span={24}>
+              <Form.Item name="text" label="内容">
+                <Input />
+              </Form.Item>
+            </Col>
+          )}
         </Form>
       </Panel>
     );
@@ -568,7 +570,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             return (
               <Form.Item label={`数据点${index}`} key={index}>
                 <span>{item.dataName}</span>
-                <Button type="link" icon={<DeleteOutlined />} onClick={()=>handleDeleteDataPoint(item)}></Button>
+                <Button
+                  type="link"
+                  icon={<DeleteOutlined />}
+                  onClick={() => handleDeleteDataPoint(item)}
+                ></Button>
               </Form.Item>
             );
           })}
@@ -830,7 +836,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
             <Col span={14}>
               <Form.Item name="text">
-                <Input />
+                <Input maxLength={4} />
               </Form.Item>
             </Col>
           </Row>
