@@ -640,7 +640,6 @@ export class Topology {
 
     if (this.mouseDown && this.moveIn.type === MoveInType.None) {
       let b = false;
-      console.log('ctrl++');
       switch (this.options.translateKey) {
         case KeyType.None:
           b = true;
@@ -888,7 +887,6 @@ export class Topology {
 
   private onmousedown = (e: MouseEvent) => {
     if (e.button !== 0) return;
-    console.log('ctrl++');
 
     const canvasPos = this.divLayer.canvas.getBoundingClientRect() as DOMRect;
     this.mouseDown = { x: e.x - canvasPos.x, y: e.y - canvasPos.y };
@@ -1008,6 +1006,7 @@ export class Topology {
           } else if (!this.activeLayer.has(this.moveIn.activeNode)) {
             this.activeLayer.add(this.moveIn.activeNode);
             if (this.activeLayer.pens.length > 1) {
+              // console.log('ctrl+mouse+多选', this.activeLayer.pens);
               this.dispatch('multi', this.activeLayer.pens);
             } else {
               this.dispatch('node', this.moveIn.activeNode);
@@ -1056,6 +1055,7 @@ export class Topology {
       this.getPensInRect(this.hoverLayer.dragRect);
 
       if (this.activeLayer.pens && this.activeLayer.pens.length > 1) {
+        // console.log('拖拽', this.activeLayer.pens);
         this.dispatch('multi', this.activeLayer.pens);
       } else if (
         this.activeLayer.pens &&
@@ -2240,7 +2240,6 @@ export class Topology {
     if (!pens) {
       pens = this.activeLayer.pens;
     }
-
     const rect = this.getRect(pens);
     for (const item of pens) {
       const i = this.findIndex(item);
@@ -2261,20 +2260,20 @@ export class Topology {
       children: [],
     });
 
-    for (let i = 0; i < pens.length; ++i) {
-      if (
-        pens[i].type === PenType.Node &&
-        rect.width === pens[i].rect.width &&
-        rect.height === pens[i].rect.height
-      ) {
-        node = pens[i] as Node;
-        if (!node.children) {
-          node.children = [];
-        }
-        pens.splice(i, 1);
-        break;
-      }
-    }
+    // for (let i = 0; i < pens.length; ++i) {
+    //   if (
+    //     pens[i].type === PenType.Node &&
+    //     rect.width === pens[i].rect.width &&
+    //     rect.height === pens[i].rect.height
+    //   ) {
+    //     node = pens[i] as Node;
+    //     if (!node.children) {
+    //       node.children = [];
+    //     }
+    //     pens.splice(i, 1);
+    //     break;
+    //   }
+    // }
 
     for (const item of pens) {
       item.stand = stand;

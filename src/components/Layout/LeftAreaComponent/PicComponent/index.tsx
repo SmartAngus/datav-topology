@@ -80,12 +80,14 @@ const Layout = ({ uploaConfig }) => {
 
   const onHandleUpload = ({ file }) => {
     if (file.status === 'done') {
-      const url = file.response.data[0];
-      getBase64(url, (data: string) => {
-        let _data = [...list];
-        _data.unshift({ name: file.name, url: data });
-        setList(_data);
-      });
+      const url = file.response?.data[0];
+      if (url) {
+        getBase64(url, (data: string) => {
+          let _data = [...list];
+          _data.unshift({ name: file.name, url: data });
+          setList(_data);
+        });
+      }
     }
   };
   // 确定重命名

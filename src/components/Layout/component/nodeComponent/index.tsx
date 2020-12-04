@@ -38,6 +38,7 @@ import DataBindModal from '../../../FilterDataPoint';
 import styles from './index.module.scss';
 import { getNodeType } from '../../../utils/Property2NodeProps';
 import * as _ from 'lodash';
+import ColumnGroup from 'antd/lib/table/ColumnGroup';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -68,14 +69,14 @@ interface ICanvasProps extends FormProps {
   onFormValueChange?: any;
   onPropertyFormValueChange?: any;
   onEventValueChange: any;
-  setIsSave?:(isSave:boolean)=>void;
+  setIsSave?: (isSave: boolean) => void;
 }
 
 const NodeCanvasProps: React.FC<ICanvasProps> = ({
   data,
   onFormValueChange,
   onPropertyFormValueChange,
-    setIsSave
+  setIsSave,
 }) => {
   const [form] = Form.useForm();
   const [propertyForm] = Form.useForm();
@@ -223,6 +224,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     const rect = canvas.activeLayer.rect;
     if (pens.length >= 2) {
       alignNodes(pens, rect, key);
+      canvas.cache();
       canvas.render();
     }
   };
@@ -274,7 +276,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         };
         setDataPointSelectedRows(selectedRows);
       }
-      setIsSave(false)
+      setIsSave(false);
     }
   };
   // 删除数据点
@@ -285,18 +287,23 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       content: '确认删除数据点吗？',
       okText: '确认',
       cancelText: '取消',
-      getContainer:() => document.querySelector('#editLayout'),
+      getContainer: () => document.querySelector('#editLayout'),
       onOk() {
-        setIsSave(false)
-        const itemRowIndex=_.findIndex(property.dataPointSelectedRows,(r:any)=>r.id==item.id)
-        const itemQueryIndex=_.findIndex(property.dataPointParam.qtDataList,(r:any)=>r.id==item.id)
-        data.node.property.dataPointParam.qtDataList.splice(itemQueryIndex,1)
-        data.node.property.dataPointSelectedRows.splice(itemRowIndex,1)
+        setIsSave(false);
+        const itemRowIndex = _.findIndex(
+          property.dataPointSelectedRows,
+          (r: any) => r.id == item.id
+        );
+        const itemQueryIndex = _.findIndex(
+          property.dataPointParam.qtDataList,
+          (r: any) => r.id == item.id
+        );
+        data.node.property.dataPointParam.qtDataList.splice(itemQueryIndex, 1);
+        data.node.property.dataPointSelectedRows.splice(itemRowIndex, 1);
         const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
         setDataPointSelectedRows(newRows);
       },
-      onCancel() {
-      },
+      onCancel() {},
     });
   };
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
@@ -756,7 +763,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         })}
       </Fragment>
     );
-  }, [propertyForm, property,data.node]);
+  }, [propertyForm, property, data.node]);
 
   // 改变指示灯大小
   const changePolitSize = (size: number) => {
@@ -954,7 +961,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [propertyForm,data.node]);
+  }, [propertyForm, data.node]);
 
   /**
    * 渲染计量器样式
@@ -1039,7 +1046,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [property,data.node]);
+  }, [property, data.node]);
 
   /**
    * 渲染仪表盘样式
@@ -1090,7 +1097,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         {renderMeter}
       </Fragment>
     );
-  }, [property,data.node]);
+  }, [property, data.node]);
 
   /**
    * 渲染曲线图样式
@@ -1247,7 +1254,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
       </Fragment>
     );
-  }, [property,data.node]);
+  }, [property, data.node]);
 
   return (
     <div className={styles.rightArea}>

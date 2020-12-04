@@ -191,6 +191,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           canvas.combine(pens);
           break;
         case 'unCombo':
+          console.log('unCombo', canvas);
           pens
             .filter((pen) => pen.name === 'combine')
             .forEach((pen) => canvas.uncombine(pen));
