@@ -159,8 +159,8 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           json.screenshot = screenshot;
           props.onEditorSaveCb && props.onEditorSaveCb(json);
         });
-      }else {
-          message.warn('数据已经保存！');
+      } else {
+        message.warn('数据已经保存！');
       }
     };
 
@@ -221,6 +221,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         setScaleNumber(scaleNumber + 0.1);
         canvas.scaleTo(scaleNumber + 0.1);
         onScaleCanvas && onScaleCanvas(scaleNumber + 0.1);
+        props.setIsSave(false);
       }
     };
 
@@ -232,6 +233,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         setScaleNumber(scaleNumber - 0.1);
         canvas.scaleTo(scaleNumber - 0.1);
         onScaleCanvas && onScaleCanvas(scaleNumber + 0.1);
+        props.setIsSave(false);
       }
     };
 
@@ -253,6 +255,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         onScaleCanvas && onScaleCanvas(parseInt(data.key) / 100);
       }
       setScaleVisible(false);
+      props.setIsSave(false);
     };
 
     /**

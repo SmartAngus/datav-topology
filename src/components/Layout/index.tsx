@@ -278,7 +278,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    * 指示灯自定义数据处理
    */
   const handlePilot = (value) => {
-    console.log('polit>', value);
     const { color, text, showText, stateType, lightRange } = value;
     selected.node.strokeStyle = color;
     selected.node.text = showText ? text : '';
@@ -363,7 +362,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }
         }
       }
-      setIsSave(false);
       canvas.updateProps(false, [selected.node]);
     },
     [selected]
@@ -493,6 +491,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         }
       }
       canvas.updateProps(selected.line);
+      setIsSave(false);
     },
     [selected]
   );
@@ -505,7 +504,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const onMessage = (event: string, data: Node) => {
     const node = data;
-    console.log('onMessage==', event);
+    // console.log('onMessage==', event);
     switch (event) {
       case 'node': // 节点切换或者点击
         setSelected({

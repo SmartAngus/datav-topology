@@ -116,6 +116,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
         canvas.showGrid(true);
       }
     }
+    props.setIsSave(false);
   };
 
   // 背景图片checkbox切换
@@ -127,15 +128,16 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
       delete data.data['bkImage'];
       canvas.render();
       onChangeBkImage && onChangeBkImage('');
+      props.setIsSave(false);
     }
   };
 
   const beforeUpload = (file) => {
-    const isLt512K = file.size / 1024 < 512;
-    if (!isLt512K) {
-      message.error('图片上传小于512K!');
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('上传图片不可大于1M');
     }
-    return isLt512K;
+    return isLt1M;
   };
 
   // 画布背景图片上传
@@ -285,6 +287,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
           <Popover
             placement="bottom"
             trigger="click"
+            transitionName=""
             content={resolutionContent}
             visible={popoverVisible.resolution}
             onVisibleChange={(visible) =>
@@ -334,6 +337,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
           <Popover
             placement="bottom"
             trigger="click"
+            transitionName=""
             content={bgSeletedContent}
             arrowPointAtCenter
             autoAdjustOverflow={false}
