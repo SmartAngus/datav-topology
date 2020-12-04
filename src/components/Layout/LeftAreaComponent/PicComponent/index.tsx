@@ -71,11 +71,11 @@ const Layout = ({ uploaConfig }) => {
   }
 
   const beforeUpload = (file) => {
-    const isLt512K = file.size / 1024 / 1024 < 1;
-    if (!isLt512K) {
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
       message.error('上传图片不可大于1M');
     }
-    return isLt512K;
+    return isLt1M;
   };
 
   const onHandleUpload = ({ file }) => {
@@ -235,7 +235,7 @@ const Layout = ({ uploaConfig }) => {
           >
             <div>
               <PlusOutlined />
-              <div style={{ marginTop: 8 }}>Upload</div>
+              <div style={{ marginTop: 8 }}>上传</div>
             </div>
           </Upload>
         </Col>

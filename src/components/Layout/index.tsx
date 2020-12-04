@@ -283,8 +283,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const onHandleFormValueChange = useCallback(
     (value) => {
+      console.log('触发表单数据变化');
       setIsSave(false);
-      canvas.cache();
+      // canvas.cache();
       const {
         x,
         y,
@@ -331,7 +332,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }
         }
       }
-      setIsSave(false);
       canvas.updateProps(false, [selected.node]);
     },
     [selected]
@@ -455,6 +455,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         }
       }
       canvas.updateProps(selected.line);
+      setIsSave(false);
     },
     [selected]
   );

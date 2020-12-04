@@ -11,7 +11,7 @@ import preBgImg2 from './bg02.jpg';
 import preBgImg3 from './bg03.jpg';
 
 const { confirm } = Modal;
-const token = '2nTNBisG7qm2s3QSCuosrD';
+const token = '3LPNqmD3zH3JbnSb9yJH0m';
 
 const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   const history = props.history;
@@ -163,7 +163,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
           'Content-Type': 'application/json',
         },
         params: {
-          id: 'aeeded41ccd34422ab9591d69bde21ec',
+          id: 'e2e697e719194b188c1bfe5b0dcb0604',
         },
       })
       .then((res) => {
