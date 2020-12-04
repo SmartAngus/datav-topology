@@ -553,7 +553,7 @@ export const Tools = [
               option: {
                 animation: false,
                 title: {
-                  text: '总流量（kbps）' /*,
+                  text: '' /*,
         left:"110px"*/,
                 },
                 tooltip: {
@@ -562,7 +562,7 @@ export const Tools = [
                 },
                 grid: {
                   left: 50 /*"50px"*/,
-                  right: 15 /*"15px"*/,
+                  right: 50 /*"15px"*/,
                 },
                 legend: {
                   data: ['当前流量'],
@@ -848,9 +848,21 @@ export const Tools = [
             dataColors: [
               {
                 checked: false,
-                color: '#ccc',
-                top: 100,
-                bottom: -10,
+                color: '#93FE94',
+                top: 20,
+                bottom: 0,
+              },
+              {
+                checked: false,
+                color: '#E4D225',
+                top: 40,
+                bottom: 20,
+              },
+              {
+                checked: false,
+                color: '#E01F28',
+                top: 70,
+                bottom: 40,
               },
             ],
             dataMax: 100,

@@ -378,17 +378,53 @@ export function getGaugeOption(opt?:{
 export function getMeasureOption2(opt?:{
   associationObject?:string,
   value?:string|number
+  max?:number;
+  min?:number;
+  unit?:string;
+  dataColors?:any;
 }) {
   function f() {
     /*****设置*****/
-    var TP_name=opt?.associationObject||"设备名称";
-    var TP_value = opt?.value||70;//值
+    var TP_name=opt?.associationObject||"计量器";
+    var TP_value = opt?.value||0;//值
     var min = 0;//最小刻度
-    var max = 150;//最大刻度
-    var offset = 50;//负数设置
+    var max = opt?.max||100;//最大刻度
+    var offset = 0;//负数设置
     var step = max/5;//步长
-    var range = [0,20,50]//范围[高,中,低]
-    var unit = '°C';//单位
+    var range = [0,20,40]//范围[高,中,低]
+    var unit = opt?.unit||'°C';//单位
+
+    var dataColors=opt?.dataColors||[
+      {
+        checked: false,
+        color: '#93FE94',
+        top: 20,
+        bottom: 0,
+      },
+      {
+        checked: false,
+        color: '#E4D225',
+        top: 40,
+        bottom: 20,
+      },
+      {
+        checked: false,
+        color: '#E01F28',
+        top: 70,
+        bottom: 40,
+      },
+    ]
+    dataColors.map((item,index)=>{
+      range[index]=item.top
+      return item
+    })
+
+    if(opt&&opt.min&&opt.min<0){
+      offset = Math.abs(opt.min)
+      max=max+2*offset
+    }else{
+      min=opt?.min||0
+    }
     /**************/
     var scale = step/20;//比例
     var kd = [];
@@ -416,26 +452,26 @@ export function getMeasureOption2(opt?:{
     if (TP_value > range[2]) {
       Gradient.push({
         offset: 0,
-        color: '#93FE94'
+        color: dataColors[0].color
       }, {
         offset: 0.5,
-        color: '#E4D225'
+        color: dataColors[1].color
       }, {
         offset: 1,
-        color: '#E01F28'
+        color: dataColors[2].color
       })
     } else if (TP_value > range[1]) {
       Gradient.push({
         offset: 0,
-        color: '#93FE94'
+        color: dataColors[0].color
       }, {
         offset: 1,
-        color: '#E4D225'
+        color: dataColors[1].color
       })
     } else {
       Gradient.push({
         offset: 1,
-        color: '#93FE94'
+        color: dataColors[0].color
       })
     }
     if (TP_value > (max-offset+(scale*2))) {
