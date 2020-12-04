@@ -31,7 +31,7 @@ import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines';
 import { calcCanvas, eraseOverlapIntervals } from '../utils/cacl';
 import ResizePanel from '../common/resizeSidebar';
-import {getGaugeOption, getMeasureOption2} from '../config/chartMeasure';
+import { getGaugeOption, getMeasureOption2 } from '../config/chartMeasure';
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
@@ -206,7 +206,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     });
   };
 
-  const handleChartMeasureOption=(values)=>{
+  const handleChartMeasureOption = (values) => {
     for (let k in values) {
       let kindex = k.split('-');
       let index = parseInt(kindex[1]);
@@ -229,13 +229,14 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       lineColors = undefined;
     }
     selected.node.data.echarts.option = getMeasureOption2({
-      associationObject:selected.node.property.dataPointSelectedRows[0]?.associationObject,
-      value:0,
+      associationObject:
+        selected.node.property.dataPointSelectedRows[0]?.associationObject,
+      value: 0,
       max: selected.node.property.dataMax,
-      min:selected.node.property.dataMin,
-      dataColors:selected.node.property.dataColors
+      min: selected.node.property.dataMin,
+      dataColors: selected.node.property.dataColors,
     });
-  }
+  };
 
   /**
    * 数据卡片自定义数据逻辑处理
@@ -330,6 +331,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         lineWidth,
         text,
       } = value;
+      const rotate2 = rotate === '' ? 0 : rotate;
 
       const changedProps = {
         rect: {
@@ -343,7 +345,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           fontSize: fontSize ? Number(fontSize) : 12,
           fontFamily,
         },
-        rotate: rotate ? Number(rotate) : 0,
+        rotate: rotate2,
         strokeStyle,
         lineWidth: lineWidth ? Number(lineWidth) : 1,
         fillStyle,
@@ -385,11 +387,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           break;
         case 'echarts':
           const theChart = selected.node.property.echartsType;
-          if(theChart=="gauge"){
+          if (theChart == 'gauge') {
             handleGaugeOption(value);
-          }else if(theChart=="chartMeasure"){
-            console.log("cheart props")
-            handleChartMeasureOption(value)
+          } else if (theChart == 'chartMeasure') {
+            console.log('cheart props');
+            handleChartMeasureOption(value);
           }
           break;
       }

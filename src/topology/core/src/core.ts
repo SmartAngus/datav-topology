@@ -14,7 +14,7 @@ import { Point } from './models/point';
 import { Line } from './models/line';
 import { TopologyData } from './models/data';
 import { Lock, AnchorMode } from './models/status';
-import { drawNodeFns, drawLineFns, rectangle } from './middles/index'
+import { drawNodeFns, drawLineFns, rectangle } from './middles/index';
 import { Offscreen } from './offscreen';
 import { RenderLayer } from './renderLayer';
 import { HoverLayer } from './hoverLayer';
@@ -37,8 +37,8 @@ import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/chart/gauge';
 import 'echarts/lib/chart/scatter';
-import html2canvas from "html2canvas"
-import * as _ from 'lodash'
+import html2canvas from 'html2canvas';
+import * as _ from 'lodash';
 
 const resizeCursors = ['nw-resize', 'ne-resize', 'se-resize', 'sw-resize'];
 enum MoveInType {
@@ -321,8 +321,8 @@ export class Topology {
   };
 
   resize(size?: { width: number; height: number }) {
-    this.data.width=size?.width||826;
-    this.data.height=size?.height||1168;
+    this.data.width = size?.width || 826;
+    this.data.height = size?.height || 1168;
 
     this.canvas.resize(size);
     this.offscreen.resize(size);
@@ -1006,6 +1006,7 @@ export class Topology {
           } else if (!this.activeLayer.has(this.moveIn.activeNode)) {
             this.activeLayer.add(this.moveIn.activeNode);
             if (this.activeLayer.pens.length > 1) {
+              // console.log('ctrl+mouse+多选', this.activeLayer.pens);
               this.dispatch('multi', this.activeLayer.pens);
             } else {
               this.dispatch('node', this.moveIn.activeNode);
@@ -1054,6 +1055,7 @@ export class Topology {
       this.getPensInRect(this.hoverLayer.dragRect);
 
       if (this.activeLayer.pens && this.activeLayer.pens.length > 1) {
+        // console.log('拖拽', this.activeLayer.pens);
         this.dispatch('multi', this.activeLayer.pens);
       } else if (
         this.activeLayer.pens &&
@@ -1936,7 +1938,6 @@ export class Topology {
       //   })
       // }
       pen.render(ctx);
-
     }
 
     if (callback) {
@@ -1944,7 +1945,6 @@ export class Topology {
     }
     return canvas.toDataURL(type, quality);
   }
-
 
   saveAsImage(
     name?: string,
@@ -2240,7 +2240,6 @@ export class Topology {
     if (!pens) {
       pens = this.activeLayer.pens;
     }
-
     const rect = this.getRect(pens);
     for (const item of pens) {
       const i = this.findIndex(item);
@@ -2261,20 +2260,20 @@ export class Topology {
       children: [],
     });
 
-    for (let i = 0; i < pens.length; ++i) {
-      if (
-        pens[i].type === PenType.Node &&
-        rect.width === pens[i].rect.width &&
-        rect.height === pens[i].rect.height
-      ) {
-        node = pens[i] as Node;
-        if (!node.children) {
-          node.children = [];
-        }
-        pens.splice(i, 1);
-        break;
-      }
-    }
+    // for (let i = 0; i < pens.length; ++i) {
+    //   if (
+    //     pens[i].type === PenType.Node &&
+    //     rect.width === pens[i].rect.width &&
+    //     rect.height === pens[i].rect.height
+    //   ) {
+    //     node = pens[i] as Node;
+    //     if (!node.children) {
+    //       node.children = [];
+    //     }
+    //     pens.splice(i, 1);
+    //     break;
+    //   }
+    // }
 
     for (const item of pens) {
       item.stand = stand;
@@ -2724,14 +2723,14 @@ export class Topology {
       svg.parentNode.parentNode.removeChild(svg.parentNode);
       this.parentElem.prepend(this.gridElem);
     }
-    this.data.gridSize=size;
-    this.data.gridColor=gridColor;
+    this.data.gridSize = size;
+    this.data.gridColor = gridColor;
   }
-  setGrid(gridSize?:number,gridColor?:string){
-    if(gridSize!=undefined){
+  setGrid(gridSize?: number, gridColor?: string) {
+    if (gridSize != undefined) {
       this.data.gridSize = gridSize;
     }
-    if(gridColor!=undefined){
+    if (gridColor != undefined) {
       this.data.gridColor = gridColor;
     }
   }
