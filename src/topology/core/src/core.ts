@@ -14,7 +14,7 @@ import { Point } from './models/point';
 import { Line } from './models/line';
 import { TopologyData } from './models/data';
 import { Lock, AnchorMode } from './models/status';
-import { drawNodeFns, drawLineFns, rectangle } from './middles/index'
+import { drawNodeFns, drawLineFns, rectangle } from './middles/index';
 import { Offscreen } from './offscreen';
 import { RenderLayer } from './renderLayer';
 import { HoverLayer } from './hoverLayer';
@@ -37,8 +37,8 @@ import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/chart/gauge';
 import 'echarts/lib/chart/scatter';
-import html2canvas from "html2canvas"
-import * as _ from 'lodash'
+import html2canvas from 'html2canvas';
+import * as _ from 'lodash';
 
 const resizeCursors = ['nw-resize', 'ne-resize', 'se-resize', 'sw-resize'];
 enum MoveInType {
@@ -321,8 +321,8 @@ export class Topology {
   };
 
   resize(size?: { width: number; height: number }) {
-    this.data.width=size?.width||826;
-    this.data.height=size?.height||1168;
+    this.data.width = size?.width || 826;
+    this.data.height = size?.height || 1168;
 
     this.canvas.resize(size);
     this.offscreen.resize(size);
@@ -640,6 +640,7 @@ export class Topology {
 
     if (this.mouseDown && this.moveIn.type === MoveInType.None) {
       let b = false;
+      console.log('ctrl++');
       switch (this.options.translateKey) {
         case KeyType.None:
           b = true;
@@ -887,6 +888,7 @@ export class Topology {
 
   private onmousedown = (e: MouseEvent) => {
     if (e.button !== 0) return;
+    console.log('ctrl++');
 
     const canvasPos = this.divLayer.canvas.getBoundingClientRect() as DOMRect;
     this.mouseDown = { x: e.x - canvasPos.x, y: e.y - canvasPos.y };
@@ -1936,7 +1938,6 @@ export class Topology {
       //   })
       // }
       pen.render(ctx);
-
     }
 
     if (callback) {
@@ -1944,7 +1945,6 @@ export class Topology {
     }
     return canvas.toDataURL(type, quality);
   }
-
 
   saveAsImage(
     name?: string,
@@ -2724,14 +2724,14 @@ export class Topology {
       svg.parentNode.parentNode.removeChild(svg.parentNode);
       this.parentElem.prepend(this.gridElem);
     }
-    this.data.gridSize=size;
-    this.data.gridColor=gridColor;
+    this.data.gridSize = size;
+    this.data.gridColor = gridColor;
   }
-  setGrid(gridSize?:number,gridColor?:string){
-    if(gridSize!=undefined){
+  setGrid(gridSize?: number, gridColor?: string) {
+    if (gridSize != undefined) {
       this.data.gridSize = gridSize;
     }
-    if(gridColor!=undefined){
+    if (gridColor != undefined) {
       this.data.gridColor = gridColor;
     }
   }
