@@ -31,7 +31,7 @@ import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines';
 import { calcCanvas, eraseOverlapIntervals } from '../utils/cacl';
 import ResizePanel from '../common/resizeSidebar';
-import { getGaugeOption } from '../config/chartMeasure';
+import {getGaugeOption, getMeasureOption2} from '../config/chartMeasure';
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
@@ -177,7 +177,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       );
     }
   };
-  const handleChartMeasure = (values) => {
+  const handleGaugeOption = (values) => {
     for (let k in values) {
       let kindex = k.split('-');
       let index = parseInt(kindex[1]);
@@ -205,6 +205,37 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       lineColors: lineColors,
     });
   };
+
+  const handleChartMeasureOption=(values)=>{
+    for (let k in values) {
+      let kindex = k.split('-');
+      let index = parseInt(kindex[1]);
+      if (k.indexOf('-') > 0) {
+        selected.node.property.dataColors[index][kindex[0]] = values[k];
+      }
+    }
+    selected.node.property.dataMax = values.dataMax || 100;
+    selected.node.property.dataMin = values.dataMin || 0;
+    let lineColors = [];
+    (selected.node.property.dataColors || []).map((item) => {
+      if (item.checked) {
+        let lineColor = [];
+        lineColor[0] = Math.abs(item.top / selected.node.property.dataMax);
+        lineColor[1] = item.color;
+        lineColors.push(lineColor);
+      }
+    });
+    if (lineColors.length == 0) {
+      lineColors = undefined;
+    }
+    selected.node.data.echarts.option = getMeasureOption2({
+      associationObject:selected.node.property.dataPointSelectedRows[0]?.associationObject,
+      value:0,
+      max: selected.node.property.dataMax,
+      min:selected.node.property.dataMin,
+      dataColors:selected.node.property.dataColors
+    });
+  }
 
   /**
    * 数据卡片自定义数据逻辑处理
@@ -353,7 +384,13 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           handlePilot(value);
           break;
         case 'echarts':
-          handleChartMeasure(value);
+          const theChart = selected.node.property.echartsType;
+          if(theChart=="gauge"){
+            handleGaugeOption(value);
+          }else if(theChart=="chartMeasure"){
+            console.log("cheart props")
+            handleChartMeasureOption(value)
+          }
           break;
       }
 

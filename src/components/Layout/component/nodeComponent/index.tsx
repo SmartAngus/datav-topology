@@ -991,9 +991,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               </Input.Group>
             </Col>
           </Row>
-          <Form.Item name="scale" label="刻度">
-            <Input placeholder="请输入个数" suffix="个" />
-          </Form.Item>
+          {/*<Form.Item name="scale" label="刻度">*/}
+          {/*  <Input placeholder="请输入个数" suffix="个" />*/}
+          {/*</Form.Item>*/}
           <Row>
             <Form.Item label="颜色分区"></Form.Item>
           </Row>

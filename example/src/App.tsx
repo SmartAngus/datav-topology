@@ -12,6 +12,7 @@ import preBgImg3 from './bg03.jpg';
 
 const { confirm } = Modal;
 const token = '3LPNqmD3zH3JbnSb9yJH0m';
+const testId="e2e697e719194b188c1bfe5b0dcb0604"
 
 const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   const history = props.history;
@@ -163,7 +164,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
           'Content-Type': 'application/json',
         },
         params: {
-          id: 'e2e697e719194b188c1bfe5b0dcb0604',
+          id: testId,
         },
       })
       .then((res) => {
@@ -255,7 +256,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         data: {
-          id: 'aeeded41ccd34422ab9591d69bde21ec',
+          id: testId,
           // property: window.btoa(
           //   unescape(encodeURIComponent(JSON.stringify(data)))
           // )
@@ -367,7 +368,7 @@ const PreviewLayout: React.FC<any> = ({ history }) => {
           'Content-Type': 'application/json',
         },
         params: {
-          id: 'aeeded41ccd34422ab9591d69bde21ec',
+          id: testId,
         },
       })
       .then((res) => {
