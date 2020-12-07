@@ -47,6 +47,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const contextMenuRef = useRef();
   const headerRef = useRef();
   const [isSave, setIsSave] = useState(true);
+  const [scaleVal, setScaleVal] = useState(1);
   const [bkImageUrl, setBkImageUrl] = useState('');
 
   const [canvasSizeInfo, setCanvasSizeInfo] = useState({
@@ -367,15 +368,18 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         },
         font: {
           color,
-          fontSize: fontSize ? Number(fontSize) : 12,
+          fontSize: fontSize ? Number(fontSize) : undefined,
           fontFamily,
         },
-        rotate: rotate2,
+        rotate: Number(rotate2),
         strokeStyle,
-        lineWidth: lineWidth ? Number(lineWidth) : 1,
+        lineWidth: lineWidth ? Number(lineWidth) : undefined,
         fillStyle,
         text,
       };
+
+      console.log('value:', value);
+      console.log('changedProps', changedProps);
       for (const key in changedProps) {
         if (typeof changedProps[key] === 'object') {
           for (const k in changedProps[key]) {
@@ -608,6 +612,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         }
         break;
       case 'multi':
+        console.log('multi', data);
         setSelected(
           Object.assign(
             {},
@@ -620,6 +625,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
             }
           )
         );
+        break;
+      case 'scale':
+        if (typeof data === 'number') {
+          setScaleVal(data);
+        }
         break;
       default:
         break;
@@ -682,7 +692,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   }, [selected, rightAreaConfig]);
   // 渲染头部
   const renderHeader = useMemo(() => {
-    if (isLoadCanvas)
+    if (isLoadCanvas) {
       return (
         <Header
           ref={headerRef}
@@ -690,6 +700,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           history={history}
           rootRef={layoutRef}
           isSave={isSave}
+          scaleVal={scaleVal}
           setIsSave={setIsSave}
           onExtraSetting={props.onExtraSetting}
           onScaleCanvas={handleScaleCanvas}
@@ -699,7 +710,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           onPreview={props.onPreview}
         />
       );
-  }, [isLoadCanvas, history, layoutRef, isSave]);
+    }
+  }, [isLoadCanvas, history, layoutRef, isSave, scaleVal]);
   // 右键菜单
   const handleContextMenu = (event) => {
     setShowContextmenu(!showContextmenu);

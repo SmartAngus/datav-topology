@@ -20,10 +20,9 @@ import ReactSwitch from '../../../common/ReactSwitch';
 import { canvas } from '../../index';
 import { FormProps } from 'antd/lib/form/Form';
 import CustomIcon from '../../../config/iconConfig';
-import styles from './index.module.scss';
 import { dynamicWebSocketData } from '../../../common/DynamicWebSocketData';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import { calcCanvas, getHexColor } from '../../../utils/cacl';
+import { calcCanvas } from '../../../utils/cacl';
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -75,7 +74,9 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     const bgColor = data.data.bkColor;
     const bkImage = data.data.bkImage;
 
-    const sizeValText = Object.values(panelSizeObj).flat().includes(`${w}*${h}`)
+    const sizeValText = Object.values(panelSizeObj)
+      .flat()
+      .includes(`${w}*${h}` || `${h}*${w}`)
       ? `预设·${w}*${h}`
       : `自定义`;
     form.setFieldsValue({

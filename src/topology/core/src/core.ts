@@ -271,8 +271,8 @@ export class Topology {
       } else {
         this.scale(0.9, new Point(event.x, event.y));
       }
-
       this.divLayer.canvas.focus();
+
 
       return false;
     };

@@ -1,4 +1,8 @@
-import {getMeasureOption, getGaugeOption, getMeasureOption2, getTimelineOption} from './chartMeasure';
+import {
+  getGaugeOption,
+  getMeasureOption2,
+  getTimelineOption,
+} from './chartMeasure';
 export const Tools = [
   {
     group: '通用组件',
@@ -16,7 +20,7 @@ export const Tools = [
           paddingRight: 10,
           paddingTop: 10,
           paddingBottom: 10,
-          borderRadius: 0.1,
+          borderRadius: 0,
           name: 'rectangle',
         },
       },
@@ -547,10 +551,10 @@ export const Tools = [
             height: 200,
           },
           name: 'echarts',
-          strokeStyle:"rgba(0,0,0,0)",
+          strokeStyle: 'rgba(0,0,0,0)',
           data: {
             echarts: {
-              option: getTimelineOption()
+              option: getTimelineOption(),
             },
             // property: {
             //   echartsType: 'timeLine',
@@ -747,8 +751,8 @@ export const Tools = [
             width: 300,
             height: 300,
           },
-          strokeStyle:"rgba(0,0,0,0)",
-          lineWidth:0,
+          strokeStyle: 'rgba(0,0,0,0)',
+          lineWidth: 0,
           name: 'echarts',
           paddingTopNum: 0,
           paddingRightNum: 0,
@@ -816,7 +820,7 @@ export const Tools = [
             height: 250,
           },
           name: 'echarts',
-          strokeStyle:"rgba(0,0,0,0)",
+          strokeStyle: 'rgba(0,0,0,0)',
           elementRendered: false,
           hideInput: true,
           data: {

@@ -38,7 +38,6 @@ import DataBindModal from '../../../FilterDataPoint';
 import styles from './index.module.scss';
 import { getNodeType } from '../../../utils/Property2NodeProps';
 import * as _ from 'lodash';
-import ColumnGroup from 'antd/lib/table/ColumnGroup';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -53,7 +52,7 @@ const alignObj = {
   middle: ['水平居中', 'iconhengxiangjuzhong'],
 };
 // 需要显示文件填充的节点列表
-const fillStyleNodeList = ['circle', 'rectangle', 'biciVarer'];
+const fillStyleNodeList = ['circle', 'rectangle', 'biciVarer', 'combine'];
 // 字体样式
 const fontStyleNodeList = [
   'biciPilot',
@@ -63,7 +62,7 @@ const fontStyleNodeList = [
   'biciVarer',
 ];
 // 边框样式
-const boardStyleNodeList = ['circle', 'rectangle', 'biciVarer'];
+const boardStyleNodeList = ['circle', 'rectangle', 'biciVarer', 'combine'];
 interface ICanvasProps extends FormProps {
   data?: any;
   onFormValueChange?: any;
@@ -93,6 +92,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   );
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
+    console.log('selected data:', data);
     // 设置基本表单
     form.setFieldsValue({
       x,
@@ -103,7 +103,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       lineWidth,
       strokeStyle,
       color,
-      fontSize,
+      fontSize: parseInt(fontSize),
       fontFamily,
       text,
       fillStyle,
@@ -133,8 +133,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       dataDot,
       'date.show': property?.date?.show,
       'date.format': property?.date?.format,
-      'time.show': property?.date?.show,
-      'time.format': property?.date?.format,
+      'time.show': property?.time?.show,
+      'time.format': property?.time?.format,
     });
     if (data.node.name === 'biciCard') {
       // 设置数据卡片
@@ -1270,20 +1270,26 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
 
   return (
     <div className={styles.rightArea}>
-      {renderAlign}
+      {data.multi && renderAlign}
       <Tabs defaultActiveKey="1" centered>
         <TabPane tab="外观" key="1" style={{ margin: 0 }}>
           <Collapse defaultActiveKey={['pos']}>
             {renderPositionForm}
-            {fontStyleNodeList.includes(name) && renderFontForm}
-            {fillStyleNodeList.includes(name) && renderFillStyle}
-            {boardStyleNodeList.includes(name) && renderBorderStyle}
-            {name === 'biciPilot' && renderLight}
-            {name === 'biciTimer' && renderBiciTimerDataForm}
-            {name === 'biciCard' && renderDataCard}
-            {property?.echartsType === 'chartMeasure' && renderMeter}
-            {property?.echartsType === 'timeLine' && renderLineGraph}
-            {property?.echartsType === 'gauge' && renderGauge}
+            {fontStyleNodeList.includes(name) && !data.multi && renderFontForm}
+            {fillStyleNodeList.includes(name) && !data.multi && renderFillStyle}
+            {boardStyleNodeList.includes(name) &&
+              !data.multi &&
+              renderBorderStyle}
+            {name === 'biciPilot' && !data.multi && renderLight}
+            {name === 'biciTimer' && !data.multi && renderBiciTimerDataForm}
+            {name === 'biciCard' && !data.multi && renderDataCard}
+            {property?.echartsType === 'chartMeasure' &&
+              !data.multi &&
+              renderMeter}
+            {property?.echartsType === 'timeLine' &&
+              !data.multi &&
+              renderLineGraph}
+            {property?.echartsType === 'gauge' && !data.multi && renderGauge}
           </Collapse>
         </TabPane>
         <TabPane tab="数据" key="2" style={{ margin: 0 }}>
