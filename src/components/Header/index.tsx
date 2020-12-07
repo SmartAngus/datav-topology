@@ -1,13 +1,14 @@
+import type { Topology } from '../../topology/core';
 import React, { useEffect, useImperativeHandle, useState } from 'react';
-import { Topology } from '../../topology/core';
 import { History } from 'history';
 import { Button, Menu, Popover, Tag, Space, Tooltip, message } from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { useFullscreen } from 'ahooks';
 import { BasicTarget } from 'ahooks/lib/utils/dom';
-import CustomIcon from '../config/iconConfig';
-import styles from './index.module.scss';
 import { base64ToFile } from '../utils/cacl';
+import CustomIcon from '../config/iconConfig';
+
+import styles from './index.module.scss';
 
 message.config({
   getContainer: () => document.querySelector('#editLayout'),
@@ -87,6 +88,7 @@ interface HeaderProps {
   history?: History;
   rootRef?: BasicTarget<HTMLElement>;
   isSave?: boolean;
+  scaleVal?: number;
   setIsSave?: (value: boolean) => void;
   onExtraSetting?: () => void;
   onScaleCanvas?: (scale: number) => void;
@@ -103,21 +105,21 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
   (props: HeaderProps, ref) => {
     const {
       canvas,
+      scaleVal,
       history,
       rootRef,
       isSave,
       setIsSave,
       onScaleCanvas,
     } = props;
-
     const [isFullscreen, { toggleFull }] = useFullscreen(rootRef);
-    const [scaleNumber, setScaleNumber] = useState(1); // 缩放的基数
+    const [scaleNumber, setScaleNumber] = useState(scaleVal); // 缩放的基数
 
     const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
 
     useEffect(() => {
-      canvas.updateProps(false);
-    }, [canvas]);
+      setScaleNumber(Math.round(scaleVal * 10) / 10);
+    }, [scaleVal]);
 
     // 对父组件暴露保存数据的接口
     useImperativeHandle(
@@ -191,7 +193,6 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           canvas.combine(pens);
           break;
         case 'unCombo':
-          console.log('unCombo', canvas);
           pens
             .filter((pen) => pen.name === 'combine')
             .forEach((pen) => canvas.uncombine(pen));
@@ -221,7 +222,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
       if (scaleNumber < 3) {
         setScaleNumber(scaleNumber + 0.1);
         canvas.scaleTo(scaleNumber + 0.1);
-        onScaleCanvas && onScaleCanvas(scaleNumber + 0.1);
+        // onScaleCanvas && onScaleCanvas(scaleNumber + 0.1);
         props.setIsSave(false);
       }
     };
@@ -233,7 +234,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
       if (scaleNumber > 0.3) {
         setScaleNumber(scaleNumber - 0.1);
         canvas.scaleTo(scaleNumber - 0.1);
-        onScaleCanvas && onScaleCanvas(scaleNumber + 0.1);
+        // onScaleCanvas && onScaleCanvas(scaleNumber + 0.1);
         props.setIsSave(false);
       }
     };
@@ -249,12 +250,9 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
      * 处理选择缩放菜单数据
      */
     const handleSelectScaleMenu = (data) => {
-      if (data.key === 'adaptive') {
-      } else {
-        setScaleNumber(parseInt(data.key) / 100);
-        canvas.scaleTo(parseInt(data.key) / 100);
-        onScaleCanvas && onScaleCanvas(parseInt(data.key) / 100);
-      }
+      setScaleNumber(parseInt(data.key) / 100);
+      canvas.scaleTo(parseInt(data.key) / 100);
+      onScaleCanvas && onScaleCanvas(parseInt(data.key) / 100);
       setScaleVisible(false);
       props.setIsSave(false);
     };
