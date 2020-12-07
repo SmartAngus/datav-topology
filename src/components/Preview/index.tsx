@@ -4,7 +4,7 @@ import { PageHeader, Button } from 'antd';
 import { roundFun } from '../utils/cacl';
 import moment from 'moment';
 import { formatTimer, getNodeType } from '../utils/Property2NodeProps';
-import {getMeasureOption2} from "../config/chartMeasure";
+import {getMeasureOption2, getTimelineOption} from "../config/chartMeasure";
 import {
   register as registerChart,
   echartsObjs,
@@ -85,8 +85,8 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 canvas.socket.socket.send(
                   JSON.stringify({
                     ...node.property.dataPointParam,
-                    tid: node.TID,
-                    id: node.id,
+                    nodeTid: node.TID,
+                    nodeId: node.id,
                   })
                 );
               }
@@ -122,55 +122,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                     }
                     break;
                   case 'timeLine':
-                    (node.property.dataPointSelectedRows || []).map(
-                      (row, index) => {
-                        const seria = {
-                          symbol: 'none',
-                          name: '当前流量',
-                          type: 'line',
-                          smoothMonotone: 'x',
-                          smooth: true,
-                          markLine: {
-                            silent: true,
-                            data: [
-                              {
-                                yAxis: 20,
-                              },
-                              {
-                                yAxis: 40,
-                              },
-                              {
-                                yAxis: 60,
-                              },
-                              {
-                                yAxis: 100,
-                              },
-                              {
-                                yAxis: 120,
-                              },
-                            ],
-                          },
-                          data: [],
-                        };
-                        if (row.id == r.id) {
-                          const xAxisData = node.data.echarts.option.xAxis.data;
-                          const yAxisData =
-                            node.data.echarts.option.series[index] || seria;
-                          if (xAxisData.length > 10) {
-                            xAxisData.shift();
-                          }
-                          if (yAxisData && yAxisData.data.length > 10) {
-                            yAxisData.data.shift();
-                          }
-                          xAxisData.push(moment(r.time).format('LTS'));
-                          yAxisData.data.push(r.value);
-                          yAxisData.name = row.dataName;
-                          node.data.echarts.option.xAxis.data = xAxisData;
-
-                          node.data.echarts.option.series[index] = yAxisData;
-                        }
-                      }
-                    );
+                    node.data.echarts.option=getTimelineOption(node,r);
                     break;
                   default:
                 }

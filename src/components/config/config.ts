@@ -1,7 +1,7 @@
 import {
-  getMeasureOption,
   getGaugeOption,
   getMeasureOption2,
+  getTimelineOption,
 } from './chartMeasure';
 export const Tools = [
   {
@@ -554,30 +554,7 @@ export const Tools = [
           strokeStyle: 'rgba(0,0,0,0)',
           data: {
             echarts: {
-              option: {
-                animation: false,
-                title: {
-                  text: '' /*,
-        left:"110px"*/,
-                },
-                tooltip: {
-                  trigger: 'axis',
-                  axisPointer: { type: 'cross' },
-                },
-                grid: {
-                  left: 50 /*"50px"*/,
-                  right: 50 /*"15px"*/,
-                },
-                legend: {
-                  data: ['当前流量'],
-                },
-                xAxis: {
-                  boundaryGap: false,
-                  data: [],
-                },
-                yAxis: { boundaryGap: false },
-                series: [],
-              },
+              option: getTimelineOption(),
             },
             // property: {
             //   echartsType: 'timeLine',

@@ -1,4 +1,5 @@
 import echarts from 'echarts/lib/echarts';
+import moment from "moment";
 
 export function getMeasureOption(option?:
   {
@@ -700,4 +701,159 @@ export function getMeasureOption2(opt?:{
     return option;
   }
   return f();
+}
+
+export function getTimelineOption(node?:any,socketData?:any) {
+  var charts = {
+    unit: 'Kbps',
+    names: [],
+    lineX: [],
+    value: []
+  };
+  var color = ['rgba(23, 255, 243', 'rgba(255,100,97'];
+  var lineY = [];
+  if(socketData!=undefined){
+    charts.lineX = node.data.echarts.option.xAxis.data;
+    if(charts.lineX.length>9){
+      charts.lineX.shift()
+    }
+    charts.lineX.push(moment(socketData.time).format('LTS')+'')
+  }
+  if(node!=undefined){
+    (node.property.dataPointSelectedRows || []).map((row,index)=>{
+        charts.value[index]=node.data.echarts.option.series[index]?node.data.echarts.option.series[index].data:[]
+        if(charts.value[index]&&charts.value[index].length>9){
+          charts.value[index].shift()
+        }
+      charts.names[index]=row.associationObject;
+      if(row.id==socketData.id){
+          charts.value[index].push(socketData.value)
+        }
+
+    });
+  }
+  for (var i = 0; i < charts.names.length; i++) {
+    var x = i
+    if (x > color.length - 1) {
+      x = color.length - 1
+    }
+    var data = {
+      name: charts.names[i],
+      type: 'line',
+      color: color[x] + ')',
+      smooth: true,
+      areaStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+            offset: 0,
+            color: color[x] + ', 0.3)'
+          }, {
+            offset: 0.8,
+            color: color[x] + ', 0)'
+          }], false),
+          shadowColor: 'rgba(0, 0, 0, 0.1)',
+          shadowBlur: 10
+        }
+      },
+      symbol: 'circle',
+      symbolSize: 5,
+      data: charts.value[i]
+    }
+    lineY.push(data)
+  }
+
+  lineY.push({
+    name: '标准 ',
+    type: 'line',
+    symbolSize:0,
+    data: [50],
+    markLine: {
+      itemStyle: {
+        normal: {
+          lineStyle: {
+            color: '#18D8F7'
+          },
+        }
+      },
+      data: [{
+        type: 'average',
+        name: '标准'
+      }]
+    }
+  })
+  lineY.push({
+    name: '最大值 ',
+    type: 'line',
+    data: [110],
+    symbolSize:0,
+    markLine: {
+      itemStyle: {
+        normal: {
+          lineStyle: {
+            color: '#FF0000'
+          },
+        }
+      },
+      data: [{
+        type: 'average',
+        name: '最大值'
+      }]
+    }
+  })
+  var option = {
+    backgroundColor:'#1b2735',
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      data: charts.names,
+      textStyle: {
+        fontSize: 12,
+        color: 'rgb(0,253,255,0.6)'
+      },
+      right: '4%'
+    },
+    grid: {
+      top: '14%',
+      left: '4%',
+      right: '10%',
+      bottom: '12%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: charts.lineX,
+      axisLabel: {
+        textStyle: {
+          color: 'rgb(0,253,255,0.6)'
+        },
+        formatter: function(params) {
+          return params.split(' ')[0]
+        }
+      }
+    },
+    yAxis: {
+      name: charts.unit,
+      type: 'value',
+      axisLabel: {
+        formatter: '{value}',
+        textStyle: {
+          color: 'rgb(0,253,255,0.6)'
+        }
+      },
+      splitLine: {
+        lineStyle: {
+          color: 'rgb(23,255,243,0.3)'
+        }
+      },
+      axisLine: {
+        lineStyle: {
+          color: 'rgb(0,253,255,0.6)'
+        }
+      }
+    },
+    series: lineY
+  }
+  return option;
 }
