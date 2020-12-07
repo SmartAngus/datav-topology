@@ -16,7 +16,7 @@ import { register as registerBiciComp } from '../../topology/bici-diagram';
 import { Modal, Tabs, message, Space } from 'antd';
 import { Tools } from '../config/config';
 import { useClickAway } from 'ahooks';
-import { replacer } from '../utils/serializing';
+import {replacer, reviver} from '../utils/serializing';
 import { s8 } from '../../topology/core/src/utils/uuid';
 import Header from '../Header';
 import NodeComponent from './component/nodeComponent';
@@ -31,7 +31,7 @@ import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines';
 import { calcCanvas, eraseOverlapIntervals } from '../utils/cacl';
 import ResizePanel from '../common/resizeSidebar';
-import { getGaugeOption, getMeasureOption2 } from '../config/chartMeasure';
+import {getGaugeOption, getMeasureOption2, getTimelineOption} from '../config/chartMeasure';
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
@@ -205,6 +205,31 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       lineColors: lineColors,
     });
   };
+  const handleTimeLineOption=(values)=>{
+    const changedProps = values;
+    console.log(values)
+    for (const key in changedProps) {
+      if (typeof changedProps[key] === 'object') {
+        for (const k in changedProps[key]) {
+          if (changedProps[key][k] !== undefined) {
+            selected.node[key][k] = changedProps[key][k];
+          }
+        }
+      } else {
+        if (changedProps[key] !== undefined) {
+          selected.node[key] = changedProps[key];
+        }
+      }
+    }
+    selected.node.data.echarts.option=getTimelineOption(selected.node,undefined,values);
+    console.log(selected.node.data.echarts.option)
+    // 更新图表数据
+    echartsObjs[selected.node.id].chart.setOption(
+        JSON.parse(JSON.stringify(selected.node.data.echarts.option), reviver)
+    );
+    echartsObjs[selected.node.id].chart.resize();
+    selected.node.elementRendered = true;
+  }
 
   const handleChartMeasureOption = (values) => {
     for (let k in values) {
@@ -230,7 +255,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     }
     selected.node.data.echarts.option = getMeasureOption2({
       associationObject:
-        selected.node.property.dataPointSelectedRows[0]?.associationObject,
+      selected.node.property.dataPointSelectedRows[0]?.associationObject,
       value: 0,
       max: selected.node.property.dataMax,
       min: selected.node.property.dataMin,
@@ -392,6 +417,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           } else if (theChart == 'chartMeasure') {
             console.log('cheart props');
             handleChartMeasureOption(value);
+          }else if(theChart==='timeLine'){
+            handleTimeLineOption(value)
           }
           break;
       }

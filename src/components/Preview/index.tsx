@@ -108,8 +108,8 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 switch (theChart) {
                   case 'gauge':
                     if (node.property.dataPointSelectedRows[0]?.id == r.id) {
-                      node.data.echarts.option.series[0].data[0].value =
-                        r.value;
+                      node.data.echarts.option.series[0].data[0].value = r.value;
+                      updateChartNode(node)
                     }
                     break;
                   case 'chartMeasure':
@@ -119,19 +119,22 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                         value:r.value
                       })
                       node.data.echarts.option=option;
+                      updateChartNode(node)
                     }
                     break;
                   case 'timeLine':
-                    node.data.echarts.option=getTimelineOption(node,r);
+                    (node.property.dataPointSelectedRows||[]).map(row=>{
+                      if(row.id==r.id){
+                        node.data.echarts.option = getTimelineOption(node, r);
+                      }
+                      updateChartNode(node)
+                    })
+
                     break;
                   default:
                 }
-                // 更新图表数据
-                echartsObjs[node.id].chart.setOption(
-                    JSON.parse(JSON.stringify(node.data.echarts.option), reviver)
-                );
-                echartsObjs[node.id].chart.resize();
-                node.elementRendered = true;
+                //
+
               } else if (
                 node.property?.dataPointParam?.qtDataList?.length > 0
               ) {
@@ -242,9 +245,19 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
     });
   };
 
+
+  const updateChartNode=(node)=>{
+    // 更新图表数据
+    echartsObjs[node.id].chart.setOption(
+        JSON.parse(JSON.stringify(node.data.echarts.option), reviver)
+    );
+    echartsObjs[node.id].chart.resize();
+    node.elementRendered = true;
+  }
   /**
    * 自动适应窗口大小
    */
+
 
   const onHandleFit = () => {
     const rect = canvas.getRect();

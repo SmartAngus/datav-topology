@@ -703,7 +703,7 @@ export function getMeasureOption2(opt?:{
   return f();
 }
 
-export function getTimelineOption(node?:any,socketData?:any) {
+export function getTimelineOption(node?:any,socketData?:any,propertyChangesValues?:any) {
   var charts = {
     unit: 'Kbps',
     names: [],
@@ -726,11 +726,17 @@ export function getTimelineOption(node?:any,socketData?:any) {
           charts.value[index].shift()
         }
       charts.names[index]=row.associationObject;
-      if(row.id==socketData.id){
+      if(socketData&&row.id==socketData.id){
           charts.value[index].push(socketData.value)
         }
 
     });
+  }
+  let smooth;
+  if(propertyChangesValues&&propertyChangesValues.smooth==true){
+    smooth=true;
+  }else{
+    smooth=false;
   }
   for (var i = 0; i < charts.names.length; i++) {
     var x = i
@@ -741,7 +747,7 @@ export function getTimelineOption(node?:any,socketData?:any) {
       name: charts.names[i],
       type: 'line',
       color: color[x] + ')',
-      smooth: true,
+      smooth: smooth,
       areaStyle: {
         normal: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
@@ -761,45 +767,58 @@ export function getTimelineOption(node?:any,socketData?:any) {
     }
     lineY.push(data)
   }
-
-  lineY.push({
-    name: '标准 ',
-    type: 'line',
-    symbolSize:0,
-    data: [50],
-    markLine: {
-      itemStyle: {
-        normal: {
-          lineStyle: {
-            color: '#18D8F7'
-          },
-        }
-      },
-      data: [{
-        type: 'average',
-        name: '标准'
-      }]
-    }
-  })
-  lineY.push({
-    name: '最大值 ',
-    type: 'line',
-    data: [110],
-    symbolSize:0,
-    markLine: {
-      itemStyle: {
-        normal: {
-          lineStyle: {
-            color: '#FF0000'
-          },
-        }
-      },
-      data: [{
-        type: 'average',
-        name: '最大值'
-      }]
-    }
-  })
+  let dataTopShow;
+  if(propertyChangesValues&&propertyChangesValues.dataTopChecked){
+    dataTopShow=1
+  }else{
+    dataTopShow=0
+  }
+    lineY.push({
+      name: '下限',
+      type: 'line',
+      symbolSize:0,
+      data: [10],
+      markLine: {
+        itemStyle: {
+          normal: {
+            lineStyle: {
+              color: '#18D8F7',
+              opacity:dataTopShow
+            },
+          }
+        },
+        data: [{
+          type: 'average',
+          name: '下限'
+        }]
+      }
+    })
+    lineY.push({
+      name: '上限',
+      type: 'line',
+      data: [100],
+      symbolSize:0,
+      markLine: {
+        itemStyle: {
+          normal: {
+            lineStyle: {
+              color: '#FF0000',
+              opacity:dataTopShow
+            },
+          }
+        },
+        data: [{
+          type: 'average',
+          name: '上限'
+        }]
+      }
+    })
+  let showReference;
+  if(propertyChangesValues&&propertyChangesValues.lineReferenceChecked){
+    showReference = true;
+  }else{
+    showReference = false;
+  }
   var option = {
     backgroundColor:'#1b2735',
     tooltip: {
@@ -843,6 +862,7 @@ export function getTimelineOption(node?:any,socketData?:any) {
         }
       },
       splitLine: {
+        show:showReference,
         lineStyle: {
           color: 'rgb(23,255,243,0.3)'
         }
