@@ -326,7 +326,10 @@ export function getGaugeOption(opt?:{
   chartTitleChecked: boolean,
   chartUnitChecked:boolean,
   chartUnit:string
-}) {
+},changeValues?:any) {
+  if(opt){
+    opt=Object.assign({},opt,changeValues)
+  }
   const min = opt?.min || 0;
   const max = opt?.max || 100;
   const lineColors = opt?.lineColors||[ //数组第一个属性是颜色所占line百分比
@@ -334,6 +337,26 @@ export function getGaugeOption(opt?:{
     [0.6, "#68A54A"],
     [1, "#f56c6c"]
   ]
+  let showTitle = true;
+  let unit;
+  let title
+  if(opt){
+    if(opt.chartUnitChecked){
+      unit=opt?.chartUnit||'°C'
+    }else{
+      unit=''
+    }
+    if(opt.chartTitleChecked){
+      showTitle=true
+      title=opt.chartTitle;
+    }else{
+      showTitle=false
+    }
+  }else{
+    unit=''
+    showTitle=false;
+    title="仪表盘";
+  }
   const option={
     tooltip: {
       formatter: '{a} {b} : {c}%',
@@ -361,7 +384,7 @@ export function getGaugeOption(opt?:{
         radius:"100%",
         max:max,
         min:min,
-        data: [{ value: 0, name: 'Hello YOu' }],
+        data: [{ value: 0, name: title }],
         axisLine: {
           lineStyle: {
             color: lineColors,
@@ -375,7 +398,7 @@ export function getGaugeOption(opt?:{
           }
         },
         detail: {
-          formatter: "{value}",
+          formatter: "{value} "+unit,
           offsetCenter: [0, "60%"],
           textStyle: {
             fontSize: 16,
@@ -383,6 +406,7 @@ export function getGaugeOption(opt?:{
           }
         },
         title: {
+          show:showTitle,
           offsetCenter: [0, "90%"]
         },
       }
