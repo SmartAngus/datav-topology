@@ -118,7 +118,10 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
     const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
 
     useEffect(() => {
-      setScaleNumber(Math.round(scaleVal * 10) / 10);
+      if ((Math.round(scaleVal * 10) / 10) !== scaleNumber) {
+        setScaleNumber(Math.round(scaleVal * 10) / 10);
+        setIsSave(false);
+      }
     }, [scaleVal]);
 
     // 对父组件暴露保存数据的接口

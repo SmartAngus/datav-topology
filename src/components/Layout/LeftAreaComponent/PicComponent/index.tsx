@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef, CSSProperties } from 'react';
-import { Row, Col, Upload, Form, message } from 'antd';
+import { Row, Col, Upload, Form, message, Collapse } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { clientParam } from '../../../data/api';
 import { useClickAway } from 'ahooks';
 import CompContextMenu from '../../../common/CompContextMenu';
 import styles from './index.module.scss';
 
-const Layout = ({ uploaConfig }) => {
+const { Panel } = Collapse;
+
+const Layout = ({ uploaConfig, industrialLibrary }) => {
   const [formRef] = Form.useForm();
   // 是否显示右键菜单
   const [showContextmenu, setShowContextmenu] = useState(false);
@@ -177,71 +179,115 @@ const Layout = ({ uploaConfig }) => {
 
   return (
     <div className={styles.container}>
-      <Row>
-        {list?.map((item, index) => (
-          <Col
-            key={index}
-            span={12}
-            className={styles.colStyle}
-            style={{ textAlign: 'center' }}
-            onContextMenu={(event) => handleContextMenu(event, item)}
-          >
-            <a
-              title={item.name}
-              draggable
-              href="#"
-              onClick={(e) => e.preventDefault()}
-              onDragStart={(ev) => onDrag(ev, item.url)}
-            >
-              <img
-                alt={item.name}
-                src={item.url}
-                style={{ width: 100, height: 100 }}
-              />
-              <span
-                style={{
-                  marginTop: 5,
-                  marginLeft: 8,
-                  width: 100,
-                  overflow: 'hidden',
-                  display: 'block',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
-                }}
+      <Collapse defaultActiveKey={['1']}>
+        <Panel header="工业图库" key="1">
+          <Row>
+            {industrialLibrary?.map((item, index) => (
+              <Col
+                key={index}
+                span={12}
+                className={styles.colStyle}
+                style={{ textAlign: 'center' }}
               >
-                {item.name}
-              </span>
-            </a>
-          </Col>
-        ))}
-        <Col
-          key="upload"
-          span={12}
-          className={styles.colStyle}
-          style={{ textAlign: 'center' }}
-        >
-          <Upload
-            listType="picture-card"
-            showUploadList={false}
-            action={`${uploaConfig.self.baseURL}${uploaConfig.self.url}`}
-            accept="image/*"
-            data={{
-              mappingType: uploaConfig.self.data.mappingType,
-              mappingId: uploaConfig.self.data.mappingId,
-            }}
-            headers={{
-              token: uploaConfig.self.token,
-            }}
-            beforeUpload={beforeUpload}
-            onChange={onHandleUpload}
-          >
-            <div>
-              <PlusOutlined />
-              <div style={{ marginTop: 8 }}>上传</div>
-            </div>
-          </Upload>
-        </Col>
-      </Row>
+                <a
+                  title={item.name}
+                  draggable
+                  href="#"
+                  onClick={(e) => e.preventDefault()}
+                  onDragStart={(ev) => onDrag(ev, item.url)}
+                >
+                  <img
+                    alt={item.name}
+                    src={item.url}
+                    style={{ width: 100, height: 100 }}
+                  />
+                  <span
+                    style={{
+                      marginTop: 5,
+                      marginLeft: 8,
+                      width: 100,
+                      overflow: 'hidden',
+                      display: 'block',
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {item.name}
+                  </span>
+                </a>
+              </Col>
+            ))}
+          </Row>
+        </Panel>
+        <Panel header="自定义上传" key="2">
+          <Row>
+            {list?.map((item, index) => (
+              <Col
+                key={index}
+                span={12}
+                className={styles.colStyle}
+                style={{ textAlign: 'center' }}
+                onContextMenu={(event) => handleContextMenu(event, item)}
+              >
+                <a
+                  title={item.name}
+                  draggable
+                  href="#"
+                  onClick={(e) => e.preventDefault()}
+                  onDragStart={(ev) => onDrag(ev, item.url)}
+                >
+                  <img
+                    alt={item.name}
+                    src={item.url}
+                    style={{ width: 100, height: 100 }}
+                  />
+                  <span
+                    style={{
+                      marginTop: 5,
+                      marginLeft: 8,
+                      width: 100,
+                      overflow: 'hidden',
+                      display: 'block',
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {item.name}
+                  </span>
+                </a>
+              </Col>
+            ))}
+            <Col
+              key="upload"
+              span={12}
+              className={styles.colStyle}
+              style={{ textAlign: 'center' }}
+            >
+              <Upload
+                listType="picture-card"
+                showUploadList={false}
+                action={`${uploaConfig.self.baseURL}${uploaConfig.self.url}`}
+                accept="image/*"
+                data={{
+                  mappingType: uploaConfig.self.data.mappingType,
+                  mappingId: uploaConfig.self.data.mappingId,
+                }}
+                headers={{
+                  token: uploaConfig.self.token,
+                }}
+                beforeUpload={beforeUpload}
+                onChange={onHandleUpload}
+              >
+                <div>
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>上传</div>
+                </div>
+              </Upload>
+            </Col>
+          </Row>
+        </Panel>
+      </Collapse>
+
       <CompContextMenu
         contextMenuRef={contextMenuRef}
         showContextmenu={showContextmenu}
