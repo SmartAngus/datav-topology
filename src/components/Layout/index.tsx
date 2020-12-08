@@ -202,15 +202,18 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (lineColors.length == 0) {
       lineColors = undefined;
     }
-    selected.node.data.echarts.option = getGaugeOption({
-      max: selected.node.property.dataMax,
-      min: selected.node.property.dataMin,
-      lineColors: lineColors,
-      chartTitle: selected.node.property.chartTitle,
-      chartTitleChecked: selected.node.property.chartTitleChecked,
-      chartUnitChecked:selected.node.property.chartUnitChecked,
-      chartUnit:selected.node.property.chartUnit,
-    },values);
+    selected.node.data.echarts.option = getGaugeOption(
+      {
+        max: selected.node.property.dataMax,
+        min: selected.node.property.dataMin,
+        lineColors: lineColors,
+        chartTitle: selected.node.property.chartTitle,
+        chartTitleChecked: selected.node.property.chartTitleChecked,
+        chartUnitChecked: selected.node.property.chartUnitChecked,
+        chartUnit: selected.node.property.chartUnit,
+      },
+      values
+    );
   };
   const handleTimeLineOption = (values) => {
     const changedProps = values;
