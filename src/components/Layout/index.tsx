@@ -16,7 +16,7 @@ import { register as registerBiciComp } from '../../topology/bici-diagram';
 import { Modal, Tabs, message, Space } from 'antd';
 import { Tools } from '../config/config';
 import { useClickAway } from 'ahooks';
-import {replacer, reviver} from '../utils/serializing';
+import { replacer, reviver } from '../utils/serializing';
 import { s8 } from '../../topology/core/src/utils/uuid';
 import Header from '../Header';
 import NodeComponent from './component/nodeComponent';
@@ -24,14 +24,18 @@ import BackgroundComponent from './component/backgroundComponent';
 import LineComponent from './component/lineComponent';
 import SystemComponent from './LeftAreaComponent/SystemComponent';
 import CustomComponent from './LeftAreaComponent/CustomComponent';
-import MyComponent from './LeftAreaComponent/PicComponent';
+import PicComponent from './LeftAreaComponent/PicComponent';
 
 import styles from './index.module.scss';
 import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines';
 import { calcCanvas, eraseOverlapIntervals } from '../utils/cacl';
 import ResizePanel from '../common/resizeSidebar';
-import {getGaugeOption, getMeasureOption2, getTimelineOption} from '../config/chartMeasure';
+import {
+  getGaugeOption,
+  getMeasureOption2,
+  getTimelineOption,
+} from '../config/chartMeasure';
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
@@ -204,11 +208,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       lineColors: lineColors,
       chartTitle: selected.node.property.chartTitle,
       chartTitleChecked: selected.node.property.chartTitleChecked,
-      chartUnitChecked:selected.node.property.chartUnitChecked,
-      chartUnit:selected.node.property.chartUnit,
+      chartUnitChecked: selected.node.property.chartUnitChecked,
+      chartUnit: selected.node.property.chartUnit,
     });
   };
-  const handleTimeLineOption=(values)=>{
+  const handleTimeLineOption = (values) => {
     const changedProps = values;
     for (const key in changedProps) {
       if (typeof changedProps[key] === 'object') {
@@ -223,15 +227,19 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         }
       }
     }
-    selected.node.data.echarts.option=getTimelineOption(selected.node,undefined,values);
+    selected.node.data.echarts.option = getTimelineOption(
+      selected.node,
+      undefined,
+      values
+    );
     // 更新图表数据
     echartsObjs[selected.node.id].chart.setOption(
-        JSON.parse(JSON.stringify(selected.node.data.echarts.option), reviver)
+      JSON.parse(JSON.stringify(selected.node.data.echarts.option), reviver)
     );
     echartsObjs[selected.node.id].chart.resize();
     selected.node.elementRendered = true;
-    canvas.updateProps(true,[selected.node])
-  }
+    canvas.updateProps(true, [selected.node]);
+  };
 
   const handleChartMeasureOption = (values) => {
     for (let k in values) {
@@ -257,7 +265,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     }
     selected.node.data.echarts.option = getMeasureOption2({
       associationObject:
-      selected.node.property.dataPointSelectedRows[0]?.associationObject,
+        selected.node.property.dataPointSelectedRows[0]?.associationObject,
       value: 0,
       max: selected.node.property.dataMax,
       min: selected.node.property.dataMin,
@@ -419,8 +427,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
             handleGaugeOption(value);
           } else if (theChart == 'chartMeasure') {
             handleChartMeasureOption(value);
-          }else if(theChart==='timeLine'){
-            handleTimeLineOption(value)
+          } else if (theChart === 'timeLine') {
+            handleTimeLineOption(value);
           }
           break;
       }
@@ -626,7 +634,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       case 'scale':
         if (typeof data === 'number') {
           setScaleVal(data);
-          setIsSave(false);
         }
         break;
       default:
@@ -763,7 +770,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
                 />
               </TabPane>
               <TabPane tab="图库" key="2" style={{ margin: 0 }}>
-                <MyComponent uploaConfig={props.uploadConfig} />
+                <PicComponent
+                  uploaConfig={props.uploadConfig}
+                  industrialLibrary={props.industrialLibrary}
+                />
               </TabPane>
             </Tabs>
           </div>
@@ -786,7 +796,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
               className={styles.titleInfo}
               style={{
                 left: canvasSizeInfo.left,
-                top: canvasSizeInfo.top + 10,
+                top: canvasSizeInfo.top,
               }}
             >
               <span>{props.boardData.name}</span>

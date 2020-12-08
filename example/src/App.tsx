@@ -26,52 +26,19 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   ];
   const industrialLibrary = [
     {
-      type: 'mk',
       name: '灯光',
-      images: [
-        {
-          name: '1',
-          url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          width: 100,
-          height: 100,
-          type: 'image',
-          key: '1',
-        },
-        {
-          name: '2',
-          url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          width: 100,
-          height: 100,
-          type: 'image',
-          key: '2',
-        },
-      ],
+      url:
+        'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
     },
     {
-      type: 'mj',
-      name: '管道',
-      images: [
-        {
-          name: '3',
-          url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          width: 100,
-          height: 100,
-          type: 'image',
-          key: '3',
-        },
-        {
-          name: '4',
-          url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          width: 100,
-          height: 100,
-          type: 'image',
-          key: '4',
-        },
-      ],
+      name: '测试1',
+      url:
+        'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    },
+    {
+      name: '测试2',
+      url:
+        'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
     },
   ];
   const selfIndustrialLibrary = [
