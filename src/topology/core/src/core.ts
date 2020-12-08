@@ -146,7 +146,6 @@ export class Topology {
     }
     this.parentElem.style.position = 'relative';
     this.parentElem.style.overflow = 'auto';
-    this.createGrid();
 
     const id = this.id;
     this.activeLayer = new ActiveLayer(this.options, id);
@@ -273,7 +272,6 @@ export class Topology {
       }
       this.divLayer.canvas.focus();
 
-
       return false;
     };
 
@@ -329,7 +327,7 @@ export class Topology {
     this.divLayer.resize(size);
 
     this.render();
-    this.showGrid();
+    // this.showGrid();
     this.dispatch('resize', size);
   }
 
@@ -542,6 +540,8 @@ export class Topology {
     this.data.mqttOptions = data.mqttOptions || { clientId: s8() };
     this.data.mqttTopics = data.mqttTopics;
     this.data.grid = data.grid;
+    this.data.gridColor = data.gridColor;
+    this.data.gridSize = data.gridSize;
     if (typeof data.data === 'object') {
       this.data.data = JSON.parse(JSON.stringify(data.data));
     } else {
@@ -562,8 +562,6 @@ export class Topology {
     this.animate(true);
     this.openSocket();
     this.openMqtt();
-
-    this.showGrid();
   }
 
   openSocket(url?: string) {
@@ -2695,56 +2693,45 @@ export class Topology {
     pen[attr] = val;
   }
 
-  createGrid(out = false) {
-    const size = this.data.gridSize || 60;
-    const minSize = size / 4;
-    const gridColor = this.data.gridColor || '#f1f1f1';
-    this.gridElem.style.position = 'absolute';
-    this.gridElem.style.display = 'none';
-    this.gridElem.style.left = '0';
-    this.gridElem.style.top = '0';
-    this.gridElem.innerHTML = `<svg class="svg-grid" width="100%" height="100%" style="position:absolute;left:0;right:0;top:0;bottom:0"
-      xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <pattern id="grid1" patternUnits="userSpaceOnUse" width="${size}" height="${size}">
-            <path d="M ${size} 0 L 0 0 0 ${size}" fill="none" stroke="${gridColor}" stroke-width="1" />
-        </pattern>
-        <pattern id="grid2" patternUnits="userSpaceOnUse" width="${minSize}" height="${minSize}">
-            <path d="M ${minSize} 0 L 0 0 0 ${minSize}" fill="none" stroke="#f3f3f3" stroke-width="1" />
-        </pattern>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#grid2)" />
-    <rect width="100%" height="100%" fill="url(#grid1)" />
-    </svg>`;
-    if (!out) {
-      this.parentElem.appendChild(this.gridElem);
-    } else {
-      const svg = document.querySelector('.svg-grid');
-      svg.parentNode.parentNode.removeChild(svg.parentNode);
-      this.parentElem.prepend(this.gridElem);
-    }
-    this.data.gridSize = size;
-    this.data.gridColor = gridColor;
-  }
-  setGrid(gridSize?: number, gridColor?: string) {
-    if (gridSize != undefined) {
-      this.data.gridSize = gridSize;
-    }
-    if (gridColor != undefined) {
-      this.data.gridColor = gridColor;
-    }
-  }
-
-  showGrid(show?: boolean) {
-    if (show === undefined) {
-      show = this.data.grid;
-    } else {
-      this.data.grid = show;
-    }
-    this.gridElem.style.width = this.canvas.width + 'px';
-    this.gridElem.style.height = this.canvas.height + 'px';
-    this.gridElem.style.display = show ? 'block' : 'none';
-  }
+  // createGrid(out = false) {
+  //   const size = this.data.gridSize || 60;
+  //   const minSize = size / 4;
+  //   const gridColor = this.data.gridColor || '#f1f1f1';
+  //   this.gridElem.style.position = 'absolute';
+  //   this.gridElem.style.display = 'none';
+  //   this.gridElem.style.left = '0';
+  //   this.gridElem.style.top = '0';
+  //   this.gridElem.innerHTML = `<svg class="svg-grid" width="100%" height="100%" style="position:absolute;left:0;right:0;top:0;bottom:0"
+  //     xmlns="http://www.w3.org/2000/svg">
+  //   <defs>
+  //       <pattern id="grid1" patternUnits="userSpaceOnUse" width="${size}" height="${size}">
+  //           <path d="M ${size} 0 L 0 0 0 ${size}" fill="none" stroke="${gridColor}" stroke-width="1" />
+  //       </pattern>
+  //       <pattern id="grid2" patternUnits="userSpaceOnUse" width="${minSize}" height="${minSize}">
+  //           <path d="M ${minSize} 0 L 0 0 0 ${minSize}" fill="none" stroke="#f3f3f3" stroke-width="1" />
+  //       </pattern>
+  //   </defs>
+  //   <rect width="100%" height="100%" fill="url(#grid2)" />
+  //   <rect width="100%" height="100%" fill="url(#grid1)" />
+  //   </svg>`;
+  //   if (!out) {
+  //     this.parentElem.appendChild(this.gridElem);
+  //   } else {
+  //     const svg = document.querySelector('.svg-grid');
+  //     svg.parentNode.parentNode.removeChild(svg.parentNode);
+  //     this.parentElem.prepend(this.gridElem);
+  //   }
+  //   this.data.gridSize = size;
+  //   this.data.gridColor = gridColor;
+  // }
+  // setGrid(gridSize?: number, gridColor?: string) {
+  //   if (gridSize != undefined) {
+  //     this.data.gridSize = gridSize;
+  //   }
+  //   if (gridColor != undefined) {
+  //     this.data.gridColor = gridColor;
+  //   }
+  // }
 
   setLineName(name: 'curve' | 'line' | 'polyline' | 'mind', render = true) {
     this.data.pens.forEach((pen: Pen) => {

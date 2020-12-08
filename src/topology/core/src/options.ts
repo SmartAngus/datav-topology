@@ -37,7 +37,7 @@ export interface Options {
     textBaseline?: string;
   };
   rotateCursor?: string;
-  locked?:number,
+  locked?: number;
   hoverCursor?: string;
   hideInput?: boolean;
   hideRotateCP?: boolean;
@@ -64,6 +64,7 @@ export interface Options {
   autoExpandDistance?: number;
   keydown?: KeydownType;
   viewPadding?: Padding;
+  grid?: boolean;
   on?: (event: string, data: any) => void;
 }
 
@@ -71,7 +72,8 @@ export const DefalutOptions: Options = {
   cacheLen: 30,
   font: {
     color: '#222',
-    fontFamily: '"Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial',
+    fontFamily:
+      '"Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial',
     fontSize: 12,
     lineHeight: 1.5,
     textAlign: 'center',

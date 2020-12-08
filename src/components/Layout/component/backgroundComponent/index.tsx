@@ -12,6 +12,7 @@ import {
   Upload,
   Checkbox,
   message,
+  InputNumber,
 } from 'antd';
 import { DownOutlined, UploadOutlined } from '@ant-design/icons';
 import { Topology } from '../../../../topology/core';
@@ -74,10 +75,10 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     const bgColor = data.data.bkColor;
     const bkImage = data.data.bkImage;
 
-    const sizeValText = Object.values(panelSizeObj)
-      .flat()
-      .includes(`${w}*${h}` || `${h}*${w}`)
+    const sizeValText = Object.values(panelSizeObj).flat().includes(`${w}*${h}`)
       ? `预设·${w}*${h}`
+      : Object.values(panelSizeObj).flat().includes(`${h}*${w}`)
+      ? `预设·${h}*${w}`
       : `自定义`;
     form.setFieldsValue({
       sizeVal: sizeValText,
@@ -104,17 +105,19 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     if (changeValues.gridSize) {
       const gridSize = parseInt(changeValues.gridSize);
       data.data['gridSize'] = gridSize;
-      canvas.setGrid(gridSize, undefined);
-      canvas.createGrid(true);
+      // canvas.setGrid(gridSize, undefined);
+      // canvas.createGrid(true);
       if (data.data.grid) {
-        canvas.showGrid(true);
+        // canvas.showGrid(true);
+        canvas.render();
       }
     } else if (changeValues.gridColor) {
       data.data['gridColor'] = changeValues.gridColor;
-      canvas.setGrid(undefined, changeValues.gridColor);
-      canvas.createGrid(true);
+      // canvas.setGrid(undefined, changeValues.gridColor);
+      // canvas.createGrid(true);
       if (data.data.grid) {
-        canvas.showGrid(true);
+        // canvas.showGrid(true);
+        canvas.render();
       }
     }
     props.setIsSave(false);
@@ -175,7 +178,9 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
 
   // 网格选择切换
   const gridOnChange = (e: CheckboxChangeEvent) => {
-    canvas.showGrid(e.target.checked);
+    // canvas.showGrid(e.target.checked);
+    data.data.grid = e.target.checked;
+    canvas.render();
     props.setIsSave(false);
   };
 
@@ -416,8 +421,8 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
               </Form.Item>
             </Col>
             <Col push={3} span={8}>
-              <Form.Item name="gridSize" initialValue={60}>
-                <Input suffix="px" />
+              <Form.Item name="gridSize" initialValue={30}>
+                <InputNumber min={1} />
               </Form.Item>
             </Col>
           </Row>
