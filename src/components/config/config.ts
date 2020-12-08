@@ -806,6 +806,10 @@ export const Tools = [
             ],
             dataMax: 100,
             dataMin: 0,
+            chartTitle: "仪表盘",
+            chartTitleChecked: false,
+            chartUnitChecked:true,
+            chartUnit:"C"
           },
         },
       },

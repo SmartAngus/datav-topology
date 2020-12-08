@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { Node, Topology } from '../../topology/core';
-import { PageHeader, Button } from 'antd';
 import { roundFun } from '../utils/cacl';
-import moment from 'moment';
 import { formatTimer, getNodeType } from '../utils/Property2NodeProps';
 import {getMeasureOption2, getTimelineOption} from "../config/chartMeasure";
+import echarts from 'echarts/lib/echarts';
+
 import {
-  register as registerChart,
-  echartsObjs,
+  echartsObjs, register as registerChart,
 } from '../../topology/chart-diagram';
 import {reviver} from "../utils/serializing";
+import {register as registerBiciComp} from "../../topology/bici-diagram";
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -29,6 +29,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       rotateCursor: '/rotate.cur',
       locked: 1,
     };
+    canvasRegister()
     canvas = new Topology('topology-canvas-preview', canvasOptions);
 
     // 渲染页面数据
@@ -42,6 +43,14 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       canvas.closeSocket();
     };
   }, [data]);
+
+  /**
+   * 注册图形库
+   */
+  const canvasRegister = () => {
+    registerChart();
+    registerBiciComp();
+  };
 
   // 数据卡片颜色根据数据变化
   const setCardStyle = (

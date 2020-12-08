@@ -92,7 +92,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   );
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
-    console.log('selected data:', data);
     // 设置基本表单
     form.setFieldsValue({
       x,
@@ -204,6 +203,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         chartTitleColor: property.chartTitleColor && property.chartTitleColor,
         lineReferenceChecked: property.lineReferenceChecked && property.lineReferenceChecked,
         lineReferenceColor: property.lineReferenceColor && property.lineReferenceColor,
+        chartUnitChecked:property.chartUnitChecked && property.chartUnitChecked,
+        chartUnit:property.chartUnit && property.chartUnit,
       });
     }
   }, [property]);
@@ -1070,7 +1071,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <Col span={10}>
                 <Form.Item
                   label="标题"
-                  name="showTitle"
+                  name="chartTitleChecked"
                   labelCol={{ span: 12 }}
                   labelAlign="left"
                   valuePropName="checked"
@@ -1079,7 +1080,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Form.Item>
               </Col>
               <Col span={14}>
-                <Form.Item name="title">
+                <Form.Item name="chartTitle">
                   <Input placeholder="标题名称" />
                 </Form.Item>
               </Col>
@@ -1088,7 +1089,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <Col span={10}>
                 <Form.Item
                   label="单位"
-                  name="showUnit"
+                  name="chartUnitChecked"
                   labelCol={{ span: 12 }}
                   labelAlign="left"
                   valuePropName="checked"
@@ -1097,7 +1098,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Form.Item>
               </Col>
               <Col span={14}>
-                <Form.Item name="unit">
+                <Form.Item name="chartUnit">
                   <Input placeholder="单位" maxLength={20} />
                 </Form.Item>
               </Col>

@@ -1,5 +1,6 @@
 import echarts from 'echarts/lib/echarts';
 import moment from "moment";
+import * as _ from "lodash";
 
 export function getMeasureOption(option?:
   {
@@ -320,7 +321,11 @@ export function getMeasureOption(option?:
 export function getGaugeOption(opt?:{
   min:number,
   max:number,
-  lineColors:any[]
+  lineColors:any[],
+  chartTitle: string,
+  chartTitleChecked: boolean,
+  chartUnitChecked:boolean,
+  chartUnit:string
 }) {
   const min = opt?.min || 0;
   const max = opt?.max || 100;
@@ -331,7 +336,7 @@ export function getGaugeOption(opt?:{
   ]
   const option={
     tooltip: {
-      formatter: '{a} <br/>{b} : {c}%',
+      formatter: '{a} {b} : {c}%',
     },
     grid:{
       top:0,
@@ -356,8 +361,7 @@ export function getGaugeOption(opt?:{
         radius:"100%",
         max:max,
         min:min,
-        detail: { formatter: '{value}' },
-        data: [{ value: 0, name: '' }],
+        data: [{ value: 0, name: 'Hello YOu' }],
         axisLine: {
           lineStyle: {
             color: lineColors,
@@ -369,7 +373,18 @@ export function getGaugeOption(opt?:{
           lineStyle: {
             width: 1
           }
-        }
+        },
+        detail: {
+          formatter: "{value}",
+          offsetCenter: [0, "60%"],
+          textStyle: {
+            fontSize: 16,
+            color: "#F37B1D"
+          }
+        },
+        title: {
+          offsetCenter: [0, "90%"]
+        },
       }
     ]
   }
@@ -703,7 +718,11 @@ export function getMeasureOption2(opt?:{
   return f();
 }
 
-export function getTimelineOption(node?:any,socketData?:any,propertyChangesValues?:any) {
+export function getTimelineOption(selectedNode?:any,socketData?:any,changeValues?:any) {
+  let node = _.cloneDeep(selectedNode)
+  if(node!=undefined){
+    node.property=Object.assign({},node.property,changeValues)
+  }
   var charts = {
     unit: 'Kbps',
     names: [],
@@ -733,7 +752,7 @@ export function getTimelineOption(node?:any,socketData?:any,propertyChangesValue
     });
   }
   let smooth;
-  if(propertyChangesValues&&propertyChangesValues.smooth==true){
+  if(node&&node.property.smooth==true){
     smooth=true;
   }else{
     smooth=false;
@@ -768,16 +787,24 @@ export function getTimelineOption(node?:any,socketData?:any,propertyChangesValue
     lineY.push(data)
   }
   let dataTopShow;
-  if(propertyChangesValues&&propertyChangesValues.dataTopChecked){
+  let dataTop=100;
+  let dataBottom=0;
+  if(node&&node.property.dataTopChecked==true){
     dataTopShow=1
   }else{
     dataTopShow=0
   }
+  if(node){
+    dataTop=node.property.dataTop;
+    dataBottom=node.property.dataBottom;
+  }
+
+
     lineY.push({
       name: '下限',
       type: 'line',
       symbolSize:0,
-      data: [10],
+      data: [dataBottom],
       markLine: {
         itemStyle: {
           normal: {
@@ -796,7 +823,7 @@ export function getTimelineOption(node?:any,socketData?:any,propertyChangesValue
     lineY.push({
       name: '上限',
       type: 'line',
-      data: [100],
+      data: [dataTop],
       symbolSize:0,
       markLine: {
         itemStyle: {
@@ -814,12 +841,31 @@ export function getTimelineOption(node?:any,socketData?:any,propertyChangesValue
       }
     })
   let showReference;
-  if(propertyChangesValues&&propertyChangesValues.lineReferenceChecked){
+  if(node&&node.property.lineReferenceChecked==true){
     showReference = true;
   }else{
     showReference = false;
   }
+  let chartTitleChecked=false,
+      chartTitle="实时曲线",
+      chartTitleColor="#c0c0c0";
+  if(node&&node.property.chartTitleChecked==true){
+    chartTitleChecked=node.property.chartTitleChecked
+    chartTitle=node.property.chartTitle
+    chartTitleColor=node.property.chartTitleColor
+  }else{
+    chartTitleChecked=false;
+    chartTitle="实时曲线";
+    chartTitleColor="#c0c0c0";
+  }
   var option = {
+    title:{
+      text:chartTitle,
+      show:chartTitleChecked,
+      textStyle:{
+        color:chartTitleColor
+      }
+    },
     backgroundColor:'#1b2735',
     tooltip: {
       trigger: 'axis'
@@ -830,10 +876,10 @@ export function getTimelineOption(node?:any,socketData?:any,propertyChangesValue
         fontSize: 12,
         color: 'rgb(0,253,255,0.6)'
       },
-      right: '4%'
+      left: 'center'
     },
     grid: {
-      top: '14%',
+      top: '24%',
       left: '4%',
       right: '10%',
       bottom: '12%',

@@ -36,6 +36,7 @@ export function echarts(ctx: CanvasRenderingContext2D, node: Node) {
       echartsObjs[node.id].div,
       node.data.echarts.theme
     );
+
     node.elementRendered = false;
 
     // 等待父div先渲染完成，避免初始图表控件太大

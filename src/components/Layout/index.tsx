@@ -204,11 +204,14 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       max: selected.node.property.dataMax,
       min: selected.node.property.dataMin,
       lineColors: lineColors,
+      chartTitle: selected.node.property.chartTitle,
+      chartTitleChecked: selected.node.property.chartTitleChecked,
+      chartUnitChecked:selected.node.property.chartUnitChecked,
+      chartUnit:selected.node.property.chartUnit,
     });
   };
   const handleTimeLineOption=(values)=>{
     const changedProps = values;
-    console.log(values)
     for (const key in changedProps) {
       if (typeof changedProps[key] === 'object') {
         for (const k in changedProps[key]) {
@@ -223,13 +226,13 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       }
     }
     selected.node.data.echarts.option=getTimelineOption(selected.node,undefined,values);
-    console.log(selected.node.data.echarts.option)
     // 更新图表数据
     echartsObjs[selected.node.id].chart.setOption(
         JSON.parse(JSON.stringify(selected.node.data.echarts.option), reviver)
     );
     echartsObjs[selected.node.id].chart.resize();
     selected.node.elementRendered = true;
+    canvas.updateProps(true,[selected.node])
   }
 
   const handleChartMeasureOption = (values) => {
