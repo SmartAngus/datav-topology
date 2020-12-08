@@ -206,7 +206,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       chartTitleChecked: selected.node.property.chartTitleChecked,
       chartUnitChecked:selected.node.property.chartUnitChecked,
       chartUnit:selected.node.property.chartUnit,
-    });
+    },values);
   };
   const handleTimeLineOption=(values)=>{
     const changedProps = values;
