@@ -580,6 +580,17 @@ export const Tools = [
               qtDataList: [],
               subscribe: true,
             },
+            smooth:true,
+            dataTopSource:'dataPoint',// dataPoint数据点或者custom=自定义
+            dataTopChecked:false,
+            dataTop:100,
+            dataBottom:0,
+            chartTitleChecked:true,
+            chartTitle:"实时曲线",
+            chartTitleColor:"#c0c0c0",
+            lineReferenceChecked:false,// splitLine
+            lineReferenceColor:'#ccc',
+            lineColors:[],
           },
         },
       },
