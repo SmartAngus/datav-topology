@@ -287,6 +287,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
     const handleExtraSetting = () => {
       const { onExtraSetting } = props;
       onExtraSetting && onExtraSetting();
+      setIsSave(false);
     };
 
     /**

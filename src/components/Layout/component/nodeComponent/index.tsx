@@ -94,11 +94,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   useEffect(() => {
     // 设置基本表单
     form.setFieldsValue({
-      x,
-      y,
-      width,
-      height,
-      rotate,
+      x: Math.round(x),
+      y: Math.round(y),
+      width: Math.round(width),
+      height: Math.round(height),
+      rotate: Math.round(rotate),
       lineWidth,
       strokeStyle,
       color,
@@ -516,7 +516,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Form.Item>
               </Col>
               <Col span={14}>
-                <Form.Item name="date.format" rules={[{ required: true }]}>
+                <Form.Item
+                  name="date.format"
+                  rules={[{ required: true, message: '日期格式不能为空' }]}
+                >
                   <Select
                     placeholder="设置日期格式"
                     onChange={onSetBiciTimerDataFmt}
@@ -542,7 +545,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Form.Item>
               </Col>
               <Col span={14}>
-                <Form.Item name="time.format" rules={[{ required: true }]}>
+                <Form.Item
+                  name="time.format"
+                  rules={[{ required: true, message: '时间格式不能为空' }]}
+                >
                   <Select
                     placeholder="设置时间格式"
                     onChange={onSetBiciTimerDataFmt}
@@ -901,6 +907,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                           {...field}
                           name={[field.name, 'lightRangeVal']}
                           fieldKey={[field.fieldKey, 'lightRangeVal']}
+                          rules={[{ required: true, message: '必填' }]}
                         >
                           <InputNumber placeholder="数值" min={0} />
                         </Form.Item>
@@ -920,6 +927,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                           {...field}
                           name={[field.name, 'lightRangeBottom']}
                           fieldKey={[field.fieldKey, 'lightRangeBottom']}
+                          rules={[{ required: true, message: '必填' }]}
                         >
                           <InputNumber
                             style={{ width: 60 }}
@@ -932,6 +940,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                           {...field}
                           name={[field.name, 'lightRangeTop']}
                           fieldKey={[field.fieldKey, 'lightRangeTop']}
+                          rules={[{ required: true, message: '必填' }]}
                         >
                           <InputNumber
                             style={{ width: 60 }}

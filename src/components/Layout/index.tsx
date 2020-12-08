@@ -131,10 +131,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       const r = calcCanvas(w, h);
       setCanvasSizeInfo({ ...r, width: w, height: h });
       canvas.data['gridColor'] = props.editorData.gridColor;
-      canvas.setGrid(undefined, props.editorData.gridColor);
-      canvas.createGrid(true);
       if (canvas.data.grid) {
-        canvas.showGrid(true);
+        canvas.data.grid = true;
       }
       canvas.resize({ width: w, height: h });
       canvas.render();
@@ -360,7 +358,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         lineWidth,
         text,
       } = value;
-      const rotate2 = rotate === '' ? 0 : rotate;
+      const rotate2 = rotate === '' ? 0 : rotate ? Number(rotate) : undefined;
 
       const changedProps = {
         rect: {
@@ -374,15 +372,13 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           fontSize: fontSize ? Number(fontSize) : undefined,
           fontFamily,
         },
-        rotate: Number(rotate2),
+        rotate: rotate2,
         strokeStyle,
         lineWidth: lineWidth ? Number(lineWidth) : undefined,
         fillStyle,
         text,
       };
 
-      console.log('value:', value);
-      console.log('changedProps', changedProps);
       for (const key in changedProps) {
         if (typeof changedProps[key] === 'object') {
           for (const k in changedProps[key]) {
@@ -422,7 +418,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           if (theChart == 'gauge') {
             handleGaugeOption(value);
           } else if (theChart == 'chartMeasure') {
-            console.log('cheart props');
             handleChartMeasureOption(value);
           }else if(theChart==='timeLine'){
             handleTimeLineOption(value)
@@ -615,7 +610,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         }
         break;
       case 'multi':
-        console.log('multi', data);
         setSelected(
           Object.assign(
             {},
@@ -632,6 +626,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       case 'scale':
         if (typeof data === 'number') {
           setScaleVal(data);
+          setIsSave(false);
         }
         break;
       default:
@@ -787,7 +782,13 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
             }}
           ></svg>
           {props.boardData && (
-            <p className={styles.titleInfo}>
+            <p
+              className={styles.titleInfo}
+              style={{
+                left: canvasSizeInfo.left,
+                top: canvasSizeInfo.top + 10,
+              }}
+            >
               <span>{props.boardData.name}</span>
               <span style={{ margin: '0 5px' }}>/</span>
               <span>{props.boardData.typeName}</span>

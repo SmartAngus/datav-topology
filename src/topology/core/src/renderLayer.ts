@@ -12,7 +12,11 @@ export class RenderLayer extends Canvas {
     width: number;
     height: number;
   };
-  constructor(public parentElem: HTMLElement, public options: Options = {}, TID: String) {
+  constructor(
+    public parentElem: HTMLElement,
+    public options: Options = {},
+    TID: String
+  ) {
     super(parentElem, options, TID);
     this.offscreen = Store.get(this.generateStoreKey('LT:offscreen'));
     this.parentElem.appendChild(this.canvas);
@@ -27,7 +31,12 @@ export class RenderLayer extends Canvas {
     this.bkImg.crossOrigin = 'anonymous';
     this.bkImg.src = this.data.bkImage;
     this.bkImg.onload = () => {
-      this.bkImgRect = this.coverRect(this.canvas.width, this.canvas.height, this.bkImg.width, this.bkImg.height);
+      this.bkImgRect = this.coverRect(
+        this.canvas.width,
+        this.canvas.height,
+        this.bkImg.width,
+        this.bkImg.height
+      );
       if (cb) {
         cb();
       }
@@ -54,35 +63,78 @@ export class RenderLayer extends Canvas {
       // 修改将背景渲染到容器div元素上，解决设置背景后网格不显示的问题
       ctx.fillStyle = this.data.bkColor;
       ctx.fillRect(0, 0, this.width, this.height);
-      // this.parentElem.style.backgroundColor=this.data.bkColor
     }
 
     if (this.bkImg && this.bkImgRect) {
-      ctx.drawImage(this.bkImg, this.bkImgRect.x, this.bkImgRect.y, this.bkImgRect.width,
-        this.bkImgRect.height, 0, 0, this.width, this.height);
+      // ctx.drawImage(
+      //   this.bkImg,
+      //   this.bkImgRect.x,
+      //   this.bkImgRect.y,
+      //   this.bkImgRect.width,
+      //   this.bkImgRect.height,
+      //   0,
+      //   0,
+      //   this.width,
+      //   this.height
+      // );
       ctx.drawImage(this.bkImg, 0, 0, this.width, this.height);
+    }
+
+    if (this.data.grid || this.options.grid) {
+      this.grid();
     }
 
     ctx.drawImage(this.offscreen, 0, 0, this.width, this.height);
   };
 
-  coverRect(canvasWidth: number, canvasHeight: number, imgWidth: number, imgHeight: number) {
+  grid() {
+    const ctx = this.canvas.getContext('2d');
+    ctx.save();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = this.data.gridColor || '#f3f3f3';
+    ctx.beginPath();
+    const size = this.data.gridSize;
+    for (let i = size; i < this.width; i += size) {
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i, this.height);
+    }
+    for (let i = size; i < this.height; i += size) {
+      ctx.moveTo(0, i);
+      ctx.lineTo(this.width, i);
+    }
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  coverRect(
+    canvasWidth: number,
+    canvasHeight: number,
+    imgWidth: number,
+    imgHeight: number
+  ) {
     let x = 0;
     let y = 0;
     let width = imgWidth;
     let height = imgHeight;
-    if (imgWidth > imgHeight || (imgWidth === imgHeight && canvasWidth < canvasHeight)) {
-      width = canvasWidth * height / canvasHeight;
+    if (
+      imgWidth > imgHeight ||
+      (imgWidth === imgHeight && canvasWidth < canvasHeight)
+    ) {
+      width = (canvasWidth * height) / canvasHeight;
       x = (imgWidth - width) / 2;
-    } else if (imgWidth < imgHeight || (imgWidth === imgHeight && canvasWidth > canvasHeight)) {
-      height = canvasHeight * width / canvasWidth;
+    } else if (
+      imgWidth < imgHeight ||
+      (imgWidth === imgHeight && canvasWidth > canvasHeight)
+    ) {
+      height = (canvasHeight * width) / canvasWidth;
       y = (imgHeight - height) / 2;
     }
     return {
       x,
       y,
       width,
-      height
+      height,
     };
   }
 }
