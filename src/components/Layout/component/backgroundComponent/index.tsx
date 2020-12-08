@@ -105,18 +105,12 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     if (changeValues.gridSize) {
       const gridSize = parseInt(changeValues.gridSize);
       data.data['gridSize'] = gridSize;
-      // canvas.setGrid(gridSize, undefined);
-      // canvas.createGrid(true);
       if (data.data.grid) {
-        // canvas.showGrid(true);
         canvas.render();
       }
     } else if (changeValues.gridColor) {
       data.data['gridColor'] = changeValues.gridColor;
-      // canvas.setGrid(undefined, changeValues.gridColor);
-      // canvas.createGrid(true);
       if (data.data.grid) {
-        // canvas.showGrid(true);
         canvas.render();
       }
     }

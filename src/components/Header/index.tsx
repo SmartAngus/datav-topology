@@ -113,12 +113,12 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
       onScaleCanvas,
     } = props;
     const [isFullscreen, { toggleFull }] = useFullscreen(rootRef);
-    const [scaleNumber, setScaleNumber] = useState(scaleVal); // 缩放的基数
+    const [scaleNumber, setScaleNumber] = useState(canvas?.data.scale); // 缩放的基数
 
     const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
 
     useEffect(() => {
-      if ((Math.round(scaleVal * 10) / 10) !== scaleNumber) {
+      if (Math.round(scaleVal * 10) / 10 !== scaleNumber) {
         setScaleNumber(Math.round(scaleVal * 10) / 10);
         setIsSave(false);
       }
