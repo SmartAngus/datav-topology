@@ -52,7 +52,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const contextMenuRef = useRef();
   const headerRef = useRef();
   const [isSave, setIsSave] = useState(true);
-  const [scaleVal, setScaleVal] = useState(1);
+  const [scaleVal, setScaleVal] = useState(canvas?.data.scale);
   const [bkImageUrl, setBkImageUrl] = useState('');
 
   const [canvasSizeInfo, setCanvasSizeInfo] = useState({
@@ -204,15 +204,18 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (lineColors.length == 0) {
       lineColors = undefined;
     }
-    selected.node.data.echarts.option = getGaugeOption({
-      max: selected.node.property.dataMax,
-      min: selected.node.property.dataMin,
-      lineColors: lineColors,
-      chartTitle: selected.node.property.chartTitle,
-      chartTitleChecked: selected.node.property.chartTitleChecked,
-      chartUnitChecked:selected.node.property.chartUnitChecked,
-      chartUnit:selected.node.property.chartUnit,
-    },values);
+    selected.node.data.echarts.option = getGaugeOption(
+      {
+        max: selected.node.property.dataMax,
+        min: selected.node.property.dataMin,
+        lineColors: lineColors,
+        chartTitle: selected.node.property.chartTitle,
+        chartTitleChecked: selected.node.property.chartTitleChecked,
+        chartUnitChecked: selected.node.property.chartUnitChecked,
+        chartUnit: selected.node.property.chartUnit,
+      },
+      values
+    );
   };
   const handleTimeLineOption = (values) => {
     const changedProps = values;
