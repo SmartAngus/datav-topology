@@ -92,7 +92,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   );
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
-    console.log('useEffect', fillStyle);
     // 设置基本表单
     form.setFieldsValue({
       x: Math.round(x),
@@ -386,8 +385,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    * 渲染填充样式
    */
   const renderFillStyle = useMemo(() => {
-    console.log(fillStyle);
-    console.log('form ', form.getFieldValue('fillStyle'));
     return (
       <Panel header="填充" key="fill">
         <Form form={form} onValuesChange={handleValuesChange}>
@@ -405,9 +402,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
             <Col push={1}>
               <Form.Item name="fillStyle">
-                <ColorPicker
-                // onChange={() => form.setFieldsValue({ showFillStyle: true })}
-                />
+                <ColorPicker />
               </Form.Item>
             </Col>
           </Row>
@@ -437,9 +432,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
             <Col span={6} push={1}>
               <Form.Item name="strokeStyle">
-                <ColorPicker
-                // onChange={() => form.setFieldsValue({ showBoardColor: true })}
-                />
+                <ColorPicker />
               </Form.Item>
             </Col>
             <Col push={2}>
