@@ -695,7 +695,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const renderRightArea = useMemo(() => {
     let _component = rightAreaConfig.default;
-    console.log(rightAreaConfig)
     Object.keys(rightAreaConfig).forEach((item) => {
       if (selected[item]) {
         _component = rightAreaConfig[item];
