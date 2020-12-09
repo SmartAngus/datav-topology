@@ -219,14 +219,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   };
   const handleTimeLineOption = (values) => {
     const changedProps = values;
+
     for (const key in changedProps) {
       if (typeof changedProps[key] === 'object') {
-        // console.log(key)
-        for (const k in changedProps[key]) {
-          if (changedProps[key][k] !== undefined) {
-            selected.node[key][k] = changedProps[key][k];
-          }
-        }
+        selected.node.property[key]=changedProps[key];
+
       } else {
         if (changedProps[key] !== undefined) {
           selected.node[key] = changedProps[key];
@@ -269,14 +266,15 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (lineColors.length == 0) {
       lineColors = undefined;
     }
-    selected.node.data.echarts.option = getMeasureOption2({
+    const option=getMeasureOption2({
       associationObject:
-        selected.node.property.dataPointSelectedRows[0]?.associationObject,
+      selected.node.property.dataPointSelectedRows[0]?.dataName,
       value: 0,
       max: selected.node.property.dataMax,
       min: selected.node.property.dataMin,
       dataColors: selected.node.property.dataColors,
     });
+    selected.node.data.echarts.option = JSON.parse(JSON.stringify(option,replacer), reviver)
   };
 
   /**

@@ -198,17 +198,14 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         dataTopChecked: property.dataTopChecked && property.dataTopChecked,
         dataTop: property.dataTop && property.dataTop,
         dataBottom: property.dataBottom && property.dataBottom,
-        chartTitleChecked:
-          property.chartTitleChecked && property.chartTitleChecked,
+        chartTitleChecked: property.chartTitleChecked && property.chartTitleChecked,
         chartTitle: property.chartTitle && property.chartTitle,
         chartTitleColor: property.chartTitleColor && property.chartTitleColor,
-        lineReferenceChecked:
-          property.lineReferenceChecked && property.lineReferenceChecked,
-        lineReferenceColor:
-          property.lineReferenceColor && property.lineReferenceColor,
-        chartUnitChecked:
-          property.chartUnitChecked && property.chartUnitChecked,
-        chartUnit: property.chartUnit && property.chartUnit,
+        lineReferenceChecked: property.lineReferenceChecked && property.lineReferenceChecked,
+        lineReferenceColor: property.lineReferenceColor && property.lineReferenceColor,
+        chartUnitChecked:property.chartUnitChecked && property.chartUnitChecked,
+        chartUnit:property.chartUnit && property.chartUnit,
+        lineGraphRange:property.lineGraphRange && property.lineGraphRange,
       });
     }
   }, [property]);
@@ -1133,17 +1130,13 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
             <Row>
               <Col span={6}>
-                <Form.Item
-                  label="标题"
-                  name="chartTitleChecked"
-                  valuePropName="checked"
-                >
+                <Form.Item label="标题" name="chartTitleChecked" valuePropName="checked">
                   <Checkbox />
                 </Form.Item>
               </Col>
               <Col span={6}>
                 <Form.Item name="chartTitleColor">
-                  <ColorPicker />
+                  <ColorPicker  />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -1152,11 +1145,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item
-              label="上下限"
-              wrapperCol={{ push: 6 }}
-              name="dataTopSource"
-            >
+            <Form.Item label="上下限" wrapperCol={{ push: 6 }} name="dataTopSource" >
               <Radio.Group
                 options={[
                   { label: '数据点', value: 'dataPoint' },
@@ -1168,7 +1157,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Form.Item>
             <Row>
               <Col>
-                <Form.Item name="dataTopChecked" valuePropName="checked">
+                <Form.Item name="dataTopChecked"  valuePropName="checked">
                   <Checkbox />
                 </Form.Item>
               </Col>
@@ -1268,8 +1257,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       </Form.Item>
                     </Space>
                   ))}
-                  {form.getFieldValue('lineGraphRange')?.length <= 10 ||
-                  !form.getFieldValue('lineGraphRange') ? (
+                  {fields.length<10 ? (
                     <Form.Item>
                       <Button
                         type="dashed"
