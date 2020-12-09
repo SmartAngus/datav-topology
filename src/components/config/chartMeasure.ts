@@ -942,9 +942,13 @@ export function getTimelineOption(
     chartTitleChecked = node.property.chartTitleChecked;
     chartTitle = node.property.chartTitle;
     chartTitleColor = node.property.chartTitleColor;
+  } else if(node&&node.property.chartTitleChecked==false){
+    chartTitleChecked = false;
+    chartTitle = '';
+    chartTitleColor = '#c0c0c0';
   } else {
     chartTitleChecked = false;
-    chartTitle = '实时曲线';
+    chartTitle = '';
     chartTitleColor = '#c0c0c0';
   }
   var option = {
