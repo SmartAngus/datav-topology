@@ -40,7 +40,6 @@ import {
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
-import * as _ from 'lodash'
 
 /**
  * 编辑器画布
@@ -86,6 +85,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   });
 
   const [isLoadCanvas, setIsLoadCanvas] = useState(false);
+  const [showHeader, setShowHeader] = useState(false);
   const svgRef = useRef();
   const canvasRef = useRef();
   const customCompRef = useRef<any>();
@@ -145,7 +145,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       canvas.render();
       setIsLoadCanvas(true);
     }
-
+    setShowHeader(true);
   }, [props.editorData]);
 
   useEffect(() => {
@@ -223,8 +223,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
     for (const key in changedProps) {
       if (typeof changedProps[key] === 'object') {
-        selected.node.property[key]=changedProps[key];
-
+        selected.node.property[key] = changedProps[key];
       } else {
         if (changedProps[key] !== undefined) {
           selected.node[key] = changedProps[key];
@@ -267,15 +266,18 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (lineColors.length == 0) {
       lineColors = undefined;
     }
-    const option=getMeasureOption2({
+    const option = getMeasureOption2({
       associationObject:
-      selected.node.property.dataPointSelectedRows[0]?.dataName,
+        selected.node.property.dataPointSelectedRows[0]?.dataName,
       value: 0,
       max: selected.node.property.dataMax,
       min: selected.node.property.dataMin,
       dataColors: selected.node.property.dataColors,
     });
-    selected.node.data.echarts.option = JSON.parse(JSON.stringify(option,replacer), reviver)
+    selected.node.data.echarts.option = JSON.parse(
+      JSON.stringify(option, replacer),
+      reviver
+    );
   };
 
   /**
@@ -405,7 +407,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }
         }
       }
-      canvas.updateProps(false, [selected.node]);
+      canvas.updateProps(true, [selected.node]);
     },
     [selected]
   );
@@ -549,6 +551,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const onMessage = (event: string, data: Node) => {
     const node = data;
+    // console.log("onMessage=",event)
     switch (event) {
       case 'node': // 节点切换或者点击
         setSelected({
@@ -602,14 +605,15 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       case 'rotated':
       case 'move':
         setIsSave(false);
-        const newPen = _.cloneDeep(data[0])
-        setSelected({
-          node: newPen,
-          line: null,
-          multi: false,
-          nodes: null,
-          locked: newPen.locked,
-        });
+        setSelected(
+          Object.assign(
+            {},
+            {
+              ...selected,
+              node: data[0],
+            }
+          )
+        );
         break;
       case 'resizePens':
         setIsSave(false);
@@ -692,7 +696,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     onHandleFormValueChange,
     onHandleLineFormValueChange,
     onEventValueChange,
-    isLoadCanvas
+    isLoadCanvas,
   ]);
 
   /**
@@ -706,10 +710,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       }
     });
     return _component;
-  }, [selected, rightAreaConfig,isLoadCanvas]);
+  }, [selected, rightAreaConfig, isLoadCanvas]);
   // 渲染头部
   const renderHeader = useMemo(() => {
-    if (isLoadCanvas) {
+    if (showHeader) {
       return (
         <Header
           ref={headerRef}
@@ -728,7 +732,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         />
       );
     }
-  }, [isLoadCanvas, history, layoutRef, isSave, scaleVal]);
+  }, [showHeader, history, layoutRef, isSave, scaleVal]);
   // 右键菜单
   const handleContextMenu = (event) => {
     setShowContextmenu(!showContextmenu);

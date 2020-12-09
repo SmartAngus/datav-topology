@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import reactCSS from 'reactcss';
-import {Button, message} from 'antd';
+import { Button } from 'antd';
 import { SketchPicker } from 'react-color';
 import styleScss from './ColorPicker.module.scss';
-import {useMount, useUpdate} from "ahooks";
 
 interface ColorPickerProps {
   value?: string;
@@ -14,23 +13,24 @@ interface ColorPickerProps {
 const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
   const { value, disabled, onChange } = props;
   const [visible, setVisible] = useState(false);
-  const [color, setColor] = useState(value);
-  useEffect(()=>{
-    setColor(value)
-  },[value])
-  
+  const [color, setColor] = useState(value ? value : 'rgba(222, 222, 222 ,1)');
+
   const triggerChange = (color: string) => {
     if (onChange) {
       onChange(color);
     }
   };
 
+  useEffect(() => {
+    setColor(value ? value : 'rgba(222, 222, 222 ,1)');
+  }, [value]);
+
   const handleClick = () => {
     setVisible(!visible);
   };
 
   const handleClose = () => {
-    setColor(value ? value : 'rgba(155, 155, 155 ,1)');
+    setColor(value ? value : 'rgba(222, 222, 222 ,1)');
     setVisible(false);
   };
 
@@ -102,6 +102,5 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
     </div>
   );
 };
-
 
 export default ColorPicker;

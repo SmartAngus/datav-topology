@@ -11,10 +11,6 @@ import CustomIcon from '../config/iconConfig';
 import styles from './index.module.scss';
 import {replacer} from "../utils/serializing";
 
-message.config({
-  getContainer: () => document.querySelector('#editLayout'),
-});
-
 const headTools = [
   {
     key: 'cut',
@@ -275,6 +271,9 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
     const handlePreview = () => {
       console.log('触发预览', isSave);
       if (!isSave) {
+        message.config({
+          getContainer: () => document.querySelector('#editLayout'),
+        });
         message.warn('预览之前请先保存数据！');
       } else {
         if (props.onPreview && typeof props.onPreview == 'function') {
