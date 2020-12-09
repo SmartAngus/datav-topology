@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import reactCSS from 'reactcss';
 import { Button } from 'antd';
 import { SketchPicker } from 'react-color';
@@ -13,7 +13,7 @@ interface ColorPickerProps {
 const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
   const { value, disabled, onChange } = props;
   const [visible, setVisible] = useState(false);
-  const [color, setColor] = useState(value ? value : 'rgba(155, 155, 155 ,1)');
+  const [color, setColor] = useState(value ? value : 'rgba(222, 222, 222 ,1)');
 
   const triggerChange = (color: string) => {
     if (onChange) {
@@ -21,12 +21,16 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
     }
   };
 
+  useEffect(() => {
+    setColor(value ? value : 'rgba(222, 222, 222 ,1)');
+  }, [value]);
+
   const handleClick = () => {
     setVisible(!visible);
   };
 
   const handleClose = () => {
-    setColor(value ? value : 'rgba(155, 155, 155 ,1)');
+    setColor(value ? value : 'rgba(222, 222, 222 ,1)');
     setVisible(false);
   };
 

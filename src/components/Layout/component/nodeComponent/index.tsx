@@ -92,6 +92,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   );
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
+    console.log('useEffect', fillStyle);
     // 设置基本表单
     form.setFieldsValue({
       x: Math.round(x),
@@ -105,7 +106,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       fontSize: parseInt(fontSize),
       fontFamily,
       text,
-      fillStyle,
+      fillStyle: fillStyle,
       showFillStyle: fillStyle ? true : false,
       showBoardColor: strokeStyle ? true : false,
     });
@@ -198,20 +199,30 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         dataTopChecked: property.dataTopChecked && property.dataTopChecked,
         dataTop: property.dataTop && property.dataTop,
         dataBottom: property.dataBottom && property.dataBottom,
-        chartTitleChecked: property.chartTitleChecked && property.chartTitleChecked,
+        chartTitleChecked:
+          property.chartTitleChecked && property.chartTitleChecked,
         chartTitle: property.chartTitle && property.chartTitle,
         chartTitleColor: property.chartTitleColor && property.chartTitleColor,
-        lineReferenceChecked: property.lineReferenceChecked && property.lineReferenceChecked,
-        lineReferenceColor: property.lineReferenceColor && property.lineReferenceColor,
-        chartUnitChecked:property.chartUnitChecked && property.chartUnitChecked,
-        chartUnit:property.chartUnit && property.chartUnit,
-        lineGraphRange:property.lineGraphRange && property.lineGraphRange,
+        lineReferenceChecked:
+          property.lineReferenceChecked && property.lineReferenceChecked,
+        lineReferenceColor:
+          property.lineReferenceColor && property.lineReferenceColor,
+        chartUnitChecked:
+          property.chartUnitChecked && property.chartUnitChecked,
+        chartUnit: property.chartUnit && property.chartUnit,
+        lineGraphRange: property.lineGraphRange && property.lineGraphRange,
       });
     }
   }, [property]);
 
   // 字段值更新时触发的回掉
   const handleValuesChange = (changedValues) => {
+    if ('fillStyle' in changedValues) {
+      form.setFieldsValue({ showFillStyle: true });
+    }
+    if ('strokeStyle' in changedValues) {
+      form.setFieldsValue({ showBoardColor: true });
+    }
     if ('showFillStyle' in changedValues) {
       changedValues.fillStyle = changedValues.showFillStyle
         ? form.getFieldValue('fillStyle')
@@ -375,6 +386,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    * 渲染填充样式
    */
   const renderFillStyle = useMemo(() => {
+    console.log(fillStyle);
+    console.log('form ', form.getFieldValue('fillStyle'));
     return (
       <Panel header="填充" key="fill">
         <Form form={form} onValuesChange={handleValuesChange}>
@@ -393,7 +406,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             <Col push={1}>
               <Form.Item name="fillStyle">
                 <ColorPicker
-                  onChange={() => form.setFieldsValue({ showFillStyle: true })}
+                // onChange={() => form.setFieldsValue({ showFillStyle: true })}
                 />
               </Form.Item>
             </Col>
@@ -401,7 +414,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [form, fillStyle, data.node]);
+  }, [fillStyle]);
 
   /**
    * 渲染边框样式
@@ -425,20 +438,20 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             <Col span={6} push={1}>
               <Form.Item name="strokeStyle">
                 <ColorPicker
-                  onChange={() => form.setFieldsValue({ showBoardColor: true })}
+                // onChange={() => form.setFieldsValue({ showBoardColor: true })}
                 />
               </Form.Item>
             </Col>
             <Col push={2}>
               <Form.Item name="lineWidth" initialValue={1}>
-                <InputNumber min={0} />
+                <InputNumber min={1} />
               </Form.Item>
             </Col>
           </Row>
         </Form>
       </Panel>
     );
-  }, [form, strokeStyle, lineWidth]);
+  }, [strokeStyle, lineWidth]);
 
   /**
    * 渲染字体的表单
@@ -1130,13 +1143,17 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
             <Row>
               <Col span={6}>
-                <Form.Item label="标题" name="chartTitleChecked" valuePropName="checked">
+                <Form.Item
+                  label="标题"
+                  name="chartTitleChecked"
+                  valuePropName="checked"
+                >
                   <Checkbox />
                 </Form.Item>
               </Col>
               <Col span={6}>
                 <Form.Item name="chartTitleColor">
-                  <ColorPicker  />
+                  <ColorPicker />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -1145,7 +1162,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item label="上下限" wrapperCol={{ push: 6 }} name="dataTopSource" >
+            <Form.Item
+              label="上下限"
+              wrapperCol={{ push: 6 }}
+              name="dataTopSource"
+            >
               <Radio.Group
                 options={[
                   { label: '数据点', value: 'dataPoint' },
@@ -1157,7 +1178,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Form.Item>
             <Row>
               <Col>
-                <Form.Item name="dataTopChecked"  valuePropName="checked">
+                <Form.Item name="dataTopChecked" valuePropName="checked">
                   <Checkbox />
                 </Form.Item>
               </Col>
@@ -1257,7 +1278,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       </Form.Item>
                     </Space>
                   ))}
-                  {fields.length<10 ? (
+                  {fields.length < 10 ? (
                     <Form.Item>
                       <Button
                         type="dashed"
@@ -1284,7 +1305,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       <Tabs defaultActiveKey="1" centered>
         <TabPane tab="外观" key="1" style={{ margin: 0 }}>
           <Collapse defaultActiveKey={['pos']}>
-            {renderPositionForm}
+            {!data.multi && renderPositionForm}
             {fontStyleNodeList.includes(name) && !data.multi && renderFontForm}
             {fillStyleNodeList.includes(name) && !data.multi && renderFillStyle}
             {boardStyleNodeList.includes(name) &&
