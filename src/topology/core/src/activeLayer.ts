@@ -399,7 +399,6 @@ export class ActiveLayer extends Layer {
       ++i;
     }
     this.rotate = angle;
-
     this.topology.dispatch('rotated', this.pens);
   }
 

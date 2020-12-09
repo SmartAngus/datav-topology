@@ -40,6 +40,7 @@ import {
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
+import * as _ from 'lodash'
 
 /**
  * 编辑器画布
@@ -548,7 +549,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const onMessage = (event: string, data: Node) => {
     const node = data;
-    console.log("onMessage=",event)
     switch (event) {
       case 'node': // 节点切换或者点击
         setSelected({
@@ -602,15 +602,14 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       case 'rotated':
       case 'move':
         setIsSave(false);
-        setSelected(
-          Object.assign(
-            {},
-            {
-              ...selected,
-              node: data[0],
-            }
-          )
-        );
+        const newPen = _.cloneDeep(data[0])
+        setSelected({
+          node: newPen,
+          line: null,
+          multi: false,
+          nodes: null,
+          locked: newPen.locked,
+        });
         break;
       case 'resizePens':
         setIsSave(false);

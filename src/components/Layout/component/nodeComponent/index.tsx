@@ -394,6 +394,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <Form.Item name="fillStyle">
                 <ColorPicker
                   onChange={() => form.setFieldsValue({ showFillStyle: true })}
+                  value={fillStyle}
                 />
               </Form.Item>
             </Col>
@@ -402,6 +403,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       </Panel>
     );
   }, [form, fillStyle, data.node]);
+
+
 
   /**
    * 渲染边框样式

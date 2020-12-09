@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import reactCSS from 'reactcss';
-import { Button } from 'antd';
+import {Button, message} from 'antd';
 import { SketchPicker } from 'react-color';
 import styleScss from './ColorPicker.module.scss';
+import {useMount, useUpdate} from "ahooks";
 
 interface ColorPickerProps {
   value?: string;
@@ -13,8 +14,11 @@ interface ColorPickerProps {
 const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
   const { value, disabled, onChange } = props;
   const [visible, setVisible] = useState(false);
-  const [color, setColor] = useState(value ? value : 'rgba(155, 155, 155 ,1)');
-
+  const [color, setColor] = useState(value);
+  useEffect(()=>{
+    setColor(value)
+  },[value])
+  
   const triggerChange = (color: string) => {
     if (onChange) {
       onChange(color);
@@ -98,5 +102,6 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
     </div>
   );
 };
+
 
 export default ColorPicker;
