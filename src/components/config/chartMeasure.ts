@@ -421,7 +421,7 @@ export function getGaugeOption(
   };
   return option;
 }
-
+// 计量器
 export function getMeasureOption2(opt?: {
   associationObject?: string;
   value?: string | number;
@@ -781,6 +781,16 @@ export function getTimelineOption(
   if (node != undefined) {
     node.property = Object.assign({}, node.property, changeValues);
   }
+  let colorList=["#9E87FF", '#73DDFF', '#fe9a8b', '#F56948', '#9E87FF']
+  if(node != undefined){
+    (node.property.lineGraphRange || []).map((colorObj, index) => {
+      if(colorObj!=undefined&&colorObj.lineGraphRangeCheck&&colorObj.lineGraphRangeColor){
+        colorList[index]=colorObj.lineGraphRangeColor
+      }else{
+        colorList[index]=colorList[index]
+      }
+    })
+  }
   var charts = {
     unit: 'Kbps',
     names: [],
@@ -804,7 +814,8 @@ export function getTimelineOption(
       if (charts.value[index] && charts.value[index].length > 9) {
         charts.value[index].shift();
       }
-      charts.names[index] = row.associationObject;
+      charts.names[index] = row.dataName;
+      charts.unit=row.unit;
       if (socketData && row.id == socketData.id) {
         charts.value[index].push(socketData.value);
       }
@@ -852,6 +863,12 @@ export function getTimelineOption(
       symbol: 'circle',
       symbolSize: 5,
       data: charts.value[i],
+      itemStyle: {
+        normal: {
+          color: colorList[i],
+          borderColor: colorList[i]
+        }
+      }
     };
     lineY.push(data);
   }

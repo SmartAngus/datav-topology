@@ -9,6 +9,7 @@ import { base64ToFile } from '../utils/cacl';
 import CustomIcon from '../config/iconConfig';
 
 import styles from './index.module.scss';
+import {replacer} from "../utils/serializing";
 
 message.config({
   getContainer: () => document.querySelector('#editLayout'),
@@ -153,8 +154,8 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         //     type: 'text/plain;charset=utf-8',
         //   }),
         //   `le5le.topology.json`
-        // );
-        const saveData = new Blob([JSON.stringify(canvas.data)], {
+        // );JSON.stringify(option,replacer)
+        const saveData = new Blob([JSON.stringify(canvas.data,replacer)], {
           type: 'text/plain;charset=utf-8',
         });
         const screenshot = base64ToFile(canvas.toImage());

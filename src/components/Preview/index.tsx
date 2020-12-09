@@ -8,7 +8,7 @@ import echarts from 'echarts/lib/echarts';
 import {
   echartsObjs, register as registerChart,
 } from '../../topology/chart-diagram';
-import {reviver} from "../utils/serializing";
+import {replacer, reviver} from "../utils/serializing";
 import {register as registerBiciComp} from "../../topology/bici-diagram";
 let canvas;
 let x, y;
@@ -124,7 +124,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                   case 'chartMeasure':
                     if (node.property.dataPointSelectedRows[0]?.id == r.id) {
                       const option = getMeasureOption2({
-                        associationObject:node.property.dataPointSelectedRows[0]?.associationObject,
+                        associationObject:node.property.dataPointSelectedRows[0]?.dataName,
                         value:r.value
                       })
                       node.data.echarts.option=option;
@@ -258,7 +258,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
   const updateChartNode=(node)=>{
     // 更新图表数据
     echartsObjs[node.id].chart.setOption(
-        JSON.parse(JSON.stringify(node.data.echarts.option), reviver)
+        JSON.parse(JSON.stringify(node.data.echarts.option,replacer), reviver)
     );
     echartsObjs[node.id].chart.resize();
     node.elementRendered = true;

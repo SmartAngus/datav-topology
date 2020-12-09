@@ -205,6 +205,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         lineReferenceColor: property.lineReferenceColor && property.lineReferenceColor,
         chartUnitChecked:property.chartUnitChecked && property.chartUnitChecked,
         chartUnit:property.chartUnit && property.chartUnit,
+        lineGraphRange:property.lineGraphRange && property.lineGraphRange,
       });
     }
   }, [property]);
@@ -1256,8 +1257,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       </Form.Item>
                     </Space>
                   ))}
-                  {form.getFieldValue('lineGraphRange')?.length <= 10 ||
-                  !form.getFieldValue('lineGraphRange') ? (
+                  {fields.length<10 ? (
                     <Form.Item>
                       <Button
                         type="dashed"
