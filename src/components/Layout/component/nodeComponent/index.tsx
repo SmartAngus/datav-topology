@@ -1295,43 +1295,39 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   return (
     <div className={styles.rightArea}>
       {data.multi && renderAlign}
-      <Tabs defaultActiveKey="1" centered>
-        <TabPane tab="外观" key="1" style={{ margin: 0 }}>
-          <Collapse defaultActiveKey={['pos']}>
-            {!data.multi && renderPositionForm}
-            {fontStyleNodeList.includes(name) && !data.multi && renderFontForm}
-            {fillStyleNodeList.includes(name) && !data.multi && renderFillStyle}
-            {boardStyleNodeList.includes(name) &&
-              !data.multi &&
-              renderBorderStyle}
-            {name === 'biciPilot' && !data.multi && renderLight}
-            {name === 'biciTimer' && !data.multi && renderBiciTimerDataForm}
-            {name === 'biciCard' && !data.multi && renderDataCard}
-            {property?.echartsType === 'chartMeasure' &&
-              !data.multi &&
-              renderMeter}
-            {property?.echartsType === 'timeLine' &&
-              !data.multi &&
-              renderLineGraph}
-            {property?.echartsType === 'gauge' && !data.multi && renderGauge}
-          </Collapse>
-        </TabPane>
-        <TabPane tab="数据" key="2" style={{ margin: 0 }}>
-          <Collapse defaultActiveKey={['1', '2']}>
-            <Panel header="本身数据" key="1">
-              {renderDataForm}
-            </Panel>
-            {(data.node.name == 'biciVarer' ||
-              data.node.name == 'echarts' ||
-              data.node.name == 'biciCard' ||
-              data.node.name == 'biciPilot') && (
-              <Panel header="自定义数据" key="2">
-                {renderExtraDataForm}
+      {!data.multi && (
+        <Tabs defaultActiveKey="1" centered>
+          <TabPane tab="外观" key="1" style={{ margin: 0 }}>
+            <Collapse defaultActiveKey={['pos']}>
+              {renderPositionForm}
+              {fontStyleNodeList.includes(name) && renderFontForm}
+              {fillStyleNodeList.includes(name) && renderFillStyle}
+              {boardStyleNodeList.includes(name) && renderBorderStyle}
+              {name === 'biciPilot' && renderLight}
+              {name === 'biciTimer' && renderBiciTimerDataForm}
+              {name === 'biciCard' && renderDataCard}
+              {property?.echartsType === 'chartMeasure' && renderMeter}
+              {property?.echartsType === 'timeLine' && renderLineGraph}
+              {property?.echartsType === 'gauge' && renderGauge}
+            </Collapse>
+          </TabPane>
+          <TabPane tab="数据" key="2" style={{ margin: 0 }}>
+            <Collapse defaultActiveKey={['1', '2']}>
+              <Panel header="本身数据" key="1">
+                {renderDataForm}
               </Panel>
-            )}
-          </Collapse>
-        </TabPane>
-      </Tabs>
+              {(data.node.name == 'biciVarer' ||
+                data.node.name == 'echarts' ||
+                data.node.name == 'biciCard' ||
+                data.node.name == 'biciPilot') && (
+                <Panel header="自定义数据" key="2">
+                  {renderExtraDataForm}
+                </Panel>
+              )}
+            </Collapse>
+          </TabPane>
+        </Tabs>
+      )}
       {visible && renderDataPointModal()}
     </div>
   );

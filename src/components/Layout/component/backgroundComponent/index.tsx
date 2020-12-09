@@ -8,7 +8,6 @@ import {
   Collapse,
   Button,
   Popover,
-  Image,
   Upload,
   Checkbox,
   message,
