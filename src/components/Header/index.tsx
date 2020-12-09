@@ -114,12 +114,20 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
       onScaleCanvas,
     } = props;
     const [isFullscreen, { toggleFull }] = useFullscreen(rootRef);
-    const [scaleNumber, setScaleNumber] = useState(canvas?.data.scale); // 缩放的基数
+    const [scaleNumber, setScaleNumber] = useState(undefined); // 缩放的基数
 
     const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
 
     useEffect(() => {
-      if (Math.round(scaleVal * 10) / 10 !== scaleNumber) {
+      if (scaleVal && scaleNumber === undefined) {
+        setScaleNumber(Math.round(scaleVal * 10) / 10);
+      }
+      if (
+        scaleVal &&
+        scaleNumber &&
+        Math.round(scaleVal * 10) / 10 !== scaleNumber
+      ) {
+        console.log(Math.round(scaleVal * 10) / 10, '=', scaleNumber);
         setScaleNumber(Math.round(scaleVal * 10) / 10);
         setIsSave(false);
       }
@@ -265,6 +273,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
      * 预览
      */
     const handlePreview = () => {
+      console.log('触发预览', isSave);
       if (!isSave) {
         message.warn('预览之前请先保存数据！');
       } else {
@@ -367,7 +376,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
                 display: 'inline-block',
               }}
             >
-              {Math.round(scaleNumber * 100)}%
+              {scaleNumber && Math.round(scaleNumber * 100)}%
             </span>
           </Popover>
           <Button

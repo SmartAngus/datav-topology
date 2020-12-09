@@ -220,7 +220,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     if ('showBoardColor' in changedValues) {
       changedValues.strokeStyle = changedValues.showBoardColor
         ? form.getFieldValue('strokeStyle')
-        : '';
+        : '#222';
     }
     onFormValueChange && onFormValueChange(changedValues);
   };
@@ -1193,7 +1193,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Form>
         </Panel>
         <Panel header="样式" key="lineStyle">
-          <Form  form={propertyForm} onValuesChange={handlePropertyValuesChange}>
+          <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
             <Form.Item label="线性" wrapperCol={{ push: 10 }} name="smooth">
               <Radio.Group
                 options={[
