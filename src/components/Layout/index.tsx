@@ -701,6 +701,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     onHandleLineFormValueChange,
     onEventValueChange,
     isLoadCanvas,
+    canvas
   ]);
 
   /**
