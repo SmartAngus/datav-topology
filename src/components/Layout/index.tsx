@@ -548,6 +548,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const onMessage = (event: string, data: Node) => {
     const node = data;
+    console.log("onMessage=",event)
     switch (event) {
       case 'node': // 节点切换或者点击
         setSelected({
@@ -570,6 +571,13 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         break;
       case 'delete':
         setIsSave(false);
+        setSelected({
+          node: undefined,
+          line: null,
+          multi: false,
+          nodes: null,
+          locked: 0,
+        });
         break;
       case 'line': // 连线
       case 'addLine':
