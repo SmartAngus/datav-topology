@@ -390,11 +390,19 @@ export function getGaugeOption(
             width: 22,
           },
         },
+        axisTick: { // 坐标轴小标记
+          lineStyle: { // 属性lineStyle控制线条样式
+            color: 'auto'
+          }
+        },
         splitLine: {
           length: 12,
           lineStyle: {
             width: 1,
           },
+        },
+        itemStyle:{
+          color:'auto'
         },
         detail: {
           formatter: '{value} ' + unit,

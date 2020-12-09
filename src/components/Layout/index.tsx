@@ -6,6 +6,7 @@ import React, {
   CSSProperties,
   useRef,
   useImperativeHandle,
+  Suspense,
 } from 'react';
 import { Topology, Options, Node } from '../../topology/core';
 import {
@@ -125,6 +126,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     canvasOptions.on = onMessage;
     canvasRegister();
     canvas = new Topology('topology-canvas', canvasOptions);
+
     if (props.editorData != undefined && typeof props.editorData == 'object') {
       props.editorData.locked = 0;
       canvas.open(props.editorData);
@@ -140,9 +142,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       }
       canvas.resize({ width: w, height: h });
       canvas.render();
+      setIsLoadCanvas(true);
     }
 
-    setIsLoadCanvas(true);
   }, [props.editorData]);
 
   useEffect(() => {
@@ -219,6 +221,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     const changedProps = values;
     for (const key in changedProps) {
       if (typeof changedProps[key] === 'object') {
+        // console.log(key)
         for (const k in changedProps[key]) {
           if (changedProps[key][k] !== undefined) {
             selected.node[key][k] = changedProps[key][k];
@@ -410,6 +413,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   /*当自定义的属性发生变化时*/
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
+      // console.log("自定义属性：",value)
       setIsSave(false);
       canvas.cache();
       // 只能两层嵌套，后期需要更改，如果有多层的话
@@ -546,7 +550,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const onMessage = (event: string, data: Node) => {
     const node = data;
-    // console.log('onMessage==', event);
     switch (event) {
       case 'node': // 节点切换或者点击
         setSelected({
@@ -684,6 +687,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     onHandleFormValueChange,
     onHandleLineFormValueChange,
     onEventValueChange,
+    isLoadCanvas
   ]);
 
   /**
@@ -691,13 +695,14 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const renderRightArea = useMemo(() => {
     let _component = rightAreaConfig.default;
+    console.log(rightAreaConfig)
     Object.keys(rightAreaConfig).forEach((item) => {
       if (selected[item]) {
         _component = rightAreaConfig[item];
       }
     });
     return _component;
-  }, [selected, rightAreaConfig]);
+  }, [selected, rightAreaConfig,isLoadCanvas]);
   // 渲染头部
   const renderHeader = useMemo(() => {
     if (isLoadCanvas) {
