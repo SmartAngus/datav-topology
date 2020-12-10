@@ -421,7 +421,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   /*当自定义的属性发生变化时*/
   const onHandlePropertyFormValueChange = useCallback(
     (value) => {
-      console.log("自定义属性：",value)
+      // console.log("自定义属性：",value)
       setIsSave(false);
       canvas.cache();
       // 只能两层嵌套，后期需要更改，如果有多层的话
@@ -440,13 +440,16 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           let y='';
           let h='';
           let node = selected.node;
-          if(node.property.date.show){
-            y=moment().format(node.property.date.format)
+          if(value['date.show']){
+            y=moment().format(value['date.format'])
           }
-          if(node.property.time.show){
-            h=moment().format(node.property.time.format)
+          if(value['time.show']){
+            h=moment().format(value['time.format'])
           }
           node.text=y+' '+h
+          if(node.text==' '){
+            node.text=moment().format("LLLL")
+          }
           canvas.updateProps(false);
           break;
         case 'echarts':

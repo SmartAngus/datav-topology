@@ -92,6 +92,9 @@ export function formatTimer(node,canvas) {
     h=moment().format(node.property.time.format)
   }
   node.text=y+' '+h
+  if(node.text==' '){
+    node.text=moment().format("LLLL")
+  }
   canvas.updateProps(false)
 }
 
