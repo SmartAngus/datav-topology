@@ -459,8 +459,8 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
 
   return (
     <div>
-      <Tabs defaultActiveKey="1" centered>
-        <TabPane tab="图文设置" key="1" style={{ margin: 0 }}>
+      <Tabs defaultActiveKey="1" tabBarStyle={{padding:"0 20px"}}>
+        <TabPane tab="图文设置" key="1">
           {renderDefultOptions}
           {/* <ul className={styles.bottomTip}>
             <li>← ↑ → ↓ ：移动5个像素</li>
@@ -471,24 +471,24 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
             <li>Shift/Alt + 鼠标拖拽节点：独立拖拽（子）节点</li>
           </ul> */}
         </TabPane>
-        <TabPane tab="消息通信" key="2" style={{ margin: 0 }}>
-          <Collapse defaultActiveKey={['1']}>
-            <Panel header="websocket地址" key="1">
-              <TextArea
-                placeholder="请输入websocket地址"
-                value={wsAddress}
-                onChange={(e) => setWsAddress(e.target.value)}
-              />
-              <Button
-                type="primary"
-                style={{ width: 265, marginTop: 10 }}
-                onClick={() => onHandleConnectWS()}
-              >
-                测试连接
-              </Button>
-            </Panel>
-          </Collapse>
-        </TabPane>
+        {/*<TabPane tab="消息通信" key="2" style={{ margin: 0 }}>*/}
+        {/*  <Collapse defaultActiveKey={['1']}>*/}
+        {/*    <Panel header="websocket地址" key="1">*/}
+        {/*      <TextArea*/}
+        {/*        placeholder="请输入websocket地址"*/}
+        {/*        value={wsAddress}*/}
+        {/*        onChange={(e) => setWsAddress(e.target.value)}*/}
+        {/*      />*/}
+        {/*      <Button*/}
+        {/*        type="primary"*/}
+        {/*        style={{ width: 265, marginTop: 10 }}*/}
+        {/*        onClick={() => onHandleConnectWS()}*/}
+        {/*      >*/}
+        {/*        测试连接*/}
+        {/*      </Button>*/}
+        {/*    </Panel>*/}
+        {/*  </Collapse>*/}
+        {/*</TabPane>*/}
       </Tabs>
     </div>
   );
