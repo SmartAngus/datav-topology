@@ -268,7 +268,6 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
      * 预览
      */
     const handlePreview = () => {
-      console.log('触发预览', isSave);
       if (!isSave) {
         message.config({
           getContainer: () => document.querySelector('#editLayout'),
@@ -374,7 +373,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
                 // display: 'inline-block',
               }}
             >
-              {scaleNumber && Math.round(scaleNumber * 100)} %
+              {scaleNumber && Math.round(scaleNumber * 100)}%
             </span>
           </Popover>
           <Button
