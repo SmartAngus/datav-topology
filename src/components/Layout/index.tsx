@@ -37,6 +37,8 @@ import {
   getMeasureOption2,
   getTimelineOption,
 } from '../config/chartMeasure';
+import * as _ from 'lodash';
+
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 export let canvas: Topology;
@@ -53,6 +55,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const headerRef = useRef();
   const [isSave, setIsSave] = useState(true);
   const [scaleVal, setScaleVal] = useState(canvas?.data.scale);
+  const [rotateVal, setRotateVal] = useState(0);
   const [bkImageUrl, setBkImageUrl] = useState('');
 
   const [canvasSizeInfo, setCanvasSizeInfo] = useState({
@@ -553,7 +556,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    * @params {object} data - 节点数据
    */
 
-  const onMessage = (event: string, data: Node) => {
+  const onMessage = (event: string, data: any) => {
     const node = data;
     // console.log("onMessage=",event)
     switch (event) {
@@ -607,6 +610,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         });
         break;
       case 'rotated':
+        let temp = data[0];
+        temp.rotate += temp.offsetRotate;
+        setIsSave(false);
+        setSelected({ ...selected, node: temp });
+        break;
       case 'move':
         setIsSave(false);
         setSelected(

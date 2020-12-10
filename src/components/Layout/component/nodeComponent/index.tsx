@@ -98,7 +98,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       y: Math.round(y),
       width: Math.round(width),
       height: Math.round(height),
-      rotate: Math.round(rotate),
+      rotate: parseInt(rotate),
       lineWidth,
       strokeStyle,
       color,
