@@ -54,8 +54,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const contextMenuRef = useRef();
   const headerRef = useRef();
   const [isSave, setIsSave] = useState(true);
-  const [scaleVal, setScaleVal] = useState(canvas?.data.scale);
-  const [rotateVal, setRotateVal] = useState(0);
+  const [scaleVal, setScaleVal] = useState(1);
   const [bkImageUrl, setBkImageUrl] = useState('');
 
   const [canvasSizeInfo, setCanvasSizeInfo] = useState({
@@ -709,7 +708,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     onHandleLineFormValueChange,
     onEventValueChange,
     isLoadCanvas,
-    canvas
+    canvas,
   ]);
 
   /**
