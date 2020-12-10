@@ -115,7 +115,6 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
     const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
 
     useEffect(() => {
-      console.log(scaleVal);
       if (scaleVal && scaleNumber === undefined) {
         setScaleNumber(Math.round(scaleVal * 10) / 10);
       }
@@ -124,7 +123,6 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         scaleNumber &&
         Math.round(scaleVal * 10) / 10 !== scaleNumber
       ) {
-        console.log(Math.round(scaleVal * 10) / 10, '=', scaleNumber);
         setScaleNumber(Math.round(scaleVal * 10) / 10);
         setIsSave(false);
       }
@@ -163,7 +161,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         const saveData = new Blob([JSON.stringify(canvas.data, replacer)], {
           type: 'text/plain;charset=utf-8',
         });
-        const screenshot = base64ToFile(canvas.toImage());
+        // const screenshot = base64ToFile(canvas.toImage());
         // canvas.saveAsImage();
         saveData.text().then((r) => {
           const json = JSON.parse(r);
