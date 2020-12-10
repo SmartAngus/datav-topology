@@ -74,6 +74,8 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     const bgColor = data.data.bkColor;
     const bkImage = data.data.bkImage;
 
+    console.log('background data:', data);
+    console.log('background x:', w, 'h:', h);
 
     const sizeValText = Object.values(panelSizeObj).flat().includes(`${w}*${h}`)
       ? `预设·${w}*${h}`
