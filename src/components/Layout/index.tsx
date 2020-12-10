@@ -559,6 +559,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     const node = data;
     // console.log("onMessage=",event)
     switch (event) {
+      case 'dblclick':
+        setIsSave(false);
+        break;
       case 'node': // 节点切换或者点击
         setSelected({
           node: data,
