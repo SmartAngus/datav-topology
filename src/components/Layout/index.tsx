@@ -14,7 +14,7 @@ import {
   echartsObjs,
 } from '../../topology/chart-diagram';
 import { register as registerBiciComp } from '../../topology/bici-diagram';
-import { Modal, Tabs, message, Space } from 'antd';
+import { Modal, Tabs, message, Tooltip } from 'antd';
 import { Tools } from '../config/config';
 import { useClickAway } from 'ahooks';
 import { replacer, reviver } from '../utils/serializing';
@@ -576,6 +576,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     const node = data;
     // console.log("onMessage=",event)
     switch (event) {
+      case 'dblclick':
+        setIsSave(false);
+        break;
       case 'node': // 节点切换或者点击
         setSelected({
           node: data,
@@ -732,13 +735,15 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    * 渲染画布右侧区域操作栏
    */
   const renderRightArea = useMemo(() => {
-    let _component = rightAreaConfig.default;
-    Object.keys(rightAreaConfig).forEach((item) => {
-      if (selected[item]) {
-        _component = rightAreaConfig[item];
-      }
-    });
-    return _component;
+    if (isLoadCanvas) {
+      let _component = rightAreaConfig.default;
+      Object.keys(rightAreaConfig).forEach((item) => {
+        if (selected[item]) {
+          _component = rightAreaConfig[item];
+        }
+      });
+      return _component;
+    }
   }, [selected, rightAreaConfig, isLoadCanvas]);
   // 渲染头部
   const renderHeader = useMemo(() => {
@@ -844,11 +849,17 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
                 top: canvasSizeInfo.top,
               }}
             >
-              <span>{props.boardData.name}</span>
+              <Tooltip title={props.boardData.name}>
+                <span>{props.boardData.name}</span>
+              </Tooltip>
               <span style={{ margin: '0 5px' }}>/</span>
-              <span>{props.boardData.typeName}</span>
+              <Tooltip title={props.boardData.typeName}>
+                <span>{props.boardData.typeName}</span>
+              </Tooltip>
               <span style={{ margin: '0 5px' }}>/</span>
-              <span>{props.boardData.remark}</span>
+              <Tooltip title={props.boardData.remark}>
+                <span>{props.boardData.remark}</span>
+              </Tooltip>
             </p>
           )}
           <div
