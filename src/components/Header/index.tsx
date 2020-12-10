@@ -9,7 +9,7 @@ import { base64ToFile } from '../utils/cacl';
 import CustomIcon from '../config/iconConfig';
 
 import styles from './index.module.scss';
-import {replacer} from "../utils/serializing";
+import { replacer } from '../utils/serializing';
 
 const headTools = [
   {
@@ -115,6 +115,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
     const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
 
     useEffect(() => {
+      console.log(scaleVal);
       if (scaleVal && scaleNumber === undefined) {
         setScaleNumber(Math.round(scaleVal * 10) / 10);
       }
@@ -159,14 +160,14 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         //   }),
         //   `le5le.topology.json`
         // );JSON.stringify(option,replacer)
-        const saveData=new Blob([JSON.stringify(canvas.data,replacer)], {
-            type: 'text/plain;charset=utf-8',
+        const saveData = new Blob([JSON.stringify(canvas.data, replacer)], {
+          type: 'text/plain;charset=utf-8',
         });
-       const screenshot = base64ToFile(canvas.toImage());
+        const screenshot = base64ToFile(canvas.toImage());
         // canvas.saveAsImage();
         saveData.text().then((r) => {
           const json = JSON.parse(r);
-         // json.screenshot = screenshot;
+          // json.screenshot = screenshot;
           props.onEditorSaveCb && props.onEditorSaveCb(json);
         });
       } else {
@@ -372,10 +373,10 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
               style={{
                 margin: '0 12px',
                 width: '4ch',
-                display: 'inline-block',
+                // display: 'inline-block',
               }}
             >
-              {scaleNumber && Math.round(scaleNumber * 100)}%
+              {scaleNumber && Math.round(scaleNumber * 100)} %
             </span>
           </Popover>
           <Button
