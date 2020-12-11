@@ -110,7 +110,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           // 有数据，去遍历有websocket的组件，并订阅
           if (canvas.socket != undefined) {
             //
-            updateComp(canvas.node.pens,data)
+            updateComp(canvas.data.pens,data)
           }
         }
       };
