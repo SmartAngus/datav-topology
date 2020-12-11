@@ -140,7 +140,15 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         switch (theChart) {
           case 'gauge':
             if (node.property.dataPointSelectedRows[0]?.id == r.id) {
-              node.data.echarts.option.series[0].data[0].value = r.value;
+              const cd = {
+                value:0,
+                name:node.property.chartTitle
+              }
+              cd.value=r.value;
+              node.data.echarts.option.series[0].data[0]=cd;
+              updateChartNode(node)
+            }else{
+              node.data.echarts.option.series[0].data.pop()
               updateChartNode(node)
             }
             break;

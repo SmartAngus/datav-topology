@@ -38,6 +38,9 @@ import DataBindModal from '../../../FilterDataPoint';
 import styles from './index.module.scss';
 import { getNodeType } from '../../../utils/Property2NodeProps';
 import * as _ from 'lodash';
+import {getTimelineOption} from "../../../config/chartMeasure";
+import {echartsObjs} from "../../../../topology/chart-diagram/src/echarts";
+import {reviver} from "../../../utils/serializing";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -288,15 +291,16 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           );
           data.node.property.dataPointParam.qtDataList.push({
             id: selectedRows[0].id,
-            type: selectedRows[0].dataType,
+            type: selectedRows[0].dataType||selectedRows[0].type,
           });
           setDataPointSelectedRows(selectedRows);
+          updateTimelineOption()
         }
       } else {
         data.node.property.dataPointSelectedRows = selectedRows;
         data.node.property.dataPointParam.qtDataList[0] = {
           id: selectedRows[0].id,
-          type: selectedRows[0].dataType,
+          type: selectedRows[0].dataType||selectedRows[0].type,
         };
         setDataPointSelectedRows(selectedRows);
       }
@@ -326,16 +330,31 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         data.node.property.dataPointSelectedRows.splice(itemRowIndex, 1);
         const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
         setDataPointSelectedRows(newRows);
+        updateTimelineOption()
       },
       onCancel() {},
     });
   };
+  const updateTimelineOption=()=>{
+    data.node.data.echarts.option = getTimelineOption(
+        data.node,
+        undefined,
+        undefined
+    );
+    // 更新图表数据
+    echartsObjs[data.node.id].chart.setOption(
+        JSON.parse(JSON.stringify(data.node.data.echarts.option), reviver)
+    );
+    echartsObjs[data.node.id].chart.resize();
+    data.node.elementRendered = true;
+    canvas.updateProps(true, [data.node]);
+  }
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
   const renderDataPointModal = useCallback(() => {
     return (
       <DataBindModal
         visible={true}
-        disableSource={['react']}
+        disableSource={[]}
         selectedRows={[]}
         onCancel={addDataPoint}
         onGetSelectRow={onDataPointBind}
@@ -372,11 +391,13 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 <Input suffix="H" />
               </Form.Item>
             </Col>
-            <Col span={16}>
-              <Form.Item name="rotate" label="旋转角度">
-                <Input suffix="°" />
-              </Form.Item>
-            </Col>
+            {data?.node.name=='echarts'?'':(
+                <Col span={14}>
+                  <Form.Item name="rotate" label="旋转">
+                    <Input suffix="°" />
+                  </Form.Item>
+                </Col>
+            )}
           </Row>
         </Form>
       </Panel>
@@ -692,7 +713,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             <Select
               placeholder="选择"
               onChange={handlePropertyDataMethodChange}
-              allowClear
+              allowClear={false}
+              disabled
             >
               <Option value="point">绑定数据点</Option>
               <Option value="restful">接口传入</Option>
@@ -710,7 +732,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           {(property?.dataPointSelectedRows || []).map((item, index) => {
             return (
               <Form.Item label={`数据点${index}`} key={index}>
-                <span>{item.dataName}</span>
+                <span>{item.dataName||item.name}</span>
                 <Button
                   type="link"
                   icon={<DeleteOutlined />}
@@ -1312,7 +1334,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
         <Panel header="样式" key="lineStyle">
           <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-            <Form.Item label="线性" wrapperCol={{ push: 10 }} name="smooth">
+            <Form.Item label="线型" wrapperCol={{ push: 10 }} name="smooth">
               <Radio.Group
                 options={[
                   { label: '曲线', value: true },
