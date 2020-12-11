@@ -61,6 +61,7 @@ export const Tools = [
           },
           name: 'biciTimer',
           elementRendered: false,
+          strokeStyle: "rgba(0,0,0,0)",
           property: {
             date: {
               show: true,
@@ -85,6 +86,7 @@ export const Tools = [
           },
           name: 'biciVarer',
           elementRendered: false,
+          strokeStyle: "rgba(0,0,0,0)",
           iconColor: '#ccc',
           property: {
             dataMethod: 'point',
