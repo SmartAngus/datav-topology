@@ -352,7 +352,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     return (
       <DataBindModal
         visible={true}
-        disableSource={['react']}
+        disableSource={[]}
         selectedRows={[]}
         onCancel={addDataPoint}
         onGetSelectRow={onDataPointBind}
@@ -628,7 +628,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           {(property?.dataPointSelectedRows || []).map((item, index) => {
             return (
               <Form.Item label={`数据点${index}`} key={index}>
-                <span>{item.dataName}</span>
+                <span>{item.dataName||item.name}</span>
                 <Button
                   type="link"
                   icon={<DeleteOutlined />}

@@ -814,7 +814,7 @@ export function getTimelineOption(
       if (charts.value[index] && charts.value[index].length > 9) {
         charts.value[index].shift();
       }
-      charts.names[index] = row.dataName;
+      charts.names[index] = row.dataName||row.name;
       charts.unit=row.unit;
       if (socketData && row.id == socketData.id) {
         charts.value[index].push(socketData.value);

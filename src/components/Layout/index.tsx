@@ -273,7 +273,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     }
     const option = getMeasureOption2({
       associationObject:
-        selected.node.property.dataPointSelectedRows[0]?.dataName,
+        selected.node.property.dataPointSelectedRows[0]?.dataName||selected.node.property.dataPointSelectedRows[0]?.name,
       value: 0,
       max: selected.node.property.dataMax,
       min: selected.node.property.dataMin,
