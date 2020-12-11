@@ -379,7 +379,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [x, y, width, height, rotate]);
+  }, [x, y, width, height, rotate,data?.node]);
 
   /**
    * 渲染填充样式
@@ -409,7 +409,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [fillStyle]);
+  }, [fillStyle,data?.node]);
 
   /**
    * 渲染边框样式
@@ -444,7 +444,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [strokeStyle, lineWidth]);
+  }, [strokeStyle, lineWidth,data?.node]);
 
   /**
    * 渲染字体的表单
@@ -478,7 +478,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [color, fontFamily, fontSize, text]);
+  }, [color, fontFamily, fontSize, text,data?.node]);
 
   /**
    * 渲染元素本身数据
@@ -499,7 +499,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Col>
       </Form>
     );
-  }, [id]);
+  }, [id,data?.node]);
   /**
    * 渲染时间组件的属性设置
    */
@@ -530,7 +530,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   <Select
                     placeholder="设置日期格式"
                     onChange={onSetBiciTimerDataFmt}
-                    allowClear
+                    allowClear={false}
                   >
                     <Option value="L">YYYY-MM-DD</Option>
                     <Option value="LL">YYYY/MM/DD</Option>
@@ -559,7 +559,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   <Select
                     placeholder="设置时间格式"
                     onChange={onSetBiciTimerDataFmt}
-                    allowClear
+                    allowClear={false}
                   >
                     <Option value="LTS">hh：mm：ss</Option>
                     <Option value="LT">hh:mm(24h)</Option>
@@ -571,7 +571,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
       </React.Fragment>
     );
-  }, [property]);
+  }, [property,data?.node]);
 
   /**
    * 渲染元素额外数据 {"qtDataList":[{"id":"6413f3a606754c31987ec584ed56d5b7","type":2}],"subscribe":true,"page":"动态曲线"}
@@ -648,7 +648,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         })}
       </Row>
     );
-  }, [alignObj]);
+  }, [alignObj,data?.node]);
 
   /**
    * 渲染数据卡片样式设置  property
@@ -988,7 +988,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [propertyForm, data.node]);
+  }, [propertyForm, data?.node]);
 
   /**
    * 渲染计量器样式
@@ -1073,7 +1073,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [property, data.node]);
+  }, [property, data?.node]);
 
   /**
    * 渲染仪表盘样式
@@ -1124,7 +1124,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         {renderMeter}
       </Fragment>
     );
-  }, [property, data.node]);
+  }, [property, data?.node]);
 
   /**
    * 渲染实时曲线图样式
@@ -1290,7 +1290,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
       </Fragment>
     );
-  }, [property, data.node]);
+  }, [property, data?.node]);
 
   return (
     <div className={styles.rightArea}>
