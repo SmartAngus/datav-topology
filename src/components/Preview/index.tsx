@@ -109,150 +109,162 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         if (canvas.data && canvas.data.pens.length > 0) {
           // 有数据，去遍历有websocket的组件，并订阅
           if (canvas.socket != undefined) {
-            (canvas.data.pens || []).map((node: Node) => {
-              if (node.name == 'echarts') {
-                // 如果是图表组件，下面就需要判断具体的是那种图表组件
-                const theChart = node.property.echartsType;
-                const r = JSON.parse(data.data);
-                switch (theChart) {
-                  case 'gauge':
-                    if (node.property.dataPointSelectedRows[0]?.id == r.id) {
-                      node.data.echarts.option.series[0].data[0].value = r.value;
-                      updateChartNode(node)
-                    }
-                    break;
-                  case 'chartMeasure':
-                    if (node.property.dataPointSelectedRows[0]?.id == r.id) {
-                      const option = getMeasureOption2({
-                        associationObject:node.property.dataPointSelectedRows[0]?.dataName,
-                        value:r.value
-                      })
-                      node.data.echarts.option=option;
-                      updateChartNode(node)
-                    }
-                    break;
-                  case 'timeLine':
-                    (node.property.dataPointSelectedRows||[]).map(row=>{
-                      if(row.id==r.id){
-                        node.data.echarts.option = getTimelineOption(node, r);
-                      }
-                      updateChartNode(node)
-                    })
-
-                    break;
-                  default:
-                }
-                //
-
-              } else if (
-                node.property?.dataPointParam?.qtDataList?.length > 0
-              ) {
-                // 非图表组件
-                const r = JSON.parse(data.data);
-                const nodeType = getNodeType(node);
-                if (node.name == 'biciVarer') {
-                  if (
-                    node.text != r.value &&
-                    node.property.dataPointParam.qtDataList[0].id == r.id
-                  ) {
-                    node.text = r.value;
-                    canvas.updateProps(false);
-                  }
-                } else if (node.name === 'biciCard') {
-                  if (node.property.dataPointParam.qtDataList[0].id == r.id) {
-                    const n = node.property.dataDot;
-                    const val = roundFun(parseFloat(r.value), n);
-                    node.children[0].text = val;
-                    const bottom = parseFloat(node.property.limit.bottom);
-                    const top = parseFloat(node.property.limit.top);
-                    const tempVal = parseFloat(val);
-                    if (top !== 0 && tempVal < bottom) {
-                      const showColor = node.property.bottomLimit.showBkColor
-                        ? node.property.bottomLimit.bkColor
-                        : node.property.normal.bkColor;
-                      // 小于下限
-                      setCardStyle(
-                        node,
-                        node.property.bottomLimit.fontFamily,
-                        node.property.bottomLimit.color,
-                        parseInt(node.property.bottomLimit.fontSize),
-                        showColor
-                      );
-                    } else if (top !== 0 && tempVal > top) {
-                      const showColor = node.property.bottomLimit.showBkColor
-                        ? node.property.topLimit.bkColor
-                        : node.property.normal.bkColor;
-                      // 高于上限
-                      setCardStyle(
-                        node,
-                        node.property.topLimit.fontFamily,
-                        node.property.topLimit.color,
-                        parseInt(node.property.topLimit.fontSize),
-                        showColor
-                      );
-                    } else {
-                      setCardStyle(
-                        node,
-                        node.property.normal.fontFamily,
-                        node.property.normal.color,
-                        parseInt(node.property.normal.fontSize),
-                        node.property.normal.bkColor
-                      );
-                    }
-                    canvas.updateProps(false);
-                  }
-                } else if (node.name === 'biciPilot') {
-                  if (
-                    node.property.val !== r.value &&
-                    node.property.dataPointParam.qtDataList[0].id == r.id
-                  ) {
-                    let flag = false;
-                    node.property.val = r.value;
-                    if (node.property.lightRange) {
-                      for (const item of node.property.lightRange) {
-                        if (node.property.stateType === 'single') {
-                          if (item.lightRangeVal == r.value) {
-                            node.strokeStyle = item.lightRangeColor;
-                            node.text =
-                              item?.lightRangeText || node.property.text;
-                            flag = true;
-                            break;
-                          }
-                        } else {
-                          if (
-                            item.lightRangeBottom <= r.value &&
-                            item.lightRangeTop > r.value
-                          ) {
-                            node.strokeStyle = item.lightRangeColor;
-                            node.text =
-                              item?.lightRangeText || node.property.text;
-                            flag = true;
-                            break;
-                          }
-                        }
-                      }
-                      if (!flag) {
-                        node.strokeStyle = node.property.color;
-                        node.text = node.property.text;
-                      }
-                    }
-                    canvas.updateProps(false);
-                  }
-                }
-              }
-            });
+            //
+            updateComp(canvas.node.pens,data)
           }
         }
       };
     }
-    (canvas.data.pens || []).map((node) => {
+    //canvas.data.pens
+    updateTimerCom(canvas.data.pens)
+  };
+  const updateTimerCom=(pens:any)=>{
+    (pens || []).map((node) => {
       if (node.name == 'biciTimer') {
         setInterval(() => {
           formatTimer(node, canvas);
         }, 1000);
+      }else if(node.name=="combine"){
+        updateTimerCom(node.children)
       }
     });
-  };
+  }
+  const updateComp=(pens:any,data:any)=>{
+    (pens || []).map((node: Node) => {
+      if(node.name=="combine"){
+        updateComp(node.children,data)
+      } else if (node.name == 'echarts') {
+        // 如果是图表组件，下面就需要判断具体的是那种图表组件
+        const theChart = node.property.echartsType;
+        const r = JSON.parse(data.data);
+        switch (theChart) {
+          case 'gauge':
+            if (node.property.dataPointSelectedRows[0]?.id == r.id) {
+              node.data.echarts.option.series[0].data[0].value = r.value;
+              updateChartNode(node)
+            }
+            break;
+          case 'chartMeasure':
+            if (node.property.dataPointSelectedRows[0]?.id == r.id) {
+              const option = getMeasureOption2({
+                associationObject:node.property.dataPointSelectedRows[0]?.dataName,
+                value:r.value
+              })
+              node.data.echarts.option=option;
+              updateChartNode(node)
+            }
+            break;
+          case 'timeLine':
+            (node.property.dataPointSelectedRows||[]).map(row=>{
+              if(row.id==r.id){
+                node.data.echarts.option = getTimelineOption(node, r);
+              }
+              updateChartNode(node)
+            })
+
+            break;
+          default:
+        }
+        //
+
+      } else if (
+          node.property?.dataPointParam?.qtDataList?.length > 0
+      ) {
+        // 非图表组件
+        const r = JSON.parse(data.data);
+        const nodeType = getNodeType(node);
+        if (node.name == 'biciVarer') {
+          if (
+              node.text != r.value &&
+              node.property.dataPointParam.qtDataList[0].id == r.id
+          ) {
+            node.text = r.value;
+            canvas.updateProps(false);
+          }
+        } else if (node.name === 'biciCard') {
+          if (node.property.dataPointParam.qtDataList[0].id == r.id) {
+            const n = node.property.dataDot;
+            const val = roundFun(parseFloat(r.value), n);
+            node.children[0].text = val;
+            const bottom = parseFloat(node.property.limit.bottom);
+            const top = parseFloat(node.property.limit.top);
+            const tempVal = parseFloat(val);
+            if (top !== 0 && tempVal < bottom) {
+              const showColor = node.property.bottomLimit.showBkColor
+                  ? node.property.bottomLimit.bkColor
+                  : node.property.normal.bkColor;
+              // 小于下限
+              setCardStyle(
+                  node,
+                  node.property.bottomLimit.fontFamily,
+                  node.property.bottomLimit.color,
+                  parseInt(node.property.bottomLimit.fontSize),
+                  showColor
+              );
+            } else if (top !== 0 && tempVal > top) {
+              const showColor = node.property.bottomLimit.showBkColor
+                  ? node.property.topLimit.bkColor
+                  : node.property.normal.bkColor;
+              // 高于上限
+              setCardStyle(
+                  node,
+                  node.property.topLimit.fontFamily,
+                  node.property.topLimit.color,
+                  parseInt(node.property.topLimit.fontSize),
+                  showColor
+              );
+            } else {
+              setCardStyle(
+                  node,
+                  node.property.normal.fontFamily,
+                  node.property.normal.color,
+                  parseInt(node.property.normal.fontSize),
+                  node.property.normal.bkColor
+              );
+            }
+            canvas.updateProps(false);
+          }
+        } else if (node.name === 'biciPilot') {
+          if (
+              node.property.val !== r.value &&
+              node.property.dataPointParam.qtDataList[0].id == r.id
+          ) {
+            let flag = false;
+            node.property.val = r.value;
+            if (node.property.lightRange) {
+              for (const item of node.property.lightRange) {
+                if (node.property.stateType === 'single') {
+                  if (item.lightRangeVal == r.value) {
+                    node.strokeStyle = item.lightRangeColor;
+                    node.text =
+                        item?.lightRangeText || node.property.text;
+                    flag = true;
+                    break;
+                  }
+                } else {
+                  if (
+                      item.lightRangeBottom <= r.value &&
+                      item.lightRangeTop > r.value
+                  ) {
+                    node.strokeStyle = item.lightRangeColor;
+                    node.text =
+                        item?.lightRangeText || node.property.text;
+                    flag = true;
+                    break;
+                  }
+                }
+              }
+              if (!flag) {
+                node.strokeStyle = node.property.color;
+                node.text = node.property.text;
+              }
+            }
+            canvas.updateProps(false);
+          }
+        }
+      }
+    });
+  }
 
 
   const updateChartNode=(node)=>{
