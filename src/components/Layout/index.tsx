@@ -38,7 +38,7 @@ import {
   getTimelineOption,
 } from '../config/chartMeasure';
 import * as _ from 'lodash';
-import moment from "moment";
+import moment from 'moment';
 
 const { confirm } = Modal;
 const { TabPane } = Tabs;
@@ -376,6 +376,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         lineWidth,
         text,
       } = value;
+      console.log(value);
       const rotate2 = rotate === '' ? 0 : rotate ? Number(rotate) : undefined;
       const fontSize2 =
         fontSize === '' ? 0 : fontSize ? Number(fontSize) : undefined;
@@ -437,18 +438,18 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           handlePilot(value);
           break;
         case 'biciTimer':
-          let y='';
-          let h='';
+          let y = '';
+          let h = '';
           let node = selected.node;
-          if(value['date.show']){
-            y=moment().format(value['date.format'])
+          if (value['date.show']) {
+            y = moment().format(value['date.format']);
           }
-          if(value['time.show']){
-            h=moment().format(value['time.format'])
+          if (value['time.show']) {
+            h = moment().format(value['time.format']);
           }
-          node.text=y+' '+h
-          if(node.text==' '){
-            node.text=moment().format("LLLL")
+          node.text = y + ' ' + h;
+          if (node.text == ' ') {
+            node.text = moment().format('LLLL');
           }
           canvas.updateProps(false);
           break;
