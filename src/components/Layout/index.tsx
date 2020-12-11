@@ -134,8 +134,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (props.editorData != undefined && typeof props.editorData == 'object') {
       props.editorData.locked = 0;
       canvas.open(props.editorData);
+
     }
-    console.log(props.editorData)
     if (props.editorData) {
       const w = props.editorData.width as number;
       const h = props.editorData.height as number;
@@ -145,16 +145,14 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       if (canvas.data.grid) {
         canvas.data.grid = true;
       }
+      setIsLoadCanvas(true);
       canvas.resize({ width: w, height: h });
       canvas.render();
+
+    }else{
+      setIsLoadCanvas(false);
     }
-    const timeLoaded = setTimeout(()=>{
-      setIsLoadCanvas(true);
-    },500)
     setShowHeader(true);
-    return ()=>{
-      clearTimeout(timeLoaded)
-    }
   }, [props.editorData]);
 
   useEffect(() => {
@@ -580,7 +578,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const onMessage = (event: string, data: any) => {
     const node = data;
-    // console.log("onMessage=",event)
     switch (event) {
       case 'dblclick':
         setIsSave(false);
@@ -596,6 +593,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         break;
       case 'addNode':
         setIsSave(false);
+        setIsLoadCanvas(true);
         setSelected({
           node: data,
           line: null,
@@ -626,6 +624,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         });
         break;
       case 'space': // 空白处
+        setIsLoadCanvas(true);
         setSelected({
           node: null,
           line: null,
