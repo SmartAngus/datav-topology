@@ -135,6 +135,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       props.editorData.locked = 0;
       canvas.open(props.editorData);
     }
+    console.log(props.editorData)
     if (props.editorData) {
       const w = props.editorData.width as number;
       const h = props.editorData.height as number;
@@ -146,9 +147,14 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       }
       canvas.resize({ width: w, height: h });
       canvas.render();
-      setIsLoadCanvas(true);
     }
+    const timeLoaded = setTimeout(()=>{
+      setIsLoadCanvas(true);
+    },500)
     setShowHeader(true);
+    return ()=>{
+      clearTimeout(timeLoaded)
+    }
   }, [props.editorData]);
 
   useEffect(() => {
