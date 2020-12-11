@@ -134,7 +134,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (props.editorData != undefined && typeof props.editorData == 'object') {
       props.editorData.locked = 0;
       canvas.open(props.editorData);
-
     }
     if (props.editorData) {
       const w = props.editorData.width as number;
@@ -148,8 +147,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       setIsLoadCanvas(true);
       canvas.resize({ width: w, height: h });
       canvas.render();
-
-    }else{
+    } else {
       setIsLoadCanvas(false);
     }
     setShowHeader(true);
@@ -365,7 +363,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const onHandleFormValueChange = useCallback(
     (value) => {
       setIsSave(false);
-      canvas.cache();
       const {
         x,
         y,
@@ -380,13 +377,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         lineWidth,
         text,
       } = value;
-      console.log(value);
-      const rotate2 = rotate === '' ? 0 : rotate ? Number(rotate) : undefined;
-      const fontSize2 =
-        fontSize === '' ? 0 : fontSize ? Number(fontSize) : undefined;
-      const lineWidth2 =
-        lineWidth === '' ? 0 : lineWidth ? Number(lineWidth) : undefined;
-
       const changedProps = {
         rect: {
           x: x ? Number(x) : undefined,
@@ -396,12 +386,12 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         },
         font: {
           color,
-          fontSize: fontSize2,
+          fontSize: isNaN(Number(fontSize)) ? undefined : Number(fontSize),
           fontFamily,
         },
-        rotate: rotate2,
+        rotate: isNaN(Number(rotate)) ? undefined : Number(rotate),
         strokeStyle,
-        lineWidth: lineWidth2,
+        lineWidth: isNaN(Number(lineWidth)) ? undefined : Number(lineWidth),
         fillStyle,
         text,
       };
@@ -491,9 +481,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const onEventValueChange = useCallback(
     (value) => {
       setIsSave(false);
-      canvas.cache();
       selected.node.events = value;
-      canvas.updateProps(selected.node);
+      canvas.updateProps(true, selected.node);
     },
     [selected]
   );
@@ -530,8 +519,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const onHandleLineFormValueChange = useCallback(
     (value) => {
-      setIsSave(false);
-      canvas.cache();
       const {
         dash,
         lineWidth,
@@ -565,7 +552,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }
         }
       }
-      canvas.updateProps(selected.line);
+      canvas.updateProps(true, selected.line);
       setIsSave(false);
     },
     [selected]
