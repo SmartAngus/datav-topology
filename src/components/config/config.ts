@@ -554,6 +554,7 @@ export const Tools = [
           },
           name: 'echarts',
           strokeStyle: 'rgba(0,0,0,0)',
+          hideRotateCP:true,
           data: {
             echarts: {
               option: getTimelineOption(),
@@ -754,6 +755,7 @@ export const Tools = [
             height: 300,
           },
           strokeStyle: 'rgba(0,0,0,0)',
+          hideRotateCP:true,
           lineWidth: 0,
           name: 'echarts',
           paddingTopNum: 0,
@@ -828,6 +830,7 @@ export const Tools = [
           name: 'echarts',
           strokeStyle: 'rgba(0,0,0,0)',
           elementRendered: false,
+          hideRotateCP:true,
           hideInput: true,
           data: {
             echarts: {

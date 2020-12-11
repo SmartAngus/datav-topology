@@ -930,8 +930,10 @@ export function getTimelineOption(
     },
   });
   let showReference;
+  let showReferenceColor="#1b2735";
   if (node && node.property.lineReferenceChecked == true) {
     showReference = true;
+    showReferenceColor=node.property.lineReferenceColor;
   } else {
     showReference = false;
   }
@@ -959,7 +961,7 @@ export function getTimelineOption(
         color: chartTitleColor,
       },
     },
-    backgroundColor: '#1b2735',
+    // backgroundColor: '#1b2735',
     tooltip: {
       trigger: 'axis',
     },
@@ -1003,7 +1005,7 @@ export function getTimelineOption(
       splitLine: {
         show: showReference,
         lineStyle: {
-          color: 'rgb(23,255,243,0.3)',
+          color: showReferenceColor,
         },
       },
       axisLine: {
