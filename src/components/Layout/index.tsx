@@ -376,6 +376,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         strokeStyle,
         lineWidth,
         text,
+        textAlign,
       } = value;
       const changedProps = {
         rect: {
@@ -386,8 +387,12 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         },
         font: {
           color,
+          textAlign,
           fontSize: isNaN(Number(fontSize)) ? undefined : Number(fontSize),
-          fontFamily,
+          fontFamily:
+            fontFamily?.length > 0
+              ? fontFamily.toString()
+              : selected.node.font.fontFamily,
         },
         rotate: isNaN(Number(rotate)) ? undefined : Number(rotate),
         strokeStyle,

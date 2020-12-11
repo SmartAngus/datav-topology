@@ -173,6 +173,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   const gridOnChange = (e: CheckboxChangeEvent) => {
     // canvas.showGrid(e.target.checked);
     data.data.grid = e.target.checked;
+    data.data.gridSize = form.getFieldValue('gridSize');
     canvas.render();
     props.setIsSave(false);
   };
@@ -458,7 +459,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
 
   return (
     <div>
-      <Tabs defaultActiveKey="1" tabBarStyle={{padding:"0 20px"}}>
+      <Tabs defaultActiveKey="1" tabBarStyle={{ padding: '0 20px' }}>
         <TabPane tab="图文设置" key="1">
           {renderDefultOptions}
           {/* <ul className={styles.bottomTip}>

@@ -85,7 +85,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const { x, y, width, height } = data?.node?.rect || {};
   const { rotate, lineWidth, strokeStyle, text, id, name, fillStyle } =
     data?.node || {};
-  const { color, fontSize, fontFamily } = data?.node?.font || {};
+  const { color, fontSize, fontFamily, textAlign } = data?.node?.font || {};
   const { property } = data?.node; // 用户自定义数据片段
   const [dataPointSelectedRows, setDataPointSelectedRows] = useState(
     property?.dataPointSelectedRows || []
@@ -103,8 +103,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       strokeStyle,
       color,
       fontSize: parseInt(fontSize),
-      fontFamily,
+      fontFamily: fontFamily.split(','),
       text,
+      textAlign,
       fillStyle: fillStyle,
       showFillStyle: fillStyle ? true : false,
       showBoardColor: strokeStyle ? true : false,
@@ -123,6 +124,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     fontFamily,
     text,
     fillStyle,
+    textAlign,
     property,
   ]);
 
@@ -379,7 +381,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [x, y, width, height, rotate,data?.node]);
+  }, [x, y, width, height, rotate, data?.node]);
 
   /**
    * 渲染填充样式
@@ -409,7 +411,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [fillStyle,data?.node]);
+  }, [fillStyle, data?.node]);
 
   /**
    * 渲染边框样式
@@ -444,7 +446,28 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [strokeStyle, lineWidth,data?.node]);
+  }, [strokeStyle, lineWidth, data?.node]);
+
+  // 字体的斜体和加粗功能
+  const fontStyleChange = (val: string) => {
+    if (val === 'fontStyle') {
+      // 斜体
+      if (data.node.font.fontStyle === 'normal') {
+        data.node.font.fontStyle = 'italic';
+      } else {
+        data.node.font.fontStyle = 'normal';
+      }
+    } else {
+      // 加粗
+      if (data.node.font.fontWeight === 'normal') {
+        data.node.font.fontWeight = 'bold';
+      } else {
+        data.node.font.fontWeight = 'normal';
+      }
+    }
+    setIsSave(false);
+    canvas.updateProps(true, [data.node]);
+  };
 
   /**
    * 渲染字体的表单
@@ -460,12 +483,93 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Col>
           <Col span={24}>
             <Form.Item name="fontFamily" label="字体">
-              <Input />
+              <Select mode="multiple" allowClear>
+                <Option
+                  value='"Microsoft YaHei"'
+                  style={{ fontFamily: '"Microsoft YaHei"' }}
+                >
+                  微软雅黑
+                </Option>
+                <Option value="SimSun" style={{ fontFamily: 'SimSun' }}>
+                  宋体
+                </Option>
+                <Option value="KaiTi" style={{ fontFamily: 'KaiTi' }}>
+                  楷体
+                </Option>
+                <Option value="SimHei" style={{ fontFamily: 'SimHei' }}>
+                  黑体
+                </Option>
+                <Option
+                  value='"Hiragino Sans GB"'
+                  style={{ fontFamily: '"Hiragino Sans GB"' }}
+                >
+                  冬青黑体
+                </Option>
+                <Option value="Arial" style={{ fontFamily: 'Arial' }}>
+                  Arial
+                </Option>
+                <Option value="Tahoma" style={{ fontFamily: 'Tahoma' }}>
+                  Tahoma
+                </Option>
+                <Option value="Helvetica" style={{ fontFamily: 'Helvetica' }}>
+                  Helvetica
+                </Option>
+              </Select>
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item name="fontSize" label="大小">
               <InputNumber min={0} />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item wrapperCol={{ offset: 4 }}>
+              <Button.Group
+                style={{ width: '100%', justifyContent: 'flex-end' }}
+              >
+                <Button
+                  size="small"
+                  style={{ width: '33%' }}
+                  icon={<CustomIcon type="iconzu" />}
+                  onClick={() => fontStyleChange('fontStyle')}
+                />
+                <Button
+                  size="small"
+                  style={{ width: '33%' }}
+                  icon={<CustomIcon type="iconjiacu" />}
+                  onClick={() => fontStyleChange('fontWeight')}
+                />
+              </Button.Group>
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item name="textAlign" wrapperCol={{ offset: 4 }}>
+              <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
+                <Radio.Button
+                  value="left"
+                  style={{ width: '25%', textAlign: 'center' }}
+                >
+                  <CustomIcon type="iconleft" />
+                </Radio.Button>
+                <Radio.Button
+                  value="center"
+                  style={{ width: '25%', textAlign: 'center' }}
+                >
+                  <CustomIcon type="iconjuzhongduiqi" />
+                </Radio.Button>
+                <Radio.Button
+                  value="right"
+                  style={{ width: '25%', textAlign: 'center' }}
+                >
+                  <CustomIcon type="iconyouduiqi2" />
+                </Radio.Button>
+                <Radio.Button
+                  value="justify"
+                  style={{ width: '25%', textAlign: 'center' }}
+                >
+                  <CustomIcon type="iconjustify" />
+                </Radio.Button>
+              </Radio.Group>
             </Form.Item>
           </Col>
           {data.node.name !== 'biciPilot' && (
@@ -478,7 +582,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [color, fontFamily, fontSize, text,data?.node]);
+  }, [color, fontFamily, fontSize, text, data?.node]);
 
   /**
    * 渲染元素本身数据
@@ -499,7 +603,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Col>
       </Form>
     );
-  }, [id,data?.node]);
+  }, [id, data?.node]);
   /**
    * 渲染时间组件的属性设置
    */
@@ -571,7 +675,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
       </React.Fragment>
     );
-  }, [property,data?.node]);
+  }, [property, data?.node]);
 
   /**
    * 渲染元素额外数据 {"qtDataList":[{"id":"6413f3a606754c31987ec584ed56d5b7","type":2}],"subscribe":true,"page":"动态曲线"}
@@ -648,7 +752,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         })}
       </Row>
     );
-  }, [alignObj,data?.node]);
+  }, [alignObj, data?.node]);
 
   /**
    * 渲染数据卡片样式设置  property

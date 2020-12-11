@@ -16,6 +16,9 @@ export const Tools = [
             width: 200,
             height: 50,
           },
+          font: {
+            fontFamily: '"Microsoft YaHei"',
+          },
           paddingLeft: 10,
           paddingRight: 10,
           paddingTop: 10,
@@ -33,6 +36,9 @@ export const Tools = [
             width: 100,
             height: 100,
           },
+          font: {
+            fontFamily: '"Microsoft YaHei"',
+          },
           name: 'circle',
           textMaxLine: 1,
         },
@@ -45,6 +51,9 @@ export const Tools = [
           rect: {
             width: 160,
             height: 30,
+          },
+          font: {
+            fontFamily: '"Microsoft YaHei"',
           },
           name: 'text',
         },
@@ -59,9 +68,12 @@ export const Tools = [
             width: 200,
             height: 45,
           },
+          font: {
+            fontFamily: 'Arial',
+          },
           name: 'biciTimer',
           elementRendered: false,
-          strokeStyle: "rgba(0,0,0,0)",
+          strokeStyle: 'rgba(0,0,0,0)',
           property: {
             date: {
               show: true,
@@ -84,9 +96,12 @@ export const Tools = [
             width: 100,
             height: 45,
           },
+          font: {
+            fontFamily: 'Arial',
+          },
           name: 'biciVarer',
           elementRendered: false,
-          strokeStyle: "rgba(0,0,0,0)",
+          strokeStyle: 'rgba(0,0,0,0)',
           iconColor: '#ccc',
           property: {
             dataMethod: 'point',
@@ -111,7 +126,7 @@ export const Tools = [
           },
           paddingTop: 30,
           font: {
-            fontFamily: 'Arial',
+            fontFamily: '"Microsoft YaHei"',
             color: '#fff',
             fontSize: 14,
             fontWeight: 400,
@@ -220,6 +235,7 @@ export const Tools = [
             height: 30,
           },
           font: {
+            fontFamily: '"Microsoft YaHei"',
             textAlign: 'left',
           },
           hideAnchor: true,
@@ -582,17 +598,17 @@ export const Tools = [
               qtDataList: [],
               subscribe: true,
             },
-            smooth:true,
-            dataTopSource:'dataPoint',// dataPoint数据点或者custom=自定义
-            dataTopChecked:false,
-            dataTop:100,
-            dataBottom:0,
-            chartTitleChecked:true,
-            chartTitle:"实时曲线",
-            chartTitleColor:"#c0c0c0",
-            lineReferenceChecked:false,// splitLine
-            lineReferenceColor:'#ccc',
-            lineColors:[],
+            smooth: true,
+            dataTopSource: 'dataPoint', // dataPoint数据点或者custom=自定义
+            dataTopChecked: false,
+            dataTop: 100,
+            dataBottom: 0,
+            chartTitleChecked: true,
+            chartTitle: '实时曲线',
+            chartTitleColor: '#c0c0c0',
+            lineReferenceChecked: false, // splitLine
+            lineReferenceColor: '#ccc',
+            lineColors: [],
           },
         },
       },
@@ -808,10 +824,10 @@ export const Tools = [
             ],
             dataMax: 100,
             dataMin: 0,
-            chartTitle: "仪表盘",
+            chartTitle: '仪表盘',
             chartTitleChecked: false,
-            chartUnitChecked:true,
-            chartUnit:"C"
+            chartUnitChecked: true,
+            chartUnit: 'C',
           },
         },
       },
