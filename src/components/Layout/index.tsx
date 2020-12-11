@@ -593,7 +593,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         break;
       case 'addNode':
         setIsSave(false);
-        setIsLoadCanvas(true);
         setSelected({
           node: data,
           line: null,
@@ -601,6 +600,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           nodes: null,
           locked: data.locked,
         });
+        setIsLoadCanvas(true);
         break;
       case 'delete':
         setIsSave(false);
