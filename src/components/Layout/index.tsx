@@ -6,7 +6,6 @@ import React, {
   CSSProperties,
   useRef,
   useImperativeHandle,
-  Suspense,
 } from 'react';
 import { Topology, Options, Node } from '../../topology/core';
 import {
@@ -30,7 +29,11 @@ import PicComponent from './LeftAreaComponent/PicComponent';
 import styles from './index.module.scss';
 import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines';
-import { calcCanvas, eraseOverlapIntervals } from '../utils/cacl';
+import {
+  calcCanvas,
+  eraseOverlapIntervals,
+  calcRepeatIndex,
+} from '../utils/cacl';
 import ResizePanel from '../common/resizeSidebar';
 import {
   getGaugeOption,
@@ -273,7 +276,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     }
     const option = getMeasureOption2({
       associationObject:
-        selected.node.property.dataPointSelectedRows[0]?.dataName||selected.node.property.dataPointSelectedRows[0]?.name,
+        selected.node.property.dataPointSelectedRows[0]?.dataName ||
+        selected.node.property.dataPointSelectedRows[0]?.name,
       value: 0,
       max: selected.node.property.dataMax,
       min: selected.node.property.dataMin,
@@ -333,9 +337,13 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       message.config({
         getContainer: () => document.querySelector('#editLayout'),
       });
+      if (lightRange.includes(undefined)) {
+        return;
+      }
       if (stateType === 'single') {
         const vals = lightRange.map((item) => item?.lightRangeVal);
         const tmpSet = new Set(vals);
+        // console.log('重复索引', calcRepeatIndex(vals));
         if (tmpSet.size !== vals.length) {
           message.error('单点值不能重复');
           selected.node.property.rangeIsOk = false;
@@ -850,6 +858,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
                 top: canvasSizeInfo.top,
               }}
             >
+              <Tooltip title={props.boardData.code}>
+                <span>{props.boardData.code}</span>
+              </Tooltip>
+              <span style={{ margin: '0 5px' }}>/</span>
               <Tooltip title={props.boardData.name}>
                 <span>{props.boardData.name}</span>
               </Tooltip>

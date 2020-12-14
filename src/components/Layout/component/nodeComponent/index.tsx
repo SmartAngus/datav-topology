@@ -38,9 +38,9 @@ import DataBindModal from '../../../FilterDataPoint';
 import styles from './index.module.scss';
 import { getNodeType } from '../../../utils/Property2NodeProps';
 import * as _ from 'lodash';
-import {getTimelineOption} from "../../../config/chartMeasure";
-import {echartsObjs} from "../../../../topology/chart-diagram/src/echarts";
-import {reviver} from "../../../utils/serializing";
+import { getTimelineOption } from '../../../config/chartMeasure';
+import { echartsObjs } from '../../../../topology/chart-diagram/src/echarts';
+import { reviver } from '../../../utils/serializing';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -66,6 +66,8 @@ const fontStyleNodeList = [
 ];
 // 边框样式
 const boardStyleNodeList = ['circle', 'rectangle', 'biciVarer', 'combine'];
+// 不展示旋转
+const disabledRotateList = ['circle', 'biciPilot', 'echarts', 'biciCard'];
 interface ICanvasProps extends FormProps {
   data?: any;
   onFormValueChange?: any;
@@ -291,16 +293,16 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           );
           data.node.property.dataPointParam.qtDataList.push({
             id: selectedRows[0].id,
-            type: selectedRows[0].dataType||selectedRows[0].type,
+            type: selectedRows[0].dataType || selectedRows[0].type,
           });
           setDataPointSelectedRows(selectedRows);
-          updateTimelineOption()
+          updateTimelineOption();
         }
       } else {
         data.node.property.dataPointSelectedRows = selectedRows;
         data.node.property.dataPointParam.qtDataList[0] = {
           id: selectedRows[0].id,
-          type: selectedRows[0].dataType||selectedRows[0].type,
+          type: selectedRows[0].dataType || selectedRows[0].type,
         };
         setDataPointSelectedRows(selectedRows);
       }
@@ -401,12 +403,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 <Input suffix="H" />
               </Form.Item>
             </Col>
-            {data?.node.name=='echarts'?'':(
-                <Col span={14}>
-                  <Form.Item name="rotate" label="旋转">
-                    <Input suffix="°" />
-                  </Form.Item>
-                </Col>
+            {!disabledRotateList.includes(data?.node.name) && (
+              <Col span={14}>
+                <Form.Item name="rotate" label="旋转">
+                  <Input suffix="°" />
+                </Form.Item>
+              </Col>
             )}
           </Row>
         </Form>
@@ -742,7 +744,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           {(property?.dataPointSelectedRows || []).map((item, index) => {
             return (
               <Form.Item label={`数据点${index}`} key={index}>
-                <span>{item.dataName||item.name}</span>
+                <span>{item.dataName || item.name}</span>
                 <Button
                   type="link"
                   icon={<DeleteOutlined />}
@@ -928,7 +930,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   // 改变指示灯大小
   const changePolitSize = (size: number) => {
     let { node } = data;
-    node.text = propertyForm.getFieldValue('text');
+    if (propertyForm.getFieldValue('showText')) {
+      node.text = propertyForm.getFieldValue('text');
+    }
     node.rect.width = size * 2;
     node.rect.height = size * 2;
     form.setFieldsValue({ width: size * 2, height: size * 2 });
@@ -1023,6 +1027,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 { label: '单点值', value: 'single' },
                 { label: '范围值', value: 'range' },
               ]}
+              onChange={() => propertyForm.setFieldsValue({ lightRange: [] })}
               optionType="button"
               buttonStyle="solid"
             />
@@ -1105,8 +1110,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     </Form.Item>
                   </Space>
                 ))}
-                {form.getFieldValue('lightRange')?.length <= 10 ||
-                !form.getFieldValue('lightRange') ? (
+                {fields.length < 10 && (
                   <Form.Item>
                     <Button
                       type="dashed"
@@ -1117,7 +1121,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       添加
                     </Button>
                   </Form.Item>
-                ) : null}
+                )}
               </Fragment>
             )}
           </Form.List>

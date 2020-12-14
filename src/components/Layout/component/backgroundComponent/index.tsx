@@ -72,8 +72,13 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     const w = data.canvas.width;
     const h = data.canvas.height;
     const bgColor = data.data.bkColor;
-    const bkImage = data.data.bkImage;
-
+    // const bkImage = data.data.bkImage;
+    let isUploadBgImg = false;
+    if (data.data.bkImage) {
+      isUploadBgImg = !props.preInstallBgImages
+        .map((item) => item.img)
+        .includes(data.data.bkImage);
+    }
     const sizeValText = Object.values(panelSizeObj).flat().includes(`${w}*${h}`)
       ? `预设·${w}*${h}`
       : Object.values(panelSizeObj).flat().includes(`${h}*${w}`)
@@ -85,7 +90,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
       h,
       bgColor,
       bgColorCheck: bgColor ? true : false,
-      bgImgCheck: bkImage ? true : false,
+      bgImgCheck: isUploadBgImg,
       gridCheck: data.data.grid ? data.data.grid : false,
       gridSize: data.data.gridSize,
       gridColor: data.data.gridColor,
@@ -142,18 +147,25 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
     if (file.status === 'done') {
       const url = file.response.data[0];
       selectedBgImg(url);
+      setBkUrl(url);
+      form.setFieldsValue({ bgImgCheck: true });
     }
   };
 
   // 设置背景图片
   const selectedBgImg = (url: string) => {
-    // 修改背景图片前，需要先canvas.clearBkImg清空旧图片
-    canvas.clearBkImg();
-    data.data['bkImage'] = url;
-    setBkUrl(url);
+    if (data.data['bkImage'] && data.data['bkImage'] === url) {
+      // 再次点击，取消图片
+      canvas.clearBkImg();
+      data.data['bkImage'] = undefined;
+      onChangeBkImage && onChangeBkImage('');
+    } else {
+      // 修改背景图片前，需要先canvas.clearBkImg清空旧图片
+      canvas.clearBkImg();
+      data.data['bkImage'] = url;
+      onChangeBkImage && onChangeBkImage(url);
+    }
     setPopoverVisible({ ...popoverVisible, bgSelect: false });
-    onChangeBkImage && onChangeBkImage(url);
-    form.setFieldsValue({ bgImgCheck: true });
     canvas.render();
     props.setIsSave(false);
   };
@@ -263,6 +275,8 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
           <Row
             key={item.key}
             style={{
+              position: 'relative',
+              cursor: 'pointer',
               border: '1px solid #096DD9',
               boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.06)',
             }}
@@ -273,6 +287,10 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
               alt={`预设背景${item}`}
               width={260}
               height={120}
+            />
+            <Checkbox
+              style={{ position: 'absolute', top: 0, right: '5px' }}
+              checked={item.img === data.data.bkImage}
             />
           </Row>
         );
