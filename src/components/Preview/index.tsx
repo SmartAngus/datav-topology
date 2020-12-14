@@ -2,14 +2,15 @@ import React, { useEffect } from 'react';
 import { Node, Topology } from '../../topology/core';
 import { roundFun } from '../utils/cacl';
 import { formatTimer, getNodeType } from '../utils/Property2NodeProps';
-import {getMeasureOption2, getTimelineOption} from "../config/chartMeasure";
+import { getMeasureOption2, getTimelineOption } from '../config/chartMeasure';
 import echarts from 'echarts/lib/echarts';
 
 import {
-  echartsObjs, register as registerChart,
+  echartsObjs,
+  register as registerChart,
 } from '../../topology/chart-diagram';
-import {replacer, reviver} from "../utils/serializing";
-import {register as registerBiciComp} from "../../topology/bici-diagram";
+import { replacer, reviver } from '../utils/serializing';
+import { register as registerBiciComp } from '../../topology/bici-diagram';
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -29,7 +30,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       rotateCursor: '/rotate.cur',
       locked: 1,
     };
-    canvasRegister()
+    canvasRegister();
     canvas = new Topology('topology-canvas-preview', canvasOptions);
 
     // 渲染页面数据
@@ -100,7 +101,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 );
               }
             });
-           // canvas.activeLayer.setPens(activePens);
+            // canvas.activeLayer.setPens(activePens);
           }
         }
       };
@@ -110,29 +111,29 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           // 有数据，去遍历有websocket的组件，并订阅
           if (canvas.socket != undefined) {
             //
-            updateComp(canvas.data.pens,data)
+            updateComp(canvas.data.pens, data);
           }
         }
       };
     }
     //canvas.data.pens
-    updateTimerCom(canvas.data.pens)
+    updateTimerCom(canvas.data.pens);
   };
-  const updateTimerCom=(pens:any)=>{
+  const updateTimerCom = (pens: any) => {
     (pens || []).map((node) => {
       if (node.name == 'biciTimer') {
         setInterval(() => {
           formatTimer(node, canvas);
         }, 1000);
-      }else if(node.name=="combine"){
-        updateTimerCom(node.children)
+      } else if (node.name == 'combine') {
+        updateTimerCom(node.children);
       }
     });
-  }
-  const updateComp=(pens:any,data:any)=>{
+  };
+  const updateComp = (pens: any, data: any) => {
     (pens || []).map((node: Node) => {
-      if(node.name=="combine"){
-        updateComp(node.children,data)
+      if (node.name == 'combine') {
+        updateComp(node.children, data);
       } else if (node.name == 'echarts') {
         // 如果是图表组件，下面就需要判断具体的是那种图表组件
         const theChart = node.property.echartsType;
@@ -141,50 +142,48 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           case 'gauge':
             if (node.property.dataPointSelectedRows[0]?.id == r.id) {
               const cd = {
-                value:0,
-                name:node.property.chartTitle
-              }
-              cd.value=r.value;
-              node.data.echarts.option.series[0].data[0]=cd;
-              updateChartNode(node)
-            }else{
-              node.data.echarts.option.series[0].data.pop()
-              updateChartNode(node)
+                value: 0,
+                name: node.property.chartTitle,
+              };
+              cd.value = r.value;
+              node.data.echarts.option.series[0].data[0] = cd;
+              updateChartNode(node);
+            } else {
+              node.data.echarts.option.series[0].data.pop();
+              updateChartNode(node);
             }
             break;
           case 'chartMeasure':
             if (node.property.dataPointSelectedRows[0]?.id == r.id) {
               const option = getMeasureOption2({
-                associationObject:node.property.dataPointSelectedRows[0]?.dataName,
-                value:r.value
-              })
-              node.data.echarts.option=option;
-              updateChartNode(node)
+                associationObject:
+                  node.property.dataPointSelectedRows[0]?.dataName,
+                value: r.value,
+              });
+              node.data.echarts.option = option;
+              updateChartNode(node);
             }
             break;
           case 'timeLine':
-            (node.property.dataPointSelectedRows||[]).map(row=>{
-              if(row.id==r.id){
+            (node.property.dataPointSelectedRows || []).map((row) => {
+              if (row.id == r.id) {
                 node.data.echarts.option = getTimelineOption(node, r);
               }
-              updateChartNode(node)
-            })
+              updateChartNode(node);
+            });
 
             break;
           default:
         }
         //
-
-      } else if (
-          node.property?.dataPointParam?.qtDataList?.length > 0
-      ) {
+      } else if (node.property?.dataPointParam?.qtDataList?.length > 0) {
         // 非图表组件
         const r = JSON.parse(data.data);
         const nodeType = getNodeType(node);
         if (node.name == 'biciVarer') {
           if (
-              node.text != r.value &&
-              node.property.dataPointParam.qtDataList[0].id == r.id
+            node.text != r.value &&
+            node.property.dataPointParam.qtDataList[0].id == r.id
           ) {
             node.text = r.value;
             canvas.updateProps(false);
@@ -199,43 +198,43 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             const tempVal = parseFloat(val);
             if (top !== 0 && tempVal < bottom) {
               const showColor = node.property.bottomLimit.showBkColor
-                  ? node.property.bottomLimit.bkColor
-                  : node.property.normal.bkColor;
+                ? node.property.bottomLimit.bkColor
+                : node.property.normal.bkColor;
               // 小于下限
               setCardStyle(
-                  node,
-                  node.property.bottomLimit.fontFamily,
-                  node.property.bottomLimit.color,
-                  parseInt(node.property.bottomLimit.fontSize),
-                  showColor
+                node,
+                node.property.bottomLimit.fontFamily,
+                node.property.bottomLimit.color,
+                parseInt(node.property.bottomLimit.fontSize),
+                showColor
               );
             } else if (top !== 0 && tempVal > top) {
               const showColor = node.property.bottomLimit.showBkColor
-                  ? node.property.topLimit.bkColor
-                  : node.property.normal.bkColor;
+                ? node.property.topLimit.bkColor
+                : node.property.normal.bkColor;
               // 高于上限
               setCardStyle(
-                  node,
-                  node.property.topLimit.fontFamily,
-                  node.property.topLimit.color,
-                  parseInt(node.property.topLimit.fontSize),
-                  showColor
+                node,
+                node.property.topLimit.fontFamily,
+                node.property.topLimit.color,
+                parseInt(node.property.topLimit.fontSize),
+                showColor
               );
             } else {
               setCardStyle(
-                  node,
-                  node.property.normal.fontFamily,
-                  node.property.normal.color,
-                  parseInt(node.property.normal.fontSize),
-                  node.property.normal.bkColor
+                node,
+                node.property.normal.fontFamily,
+                node.property.normal.color,
+                parseInt(node.property.normal.fontSize),
+                node.property.normal.bkColor
               );
             }
             canvas.updateProps(false);
           }
         } else if (node.name === 'biciPilot') {
           if (
-              node.property.val !== r.value &&
-              node.property.dataPointParam.qtDataList[0].id == r.id
+            node.property.val !== r.value &&
+            node.property.dataPointParam.qtDataList[0].id == r.id
           ) {
             let flag = false;
             node.property.val = r.value;
@@ -244,19 +243,21 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 if (node.property.stateType === 'single') {
                   if (item.lightRangeVal == r.value) {
                     node.strokeStyle = item.lightRangeColor;
-                    node.text =
-                        item?.lightRangeText || node.property.text;
+                    if (node.property.showText) {
+                      node.text = item?.lightRangeText || node.property.text;
+                    }
                     flag = true;
                     break;
                   }
                 } else {
                   if (
-                      item.lightRangeBottom <= r.value &&
-                      item.lightRangeTop > r.value
+                    item.lightRangeBottom <= r.value &&
+                    item.lightRangeTop > r.value
                   ) {
                     node.strokeStyle = item.lightRangeColor;
-                    node.text =
-                        item?.lightRangeText || node.property.text;
+                    if (node.property.showText) {
+                      node.text = item?.lightRangeText || node.property.text;
+                    }
                     flag = true;
                     break;
                   }
@@ -264,7 +265,9 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
               }
               if (!flag) {
                 node.strokeStyle = node.property.color;
-                node.text = node.property.text;
+                if (node.property.showText) {
+                  node.text = node.property.text;
+                }
               }
             }
             canvas.updateProps(false);
@@ -272,21 +275,19 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         }
       }
     });
-  }
+  };
 
-
-  const updateChartNode=(node)=>{
+  const updateChartNode = (node) => {
     // 更新图表数据
     echartsObjs[node.id].chart.setOption(
-        JSON.parse(JSON.stringify(node.data.echarts.option,replacer), reviver)
+      JSON.parse(JSON.stringify(node.data.echarts.option, replacer), reviver)
     );
     echartsObjs[node.id].chart.resize();
     node.elementRendered = true;
-  }
+  };
   /**
    * 自动适应窗口大小
    */
-
 
   const onHandleFit = () => {
     const rect = canvas.getRect();

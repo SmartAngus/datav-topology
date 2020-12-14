@@ -32,6 +32,7 @@ export const Tools = [
         icon: 'iconyuanxing',
         data: {
           text: '',
+          hideRotateCP: true,
           rect: {
             width: 100,
             height: 100,
@@ -120,6 +121,7 @@ export const Tools = [
         data: {
           text: '数据卡片',
           hideInput: true,
+          hideRotateCP: true,
           rect: {
             width: 278,
             height: 128,
@@ -140,6 +142,7 @@ export const Tools = [
               name: 'text',
               hideInput: true,
               hideAnchor: true,
+              hideRotateCP: true,
               paddingLeft: 10,
               paddingRight: 10,
               paddingTop: '50%',
@@ -164,6 +167,7 @@ export const Tools = [
               name: 'text',
               hideInput: true,
               hideAnchor: true,
+              hideRotateCP: true,
               paddingLeft: 10,
               paddingRight: 10,
               paddingTop: '50%',
@@ -239,6 +243,7 @@ export const Tools = [
             textAlign: 'left',
           },
           hideAnchor: true,
+          hideRotateCP: true,
           name: 'biciPilot',
           property: {
             val: 0,
@@ -570,7 +575,7 @@ export const Tools = [
           },
           name: 'echarts',
           strokeStyle: 'rgba(0,0,0,0)',
-          hideRotateCP:true,
+          hideRotateCP: true,
           data: {
             echarts: {
               option: getTimelineOption(),
@@ -771,7 +776,7 @@ export const Tools = [
             height: 300,
           },
           strokeStyle: 'rgba(0,0,0,0)',
-          hideRotateCP:true,
+          hideRotateCP: true,
           lineWidth: 0,
           name: 'echarts',
           paddingTopNum: 0,
@@ -846,7 +851,7 @@ export const Tools = [
           name: 'echarts',
           strokeStyle: 'rgba(0,0,0,0)',
           elementRendered: false,
-          hideRotateCP:true,
+          hideRotateCP: true,
           hideInput: true,
           data: {
             echarts: {

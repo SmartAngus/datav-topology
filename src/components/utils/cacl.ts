@@ -99,3 +99,26 @@ export function eraseOverlapIntervals(intervals) {
   }
   return sum;
 }
+
+// 获取数组中重复元素的索引
+export function calcRepeatIndex(newArr) {
+  var obj = {};
+
+  newArr.forEach((newAr, index) => {
+    // init with array if the key is falsy (undefined in this case)
+    obj[newAr] = obj[newAr] || [];
+
+    // push the current index into the array
+    obj[newAr].push(index);
+  });
+
+  var res = {};
+  for (const key in obj) {
+    if (obj[key].length > 1) {
+      res[key] = obj[key];
+    }
+  }
+  if (Object.keys(res).length > 0) {
+    return res;
+  }
+}
