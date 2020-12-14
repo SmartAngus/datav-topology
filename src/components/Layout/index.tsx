@@ -180,7 +180,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (custom) {
       let data = node;
       data.id = s8();
-      event.dataTransfer.setData('Topology', JSON.stringify(node));
+      event.dataTransfer.setData('Topology', JSON.stringify(data,replacer));
     } else {
       event.dataTransfer.setData(
         'Topology',
@@ -576,6 +576,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         setIsSave(false);
         break;
       case 'node': // 节点切换或者点击
+          console.log("event=",data)
         setSelected({
           node: data,
           line: null,

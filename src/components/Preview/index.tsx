@@ -148,8 +148,8 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
               node.data.echarts.option.series[0].data[0]=cd;
               updateChartNode(node)
             }else{
-              node.data.echarts.option.series[0].data.pop()
-              updateChartNode(node)
+              // node.data.echarts.option.series[0].data.pop()
+              // updateChartNode(node)
             }
             break;
           case 'chartMeasure':

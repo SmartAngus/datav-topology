@@ -6,6 +6,7 @@ import styles from './index.module.scss';
 import { Form, Input, Modal, message } from 'antd';
 import { FormInstance } from 'antd/es/form';
 import { client, clientParam } from '../data/api';
+import {replacer} from "../utils/serializing";
 
 export interface CanvasContextMenuProps {
   data: {
@@ -105,6 +106,7 @@ export default class CanvasContextMenu extends Component<
   };
   // 打开新建组件弹窗
   onNewComponent = () => {
+    console.log(this.props.data.nodes)
     this.setState({ newComVisible: true });
   };
   // 确定新建组件
@@ -121,15 +123,16 @@ export default class CanvasContextMenu extends Component<
       ]);
       this.setState({ componentName: values.componentName });
       this.setState({ newComVisible: false });
-      const newNode = this.props.canvas.toComponent(this.props.data.nodes);
-      this.props.canvas.delete();
-      this.props.canvas.addNode(newNode);
+      const newNode = this.props.data.nodes?
+          this.props.canvas.toComponent(this.props.data.nodes):this.props.canvas.toComponent([this.props.data.node]);
+      // this.props.canvas.delete();
+      // this.props.canvas.addNode(newNode);
       this.props.canvas.render();
       this.saveNewComponent({
         componentName: this.state.componentName,
-        componentProperty: JSON.stringify(newNode),
+        componentProperty: JSON.stringify(newNode,replacer),
       }).then((res) => {
-        message.info('新建组合组件成功');
+        message.info('新建组件成功');
         this.props.getNewComponents();
       });
     } catch (errorInfo) {
@@ -204,6 +207,20 @@ export default class CanvasContextMenu extends Component<
             置底
           </a>
         </div>
+        <div>
+          <a
+              className={
+                this.props.data.node || this.props.data.nodes
+                    ? ''
+                    : styles.disabled
+              }
+              onClick={() => {
+                this.onNewComponent();
+              }}
+          >
+            新建节点
+          </a>
+        </div>
         <div className={styles.line} />
         {this.props.data.nodes ? (
           <div>
@@ -213,13 +230,6 @@ export default class CanvasContextMenu extends Component<
               }}
             >
               组合
-            </a>
-            <a
-              onClick={() => {
-                this.onNewComponent();
-              }}
-            >
-              新建节点
             </a>
             {/*<a onClick={() => { this.onCombine(true) }}>包含</a>*/}
           </div>

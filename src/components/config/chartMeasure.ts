@@ -792,7 +792,7 @@ export function getTimelineOption(
     })
   }
   var charts = {
-    unit: 'Kbps',
+    unit: '',
     names: [],
     lineX: [],
     value: [],
@@ -994,7 +994,7 @@ export function getTimelineOption(
       },
     },
     yAxis: {
-      name: charts.unit,
+      name: '',//charts.unit,//
       type: 'value',
       axisLabel: {
         formatter: '{value}',

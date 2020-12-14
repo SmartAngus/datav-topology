@@ -318,19 +318,25 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       getContainer: () => document.querySelector('#editLayout'),
       onOk() {
         setIsSave(false);
-        const itemRowIndex = _.findIndex(
-          property.dataPointSelectedRows,
-          (r: any) => r.id == item.id
-        );
-        const itemQueryIndex = _.findIndex(
-          property.dataPointParam.qtDataList,
-          (r: any) => r.id == item.id
-        );
-        data.node.property.dataPointParam.qtDataList.splice(itemQueryIndex, 1);
-        data.node.property.dataPointSelectedRows.splice(itemRowIndex, 1);
-        const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
-        setDataPointSelectedRows(newRows);
-        updateTimelineOption()
+        if(data.node.property.echartsType=='timeLine'){
+          const itemRowIndex = _.findIndex(
+              property.dataPointSelectedRows,
+              (r: any) => r.id == item.id
+          );
+          const itemQueryIndex = _.findIndex(
+              property.dataPointParam.qtDataList,
+              (r: any) => r.id == item.id
+          );
+          data.node.property.dataPointParam.qtDataList.splice(itemQueryIndex, 1);
+          data.node.property.dataPointSelectedRows.splice(itemRowIndex, 1);
+          const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
+          setDataPointSelectedRows(newRows);
+          updateTimelineOption()
+        }else{
+          data.node.property.dataPointParam.qtDataList=[];
+          data.node.property.dataPointSelectedRows=[];
+          setDataPointSelectedRows([]);
+        }
       },
       onCancel() {},
     });
@@ -349,12 +355,16 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     data.node.elementRendered = true;
     canvas.updateProps(true, [data.node]);
   }
+  let disableSource=['react'];
+  if(data.node.name=="biciPilot"){
+    disableSource=[]
+  }
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
   const renderDataPointModal = useCallback(() => {
     return (
       <DataBindModal
         visible={true}
-        disableSource={[]}
+        disableSource={disableSource}
         selectedRows={[]}
         onCancel={addDataPoint}
         onGetSelectRow={onDataPointBind}
