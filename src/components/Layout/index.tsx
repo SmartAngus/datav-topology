@@ -797,6 +797,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         data={selected}
         canvas={canvas}
         show={showContextmenu}
+        isSave={isSave}
+        setIsSave={setIsSave}
         onNeedHide={() => setShowContextmenu(false)}
         combineCom={props.uploadConfig.combineCom}
         getNewComponents={customCompRef.current?.getNewComponents}

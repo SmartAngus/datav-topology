@@ -21,6 +21,8 @@ export interface CanvasContextMenuProps {
   combineCom?: any;
   onNeedHide?: () => void;
   getNewComponents?: () => void;
+  isSave?: boolean;
+  setIsSave?: (value: boolean) => void;
 }
 
 export default class CanvasContextMenu extends Component<
@@ -81,6 +83,7 @@ export default class CanvasContextMenu extends Component<
     this.props.canvas.combine(this.props.data.nodes, stand);
     this.props.canvas.render();
     this.props.onNeedHide();
+    this.props.setIsSave(false)
   }
 
   onUncombine = () => {
@@ -90,6 +93,7 @@ export default class CanvasContextMenu extends Component<
     this.props.canvas.uncombine(this.props.data.node);
     this.props.canvas.render();
     this.props.onNeedHide();
+    this.props.setIsSave(false)
   };
 
   onLock = () => {
