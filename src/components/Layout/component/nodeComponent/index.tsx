@@ -287,14 +287,16 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     if (property && property.dataPointSelectedRows) {
       if (nodeType == 'timeLine') {
         // 最多可绑定十个数据点
+        selectedRows=selectedRows.slice(0,10)
         if (data.node.property.dataPointSelectedRows.length < 10) {
-          data.node.property.dataPointSelectedRows = data.node.property.dataPointSelectedRows.concat(
-            selectedRows
-          );
-          data.node.property.dataPointParam.qtDataList.push({
-            id: selectedRows[0].id,
-            type: selectedRows[0].dataType || selectedRows[0].type,
-          });
+          data.node.property.dataPointSelectedRows = selectedRows;
+          selectedRows.map((row,index)=>{
+            const q={
+              id: selectedRows[index].id,
+              type: selectedRows[index].dataType || selectedRows[index].type,
+            };
+            data.node.property.dataPointParam.qtDataList[index]=q;
+          })
           setDataPointSelectedRows(selectedRows);
           updateTimelineOption();
         }
@@ -362,15 +364,22 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     disableSource=[]
   }
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
+  const selectedRowKeys=[];
+  data.node.property&&(data.node.property.dataPointSelectedRows||[]).map(row=>{
+    selectedRowKeys.push(row.id)
+    return row;
+  })
   const renderDataPointModal = useCallback(() => {
     return (
       <DataBindModal
         visible={true}
         disableSource={disableSource}
-        selectedRows={[]}
+        selectedRows={data.node.property.dataPointSelectedRows}
         onCancel={addDataPoint}
         onGetSelectRow={onDataPointBind}
+        selectedRowKeys={selectedRowKeys}
         node={data.node}
+        mode={data.node.property.echartsType=='timeLine'?'checkbox':'radio'}
       ></DataBindModal>
     );
   }, [visible]);
@@ -1138,13 +1147,31 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       <Panel header="样式" key="style">
         <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
           <Row>
+            <Col span={10}>
+              <Form.Item
+                  label="单位"
+                  name="chartUnitChecked"
+                  labelCol={{ span: 12 }}
+                  labelAlign="left"
+                  valuePropName="checked"
+              >
+                <Checkbox />
+              </Form.Item>
+            </Col>
+            <Col span={14}>
+              <Form.Item name="chartUnit">
+                <Input placeholder="单位" maxLength={5} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
             <Col>
               <Form.Item label="范围"></Form.Item>
             </Col>
             <Col>
               <Input.Group compact>
                 <Form.Item name="dataMin">
-                  <InputNumber style={{ width: 85 }} placeholder="下限" />
+                  <InputNumber style={{ width: 85 }} placeholder="下限" required={true} />
                 </Form.Item>
                 <Input
                   style={{
@@ -1160,6 +1187,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       width: 85,
                     }}
                     placeholder="上限"
+                    required={true}
                   />
                 </Form.Item>
               </Input.Group>

@@ -43,7 +43,7 @@ export default class FilterDataPoint extends React.PureComponent<any,any> {
   state = {...initialState}
 
   componentDidMount(): void {
-    // console.log("selected node",this.props.node)
+    this.setState({selectedRowKeys: this.props.selectedRowKeys, selectedRows: this.props.selectedRows})
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {

@@ -32,7 +32,6 @@ import { DataVEditorProps } from '../data/defines';
 import {
   calcCanvas,
   eraseOverlapIntervals,
-  calcRepeatIndex,
 } from '../utils/cacl';
 import ResizePanel from '../common/resizeSidebar';
 import {
@@ -282,6 +281,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       max: selected.node.property.dataMax,
       min: selected.node.property.dataMin,
       dataColors: selected.node.property.dataColors,
+      unit:values.chartUnit,
+      chartUnitChecked:values.chartUnitChecked
     });
     selected.node.data.echarts.option = JSON.parse(
       JSON.stringify(option, replacer),

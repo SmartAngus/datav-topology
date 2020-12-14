@@ -336,6 +336,9 @@ export function getGaugeOption(
     [0.6, '#68A54A'],
     [1, '#f56c6c'],
   ];
+  if(lineColors[lineColors.length-1][0]<1){
+    lineColors.push([1, '#f56c6c'])
+  }
   let showTitle = true;
   let unit;
   let title;
@@ -429,6 +432,7 @@ export function getMeasureOption2(opt?: {
   min?: number;
   unit?: string;
   dataColors?: any;
+  chartUnitChecked?:boolean;
 }) {
   function f() {
     /*****设置*****/
@@ -437,9 +441,13 @@ export function getMeasureOption2(opt?: {
     var min = 0; //最小刻度
     var max = opt?.max || 100; //最大刻度
     var offset = 0; //负数设置
-    var step = max / 5; //步长
+    var step = 20; //步长
     var range = [0, 20, 40]; //范围[高,中,低]
-    var unit = opt?.unit || '°C'; //单位
+    var unit = opt?.unit || ''; //单位
+    if(opt?.chartUnitChecked!=true){
+      unit=''
+    }
+
 
     var dataColors = opt?.dataColors || [
       {
@@ -447,6 +455,18 @@ export function getMeasureOption2(opt?: {
         color: '#93FE94',
         top: 20,
         bottom: 0,
+      },
+      {
+        checked: false,
+        color: '#E4D225',
+        top: 40,
+        bottom: 20,
+      },
+      {
+        checked: false,
+        color: '#E01F28',
+        top: 70,
+        bottom: 40,
       },
       {
         checked: false,
@@ -468,7 +488,7 @@ export function getMeasureOption2(opt?: {
 
     if (opt && opt.min && opt.min < 0) {
       offset = Math.abs(opt.min);
-      max = max + 2 * offset;
+      max = max + offset;
     } else {
       min = opt?.min || 0;
     }

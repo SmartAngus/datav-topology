@@ -159,6 +159,9 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 associationObject:
                   node.property.dataPointSelectedRows[0]?.dataName,
                 value: r.value,
+                unit:node.property.chartUnit,
+                dataColors: node.property.dataColors,
+                chartUnitChecked:node.property.chartUnitChecked
               });
               node.data.echarts.option = option;
               updateChartNode(node);
