@@ -804,7 +804,7 @@ export function getTimelineOption(
   let colorList=["#9E87FF", '#73DDFF', '#fe9a8b', '#F56948', '#9E87FF']
   if(node != undefined){
     (node.property.lineGraphRange || []).map((colorObj, index) => {
-      if(colorObj!=undefined&&colorObj.lineGraphRangeCheck&&colorObj.lineGraphRangeColor){
+      if(colorObj!=undefined&&colorObj.lineGraphRangeColor){
         colorList[index]=colorObj.lineGraphRangeColor
       }else{
         colorList[index]=colorList[index]

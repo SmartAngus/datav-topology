@@ -41,6 +41,7 @@ import * as _ from 'lodash';
 import { getTimelineOption } from '../../../config/chartMeasure';
 import { echartsObjs } from '../../../../topology/chart-diagram/src/echarts';
 import { reviver } from '../../../utils/serializing';
+import {useVirtualList} from "ahooks";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -95,6 +96,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const [dataPointSelectedRows, setDataPointSelectedRows] = useState(
     property?.dataPointSelectedRows || []
   );
+  const [showSelectDataPoint,setShowSelectDataPoint]=useState(false)
+  const addLineColorBtnRef = React.useRef()
+  const removeLineColorBtnRef = React.useRef()
   const { dataMethod, dataDot } = property || {};
   useEffect(() => {
     // 设置基本表单
@@ -133,7 +137,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     property,
   ]);
 
+
   useEffect(() => {
+    setShowSelectDataPoint(property?.dataTopSource=="custom")
     propertyForm.setFieldsValue({
       dataMethod,
       dataDot,
@@ -288,6 +294,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         // 最多可绑定十个数据点
         selectedRows=selectedRows.slice(0,10)
         if (data.node.property.dataPointSelectedRows.length < 10) {
+          const tmp=_.cloneDeep(data.node.property.dataPointSelectedRows)
           data.node.property.dataPointSelectedRows = selectedRows;
           selectedRows.map((row,index)=>{
             const q={
@@ -295,6 +302,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               type: selectedRows[index].dataType || selectedRows[index].type,
             };
             data.node.property.dataPointParam.qtDataList[index]=q;
+            if(index>(tmp.length-1)){
+              (addLineColorBtnRef as any)?.current.click()
+            }
           })
           setDataPointSelectedRows(selectedRows);
           updateTimelineOption();
@@ -352,6 +362,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
           setDataPointSelectedRows(newRows);
           updateTimelineOption();
+          (removeLineColorBtnRef as any).current.click();
         } else {
           data.node.property.dataPointParam.qtDataList = [];
           data.node.property.dataPointSelectedRows = [];
@@ -361,6 +372,18 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       onCancel() {},
     });
   };
+  // 选择数据点，将数值配置上区
+  const handleChangeDataPoint=(value)=>{
+    const dataTween=value.split("~");
+    propertyForm.setFieldsValue({
+      dataBottom:dataTween[0]=='undefined'?'':dataTween[0],
+      dataTop:dataTween[1]=='undefined'?'':dataTween[1],
+    });
+    onPropertyFormValueChange && onPropertyFormValueChange({
+      dataBottom:dataTween[0]=='undefined'?'':dataTween[0],
+      dataTop:dataTween[1]=='undefined'?'':dataTween[1],
+    });
+  }
   const updateTimelineOption = () => {
     data.node.data.echarts.option = getTimelineOption(
       data.node,
@@ -1340,11 +1363,18 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             >
               <Radio.Group
                 options={[
-                  { label: '数据点', value: 'dataPoint' },
                   { label: '自定义', value: 'custom' },
+                  { label: '数据点', value: 'dataPoint' },
                 ]}
                 optionType="button"
                 buttonStyle="solid"
+                onChange={(value)=>{
+                  if(value.target.value=='custom'){
+                    setShowSelectDataPoint(true)
+                  }else{
+                    setShowSelectDataPoint(false)
+                  }
+                }}
               />
             </Form.Item>
             <Row>
@@ -1360,6 +1390,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       style={{ width: 90 }}
                       min={0}
                       placeholder="下限"
+                      readOnly={!showSelectDataPoint}
                     />
                   </Form.Item>
                   <Input
@@ -1377,9 +1408,25 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       }}
                       min={0}
                       placeholder="上限"
+                      readOnly={!showSelectDataPoint}
                     />
                   </Form.Item>
                 </Input.Group>
+              </Col>
+            </Row>
+            <Row style={{
+              display:showSelectDataPoint?"none":"block"
+            }}>
+              <Col push={4} span={20}>
+                <Form.Item name="selectDataPoint">
+                  <Select style={{ width: '100%' }} onChange={handleChangeDataPoint} placeholder="选择数据点">
+                    {
+                      (data.node.property.dataPointSelectedRows||[]).map((item,index)=>{
+                        return <Option value={item.scopeMin+'~'+item.scopeMax} key={index}>{item.dataName}</Option>
+                      })
+                    }
+                  </Select>
+                </Form.Item>
               </Col>
             </Row>
           </Form>
@@ -1432,6 +1479,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                         name={[field.name, 'lineGraphRangeCheck']}
                         fieldKey={[field.fieldKey, 'lineGraphRangeCheck']}
                         valuePropName="checked"
+                        style={{display:'none'}}
                       >
                         <Checkbox />
                       </Form.Item>
@@ -1442,17 +1490,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       >
                         <ColorPicker />
                       </Form.Item>
-                      <Form.Item>
+                      <Form.Item style={{display:'none'}}>
                         <MinusCircleOutlined
+                            ref={removeLineColorBtnRef}
                           onClick={() => remove(field.name)}
                         />
                       </Form.Item>
                     </Space>
                   ))}
                   {fields.length < 10 ? (
-                    <Form.Item>
+                    <Form.Item style={{display:'none'}}>
                       <Button
                         type="dashed"
+                        ref={addLineColorBtnRef}
                         onClick={() => add()}
                         block
                         icon={<PlusOutlined />}
@@ -1468,7 +1518,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
       </Fragment>
     );
-  }, [property, data?.node]);
+  }, [property, data?.node,showSelectDataPoint]);
 
   return (
     <div className={styles.rightArea}>
@@ -1476,7 +1526,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       {!data.multi && (
         <Tabs defaultActiveKey="1" centered>
           <TabPane tab="外观" key="1" style={{ margin: 0 }}>
-            <Collapse defaultActiveKey={['pos']}>
+            <Collapse defaultActiveKey={['pos','lineInfo','lineStyle']}>
               {renderPositionForm}
               {fontStyleNodeList.includes(name) && renderFontForm}
               {fillStyleNodeList.includes(name) && renderFillStyle}
@@ -1490,10 +1540,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Collapse>
           </TabPane>
           <TabPane tab="数据" key="2" style={{ margin: 0 }}>
-            <Collapse defaultActiveKey={['1', '2']}>
-              <Panel header="本身数据" key="1">
-                {renderDataForm}
-              </Panel>
+            <Collapse defaultActiveKey={['2']}>
+              {/*<Panel header="本身数据" key="1">*/}
+              {/*  {renderDataForm}*/}
+              {/*</Panel>*/}
               {(data.node.name == 'biciVarer' ||
                 data.node.name == 'echarts' ||
                 data.node.name == 'biciCard' ||

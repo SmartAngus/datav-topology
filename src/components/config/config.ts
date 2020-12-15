@@ -605,7 +605,7 @@ export const Tools = [
               subscribe: true,
             },
             smooth: true,
-            dataTopSource: 'dataPoint', // dataPoint数据点或者custom=自定义
+            dataTopSource: 'custom', // dataPoint数据点或者custom=自定义
             dataTopChecked: false,
             dataTop: 100,
             dataBottom: 0,
