@@ -414,7 +414,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       <DataBindModal
         visible={true}
         disableSource={disableSource}
-        selectedRows={data.node.property.dataPointSelectedRows}
+        selectedRows={data.node.property?.dataPointSelectedRows}
         onCancel={addDataPoint}
         onGetSelectRow={onDataPointBind}
         selectedRowKeys={selectedRowKeys}
@@ -1475,7 +1475,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 <Form.Item name="selectDataPoint">
                   <Select style={{ width: '100%' }} onChange={handleChangeDataPoint} placeholder="选择数据点">
                     {
-                      (data.node.property.dataPointSelectedRows||[]).map((item,index)=>{
+                      (data.node.property?.dataPointSelectedRows||[]).map((item,index)=>{
                         return <Option value={item.scopeMin+'~'+item.scopeMax} key={index}>{item.dataName}</Option>
                       })
                     }
