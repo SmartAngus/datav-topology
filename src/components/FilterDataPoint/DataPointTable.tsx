@@ -9,7 +9,6 @@ import _ from 'lodash'
 import {apiClientParam} from '../data/api'
 
 
-
 // 查询数据点列表
 export function fetchSearchDataPointManageList(params) {
   return apiClientParam(window["API_URL"]).post('/datapoint/list', params,{
@@ -43,6 +42,7 @@ const initialQueryParams = {
 }
 
 export default class DataPointTable extends Component<any,any> {
+  associationObject="";
   state = {
     dataList: [],
     total: 0,
@@ -96,9 +96,10 @@ export default class DataPointTable extends Component<any,any> {
     if (position) {
       params.position = position
     }
-    if (associationObject) {
-      params.associationObject = associationObject
-    }
+    // if (associationObject) {
+    //   params.associationObject = associationObject
+    // }
+    params.associationObject=this.associationObject;
     if (channelList && channelList.length) {
       params.channelList = channelList
     }
@@ -124,6 +125,7 @@ export default class DataPointTable extends Component<any,any> {
     this.setState({ pagination: initialQueryParams.pagination, [key]: value }, () => {
       this.requestList()
     })
+    this.associationObject=value;
   }
 
   handleTableChange = (pagination, filters, sorter) => {
