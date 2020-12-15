@@ -253,7 +253,6 @@ export const Tools = [
             showText: true,
             stateType: 'single', // 状态定义: single 单点值,  range 范围值
             lightRange: [], // 指示灯 状态定义 列表
-            rangeIsOk: true,
             dataMethod: 'point',
             dataDot: 2,
             dataPointSelectedRows: [],
@@ -833,7 +832,7 @@ export const Tools = [
             dataMin: 0,
             chartTitle: '仪表盘',
             chartTitleChecked: false,
-            chartUnitChecked: true,
+            chartUnitChecked: false,
             chartUnit: 'C',
           },
         },

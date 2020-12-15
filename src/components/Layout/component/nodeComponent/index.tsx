@@ -41,7 +41,6 @@ import * as _ from 'lodash';
 import { getTimelineOption } from '../../../config/chartMeasure';
 import { echartsObjs } from '../../../../topology/chart-diagram/src/echarts';
 import { reviver } from '../../../utils/serializing';
-import {useVirtualList} from "ahooks";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -264,6 +263,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       alignNodes(pens, rect, key);
       canvas.cache();
       canvas.render();
+      setIsSave(false);
     }
   };
   // 设置日期格式
@@ -320,6 +320,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             : undefined;
           propertyForm.setFieldsValue({
             limitType: 'dataPoint',
+            showLimit: false,
             'limit.bottom': scopeMin,
             'limit.top': scopeMax,
           });
@@ -564,7 +565,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Col>
           <Col span={24}>
             <Form.Item name="fontFamily" label="字体">
-              <Select allowClear>
+              <Select
+                allowClear
+                getPopupContainer={() => document.querySelector('#editLayout')}
+              >
                 <Option
                   value='"Microsoft YaHei"'
                   style={{ fontFamily: '"Microsoft YaHei"' }}
@@ -836,6 +840,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     );
   }, [alignObj, data?.node]);
 
+
   /**
    * 渲染数据卡片样式设置  property
    */
@@ -864,7 +869,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               </Col>
               <Col span={14}>
                 <Form.Item name="cardTitle">
-                  <Input placeholder="标题名称" />
+                  <Input placeholder="标题名称" maxLength={20} />
                 </Form.Item>
               </Col>
             </Row>
@@ -924,7 +929,46 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   labelCol={{ span: 8 }}
                   labelAlign="left"
                 >
-                  <Input />
+                  <Select
+                    allowClear
+                    getPopupContainer={() =>
+                      document.querySelector('#editLayout')
+                    }
+                  >
+                    <Option
+                      value='"Microsoft YaHei"'
+                      style={{ fontFamily: '"Microsoft YaHei"' }}
+                    >
+                      微软雅黑
+                    </Option>
+                    <Option value="SimSun" style={{ fontFamily: 'SimSun' }}>
+                      宋体
+                    </Option>
+                    <Option value="KaiTi" style={{ fontFamily: 'KaiTi' }}>
+                      楷体
+                    </Option>
+                    <Option value="SimHei" style={{ fontFamily: 'SimHei' }}>
+                      黑体
+                    </Option>
+                    <Option
+                      value='"Hiragino Sans GB"'
+                      style={{ fontFamily: '"Hiragino Sans GB"' }}
+                    >
+                      冬青黑体
+                    </Option>
+                    <Option value="Arial" style={{ fontFamily: 'Arial' }}>
+                      Arial
+                    </Option>
+                    <Option value="Tahoma" style={{ fontFamily: 'Tahoma' }}>
+                      Tahoma
+                    </Option>
+                    <Option
+                      value="Helvetica"
+                      style={{ fontFamily: 'Helvetica' }}
+                    >
+                      Helvetica
+                    </Option>
+                  </Select>
                 </Form.Item>
                 <Row>
                   <Col span={7}>
@@ -1174,31 +1218,36 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     return (
       <Panel header="样式" key="style">
         <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-          <Row>
-            <Col span={10}>
-              <Form.Item
+          {property?.echartsType === 'chartMeasure' && (
+            <Row>
+              <Col span={10}>
+                <Form.Item
                   label="单位"
                   name="chartUnitChecked"
                   labelCol={{ span: 12 }}
                   labelAlign="left"
                   valuePropName="checked"
-              >
-                <Checkbox />
-              </Form.Item>
-            </Col>
-            <Col span={14}>
-              <Form.Item name="chartUnit">
-                <Input placeholder="单位" maxLength={5} />
-              </Form.Item>
-            </Col>
-          </Row>
+                >
+                  <Checkbox />
+                </Form.Item>
+              </Col>
+              <Col span={14}>
+                <Form.Item name="chartUnit">
+                  <Input placeholder="单位" maxLength={5} />
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
           <Row>
             <Col>
               <Form.Item label="范围"></Form.Item>
             </Col>
             <Col>
               <Input.Group compact>
-                <Form.Item name="dataMin" rules={[{ required: true, message: ' ' }]}>
+                <Form.Item
+                  name="dataMin"
+                  rules={[{ required: true, message: ' ' }]}
+                >
                   <InputNumber style={{ width: 85 }} placeholder="下限" />
                 </Form.Item>
                 <Input
@@ -1210,21 +1259,22 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   disabled
                 />
                 <Form.Item
-                    name="dataMax"
-                   rules={[
-                     {
-                       required: true,
-                       message: ' ',
-                     },
-                     ({ getFieldValue }) => ({
-                       validator(rule, value) {
-                         if (!value || getFieldValue('dataMin') <= value) {
-                           return Promise.resolve();
-                         }
-                         return Promise.reject(' ');
-                       },
-                     }),
-                   ]}>
+                  name="dataMax"
+                  rules={[
+                    {
+                      required: true,
+                      message: ' ',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(rule, value) {
+                        if (!value || getFieldValue('dataMin') <= value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(' ');
+                      },
+                    }),
+                  ]}
+                >
                   <InputNumber
                     style={{
                       width: 85,
@@ -1257,7 +1307,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <Col span={15}>
                 <Input.Group compact>
                   <Form.Item name={`bottom-${index}`}>
-                    <InputNumber style={{ width: 60 }} placeholder="下限" />
+                    <InputNumber
+                      style={{ width: 60 }}
+                      placeholder="下限"
+                      disabled
+                    />
                   </Form.Item>
                   <Input
                     style={{ width: 30, pointerEvents: 'none' }}
@@ -1298,7 +1352,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               </Col>
               <Col span={14}>
                 <Form.Item name="chartTitle">
-                  <Input placeholder="标题名称" />
+                  <Input placeholder="标题名称" maxLength={20} />
                 </Form.Item>
               </Col>
             </Row>

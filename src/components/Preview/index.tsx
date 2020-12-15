@@ -159,9 +159,9 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 associationObject:
                   node.property.dataPointSelectedRows[0]?.dataName,
                 value: r.value,
-                unit:node.property.chartUnit,
+                unit: node.property.chartUnit,
                 dataColors: node.property.dataColors,
-                chartUnitChecked:node.property.chartUnitChecked
+                chartUnitChecked: node.property.chartUnitChecked,
               });
               node.data.echarts.option = option;
               updateChartNode(node);
@@ -251,7 +251,8 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
               for (const item of node.property.lightRange) {
                 if (node.property.stateType === 'single') {
                   if (item.lightRangeVal == r.value) {
-                    node.strokeStyle = item.lightRangeColor;
+                    node.strokeStyle =
+                      item?.lightRangeColor || node.strokeStyle;
                     if (node.property.showText) {
                       node.text = item?.lightRangeText || node.property.text;
                     }
@@ -263,7 +264,8 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                     item.lightRangeBottom <= r.value &&
                     item.lightRangeTop > r.value
                   ) {
-                    node.strokeStyle = item.lightRangeColor;
+                    node.strokeStyle =
+                      item?.lightRangeColor || node.strokeStyle;
                     if (node.property.showText) {
                       node.text = item?.lightRangeText || node.property.text;
                     }
