@@ -344,7 +344,7 @@ export function getGaugeOption(
   let title;
   if (opt) {
     if (opt.chartUnitChecked) {
-      unit = opt?.chartUnit || '°C';
+      unit = opt?.chartUnit || '';
     } else {
       unit = '';
     }

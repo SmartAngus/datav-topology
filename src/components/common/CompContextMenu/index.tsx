@@ -35,9 +35,9 @@ const CompContextMenu = (props: CompContextMenuProps) => {
 
   const onDelete = () => {
     confirm({
-      title: '删除提示',
+      title: '确定删除吗?',
       icon: <ExclamationCircleOutlined />,
-      content: '确定删除吗?',
+      content: '',
       okText: '确定',
       cancelText: '取消',
       getContainer:() => document.querySelector('#editLayout'),

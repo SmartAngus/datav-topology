@@ -585,7 +585,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         setIsSave(false);
         break;
       case 'node': // 节点切换或者点击
-          console.log("event=",data)
         setSelected({
           node: data,
           line: null,

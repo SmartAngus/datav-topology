@@ -314,9 +314,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   // 删除数据点
   const handleDeleteDataPoint = (item) => {
     Modal.confirm({
-      title: '删除提示',
+      title: '确认删除数据点吗？',
       icon: <ExclamationCircleOutlined />,
-      content: '确认删除数据点吗？',
+      content: '',
       okText: '确认',
       cancelText: '取消',
       getContainer: () => document.querySelector('#editLayout'),
@@ -752,7 +752,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Form.Item>
           {(property?.dataPointSelectedRows || []).map((item, index) => {
             return (
-              <Form.Item label={`数据点${index}`} key={index}>
+              <Form.Item label={`数据点${index+1}`} key={index}>
                 <span>{item.dataName || item.name}</span>
                 <Button
                   type="link"
@@ -1170,8 +1170,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
             <Col>
               <Input.Group compact>
-                <Form.Item name="dataMin">
-                  <InputNumber style={{ width: 85 }} placeholder="下限" required={true} />
+                <Form.Item name="dataMin" rules={[{ required: true, message: ' ' }]}>
+                  <InputNumber style={{ width: 85 }} placeholder="下限" />
                 </Form.Item>
                 <Input
                   style={{
@@ -1181,13 +1181,27 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   placeholder="~"
                   disabled
                 />
-                <Form.Item name="dataMax">
+                <Form.Item
+                    name="dataMax"
+                   rules={[
+                     {
+                       required: true,
+                       message: ' ',
+                     },
+                     ({ getFieldValue }) => ({
+                       validator(rule, value) {
+                         if (!value || getFieldValue('dataMin') <= value) {
+                           return Promise.resolve();
+                         }
+                         return Promise.reject(' ');
+                       },
+                     }),
+                   ]}>
                   <InputNumber
                     style={{
                       width: 85,
                     }}
                     placeholder="上限"
-                    required={true}
                   />
                 </Form.Item>
               </Input.Group>

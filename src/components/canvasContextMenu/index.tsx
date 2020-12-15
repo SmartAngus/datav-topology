@@ -30,7 +30,7 @@ export default class CanvasContextMenu extends Component<
 > {
   state = {
     newComVisible: false,
-    componentName: '新建组件',
+    componentName: '添加到自定义组件',
   };
   formRef = React.createRef<FormInstance>();
   saveNewComponent(params) {
@@ -136,17 +136,19 @@ export default class CanvasContextMenu extends Component<
         componentName: this.state.componentName,
         componentProperty: JSON.stringify(newNode,replacer),
       }).then((res) => {
-        message.info('新建组件成功');
+        message.info('添加到自定义组件成功');
         this.props.getNewComponents();
+        this.formRef.current.resetFields();
       });
     } catch (errorInfo) {
       console.error('Failed:', errorInfo);
+      this.formRef.current.resetFields();
     }
   };
   renderNewComponentModal = () => {
     return (
       <Modal
-        title="新建组合节点"
+        title="添加到自定义组件"
         visible={this.state.newComVisible}
         onOk={this.handleOk}
         onCancel={this.handleCancel}
@@ -155,7 +157,7 @@ export default class CanvasContextMenu extends Component<
         cancelText="取消"
         getContainer={() => document.querySelector('#editLayout')}
       >
-        <Form ref={this.formRef}>
+        <Form ref={this.formRef} preserve={false}>
           <Form.Item
             rules={[
               {
@@ -222,7 +224,7 @@ export default class CanvasContextMenu extends Component<
                 this.onNewComponent();
               }}
           >
-            新建节点
+            添加到自定义组件
           </a>
         </div>
         <div className={styles.line} />
