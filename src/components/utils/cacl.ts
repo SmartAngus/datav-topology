@@ -73,13 +73,13 @@ export function base64ToFile(data) {
 // 保留n位小数并格式化输出（不足的部分补0）
 export function roundFun(value: number, n: number) {
   let s = (Math.round(value * Math.pow(10, n)) / Math.pow(10, n)).toString();
-  let rs = s.indexOf('.');
-  if (rs < 0) {
-    s += '.';
-  }
-  for (let i = s.length - s.indexOf('.'); i <= n; i++) {
-    s += '0';
-  }
+  // let rs = s.indexOf('.');
+  // if (rs < 0) {
+  //   s += '.';
+  // }
+  // for (let i = s.length - s.indexOf('.'); i <= n; i++) {
+  //   s += '0';
+  // }
   return s;
 }
 

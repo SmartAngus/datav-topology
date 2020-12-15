@@ -5,7 +5,7 @@ export function biciPilotIconRect(node: Node) {
 }
 
 export function biciPilotTextRect(node: Node) {
-  const w = 100;
+  const w = 200;
   const h = 30;
   node.textRect = new Rect(
     node.rect.x + node.rect.width,

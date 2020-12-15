@@ -189,13 +189,13 @@ export const Tools = [
             },
           ],
           property: {
-            title: '数据卡片',
+            cardTitle: '数据卡片',
             showTitle: true,
             limitType: 'custom', // 数据类型：dataPoint 数据点  custom 自定义
             showLimit: false, // 展示上下限
             limit: {
-              bottom: 0, // 下限
-              top: 0, // 上限
+              bottom: undefined, // 下限
+              top: undefined, // 上限
             },
             normal: {
               fontFamily: 'Arial',
@@ -242,7 +242,7 @@ export const Tools = [
             fontFamily: '"Microsoft YaHei"',
             textAlign: 'left',
           },
-          hideAnchor: true,
+          // hideAnchor: true,
           hideRotateCP: true,
           name: 'biciPilot',
           property: {
