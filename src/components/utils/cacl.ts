@@ -83,21 +83,24 @@ export function roundFun(value: number, n: number) {
   return s;
 }
 
-// 判断区间是否有重叠，返回重叠区间个数，!==0 代表区间有重叠
+// 判断区间是否有重叠，返回重叠区
 export function eraseOverlapIntervals(intervals) {
   intervals.sort((a, b) => a[1] - b[1]); //按照区间末位对这些区间排个位，保证结束时间是按序上升的，从前往后取总是能取到当前结束时间的最小值
+  // 重叠的区间
+  let res = []
 
   let flag = -Infinity; //记录前一区间的结束值，此处一开始需取负无穷，因为必须保证这里一开始是最小的
-  let sum = 0; //记录需要移除的区间个数
+  // let sum = 0; //记录需要移除的区间个数
   for (let i = 0; i < intervals.length; i++) {
     if (intervals[i][0] >= flag) {
       //区间起点大于前一区间的结束点
       flag = intervals[i][1];
     } else {
-      sum += 1; //有重叠
+      // sum += 1; //有重叠
+      res.push(intervals[i]);
     }
   }
-  return sum;
+  return res;
 }
 
 // 获取数组中重复元素的索引

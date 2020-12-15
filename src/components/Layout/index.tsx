@@ -29,10 +29,7 @@ import PicComponent from './LeftAreaComponent/PicComponent';
 import styles from './index.module.scss';
 import CanvasContextMenu from '../canvasContextMenu';
 import { DataVEditorProps } from '../data/defines';
-import {
-  calcCanvas,
-  eraseOverlapIntervals,
-} from '../utils/cacl';
+import { calcCanvas, eraseOverlapIntervals } from '../utils/cacl';
 import ResizePanel from '../common/resizeSidebar';
 import {
   getGaugeOption,
@@ -281,8 +278,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       max: selected.node.property.dataMax,
       min: selected.node.property.dataMin,
       dataColors: selected.node.property.dataColors,
-      unit:values.chartUnit,
-      chartUnitChecked:values.chartUnitChecked
+      unit: values.chartUnit,
+      chartUnitChecked: values.chartUnitChecked,
     });
     selected.node.data.echarts.option = JSON.parse(
       JSON.stringify(option, replacer),
@@ -302,9 +299,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (showLimit !== undefined) {
       const limitText = showLimit
         ? `下限: ${
-            !isNaN(Number(value['limit.bottom'])) ? value['limit.bottom'] : ''
+            !isNaN(parseInt(value['limit.bottom'])) ? value['limit.bottom'] : ''
           }   上限: ${
-            !isNaN(Number(value['limit.top'])) ? value['limit.top'] : ''
+            !isNaN(parseInt(value['limit.top'])) ? value['limit.top'] : ''
           }`
         : '';
       selected.node.children[1].text = limitText;
@@ -339,19 +336,27 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     selected.node.strokeStyle = color;
     selected.node.text = showText ? text : '';
     if (lightRange.length > 0) {
-      message.config({
-        getContainer: () => document.querySelector('#editLayout'),
-      });
+      // message.config({
+      //   getContainer: () => document.querySelector('#editLayout'),
+      // });
       if (lightRange.includes(undefined)) {
         return;
       }
+
       if (stateType === 'single') {
         const vals = lightRange.map((item) => item?.lightRangeVal);
         const tmpSet = new Set(vals);
-        // console.log('重复索引', calcRepeatIndex(vals));
         if (tmpSet.size !== vals.length) {
-          message.error('单点值不能重复');
-          selected.node.property.rangeIsOk = false;
+          let tmp = {};
+          let lightRangeTmp = _.cloneDeep(lightRange);
+          lightRangeTmp = lightRangeTmp.reduce((item, next) => {
+            tmp[next.lightRangeVal]
+              ? ''
+              : (tmp[next.lightRangeVal] = true && item.push(next));
+            return item;
+          }, []);
+          selected.node.property.lightRange = lightRangeTmp;
+          // message.error('单点值不能重复');
         }
       } else {
         const vals = lightRange.map((item) => [
@@ -360,9 +365,20 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         ]);
         if (!vals.flat().includes(undefined)) {
           const nums = eraseOverlapIntervals(vals);
-          if (nums !== 0) {
-            message.error('范围值区间不能重叠');
-            selected.node.property.rangeIsOk = false;
+          if (nums.length !== 0) {
+            let lightRangeTmp = _.cloneDeep(lightRange);
+            nums.forEach((num) => {
+              lightRangeTmp.forEach((item, index) => {
+                if (
+                  item.lightRangeBottom === num[0] &&
+                  item.lightRangeTop === num[1]
+                ) {
+                  lightRangeTmp.splice(index, 1);
+                }
+              });
+            });
+            selected.node.property.lightRange = lightRangeTmp;
+            // message.error('范围值区间不能重叠');
           }
         }
       }
@@ -438,6 +454,19 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // canvas.setValue(selected.node.id, 'setValue');
       // 通知有数据属性更新,会重新渲染画布
 
+      for (const key in value) {
+        if (key.indexOf('.') > 0) {
+          if (key != undefined) {
+            const k = key.split('.');
+            selected.node.property[k[0]][k[1]] = value[key];
+          }
+        } else {
+          if (value[key] !== undefined) {
+            selected.node.property[key] = value[key];
+          }
+        }
+      }
+
       const { name } = selected.node;
       switch (name) {
         case 'biciCard':
@@ -474,18 +503,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           break;
       }
 
-      for (const key in value) {
-        if (key.indexOf('.') > 0) {
-          if (key != undefined) {
-            const k = key.split('.');
-            selected.node.property[k[0]][k[1]] = value[key];
-          }
-        } else {
-          if (value[key] !== undefined) {
-            selected.node.property[key] = value[key];
-          }
-        }
-      }
       setIsSave(false);
       // 更新属性变化
       canvas.updateProps(false, [selected.node]);

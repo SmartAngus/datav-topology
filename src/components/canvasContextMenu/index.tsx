@@ -59,6 +59,7 @@ export default class CanvasContextMenu extends Component<
 
     this.props.canvas.render();
     this.props.onNeedHide();
+    this.props.setIsSave(false);
   }
 
   onBottom() {
@@ -74,6 +75,7 @@ export default class CanvasContextMenu extends Component<
 
     this.props.canvas.render();
     this.props.onNeedHide();
+    this.props.setIsSave(false);
   }
 
   onCombine(stand: boolean) {
@@ -107,6 +109,7 @@ export default class CanvasContextMenu extends Component<
       }
     }
     this.props.canvas.render(true);
+    this.props.setIsSave(false);
   };
   // 打开新建组件弹窗
   onNewComponent = () => {
