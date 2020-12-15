@@ -175,7 +175,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     } else if (data.node.name === 'biciPilot') {
       propertyForm.setFieldsValue({
         color: property.color,
-        size: width / 2,
+        size: Math.round(width / 2),
         showText: property.showText,
         text: property.text,
         stateType: property.stateType,
