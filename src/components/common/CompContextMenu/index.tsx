@@ -40,7 +40,7 @@ const CompContextMenu = (props: CompContextMenuProps) => {
       content: '确定删除吗?',
       okText: '确定',
       cancelText: '取消',
-      getContainer:() => document.querySelector('#editLayout'),
+      getContainer: () => document.querySelector('#editLayout'),
       onOk() {
         handleDelete();
       },
@@ -87,7 +87,7 @@ const CompContextMenu = (props: CompContextMenuProps) => {
           label="组件名字"
           name="componentName"
         >
-          <Input placeholder="输入组件名字" id="componentName" />
+          <Input placeholder="输入组件名字" id="componentName" maxLength={20} />
         </Form.Item>
       </Form>
     </Modal>

@@ -85,7 +85,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const [form] = Form.useForm();
   const [propertyForm] = Form.useForm();
   const [visible, setVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [pilotBtnSize, setPilotBtnSize] = useState('small');
 
   const { x, y, width, height } = data?.node?.rect || {};
   const { rotate, lineWidth, strokeStyle, text, id, name, fillStyle } =
@@ -146,7 +146,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       // 设置数据卡片
       propertyForm.setFieldsValue({
         showTitle: property.showTitle,
-        cardTitle: property.title,
+        cardTitle: property.cardTitle,
         limitType: property.limitType,
         showLimit: property.showLimit,
         'limit.bottom': property.limit.bottom,
@@ -176,6 +176,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         stateType: property.stateType,
         lightRange: property.lightRange,
       });
+      const btnSize =
+        width / 2 <= 15 ? 'small' : width / 2 <= 20 ? 'middle' : 'large';
+      setPilotBtnSize(btnSize);
     } else if (data.node.name == 'echarts') {
       propertyForm.setFieldsValue({
         dataMax: property.dataMax,
@@ -261,14 +264,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const onSetBiciTimerDataFmt = () => {};
   // 数据绑定方式
   const handlePropertyDataMethodChange = (value) => {};
-  const handleOk = () => {
-    setVisible(false);
-    setLoading(false);
-  };
-  const handleCancel = () => {
-    setVisible(false);
-    setLoading(false);
-  };
+
   // 添加数据点
   const addDataPoint = () => {
     setVisible(!visible);
@@ -283,6 +279,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
   // 获得选中的数据点
   const onDataPointBind = (selectedRowKeys, selectedRows) => {
+    if (selectedRows.length === 0) {
+      return;
+    }
     const nodeType = getNodeType(data.node);
     if (property && property.dataPointSelectedRows) {
       if (nodeType == 'timeLine') {
@@ -299,10 +298,24 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           updateTimelineOption();
         }
       } else {
+        const selectedData = selectedRows[0];
+        if (nodeType === 'biciCard') {
+          const scopeMin = !isNaN(Number(selectedData?.scopeMin))
+            ? selectedData?.scopeMin
+            : undefined;
+          const scopeMax = !isNaN(Number(selectedData?.scopeMax))
+            ? selectedData?.scopeMax
+            : undefined;
+          propertyForm.setFieldsValue({
+            limitType: 'dataPoint',
+            'limit.bottom': scopeMin,
+            'limit.top': scopeMax,
+          });
+        }
         data.node.property.dataPointSelectedRows = selectedRows;
         data.node.property.dataPointParam.qtDataList[0] = {
-          id: selectedRows[0].id,
-          type: selectedRows[0].dataType || selectedRows[0].type,
+          id: selectedData.id,
+          type: selectedData.dataType || selectedData.type,
         };
         setDataPointSelectedRows(selectedRows);
       }
@@ -320,46 +333,49 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       getContainer: () => document.querySelector('#editLayout'),
       onOk() {
         setIsSave(false);
-        if(data.node.property.echartsType=='timeLine'){
+        if (data.node.property.echartsType == 'timeLine') {
           const itemRowIndex = _.findIndex(
-              property.dataPointSelectedRows,
-              (r: any) => r.id == item.id
+            property.dataPointSelectedRows,
+            (r: any) => r.id == item.id
           );
           const itemQueryIndex = _.findIndex(
-              property.dataPointParam.qtDataList,
-              (r: any) => r.id == item.id
+            property.dataPointParam.qtDataList,
+            (r: any) => r.id == item.id
           );
-          data.node.property.dataPointParam.qtDataList.splice(itemQueryIndex, 1);
+          data.node.property.dataPointParam.qtDataList.splice(
+            itemQueryIndex,
+            1
+          );
           data.node.property.dataPointSelectedRows.splice(itemRowIndex, 1);
           const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
           setDataPointSelectedRows(newRows);
-          updateTimelineOption()
-        }else{
-          data.node.property.dataPointParam.qtDataList=[];
-          data.node.property.dataPointSelectedRows=[];
+          updateTimelineOption();
+        } else {
+          data.node.property.dataPointParam.qtDataList = [];
+          data.node.property.dataPointSelectedRows = [];
           setDataPointSelectedRows([]);
         }
       },
       onCancel() {},
     });
   };
-  const updateTimelineOption=()=>{
+  const updateTimelineOption = () => {
     data.node.data.echarts.option = getTimelineOption(
-        data.node,
-        undefined,
-        undefined
+      data.node,
+      undefined,
+      undefined
     );
     // 更新图表数据
     echartsObjs[data.node.id].chart.setOption(
-        JSON.parse(JSON.stringify(data.node.data.echarts.option), reviver)
+      JSON.parse(JSON.stringify(data.node.data.echarts.option), reviver)
     );
     echartsObjs[data.node.id].chart.resize();
     data.node.elementRendered = true;
     canvas.updateProps(true, [data.node]);
-  }
-  let disableSource=['react'];
-  if(data.node.name=="biciPilot"){
-    disableSource=[]
+  };
+  let disableSource = ['react'];
+  if (data.node.name == 'biciPilot') {
+    disableSource = [];
   }
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
   const renderDataPointModal = useCallback(() => {
@@ -516,7 +532,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Col>
           <Col span={24}>
             <Form.Item name="fontFamily" label="字体">
-              <Select mode="multiple" allowClear>
+              <Select allowClear>
                 <Option
                   value='"Microsoft YaHei"'
                   style={{ fontFamily: '"Microsoft YaHei"' }}
@@ -743,7 +759,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Form.Item>
           {(property?.dataPointSelectedRows || []).map((item, index) => {
             return (
-              <Form.Item label={`数据点${index}`} key={index}>
+              <Form.Item label={`数据点${index + 1}`} key={index}>
                 <span>{item.dataName || item.name}</span>
                 <Button
                   type="link"
@@ -845,11 +861,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <Col span={20}>
                 <Input.Group compact>
                   <Form.Item name="limit.bottom">
-                    <InputNumber
-                      style={{ width: 80 }}
-                      min={0}
-                      placeholder="下限"
-                    />
+                    <InputNumber style={{ width: 80 }} placeholder="下限" />
                   </Form.Item>
                   <Input
                     style={{
@@ -860,11 +872,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     disabled
                   />
                   <Form.Item name="limit.top">
-                    <InputNumber
-                      style={{ width: 80 }}
-                      min={0}
-                      placeholder="上限"
-                    />
+                    <InputNumber style={{ width: 80 }} placeholder="上限" />
                   </Form.Item>
                 </Input.Group>
               </Col>
@@ -938,6 +946,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     form.setFieldsValue({ width: size * 2, height: size * 2 });
     node.property.size = size;
     propertyForm.setFieldsValue({ size });
+    setPilotBtnSize(size === 15 ? 'small' : size === 20 ? 'middle' : 'large');
     canvas.updateProps(false, [node]);
   };
 
@@ -970,13 +979,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Col>
           <Col span={24}>
             <Form.Item wrapperCol={{ offset: 6 }}>
-              <Button.Group
-                style={{ width: '100%', backgroundColor: '#E0E7F5' }}
-              >
+              <Button.Group style={{ width: '100%' }}>
                 <Button
                   block
                   size="small"
-                  type="text"
+                  type={pilotBtnSize === 'small' ? 'primary' : 'default'}
                   onClick={() => changePolitSize(15)}
                 >
                   小
@@ -984,7 +991,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 <Button
                   block
                   size="small"
-                  type="text"
+                  type={pilotBtnSize === 'middle' ? 'primary' : 'default'}
                   onClick={() => changePolitSize(20)}
                 >
                   中
@@ -992,7 +999,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 <Button
                   block
                   size="small"
-                  type="text"
+                  type={pilotBtnSize === 'large' ? 'primary' : 'default'}
                   onClick={() => changePolitSize(30)}
                 >
                   大
@@ -1013,7 +1020,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
             <Col span={14}>
               <Form.Item name="text">
-                <Input maxLength={4} />
+                <Input maxLength={10} />
               </Form.Item>
             </Col>
           </Row>
@@ -1057,7 +1064,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                           fieldKey={[field.fieldKey, 'lightRangeVal']}
                           rules={[{ required: true, message: '必填' }]}
                         >
-                          <InputNumber placeholder="数值" min={0} />
+                          <InputNumber placeholder="数值" />
                         </Form.Item>
                         <Form.Item
                           {...field}
@@ -1079,7 +1086,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                         >
                           <InputNumber
                             style={{ width: 60 }}
-                            min={0}
                             placeholder="下限"
                           />
                         </Form.Item>
@@ -1092,7 +1098,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                         >
                           <InputNumber
                             style={{ width: 60 }}
-                            min={0}
                             placeholder="上限"
                           />
                         </Form.Item>
@@ -1128,7 +1133,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [propertyForm, data?.node]);
+  }, [propertyForm, property, data?.node, pilotBtnSize]);
 
   /**
    * 渲染计量器样式
@@ -1143,7 +1148,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Col>
             <Col>
               <Input.Group compact>
-                <Form.Item name="dataMin">
+                <Form.Item
+                  name="dataMin"
+                  rules={[{ required: true, message: '必填项' }]}
+                >
                   <InputNumber style={{ width: 85 }} placeholder="下限" />
                 </Form.Item>
                 <Input
@@ -1154,7 +1162,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   placeholder="~"
                   disabled
                 />
-                <Form.Item name="dataMax">
+                <Form.Item
+                  name="dataMax"
+                  rules={[{ required: true, message: '必填项' }]}
+                >
                   <InputNumber
                     style={{
                       width: 85,
@@ -1186,12 +1197,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <Col span={15}>
                 <Input.Group compact>
                   <Form.Item name={`bottom-${index}`}>
-                    <InputNumber
-                      style={{ width: 60 }}
-                      placeholder="下限"
-                      min={-100}
-                      max={500}
-                    />
+                    <InputNumber style={{ width: 60 }} placeholder="下限" />
                   </Form.Item>
                   <Input
                     style={{ width: 30, pointerEvents: 'none' }}
@@ -1199,12 +1205,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     disabled
                   />
                   <Form.Item name={`top-${index}`}>
-                    <InputNumber
-                      style={{ width: 60 }}
-                      placeholder="上限"
-                      min={-100}
-                      max={500}
-                    />
+                    <InputNumber style={{ width: 60 }} placeholder="上限" />
                   </Form.Item>
                 </Input.Group>
               </Col>

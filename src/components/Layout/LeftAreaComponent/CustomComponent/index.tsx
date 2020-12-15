@@ -158,6 +158,7 @@ const Layout = forwardRef((props: Props, ref) => {
                     href="#"
                     onClick={(e) => e.preventDefault()}
                     title={item.componentName}
+                    style={{padding: '0 5px'}}
                     onDragStart={(ev) =>
                       onDrag(ev, JSON.parse(item.componentProperty), true)
                     }
@@ -166,6 +167,7 @@ const Layout = forwardRef((props: Props, ref) => {
                     <span
                       style={{
                         marginTop: 5,
+                        width: '10ch',
                         overflow: 'hidden',
                         display: 'block',
                         whiteSpace: 'nowrap',

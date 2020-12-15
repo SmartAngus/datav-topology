@@ -142,13 +142,13 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           case 'gauge':
             if (node.property.dataPointSelectedRows[0]?.id == r.id) {
               const cd = {
-                value:0,
-                name:node.property.chartTitle
-              }
-              cd.value=r.value;
-              node.data.echarts.option.series[0].data[0]=cd;
-              updateChartNode(node)
-            }else{
+                value: 0,
+                name: node.property.chartTitle,
+              };
+              cd.value = r.value;
+              node.data.echarts.option.series[0].data[0] = cd;
+              updateChartNode(node);
+            } else {
               // node.data.echarts.option.series[0].data.pop()
               // updateChartNode(node)
             }
@@ -185,7 +185,13 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             node.text != r.value &&
             node.property.dataPointParam.qtDataList[0].id == r.id
           ) {
-            node.text = r.value;
+            if (!isNaN(Number(r.value))) {
+              // 数值型
+              const n = node.property.dataDot;
+              node.text = roundFun(Number(r.value), n);
+            } else {
+              node.text = r.value;
+            }
             canvas.updateProps(false);
           }
         } else if (node.name === 'biciCard') {

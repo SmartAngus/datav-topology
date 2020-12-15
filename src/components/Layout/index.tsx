@@ -183,7 +183,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (custom) {
       let data = node;
       data.id = s8();
-      event.dataTransfer.setData('Topology', JSON.stringify(data,replacer));
+      event.dataTransfer.setData('Topology', JSON.stringify(data, replacer));
     } else {
       event.dataTransfer.setData(
         'Topology',
@@ -298,9 +298,14 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       const titleVal = showTitle ? cardTitle : '';
       selected.node.text = titleVal;
     }
+    console.log(value);
     if (showLimit !== undefined) {
       const limitText = showLimit
-        ? `上限: ${value['limit.top']}   下限: ${value['limit.bottom']}`
+        ? `下限: ${
+            !isNaN(Number(value['limit.bottom'])) ? value['limit.bottom'] : ''
+          }   上限: ${
+            !isNaN(Number(value['limit.top'])) ? value['limit.top'] : ''
+          }`
         : '';
       selected.node.children[1].text = limitText;
     }
@@ -308,7 +313,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // 下限不能高于上限
       const limitTop = value['limit.top'];
       const limitBottom = value['limit.bottom'];
-      if ((limitTop !== 0 || limitBottom !== 0) && limitTop <= limitBottom) {
+      if (limitTop && limitBottom && limitTop <= limitBottom) {
         message.error('上限不能低于或等于下限');
       }
     }
@@ -397,10 +402,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           color,
           textAlign,
           fontSize: isNaN(Number(fontSize)) ? undefined : Number(fontSize),
-          fontFamily:
-            fontFamily?.length > 0
-              ? fontFamily.toString()
-              : selected.node.font.fontFamily,
+          fontFamily,
         },
         rotate: isNaN(Number(rotate)) ? undefined : Number(rotate),
         strokeStyle,
@@ -584,7 +586,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         setIsSave(false);
         break;
       case 'node': // 节点切换或者点击
-          console.log("event=",data)
+        console.log('event=', data);
         setSelected({
           node: data,
           line: null,
