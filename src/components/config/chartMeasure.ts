@@ -313,6 +313,12 @@ export function getMeasureOption(option?: {
 
   return measureOption;
 }
+
+/***
+ * 仪表盘
+ * @param opt
+ * @param changeValues
+ */
 export function getGaugeOption(
   opt?: {
     min: number;
@@ -424,7 +430,11 @@ export function getGaugeOption(
   };
   return option;
 }
-// 计量器
+
+/**
+ * 计量器
+ * @param opt
+ */
 export function getMeasureOption2(opt?: {
   associationObject?: string;
   value?: string | number;
