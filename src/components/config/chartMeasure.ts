@@ -2,6 +2,7 @@ import echarts from 'echarts/lib/echarts';
 import moment from 'moment';
 import * as _ from 'lodash';
 import { roundFun } from '../utils/cacl';
+import {colorList} from '../data/defines'
 
 /***
  * 仪表盘
@@ -127,31 +128,31 @@ export function getGaugeOption(
 export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
   const dataColors =  [
     {
-      checked: false,
+      checked: true,
       color: '#93FE94',
       top: 20,
       bottom: 0,
     },
     {
-      checked: false,
+      checked: true,
       color: '#E4D225',
       top: 40,
       bottom: 20,
     },
     {
-      checked: false,
+      checked: true,
       color: '#E01F28',
       top: 70,
       bottom: 40,
     },
     {
-      checked: false,
+      checked: true,
       color: '#E4D225',
       top: 40,
       bottom: 20,
     },
     {
-      checked: false,
+      checked: true,
       color: '#E01F28',
       top: 70,
       bottom: 40,
@@ -171,6 +172,15 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
     ...options,
     ...node?.property?.dataPointSelectedRows[0],
     value:socketData?.value||0
+  }
+  if(node&&node.property){
+    options.dataColors.map((color,index)=>{
+      if(node.property.dataColors[index].checked){
+        options.dataColors[index]=node.property.dataColors[index];
+      }else{
+        options.dataColors[index]=dataColors[index];
+      }
+    })
   }
 
   function f() {
@@ -518,7 +528,7 @@ export function getTimelineOption(
   if (node != undefined) {
     node.property = Object.assign({}, node.property, changeValues);
   }
-  let colorList=["#9E87FF", '#73DDFF', '#fe9a8b', '#F56948', '#9E87FF', '#1E87FF', '#2E87FF', '#3E87FF', '#4E87FF', '#5E87FF']
+
   if(node != undefined){
     (node.property.lineGraphRange || []).map((colorObj, index) => {
       if(colorObj!=undefined&&colorObj.lineGraphRangeColor){
@@ -576,29 +586,29 @@ export function getTimelineOption(
       type: 'line',
       color: color[x] + ')',
       smooth: smooth,
-      areaStyle: {
-        normal: {
-          color: new echarts.graphic.LinearGradient(
-            0,
-            0,
-            0,
-            1,
-            [
-              {
-                offset: 0,
-                color: color[x] + ', 0.3)',
-              },
-              {
-                offset: 0.8,
-                color: color[x] + ', 0)',
-              },
-            ],
-            false
-          ),
-          shadowColor: 'rgba(0, 0, 0, 0.1)',
-          shadowBlur: 10,
-        },
-      },
+      // areaStyle: {
+      //   normal: {
+      //     color: new echarts.graphic.LinearGradient(
+      //       0,
+      //       0,
+      //       0,
+      //       1,
+      //       [
+      //         {
+      //           offset: 0,
+      //           color: color[x] + ', 0.3)',
+      //         },
+      //         {
+      //           offset: 0.8,
+      //           color: color[x] + ', 0)',
+      //         },
+      //       ],
+      //       false
+      //     ),
+      //     shadowColor: 'rgba(0, 0, 0, 0.1)',
+      //     shadowBlur: 10,
+      //   },
+      // },
       symbol: 'circle',
       symbolSize: 5,
       data: charts.value[i],
