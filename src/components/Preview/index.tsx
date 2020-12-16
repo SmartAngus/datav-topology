@@ -155,14 +155,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             break;
           case 'chartMeasure':
             if (node.property.dataPointSelectedRows[0]?.id == r.id) {
-              const option = getMeasureOption2({
-                associationObject:
-                  node.property.dataPointSelectedRows[0]?.dataName,
-                value: r.value,
-                unit: node.property.chartUnit,
-                dataColors: node.property.dataColors,
-                chartUnitChecked: node.property.chartUnitChecked,
-              });
+              const option = getMeasureOption2(node,undefined,r);
               node.data.echarts.option = option;
               updateChartNode(node);
             }

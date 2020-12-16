@@ -84,7 +84,7 @@ export function roundFun(value: number, n: number) {
 }
 
 // 判断区间是否有重叠，返回重叠区
-export function eraseOverlapIntervals(intervals) {
+export function eraseOverlapIntervals(intervals):any[] {
   intervals.sort((a, b) => a[1] - b[1]); //按照区间末位对这些区间排个位，保证结束时间是按序上升的，从前往后取总是能取到当前结束时间的最小值
   // 重叠的区间
   let res = []

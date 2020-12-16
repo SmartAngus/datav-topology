@@ -611,6 +611,8 @@ export const Tools = [
             chartTitleChecked: true,
             chartTitle: '实时曲线',
             chartTitleColor: '#c0c0c0',
+            chartBackgroundColor: '#1b2735',
+            chartBackgroundChecked:false,
             lineReferenceChecked: false, // splitLine
             lineReferenceColor: '#ccc',
             lineColors: [],

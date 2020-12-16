@@ -9,7 +9,7 @@ import { base64ToFile } from '../utils/cacl';
 import CustomIcon from '../config/iconConfig';
 
 import styles from './index.module.scss';
-import { replacer } from '../utils/serializing';
+import {replacer, reviver} from '../utils/serializing';
 
 const headTools = [
   {

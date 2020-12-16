@@ -225,6 +225,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           property.chartUnitChecked && property.chartUnitChecked,
         chartUnit: property.chartUnit && property.chartUnit,
         lineGraphRange: property.lineGraphRange && property.lineGraphRange,
+        chartBackgroundColor:property.chartBackgroundColor && property.chartBackgroundColor,
+        chartBackgroundChecked:property.chartBackgroundChecked && property.chartBackgroundChecked,
       });
     }
   }, [property]);
@@ -1497,6 +1499,24 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 buttonStyle="solid"
               />
             </Form.Item>
+            <Row>
+              <Col span={10}>
+                <Form.Item
+                    label="背景色"
+                    labelCol={{ span: 16 }}
+                    labelAlign="left"
+                    name="chartBackgroundChecked"
+                    valuePropName="checked"
+                >
+                  <Checkbox />
+                </Form.Item>
+              </Col>
+              <Col span={12} push={2}>
+                <Form.Item name="chartBackgroundColor">
+                  <ColorPicker />
+                </Form.Item>
+              </Col>
+            </Row>
             <Row>
               <Col span={10}>
                 <Form.Item

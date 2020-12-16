@@ -247,12 +247,12 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     selected.node.elementRendered = true;
     canvas.updateProps(true, [selected.node]);
   };
-
+  // 计量器
   const handleChartMeasureOption = (values) => {
     for (let k in values) {
-      let kindex = k.split('-');
-      let index = parseInt(kindex[1]);
       if (k.indexOf('-') > 0) {
+        let kindex = k.split('-');
+        let index = parseInt(kindex[1]);
         selected.node.property.dataColors[index][kindex[0]] = values[k];
       }
     }
@@ -270,17 +270,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (lineColors.length == 0) {
       lineColors = undefined;
     }
-    const option = getMeasureOption2({
-      associationObject:
-        selected.node.property.dataPointSelectedRows[0]?.dataName ||
-        selected.node.property.dataPointSelectedRows[0]?.name,
-      value: 0,
-      max: selected.node.property.dataMax,
-      min: selected.node.property.dataMin,
-      dataColors: selected.node.property.dataColors,
-      unit: values.chartUnit,
-      chartUnitChecked: values.chartUnitChecked,
-    });
+    const option = getMeasureOption2(selected.node,values,undefined);
     selected.node.data.echarts.option = JSON.parse(
       JSON.stringify(option, replacer),
       reviver
