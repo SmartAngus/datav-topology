@@ -113,7 +113,6 @@ export default class CanvasContextMenu extends Component<
   };
   // 打开新建组件弹窗
   onNewComponent = () => {
-    console.log(this.props.data.nodes)
     this.setState({ newComVisible: true });
   };
   // 确定新建组件
@@ -130,14 +129,24 @@ export default class CanvasContextMenu extends Component<
       ]);
       this.setState({ componentName: values.componentName });
       this.setState({ newComVisible: false });
-      const newNode = this.props.data.nodes?
-          this.props.canvas.toComponent(this.props.data.nodes):this.props.canvas.toComponent([this.props.data.node]);
+      if (this.props.data.nodes) {
+        this.props.data.nodes.forEach(item => {
+          item.property.dataPointSelectedRows = [];
+          item.property.dataPointParam.qtDataList= [];
+        })
+      }else {
+        this.props.data.node.property.dataPointSelectedRows = [];
+        this.props.data.node.property.dataPointParam.qtDataList = [];
+      }
+      const newNode = this.props.data.nodes
+        ? this.props.canvas.toComponent(this.props.data.nodes)
+        : this.props.canvas.toComponent([this.props.data.node]);
       // this.props.canvas.delete();
       // this.props.canvas.addNode(newNode);
       this.props.canvas.render();
       this.saveNewComponent({
         componentName: this.state.componentName,
-        componentProperty: JSON.stringify(newNode,replacer),
+        componentProperty: JSON.stringify(newNode, replacer),
       }).then((res) => {
         message.info('添加到自定义组件成功');
         this.props.getNewComponents();

@@ -145,7 +145,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 value: 0,
                 name: node.property.chartTitle,
               };
-              cd.value = r.value;
+              cd.value = +roundFun(r.value, node.property.dataDot);
               node.data.echarts.option.series[0].data[0] = cd;
               updateChartNode(node);
             } else {
@@ -158,7 +158,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
               const option = getMeasureOption2({
                 associationObject:
                   node.property.dataPointSelectedRows[0]?.dataName,
-                value: r.value,
+                value: +roundFun(r.value, node.property.dataDot),
                 unit: node.property.chartUnit,
                 dataColors: node.property.dataColors,
                 chartUnitChecked: node.property.chartUnitChecked,
@@ -202,10 +202,10 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             const n = node.property.dataDot;
             const val = roundFun(parseFloat(r.value), n);
             node.children[0].text = val;
-            const bottom = parseFloat(node.property.limit.bottom);
-            const top = parseFloat(node.property.limit.top);
+            const bottom = node.property.limit.bottom ? parseInt(node.property.limit.bottom) : undefined;
+            const top = node.property.limit.bottom ? parseInt(node.property.limit.top) : undefined;
             const tempVal = parseFloat(val);
-            if (top !== 0 && tempVal < bottom) {
+            if (bottom && tempVal < bottom) {
               const showColor = node.property.bottomLimit.showBkColor
                 ? node.property.bottomLimit.bkColor
                 : node.property.normal.bkColor;
@@ -217,7 +217,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 parseInt(node.property.bottomLimit.fontSize),
                 showColor
               );
-            } else if (top !== 0 && tempVal > top) {
+            } else if (top && tempVal > top) {
               const showColor = node.property.bottomLimit.showBkColor
                 ? node.property.topLimit.bkColor
                 : node.property.normal.bkColor;

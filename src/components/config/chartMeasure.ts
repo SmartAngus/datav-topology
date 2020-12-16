@@ -1,6 +1,7 @@
 import echarts from 'echarts/lib/echarts';
 import moment from 'moment';
 import * as _ from 'lodash';
+import { roundFun } from '../utils/cacl';
 
 export function getMeasureOption(option?: {
   min: number;
@@ -847,7 +848,9 @@ export function getTimelineOption(
       charts.names[index] = row.dataName||row.name;
       charts.unit=row.unit;
       if (socketData && row.id == socketData.id) {
-        charts.value[index].push(socketData.value);
+        charts.value[index].push(
+          +roundFun(socketData.value, node.property.dataDot)
+        );
       }
     });
   }

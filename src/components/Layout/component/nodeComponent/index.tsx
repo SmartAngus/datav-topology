@@ -20,7 +20,7 @@ import {
   Space,
   Tooltip,
   Radio,
-  Modal,
+  Modal, message,
 } from 'antd';
 import {
   PlusOutlined,
@@ -41,6 +41,7 @@ import * as _ from 'lodash';
 import { getTimelineOption } from '../../../config/chartMeasure';
 import { echartsObjs } from '../../../../topology/chart-diagram/src/echarts';
 import { reviver } from '../../../utils/serializing';
+import {eraseOverlapIntervals} from "../../../utils/cacl";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -841,6 +842,18 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   }, [alignObj, data?.node]);
 
 
+  const checkCardRange = () => {
+    const bottom = propertyForm.getFieldValue('limit.bottom');
+    const top = propertyForm.getFieldValue('limit.top');
+    if (top < bottom) {
+      message.config({
+        getContainer: () => document.getElementById('editLayout'),
+      });
+      message.error('上限不能超过下限')
+    }
+  }
+
+
   /**
    * 渲染数据卡片样式设置  property
    */
@@ -885,6 +898,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   { label: '数据点', value: 'dataPoint' },
                   { label: '自定义', value: 'custom' },
                 ]}
+                onChange={() => {
+                  propertyForm.setFieldsValue({'showLimit': false ,'limit.bottom': undefined, 'limit.top': undefined});
+                }}
                 optionType="button"
                 buttonStyle="solid"
               />
@@ -909,7 +925,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     disabled
                   />
                   <Form.Item name="limit.top">
-                    <InputNumber style={{ width: 80 }} placeholder="上限" />
+                    <InputNumber style={{ width: 80 }} placeholder="上限" onBlur={checkCardRange} />
                   </Form.Item>
                 </Input.Group>
               </Col>
@@ -1026,6 +1042,33 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     canvas.updateProps(false, [node]);
   };
 
+  const checkPilotSingleRepeat = () => {
+    const vals = propertyForm.getFieldValue('lightRange').map((item) => item?.lightRangeVal);
+    const tmpSet = new Set(vals);
+    if (tmpSet.size !== vals.length) {
+      message.config({
+        getContainer: () => document.getElementById('editLayout'),
+      });
+      message.error('单点值不能重复')
+    }
+  }
+
+  const checkPilotRangeRepeat = () => {
+    const vals = propertyForm.getFieldValue('lightRange').map((item) => [
+      item?.lightRangeBottom,
+      item?.lightRangeTop,
+    ]);
+    if (!vals.flat().includes(undefined)){
+      const nums = eraseOverlapIntervals(vals);
+      if (nums.length !== 0) {
+        message.config({
+          getContainer: () => document.getElementById('editLayout'),
+        });
+        message.error('范围值出现重叠')
+      }
+    }
+  }
+
   /**
    * 渲染指示灯样式
    */
@@ -1140,7 +1183,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                           fieldKey={[field.fieldKey, 'lightRangeVal']}
                           rules={[{ required: true, message: '必填' }]}
                         >
-                          <InputNumber placeholder="数值" />
+                          <InputNumber placeholder="数值" onBlur={checkPilotSingleRepeat} />
                         </Form.Item>
                         <Form.Item
                           {...field}
@@ -1175,6 +1218,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                           <InputNumber
                             style={{ width: 60 }}
                             placeholder="上限"
+                            onBlur={checkPilotRangeRepeat}
                           />
                         </Form.Item>
                         <Form.Item
