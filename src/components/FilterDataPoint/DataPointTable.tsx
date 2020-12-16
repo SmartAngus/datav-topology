@@ -84,6 +84,9 @@ export default class DataPointTable extends Component<any,any> {
         case 'biciPilot': // 指示灯
           params.dataTypeList = [1,2]
           break;
+        case 'biciCard':
+          params.dataTypeList = [1];
+          break
         default:
       }
     }

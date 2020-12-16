@@ -1004,7 +1004,6 @@ export class Topology {
           } else if (!this.activeLayer.has(this.moveIn.activeNode)) {
             this.activeLayer.add(this.moveIn.activeNode);
             if (this.activeLayer.pens.length > 1) {
-              // console.log('ctrl+mouse+多选', this.activeLayer.pens);
               this.dispatch('multi', this.activeLayer.pens);
             } else {
               this.dispatch('node', this.moveIn.activeNode);
@@ -1018,10 +1017,14 @@ export class Topology {
             this.activeLayer.setPens([this.moveIn.hoverLine]);
             this.dispatch('line', this.moveIn.hoverLine);
           }
-        } else if (this.activeLayer.pens.length < 2) {
+        }else {
           this.activeLayer.setPens([this.moveIn.activeNode]);
           this.dispatch('node', this.moveIn.activeNode);
         }
+        // } else if (this.activeLayer.pens.length < 2) {
+        //   this.activeLayer.setPens([this.moveIn.activeNode]);
+        //   this.dispatch('node', this.moveIn.activeNode);
+        // }
 
         if (this.data.locked || this.moveIn.activeNode.locked) {
           this.moveIn.activeNode.click();
@@ -1066,6 +1069,7 @@ export class Topology {
         this.activeLayer.pens[0] &&
         this.activeLayer.pens[0].type === PenType.Node
       ) {
+        debugger
         this.dispatch('node', this.activeLayer.pens[0]);
       }
     } else {

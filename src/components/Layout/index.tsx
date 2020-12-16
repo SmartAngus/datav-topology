@@ -1,23 +1,12 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useMemo,
-  CSSProperties,
-  useRef,
-  useImperativeHandle,
-} from 'react';
-import { Topology, Options, Node } from '../../topology/core';
-import {
-  register as registerChart,
-  echartsObjs,
-} from '../../topology/chart-diagram';
-import { register as registerBiciComp } from '../../topology/bici-diagram';
-import { Modal, Tabs, message, Tooltip } from 'antd';
-import { Tools } from '../config/config';
-import { useClickAway } from 'ahooks';
-import { replacer, reviver } from '../utils/serializing';
-import { s8 } from '../../topology/core/src/utils/uuid';
+import React, {CSSProperties, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState,} from 'react';
+import {Options, Topology} from '../../topology/core';
+import {echartsObjs, register as registerChart,} from '../../topology/chart-diagram';
+import {register as registerBiciComp} from '../../topology/bici-diagram';
+import {message, Modal, Tabs, Tooltip} from 'antd';
+import {Tools} from '../config/config';
+import {useClickAway} from 'ahooks';
+import {replacer, reviver} from '../utils/serializing';
+import {s8} from '../../topology/core/src/utils/uuid';
 import Header from '../Header';
 import NodeComponent from './component/nodeComponent';
 import BackgroundComponent from './component/backgroundComponent';
@@ -28,14 +17,10 @@ import PicComponent from './LeftAreaComponent/PicComponent';
 
 import styles from './index.module.scss';
 import CanvasContextMenu from '../canvasContextMenu';
-import { DataVEditorProps } from '../data/defines';
-import { calcCanvas, eraseOverlapIntervals } from '../utils/cacl';
+import {DataVEditorProps} from '../data/defines';
+import {calcCanvas, eraseOverlapIntervals} from '../utils/cacl';
 import ResizePanel from '../common/resizeSidebar';
-import {
-  getGaugeOption,
-  getMeasureOption2,
-  getTimelineOption,
-} from '../config/chartMeasure';
+import {getGaugeOption, getMeasureOption2, getTimelineOption,} from '../config/chartMeasure';
 import * as _ from 'lodash';
 import moment from 'moment';
 
@@ -282,26 +267,31 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const handleBiciCard = (value) => {
     const { cardTitle, showTitle, showLimit } = value;
+    console.log(value)
+    console.log(selected.node)
     if (showTitle !== undefined) {
-      const titleVal = showTitle ? cardTitle : '';
-      selected.node.text = titleVal;
+      selected.node.text = showTitle ? cardTitle : '';
     }
     if (showLimit !== undefined) {
-      const limitText = showLimit
+      selected.node.children[1].text = showLimit
         ? `下限: ${
             !isNaN(parseInt(value['limit.bottom'])) ? value['limit.bottom'] : ''
           }   上限: ${
             !isNaN(parseInt(value['limit.top'])) ? value['limit.top'] : ''
           }`
         : '';
-      selected.node.children[1].text = limitText;
+    }
+    if (selected.node.property.preType !== selected.node.property.limitType) {
+      // 切换的标签
+      selected.node.children[1].text = ''
     }
     if ('limit.top' in value) {
       // 下限不能高于上限
       const limitTop = value['limit.top'];
       const limitBottom = value['limit.bottom'];
-      if (limitTop && limitBottom && limitTop <= limitBottom) {
-        message.error('上限不能低于或等于下限');
+      if (limitTop && limitBottom && limitTop < limitBottom) {
+        selected.node.property.limit.top = undefined
+        selected.node.property.limit.bottom = undefined
       }
     }
     if ('normal.showBkColor' in value) {
@@ -326,9 +316,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     selected.node.strokeStyle = color;
     selected.node.text = showText ? text : '';
     if (lightRange.length > 0) {
-      // message.config({
-      //   getContainer: () => document.querySelector('#editLayout'),
-      // });
       if (lightRange.includes(undefined)) {
         return;
       }
@@ -346,7 +333,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
             return item;
           }, []);
           selected.node.property.lightRange = lightRangeTmp;
-          // message.error('单点值不能重复');
         }
       } else {
         const vals = lightRange.map((item) => [
@@ -368,7 +354,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
               });
             });
             selected.node.property.lightRange = lightRangeTmp;
-            // message.error('范围值区间不能重叠');
           }
         }
       }
@@ -443,6 +428,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // 只能两层嵌套，后期需要更改，如果有多层的话
       // canvas.setValue(selected.node.id, 'setValue');
       // 通知有数据属性更新,会重新渲染画布
+      const { name } = selected.node;
+      if (name === 'biciCard') {
+        selected.node.property.preType = selected.node.property.limitType
+      }
 
       for (const key in value) {
         if (key.indexOf('.') > 0) {
@@ -457,7 +446,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         }
       }
 
-      const { name } = selected.node;
       switch (name) {
         case 'biciCard':
           handleBiciCard(value);
@@ -524,16 +512,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     canvas.cache();
     setBkImageUrl(imgUrl);
   }, []);
-  /**
-   * 缩放画布
-   * @param scaleKey 缩放系数
-   */
-  const handleScaleCanvas = (scaleKey) => {
-    // const  width=canvasSizeInfo.width*scaleKey;
-    // const height=canvasSizeInfo.height*scaleKey;
-    // const r = calcCanvas(width,height)
-    // setCanvasSizeInfo({...r,width,height})
-  };
 
   /**
    * 当线条表单数据变化时, 重新渲染canvas
@@ -773,7 +751,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           scaleVal={scaleVal}
           setIsSave={setIsSave}
           onExtraSetting={props.onExtraSetting}
-          onScaleCanvas={handleScaleCanvas}
           onEditorSaveCb={props.onEditorSaveCb}
           onPoweroff={props.onPoweroff}
           autoSaveInterval={props.autoSaveInterval}
