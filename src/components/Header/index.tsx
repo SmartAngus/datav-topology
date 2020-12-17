@@ -109,10 +109,12 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
       setIsSave,
       onScaleCanvas,
     } = props;
-    const [isFullscreen, { toggleFull }] = useFullscreen(rootRef);
     const [scaleNumber, setScaleNumber] = useState(undefined); // 缩放的基数
-
     const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
+
+    const [isFullscreen, { toggleFull }] = useFullscreen(rootRef, {onFull: () => {
+        console.log("全屏", canvas)
+      }});
 
     useEffect(() => {
       if (scaleVal && scaleNumber === undefined) {
@@ -386,7 +388,10 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         <a
           className={styles.toolItem}
           style={{ margin: '0 30px' }}
-          onClick={toggleFull}
+          onClick={() => {
+            console.log('全屏before', canvas)
+            toggleFull()
+          }}
         >
           <CustomIcon type="iconquanping1" />
           <span>{isFullscreen ? '退出全屏' : '全屏'}</span>

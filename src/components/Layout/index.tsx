@@ -23,6 +23,7 @@ import ResizePanel from '../common/resizeSidebar';
 import {getGaugeOption, getMeasureOption2, getTimelineOption,} from '../config/chartMeasure';
 import * as _ from 'lodash';
 import moment from 'moment';
+import {ActiveLayer} from "../../topology/core/src/activeLayer";
 
 const { confirm } = Modal;
 const { TabPane } = Tabs;
@@ -586,6 +587,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           nodes: null,
           locked: data.locked,
         });
+        // canvas.activeLayer.move(canvas.activeLayer.rect.x + 1, canvas.activeLayer.rect.y)
         setIsLoadCanvas(true);
         break;
       case 'delete':

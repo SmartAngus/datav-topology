@@ -349,12 +349,17 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           const scopeMax = !isNaN(Number(selectedData?.scopeMax))
             ? selectedData?.scopeMax
             : undefined;
-          propertyForm.setFieldsValue({
-            limitType: 'dataPoint',
-            showLimit: false,
-            'limit.bottom': scopeMin,
-            'limit.top': scopeMax,
-          });
+          // 不生效？？？
+          // propertyForm.setFieldsValue({
+          //   'limitType': 'dataPoint',
+          //   'showLimit': false,
+          //   'limit.bottom': scopeMin,
+          //   'limit.top': scopeMax,
+          // })
+          property.limitType = 'dataPoint'
+          property.showLimit = false
+          property.limit.bottom = scopeMin
+          property.limit.top = scopeMax
         }
         data.node.property.dataPointSelectedRows = selectedRows;
         data.node.property.dataPointParam.qtDataList[0] = {
@@ -935,9 +940,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   { label: '数据点', value: 'dataPoint' },
                   { label: '自定义', value: 'custom' },
                 ]}
-                onChange={() => {
-                  propertyForm.setFieldsValue({'showLimit': false ,'limit.bottom': undefined, 'limit.top': undefined});
-                }}
+                onChange={() => propertyForm.setFieldsValue({'showLimit': false ,'limit.bottom': undefined, 'limit.top': undefined})}
                 optionType="button"
                 buttonStyle="solid"
               />
@@ -1095,12 +1098,21 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       item?.lightRangeBottom,
       item?.lightRangeTop,
     ]);
+    let flag = false
     if (!vals.flat().includes(undefined)){
+      message.config({
+        getContainer: () => document.getElementById('editLayout'),
+      });
+      vals.some(item => {
+        if (item[1] < item[0]) {
+          message.error('下限不能大于上限')
+          flag = true
+          return true
+        }
+      })
+      if(flag) return
       const nums = eraseOverlapIntervals(vals);
       if (nums.length !== 0) {
-        message.config({
-          getContainer: () => document.getElementById('editLayout'),
-        });
         message.error('范围值出现重叠')
       }
     }

@@ -134,12 +134,18 @@ export default class CanvasContextMenu extends Component<
           if ('property' in item && item.property) {
             item.property.dataPointSelectedRows = [];
             item.property.dataPointParam.qtDataList= [];
+            if (item.property.echartsType === 'timeLine') {
+              item.data.echarts.option.series = []
+            }
           }
         })
       }else {
         if ('property' in this.props.data.node && this.props.data.node.property) {
           this.props.data.node.property.dataPointSelectedRows = [];
           this.props.data.node.property.dataPointParam.qtDataList = [];
+          if (this.props.data.node.property.echartsType === 'timeLine') {
+            this.props.data.node.data.echarts.option.series = []
+          }
         }
       }
       const newNode = this.props.data.nodes
