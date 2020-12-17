@@ -607,11 +607,10 @@ export function getTimelineOption(
 
       if (charts.value[index] && charts.value[index].length > 9) {
         charts.value[index].shift();
-      }else{
-        for(let i=0;i<9;i++){
-          charts.value[index].push(null)
-        }
       }
+      // for(let i=0;i<9;i++){
+      //   charts.value[index].push(null)
+      // }
       charts.names[index] = row.dataName||row.name;
       charts.unit=row.unit;
       if (socketData && row.id == socketData.id) {
