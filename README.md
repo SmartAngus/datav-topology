@@ -171,7 +171,6 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
         },
       })
       .then(res => {
-        console.log('detail', res);
         if (res.data?.data != null) {
           if (
             res.data.data.property != null &&

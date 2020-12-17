@@ -69,7 +69,7 @@ const fontStyleNodeList = [
 // 边框样式
 const boardStyleNodeList = ['circle', 'rectangle', 'biciVarer', 'combine'];
 // 不展示旋转
-const disabledRotateList = ['circle', 'biciPilot', 'echarts', 'biciCard'];
+const disabledRotateList = ['biciPilot', 'echarts', 'biciCard'];
 interface ICanvasProps extends FormProps {
   data?: any;
   onFormValueChange?: any;
@@ -1478,7 +1478,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Row>
             <Form.Item
               label="上下限"
-              wrapperCol={{ push: 6 }}
+              wrapperCol={{ offset: 4 }}
               name="dataTopSource"
             >
               <Radio.Group
@@ -1553,7 +1553,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
         <Panel header="样式" key="lineStyle">
           <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-            <Form.Item label="线型" wrapperCol={{ push: 10 }} name="smooth">
+            <Form.Item label="线型" wrapperCol={{ offset: 8 }} name="smooth">
               <Radio.Group
                 options={[
                   { label: '曲线', value: true },
