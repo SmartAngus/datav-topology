@@ -1017,14 +1017,15 @@ export class Topology {
             this.activeLayer.setPens([this.moveIn.hoverLine]);
             this.dispatch('line', this.moveIn.hoverLine);
           }
-        }else {
+        } else if (this.activeLayer.pens.length < 2) {
           this.activeLayer.setPens([this.moveIn.activeNode]);
           this.dispatch('node', this.moveIn.activeNode);
+        }else if (this.activeLayer.pens.length >= 2) {
+          if (!this.activeLayer.pens.includes(this.moveIn.activeNode)) {
+            this.activeLayer.setPens([this.moveIn.activeNode]);
+            this.dispatch('node', this.moveIn.activeNode);
+          }
         }
-        // } else if (this.activeLayer.pens.length < 2) {
-        //   this.activeLayer.setPens([this.moveIn.activeNode]);
-        //   this.dispatch('node', this.moveIn.activeNode);
-        // }
 
         if (this.data.locked || this.moveIn.activeNode.locked) {
           this.moveIn.activeNode.click();
@@ -1069,7 +1070,6 @@ export class Topology {
         this.activeLayer.pens[0] &&
         this.activeLayer.pens[0].type === PenType.Node
       ) {
-        debugger
         this.dispatch('node', this.activeLayer.pens[0]);
       }
     } else {
