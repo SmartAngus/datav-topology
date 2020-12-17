@@ -237,7 +237,49 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
       }
     }
     //中间线的渐变色和文本内容
-    if (TP_value > range[2]) {
+    if (TP_value > range[4]) {
+      Gradient.push(
+          {
+            offset: 0,
+            color: options.dataColors[0].color,
+          },
+          {
+            offset: 0.25,
+            color: options.dataColors[1].color,
+          },
+          {
+            offset: 0.5,
+            color: options.dataColors[2].color,
+          },
+          {
+            offset: 0.75,
+            color: options.dataColors[3].color,
+          },
+          {
+            offset: 1,
+            color: options.dataColors[4].color,
+          }
+      );
+    }else if (TP_value > range[3]) {
+      Gradient.push(
+          {
+            offset: 0,
+            color: options.dataColors[0].color,
+          },
+          {
+            offset: 0.33,
+            color: options.dataColors[1].color,
+          },
+          {
+            offset: 0.66,
+            color: options.dataColors[2].color,
+          },
+          {
+            offset: 1,
+            color: options.dataColors[3].color,
+          }
+      );
+    } else if (TP_value > range[2]) {
       Gradient.push(
         {
           offset: 0,
