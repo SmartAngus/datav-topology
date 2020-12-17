@@ -256,6 +256,19 @@ export const keyCodeMap = {
   paste: 86
 };
 
+export const colorList=[
+  "rgba(156, 25, 25, 1)",
+  "rgba(65, 117, 5, 1)",
+  "rgba(144, 19, 254, 1)",
+  "rgba(139, 87, 42, 1)",
+  "rgba(208, 2, 27, 1)",
+  "rgba(126, 211, 33, 1)",
+  "rgba(45, 65, 181, 1)",
+  "rgba(179, 156, 156, 1)",
+  "rgba(137, 116, 116, 1)",
+  "rgba(97, 147, 39, 1)"
+]
+
 /** 处理弹窗全屏挂载 */
 export function getContainer() {
   const pipelineDoms = document.getElementsByClassName("pipeline-canvas");

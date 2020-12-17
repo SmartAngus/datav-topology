@@ -42,6 +42,7 @@ import { getTimelineOption } from '../../../config/chartMeasure';
 import { echartsObjs } from '../../../../topology/chart-diagram/src/echarts';
 import { reviver } from '../../../utils/serializing';
 import {eraseOverlapIntervals} from "../../../utils/cacl";
+import {colorList} from '../../../data/defines'
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -100,6 +101,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const addLineColorBtnRef = React.useRef()
   const removeLineColorBtnRef = React.useRef()
   const { dataMethod, dataDot } = property || {};
+  const [refreshProperty,setRefreshProperty]=useState(false)
   useEffect(() => {
     // 设置基本表单
     form.setFieldsValue({
@@ -186,6 +188,22 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         width / 2 <= 15 ? 'small' : width / 2 <= 20 ? 'middle' : 'large';
       setPilotBtnSize(btnSize);
     } else if (data.node.name == 'echarts') {
+      let lineRangedefaultColor=colorList.map(color=>{
+        return {
+          lineGraphRangeColor:color
+        }
+      })
+
+      let nodeLineRangeColor=[]
+      if(property&&property.lineGraphRange){
+        nodeLineRangeColor=_.compact(property.lineGraphRange)
+      }
+      lineRangedefaultColor.map((colorObj,index)=>{
+        if(nodeLineRangeColor[index]!=null){
+          lineRangedefaultColor[index]=nodeLineRangeColor[index];
+        }
+      })
+      lineRangedefaultColor=_.slice(lineRangedefaultColor,0,property.dataPointSelectedRows.length)
       propertyForm.setFieldsValue({
         dataMax: property.dataMax,
         dataMin: property.dataMin,
@@ -225,12 +243,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         chartUnitChecked:
           property.chartUnitChecked && property.chartUnitChecked,
         chartUnit: property.chartUnit && property.chartUnit,
-        lineGraphRange: property.lineGraphRange && property.lineGraphRange,
+        lineGraphRange: lineRangedefaultColor,
         chartBackgroundColor:property.chartBackgroundColor && property.chartBackgroundColor,
         chartBackgroundChecked:property.chartBackgroundChecked && property.chartBackgroundChecked,
       });
     }
-  }, [property]);
+  }, [property,refreshProperty]);
 
   // 字段值更新时触发的回掉
   const handleValuesChange = (changedValues) => {
@@ -288,6 +306,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
   // 获得选中的数据点
   const onDataPointBind = (selectedRowKeys, selectedRows) => {
+    setRefreshProperty(!refreshProperty)
     if (selectedRows.length === 0) {
       return;
     }
@@ -305,9 +324,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               type: selectedRows[index].dataType || selectedRows[index].type,
             };
             data.node.property.dataPointParam.qtDataList[index]=q;
-            if(index>(tmp.length-1)){
-              (addLineColorBtnRef as any)?.current?.click()
-            }
+            // if(index>(tmp.length-1)){
+            //   (addLineColorBtnRef as any)?.current.click()
+            // }
           })
           setDataPointSelectedRows(selectedRows);
           updateTimelineOption();
@@ -349,6 +368,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       getContainer: () => document.querySelector('#editLayout'),
       onOk() {
         setIsSave(false);
+        setRefreshProperty(!refreshProperty)
         if (data.node.property.echartsType == 'timeLine') {
           const itemRowIndex = _.findIndex(
             property.dataPointSelectedRows,
@@ -366,7 +386,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
           setDataPointSelectedRows(newRows);
           updateTimelineOption();
-          (removeLineColorBtnRef as any).current?.click();
+         //(removeLineColorBtnRef as any).current.click();
         } else {
           data.node.property.dataPointParam.qtDataList = [];
           data.node.property.dataPointSelectedRows = [];
@@ -1588,9 +1608,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   {fields.map((field) => (
                     <Space
                       key={field.key}
-                      style={{ display: 'flex', marginBottom: 8}}
-                      // align="center"
-                      // size={20}
+                      style={{ display: 'flex', marginBottom: 8 }}
+                      align="center"
+                      size={20}
                     >
                       <Form.Item
                         {...field}
@@ -1616,17 +1636,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       </Form.Item>
                     </Space>
                   ))}
-                  <Form.Item style={{display:'none'}}>
-                    <Button
-                      type="dashed"
-                      ref={addLineColorBtnRef}
-                      onClick={() => add()}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      添加
-                    </Button>
-                  </Form.Item>
+                  {fields.length < 10 ? (
+                    <Form.Item style={{display:'none'}}>
+                      <Button
+                        type="dashed"
+                        ref={addLineColorBtnRef}
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        添加
+                      </Button>
+                    </Form.Item>
+                  ) : null}
                 </Fragment>
               )}
             </Form.List>
