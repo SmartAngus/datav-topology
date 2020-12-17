@@ -32,7 +32,6 @@ export const Tools = [
         icon: 'iconyuanxing',
         data: {
           text: '',
-          hideRotateCP: true,
           rect: {
             width: 100,
             height: 100,

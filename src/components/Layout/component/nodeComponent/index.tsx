@@ -68,7 +68,7 @@ const fontStyleNodeList = [
 // 边框样式
 const boardStyleNodeList = ['circle', 'rectangle', 'biciVarer', 'combine'];
 // 不展示旋转
-const disabledRotateList = ['circle', 'biciPilot', 'echarts', 'biciCard'];
+const disabledRotateList = ['biciPilot', 'echarts', 'biciCard'];
 interface ICanvasProps extends FormProps {
   data?: any;
   onFormValueChange?: any;
@@ -306,7 +306,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             };
             data.node.property.dataPointParam.qtDataList[index]=q;
             if(index>(tmp.length-1)){
-              (addLineColorBtnRef as any)?.current.click()
+              (addLineColorBtnRef as any)?.current?.click()
             }
           })
           setDataPointSelectedRows(selectedRows);
@@ -366,7 +366,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
           setDataPointSelectedRows(newRows);
           updateTimelineOption();
-          (removeLineColorBtnRef as any).current.click();
+          (removeLineColorBtnRef as any).current?.click();
         } else {
           data.node.property.dataPointParam.qtDataList = [];
           data.node.property.dataPointSelectedRows = [];
@@ -1458,7 +1458,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Row>
             <Form.Item
               label="上下限"
-              wrapperCol={{ push: 6 }}
+              wrapperCol={{ offset: 4 }}
               name="dataTopSource"
             >
               <Radio.Group
@@ -1533,7 +1533,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
         <Panel header="样式" key="lineStyle">
           <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-            <Form.Item label="线型" wrapperCol={{ push: 10 }} name="smooth">
+            <Form.Item label="线型" wrapperCol={{ offset: 8 }} name="smooth">
               <Radio.Group
                 options={[
                   { label: '曲线', value: true },
@@ -1588,9 +1588,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   {fields.map((field) => (
                     <Space
                       key={field.key}
-                      style={{ display: 'flex', marginBottom: 8 }}
-                      align="center"
-                      size={20}
+                      style={{ display: 'flex', marginBottom: 8}}
+                      // align="center"
+                      // size={20}
                     >
                       <Form.Item
                         {...field}
@@ -1616,19 +1616,17 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       </Form.Item>
                     </Space>
                   ))}
-                  {fields.length < 10 ? (
-                    <Form.Item style={{display:'none'}}>
-                      <Button
-                        type="dashed"
-                        ref={addLineColorBtnRef}
-                        onClick={() => add()}
-                        block
-                        icon={<PlusOutlined />}
-                      >
-                        添加
-                      </Button>
-                    </Form.Item>
-                  ) : null}
+                  <Form.Item style={{display:'none'}}>
+                    <Button
+                      type="dashed"
+                      ref={addLineColorBtnRef}
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      添加
+                    </Button>
+                  </Form.Item>
                 </Fragment>
               )}
             </Form.List>

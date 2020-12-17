@@ -737,7 +737,9 @@ export function getTimelineOption(
           color: 'rgb(0,253,255,0.6)',
         },
         formatter: function (params) {
-          return params.split(' ')[0];
+          if (params) {
+            return params.split(' ')[0];
+          }
         },
       },
     },
