@@ -88,6 +88,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const [propertyForm] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [pilotBtnSize, setPilotBtnSize] = useState('small');
+  const [btnColor, setBtnColor] = useState({
+    italicBtn: '#fff',
+    boldBtn: '#fff'
+  })
 
   const { x, y, width, height } = data?.node?.rect || {};
   const { rotate, lineWidth, strokeStyle, text, id, name, fillStyle } =
@@ -103,6 +107,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const { dataMethod, dataDot } = property || {};
   const [refreshProperty,setRefreshProperty]=useState(false)
   useEffect(() => {
+    if (data.node.font.fontStyle !== 'normal') {
+      setBtnColor({...btnColor, italicBtn: '#1890ff'})
+    }
+    if (data.node.font.fontWeight !== 'normal') {
+      setBtnColor({...btnColor, boldBtn: '#1890ff'})
+    }
     // 设置基本表单
     form.setFieldsValue({
       x: Math.round(x),
@@ -559,15 +569,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       // 斜体
       if (data.node.font.fontStyle === 'normal') {
         data.node.font.fontStyle = 'italic';
+        setBtnColor({...btnColor, italicBtn: '#1890ff'})
       } else {
         data.node.font.fontStyle = 'normal';
+        setBtnColor({...btnColor, italicBtn: '#fff'})
       }
     } else {
       // 加粗
       if (data.node.font.fontWeight === 'normal') {
         data.node.font.fontWeight = 'bold';
+        setBtnColor({...btnColor, boldBtn: '#1890ff'})
       } else {
         data.node.font.fontWeight = 'normal';
+        setBtnColor({...btnColor, boldBtn: '#fff'})
       }
     }
     setIsSave(false);
@@ -578,6 +592,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    * 渲染字体的表单
    */
   const renderFontForm = useMemo(() => {
+
     return (
       <Panel header="文字" key="font">
         <Form form={form} onValuesChange={handleValuesChange}>
@@ -637,15 +652,15 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               >
                 <Button
                   size="small"
-                  style={{ width: '33%' }}
+                  style={{ width: '33%', background: btnColor.italicBtn}}
                   icon={<CustomIcon type="iconzu" />}
                   onClick={() => fontStyleChange('fontStyle')}
                 />
                 <Button
                   size="small"
-                  style={{ width: '33%' }}
+                  style={{ width: '33%', background: btnColor.boldBtn}}
                   icon={<CustomIcon type="iconjiacu" />}
-                  onClick={() => fontStyleChange('fontWeight')}
+                  onClick={() =>fontStyleChange('fontWeight')}
                 />
               </Button.Group>
             </Form.Item>
@@ -690,7 +705,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Form>
       </Panel>
     );
-  }, [color, fontFamily, fontSize, text, data?.node]);
+  }, [color, fontFamily, fontSize, text, data?.node, btnColor]);
 
   /**
    * 渲染元素本身数据

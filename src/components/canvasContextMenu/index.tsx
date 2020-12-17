@@ -131,13 +131,13 @@ export default class CanvasContextMenu extends Component<
       this.setState({ newComVisible: false });
       if (this.props.data.nodes) {
         this.props.data.nodes.forEach(item => {
-          if(item.property){
+          if ('property' in item && item.property) {
             item.property.dataPointSelectedRows = [];
             item.property.dataPointParam.qtDataList= [];
           }
         })
       }else {
-        if(this.props.data.node.property){
+        if ('property' in this.props.data.node && this.props.data.node.property) {
           this.props.data.node.property.dataPointSelectedRows = [];
           this.props.data.node.property.dataPointParam.qtDataList = [];
         }
@@ -185,8 +185,8 @@ export default class CanvasContextMenu extends Component<
                 message: '最长为20个字符',
               },
               {
-                min: 2,
-                message: '不低于2个字符',
+                min: 1,
+                message: '不低于1个字符',
               },
             ]}
             label="组件名字"

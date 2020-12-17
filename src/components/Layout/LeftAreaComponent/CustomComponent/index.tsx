@@ -167,7 +167,6 @@ const Layout = forwardRef((props: Props, ref) => {
                     <span
                       style={{
                         marginTop: 5,
-                        width: '10ch',
                         overflow: 'hidden',
                         display: 'block',
                         whiteSpace: 'nowrap',
