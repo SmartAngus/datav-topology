@@ -188,6 +188,12 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             } else {
               node.text = r.value;
             }
+            if(r.value==true||r.value=='true'){
+              node.text=node.property.dataPointParam.qtDataList[0].trueDisplay||r.value
+            }
+            if(r.value==false||r.value=='false'){
+              node.text=node.property.dataPointParam.qtDataList[0].falseDisplay||r.value
+            }
             canvas.updateProps(false);
           }
         } else if (node.name === 'biciCard') {

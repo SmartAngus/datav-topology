@@ -592,6 +592,10 @@ export function getTimelineOption(
     charts.lineX = node.data.echarts.option.xAxis.data;
     if (charts.lineX.length > 9) {
       charts.lineX.shift();
+    }else{
+      for(let i=0;i<9;i++){
+        charts.lineX.push('')
+      }
     }
     charts.lineX.push(moment(socketData.time).format('LTS') + '');
   }
@@ -600,12 +604,20 @@ export function getTimelineOption(
       charts.value[index] = node.data.echarts.option.series[index]
         ? node.data.echarts.option.series[index].data
         : [];
+
       if (charts.value[index] && charts.value[index].length > 9) {
         charts.value[index].shift();
+      }else{
+        for(let i=0;i<9;i++){
+          charts.value[index].push(null)
+        }
       }
       charts.names[index] = row.dataName||row.name;
       charts.unit=row.unit;
       if (socketData && row.id == socketData.id) {
+        if(charts.value[index][0]==0){
+          charts.value[index].shift();
+        }
         charts.value[index].push(
           +roundFun(socketData.value, node.property.dataDot)
         );
@@ -818,5 +830,6 @@ export function getTimelineOption(
     },
     series: lineY,
   };
+
   return option;
 }

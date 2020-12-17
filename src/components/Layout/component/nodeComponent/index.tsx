@@ -306,7 +306,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
   // 获得选中的数据点
   const onDataPointBind = (selectedRowKeys, selectedRows) => {
-    setRefreshProperty(!refreshProperty)
     if (selectedRows.length === 0) {
       return;
     }
@@ -356,6 +355,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       }
       setIsSave(false);
     }
+    setRefreshProperty(!refreshProperty)
   };
   // 删除数据点
   const handleDeleteDataPoint = (item) => {
@@ -1656,7 +1656,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
       </Fragment>
     );
-  }, [property, data?.node,showSelectDataPoint]);
+  }, [property, data?.node,showSelectDataPoint,refreshProperty]);
 
   return (
     <div className={styles.rightArea}>

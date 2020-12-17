@@ -99,10 +99,10 @@ export default class DataPointTable extends Component<any,any> {
     if (position) {
       params.position = position
     }
-    // if (associationObject) {
-    //   params.associationObject = associationObject
-    // }
-    params.associationObject=this.associationObject;
+    if (associationObject) {
+      params.associationObject = associationObject
+    }
+    //params.associationObject=this.associationObject;
     if (channelList && channelList.length) {
       params.channelList = channelList
     }

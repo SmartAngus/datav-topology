@@ -131,12 +131,16 @@ export default class CanvasContextMenu extends Component<
       this.setState({ newComVisible: false });
       if (this.props.data.nodes) {
         this.props.data.nodes.forEach(item => {
-          item.property.dataPointSelectedRows = [];
-          item.property.dataPointParam.qtDataList= [];
+          if(item.property){
+            item.property.dataPointSelectedRows = [];
+            item.property.dataPointParam.qtDataList= [];
+          }
         })
       }else {
-        this.props.data.node.property.dataPointSelectedRows = [];
-        this.props.data.node.property.dataPointParam.qtDataList = [];
+        if(this.props.data.node.property){
+          this.props.data.node.property.dataPointSelectedRows = [];
+          this.props.data.node.property.dataPointParam.qtDataList = [];
+        }
       }
       const newNode = this.props.data.nodes
         ? this.props.canvas.toComponent(this.props.data.nodes)
