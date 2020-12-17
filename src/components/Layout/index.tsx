@@ -267,8 +267,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const handleBiciCard = (value) => {
     const { cardTitle, showTitle, showLimit } = value;
-    console.log(value)
-    console.log(selected.node)
     if (showTitle !== undefined) {
       selected.node.text = showTitle ? cardTitle : '';
     }

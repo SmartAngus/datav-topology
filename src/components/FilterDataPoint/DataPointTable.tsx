@@ -99,10 +99,10 @@ export default class DataPointTable extends Component<any,any> {
     if (position) {
       params.position = position
     }
-    // if (associationObject) {
-    //   params.associationObject = associationObject
-    // }
-    params.associationObject=this.associationObject;
+    if (associationObject) {
+      params.associationObject = associationObject
+    }
+    // params.associationObject=this.associationObject;
     if (channelList && channelList.length) {
       params.channelList = channelList
     }
@@ -128,13 +128,14 @@ export default class DataPointTable extends Component<any,any> {
     this.setState({ pagination: initialQueryParams.pagination, [key]: value }, () => {
       this.requestList()
     })
-    this.associationObject=value;
+    // this.associationObject=value;
   }
 
   handleTableChange = (pagination, filters, sorter) => {
     const { field, order } = sorter
     const resultOrder = order === 'ascend' ? 'asc' : 'desc'
     const sorterList = order ? [{ field, order: resultOrder }] : []
+    Object.keys(filters).forEach(key => (filters[key] == null) && delete filters[key])
     this.setState({ pagination, ...filters, sorterList }, () => this.requestList())
   }
 
