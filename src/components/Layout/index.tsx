@@ -23,6 +23,7 @@ import ResizePanel from '../common/resizeSidebar';
 import {getGaugeOption, getMeasureOption2, getTimelineOption,} from '../config/chartMeasure';
 import * as _ from 'lodash';
 import moment from 'moment';
+import {ActiveLayer} from "../../topology/core/src/activeLayer";
 
 const { confirm } = Modal;
 const { TabPane } = Tabs;
@@ -569,6 +570,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         setIsSave(false);
         break;
       case 'node': // 节点切换或者点击
+        console.log(data)
         setSelected({
           node: data,
           line: null,
@@ -587,6 +589,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           locked: data.locked,
         });
         setIsLoadCanvas(true);
+        canvas.activeLayer.saveNodeRects();
+        canvas.activeLayer.move(1, 0);
+        canvas.overflow();
+        canvas.animateLayer.animate();
         break;
       case 'delete':
         setIsSave(false);

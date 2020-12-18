@@ -57,7 +57,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
 }) => {
   const [form] = Form.useForm();
   const [rcSwitchState, setRcSwitchState] = useState(
-    data.canvas.width > data.canvas.height ? false : true
+    data.canvas.width <= data.canvas.height
   ); // 页面布局切换
   const [bkUrl, setBkUrl] = useState(''); // 保存背景图片url地址
   // 控制Popover的显示隐藏
@@ -89,7 +89,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
       w,
       h,
       bgColor,
-      bgColorCheck: bgColor ? true : false,
+      bgColorCheck: !!bgColor,
       bgImgCheck: isUploadBgImg,
       gridCheck: data.data.grid ? data.data.grid : false,
       gridSize: data.data.gridSize,

@@ -349,12 +349,17 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           const scopeMax = !isNaN(Number(selectedData?.scopeMax))
             ? selectedData?.scopeMax
             : undefined;
-          propertyForm.setFieldsValue({
-            limitType: 'dataPoint',
-            showLimit: false,
-            'limit.bottom': scopeMin,
-            'limit.top': scopeMax,
-          });
+          // 不生效？？？
+          // propertyForm.setFieldsValue({
+          //   'limitType': 'dataPoint',
+          //   'showLimit': false,
+          //   'limit.bottom': scopeMin,
+          //   'limit.top': scopeMax,
+          // })
+          property.limitType = 'dataPoint'
+          property.showLimit = false
+          property.limit.bottom = scopeMin
+          property.limit.top = scopeMax
         }
         data.node.property.dataPointSelectedRows = selectedRows;
         data.node.property.dataPointParam.qtDataList[0] = {
@@ -935,9 +940,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   { label: '数据点', value: 'dataPoint' },
                   { label: '自定义', value: 'custom' },
                 ]}
-                onChange={() => {
-                  propertyForm.setFieldsValue({'showLimit': false ,'limit.bottom': undefined, 'limit.top': undefined});
-                }}
+                onChange={() => propertyForm.setFieldsValue({'showLimit': false ,'limit.bottom': undefined, 'limit.top': undefined})}
                 optionType="button"
                 buttonStyle="solid"
               />
@@ -1095,12 +1098,21 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       item?.lightRangeBottom,
       item?.lightRangeTop,
     ]);
+    let flag = false
     if (!vals.flat().includes(undefined)){
+      message.config({
+        getContainer: () => document.getElementById('editLayout'),
+      });
+      vals.some(item => {
+        if (item[1] < item[0]) {
+          message.error('下限不能大于上限')
+          flag = true
+          return true
+        }
+      })
+      if(flag) return
       const nums = eraseOverlapIntervals(vals);
       if (nums.length !== 0) {
-        message.config({
-          getContainer: () => document.getElementById('editLayout'),
-        });
         message.error('范围值出现重叠')
       }
     }
@@ -1491,38 +1503,40 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item
-              label="上下限"
-              wrapperCol={{ offset: 4 }}
-              name="dataTopSource"
-            >
-              <Radio.Group
-                options={[
-                  { label: '自定义', value: 'custom' },
-                  { label: '数据点', value: 'dataPoint' },
-                ]}
-                optionType="button"
-                buttonStyle="solid"
-                onChange={(value)=>{
-                  if(value.target.value=='custom'){
-                    setShowSelectDataPoint(true)
-                  }else{
-                    setShowSelectDataPoint(false)
-                  }
-                }}
-              />
-            </Form.Item>
-            <Row>
+             <Col span={24}>
+               <Form.Item
+                 label="上下限"
+                 name="dataTopSource"
+               >
+                 <Radio.Group
+                   options={[
+                     { label: '自定义', value: 'custom' },
+                     { label: '数据点', value: 'dataPoint' },
+                   ]}
+                   style={{float: 'right'}}
+                   optionType="button"
+                   buttonStyle="solid"
+                   onChange={(value)=>{
+                     if(value.target.value=='custom'){
+                       setShowSelectDataPoint(true)
+                     }else{
+                       setShowSelectDataPoint(false)
+                     }
+                   }}
+                 />
+               </Form.Item>
+             </Col>
+            <Row justify='space-between'>
               <Col>
                 <Form.Item name="dataTopChecked" valuePropName="checked">
                   <Checkbox />
                 </Form.Item>
               </Col>
-              <Col push={2}>
+              <Col>
                 <Input.Group compact>
                   <Form.Item name="dataBottom">
                     <InputNumber
-                      style={{ width: 90 }}
+                      style={{ width: 85 }}
                       min={0}
                       placeholder="下限"
                       readOnly={!showSelectDataPoint}
@@ -1539,7 +1553,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   <Form.Item name="dataTop">
                     <InputNumber
                       style={{
-                        width: 90,
+                        width: 85,
                       }}
                       min={0}
                       placeholder="上限"
@@ -1568,16 +1582,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
         <Panel header="样式" key="lineStyle">
           <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-            <Form.Item label="线型" wrapperCol={{ offset: 8 }} name="smooth">
-              <Radio.Group
-                options={[
-                  { label: '曲线', value: true },
-                  { label: '折线', value: false },
-                ]}
-                optionType="button"
-                buttonStyle="solid"
-              />
-            </Form.Item>
+           <Col span={24}>
+             <Form.Item label="线型" name="smooth">
+               <Radio.Group
+                 options={[
+                   { label: '曲线', value: true },
+                   { label: '折线', value: false },
+                 ]}
+                 style={{float: "right"}}
+                 optionType="button"
+                 buttonStyle="solid"
+               />
+             </Form.Item>
+           </Col>
             <Row>
               <Col span={10}>
                 <Form.Item

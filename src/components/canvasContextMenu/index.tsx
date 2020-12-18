@@ -134,12 +134,19 @@ export default class CanvasContextMenu extends Component<
           if ('property' in item && item.property) {
             item.property.dataPointSelectedRows = [];
             item.property.dataPointParam.qtDataList= [];
+            if (item.property.echartsType === 'timeLine') {
+              item.data.echarts.option.series = []
+            }
           }
         })
       }else {
         if ('property' in this.props.data.node && this.props.data.node.property) {
           this.props.data.node.property.dataPointSelectedRows = [];
           this.props.data.node.property.dataPointParam.qtDataList = [];
+          if (this.props.data.node.property.echartsType === 'timeLine') {
+            const series = this.props.data.node.data.echarts.option.series
+            this.props.data.node.data.echarts.option.series = series.filter(item => item.name === '上限' || item.name === '下限')
+          }
         }
       }
       const newNode = this.props.data.nodes

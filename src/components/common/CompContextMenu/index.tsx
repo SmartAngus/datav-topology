@@ -80,8 +80,8 @@ const CompContextMenu = (props: CompContextMenuProps) => {
               message: '最长为20个字符',
             },
             {
-              min: 2,
-              message: '不低于2个字符',
+              min: 1,
+              message: '不低于1个字符',
             },
           ]}
           label="组件名字"
