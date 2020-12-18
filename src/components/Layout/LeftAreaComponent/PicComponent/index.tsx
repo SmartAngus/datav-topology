@@ -43,7 +43,7 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
       .then((res) => {
         const data = res.data.data;
         if (data) {
-          data.map((item: any) => {
+          data.forEach((item: any) => {
             item.name = item.name.substring(0, item.name.lastIndexOf('.'));
             item.type = item.name.substring(item.name.lastIndexOf('.') + 1);
             // getBase64(item.url, (data: string) => {
@@ -82,15 +82,7 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
 
   const onHandleUpload = ({ file }) => {
     if (file.status === 'done') {
-      const url = file.response?.data[0];
-      if (url) {
-        let _data = [...list];
-        _data.unshift({ name: file.name, url: url });
-        setList(_data);
-        // getBase64(url, (data: string) => {
-        //
-        // });
-      }
+      requstPicList()
     }
   };
   // 确定重命名

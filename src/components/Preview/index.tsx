@@ -145,7 +145,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 value: 0,
                 name: node.property.chartTitle,
               };
-              cd.value = +roundFun(r.value, node.property.dataDot);
+              cd.value = roundFun(r.value, node.property.dataDot);
               node.data.echarts.option.series[0].data[0] = cd;
               updateChartNode(node);
             } else {
