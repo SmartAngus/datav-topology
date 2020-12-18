@@ -144,7 +144,8 @@ export default class CanvasContextMenu extends Component<
           this.props.data.node.property.dataPointSelectedRows = [];
           this.props.data.node.property.dataPointParam.qtDataList = [];
           if (this.props.data.node.property.echartsType === 'timeLine') {
-            this.props.data.node.data.echarts.option.series = []
+            const series = this.props.data.node.data.echarts.option.series
+            this.props.data.node.data.echarts.option.series = series.filter(item => item.name === '上限' || item.name === '下限')
           }
         }
       }

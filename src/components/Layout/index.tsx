@@ -570,6 +570,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         setIsSave(false);
         break;
       case 'node': // 节点切换或者点击
+        console.log(data)
         setSelected({
           node: data,
           line: null,
@@ -587,8 +588,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           nodes: null,
           locked: data.locked,
         });
-        // canvas.activeLayer.move(canvas.activeLayer.rect.x + 1, canvas.activeLayer.rect.y)
         setIsLoadCanvas(true);
+        canvas.activeLayer.saveNodeRects();
+        canvas.activeLayer.move(1, 0);
+        canvas.overflow();
+        canvas.animateLayer.animate();
         break;
       case 'delete':
         setIsSave(false);

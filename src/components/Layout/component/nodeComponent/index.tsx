@@ -1503,38 +1503,40 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item
-              label="上下限"
-              wrapperCol={{ offset: 4 }}
-              name="dataTopSource"
-            >
-              <Radio.Group
-                options={[
-                  { label: '自定义', value: 'custom' },
-                  { label: '数据点', value: 'dataPoint' },
-                ]}
-                optionType="button"
-                buttonStyle="solid"
-                onChange={(value)=>{
-                  if(value.target.value=='custom'){
-                    setShowSelectDataPoint(true)
-                  }else{
-                    setShowSelectDataPoint(false)
-                  }
-                }}
-              />
-            </Form.Item>
-            <Row>
+             <Col span={24}>
+               <Form.Item
+                 label="上下限"
+                 name="dataTopSource"
+               >
+                 <Radio.Group
+                   options={[
+                     { label: '自定义', value: 'custom' },
+                     { label: '数据点', value: 'dataPoint' },
+                   ]}
+                   style={{float: 'right'}}
+                   optionType="button"
+                   buttonStyle="solid"
+                   onChange={(value)=>{
+                     if(value.target.value=='custom'){
+                       setShowSelectDataPoint(true)
+                     }else{
+                       setShowSelectDataPoint(false)
+                     }
+                   }}
+                 />
+               </Form.Item>
+             </Col>
+            <Row justify='space-between'>
               <Col>
                 <Form.Item name="dataTopChecked" valuePropName="checked">
                   <Checkbox />
                 </Form.Item>
               </Col>
-              <Col push={2}>
+              <Col>
                 <Input.Group compact>
                   <Form.Item name="dataBottom">
                     <InputNumber
-                      style={{ width: 90 }}
+                      style={{ width: 85 }}
                       min={0}
                       placeholder="下限"
                       readOnly={!showSelectDataPoint}
@@ -1551,7 +1553,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   <Form.Item name="dataTop">
                     <InputNumber
                       style={{
-                        width: 90,
+                        width: 85,
                       }}
                       min={0}
                       placeholder="上限"
@@ -1580,16 +1582,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
         <Panel header="样式" key="lineStyle">
           <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-            <Form.Item label="线型" wrapperCol={{ offset: 8 }} name="smooth">
-              <Radio.Group
-                options={[
-                  { label: '曲线', value: true },
-                  { label: '折线', value: false },
-                ]}
-                optionType="button"
-                buttonStyle="solid"
-              />
-            </Form.Item>
+           <Col span={24}>
+             <Form.Item label="线型" name="smooth">
+               <Radio.Group
+                 options={[
+                   { label: '曲线', value: true },
+                   { label: '折线', value: false },
+                 ]}
+                 style={{float: "right"}}
+                 optionType="button"
+                 buttonStyle="solid"
+               />
+             </Form.Item>
+           </Col>
             <Row>
               <Col span={10}>
                 <Form.Item

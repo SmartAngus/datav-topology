@@ -171,7 +171,7 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
   options={
     ...options,
     ...node?.property?.dataPointSelectedRows[0],
-    value:socketData?.value||0
+    value:roundFun(Number(socketData?.value), node?.property?.dataDot)||0
   }
   if(node&&node.property){
     options.dataColors.map((color,index)=>{
