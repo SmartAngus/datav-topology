@@ -139,7 +139,11 @@ export default class CanvasContextMenu extends Component<
             item.property.dataPointSelectedRows = [];
             item.property.dataPointParam.qtDataList= [];
             if (item.property.echartsType === 'timeLine') {
-              item.data.echarts.option.series = []
+              // item.data.echarts.option.series = []
+              if(item.data.echarts.option.legend){
+                item.data.echarts.option.legend.data=[];
+              }
+              item.data.echarts.option.series = item.data.echarts.option.series.filter(item => item.name === '上限' || item.name === '下限')
             }
           }
         })
@@ -150,6 +154,9 @@ export default class CanvasContextMenu extends Component<
           cloneNode.property.dataPointParam.qtDataList = [];
           if (cloneNode.property.echartsType === 'timeLine') {
             const series = cloneNode.data.echarts.option.series
+            if(cloneNode.data.echarts.option.legend){
+              cloneNode.data.echarts.option.legend.data=[];
+            }
             cloneNode.data.echarts.option.series = series.filter(item => item.name === '上限' || item.name === '下限')
           }
         }
