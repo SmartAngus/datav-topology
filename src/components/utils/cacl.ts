@@ -71,7 +71,10 @@ export function base64ToFile(data) {
 }
 
 // 保留n位小数并格式化输出（不足的部分补0）
-export function roundFun(value: number, n: number) {
+export function roundFun(value: any, n: any) {
+  if(typeof value!=='number'){
+    return value;
+  }
   let s = (Math.round(value * Math.pow(10, n)) / Math.pow(10, n)).toString();
   // let rs = s.indexOf('.');
   // if (rs < 0) {
