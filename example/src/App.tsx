@@ -11,7 +11,7 @@ import preBgImg2 from './bg02.jpg';
 import preBgImg3 from './bg03.jpg';
 
 const { confirm } = Modal;
-const token = '6v6sRucr3yIpYuRhaEnbpu';
+const token = '56Ddo6Q60t1LjFLgTGxp7';
 
 const testId = 'e2e697e719194b188c1bfe5b0dcb0604';
 
