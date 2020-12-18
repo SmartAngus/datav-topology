@@ -46,9 +46,9 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
           data.map((item: any) => {
             item.name = item.name.substring(0, item.name.lastIndexOf('.'));
             item.type = item.name.substring(item.name.lastIndexOf('.') + 1);
-            getBase64(item.url, (data: string) => {
-              item.url = data;
-            });
+            // getBase64(item.url, (data: string) => {
+            //   item.url = item.url;
+            // });
           });
         }
         setList(data);
@@ -84,11 +84,12 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
     if (file.status === 'done') {
       const url = file.response?.data[0];
       if (url) {
-        getBase64(url, (data: string) => {
-          let _data = [...list];
-          _data.unshift({ name: file.name, url: data });
-          setList(_data);
-        });
+        let _data = [...list];
+        _data.unshift({ name: file.name, url: url });
+        setList(_data);
+        // getBase64(url, (data: string) => {
+        //
+        // });
       }
     }
   };

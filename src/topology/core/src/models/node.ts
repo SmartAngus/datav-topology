@@ -9,7 +9,7 @@ import { text, iconfont } from '../middles/nodes/text';
 import { Store } from '../../../le5le-store';
 import { abs, distance } from '../utils/math';
 import { s8 } from '../utils/uuid';
-
+import * as _ from 'lodash'
 export const images: {
   [key: string]: { img: HTMLImageElement; cnt: number };
 } = {};
@@ -875,7 +875,8 @@ export class Node extends Pen {
 
   clone() {
     const n = new Node(this);
-    n.clearChildrenIds();
-    return n;
+    const newNode = _.cloneDeep(n)
+    newNode.clearChildrenIds();
+    return newNode;
   }
 }

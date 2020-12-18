@@ -188,10 +188,10 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
               node.text = r.value;
             }
             if(r.value==true||r.value=='true'){
-              node.text=node.property.dataPointParam.qtDataList[0].trueDisplay||r.value
+              node.text=node.property.dataPointSelectedRows[0].trueDisplay||r.value
             }
             if(r.value==false||r.value=='false'){
-              node.text=node.property.dataPointParam.qtDataList[0].falseDisplay||r.value
+              node.text=node.property.dataPointSelectedRows[0].falseDisplay||r.value
             }
             canvas.updateProps(false);
           }

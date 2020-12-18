@@ -190,7 +190,7 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
     var min = options.dataMin; //最小刻度
     var max = options.dataMax //最大刻度
     var offset = 0; //负数设置
-    var step = 20; //步长
+    var step = max/10; //步长
     var range = [0, 20, 40]; //范围[高,中,低]
     var unit = options.chartUnit; //单位
     if(options.chartUnitChecked!=true){
@@ -237,7 +237,132 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
       }
     }
     //中间线的渐变色和文本内容
-    if (TP_value > range[4]) {
+    // if (TP_value > range[4]) {
+    //   Gradient.push(
+    //       {
+    //         offset: 0,
+    //         color: options.dataColors[0].color,
+    //       },
+    //       {
+    //         offset: 0.25,
+    //         color: options.dataColors[1].color,
+    //       },
+    //       {
+    //         offset: 0.5,
+    //         color: options.dataColors[2].color,
+    //       },
+    //       {
+    //         offset: 0.75,
+    //         color: options.dataColors[3].color,
+    //       },
+    //       {
+    //         offset: 1,
+    //         color: options.dataColors[4].color,
+    //       }
+    //   );
+    // }else if (TP_value > range[3]) {
+    //   Gradient.push(
+    //       {
+    //         offset: 0,
+    //         color: options.dataColors[0].color,
+    //       },
+    //       {
+    //         offset: 0.33,
+    //         color: options.dataColors[1].color,
+    //       },
+    //       {
+    //         offset: 0.66,
+    //         color: options.dataColors[2].color,
+    //       },
+    //       {
+    //         offset: 1,
+    //         color: options.dataColors[3].color,
+    //       }
+    //   );
+    // } else if (TP_value > range[2]) {
+    //   Gradient.push(
+    //     {
+    //       offset: 0,
+    //       color: options.dataColors[0].color,
+    //     },
+    //     {
+    //       offset: 0.5,
+    //       color: options.dataColors[1].color,
+    //     },
+    //     {
+    //       offset: 1,
+    //       color: options.dataColors[2].color,
+    //     }
+    //   );
+    // } else if (TP_value > range[1]) {
+    //   Gradient.push(
+    //     {
+    //       offset: 0,
+    //       color: options.dataColors[0].color,
+    //     },
+    //     {
+    //       offset: 1,
+    //       color: options.dataColors[1].color,
+    //     }
+    //   );
+    // } else {
+    //   Gradient.push({
+    //     offset: 1,
+    //     color: options.dataColors[0].color,
+    //   });
+    // }
+    // 相反
+    if(TP_value < range[0]){
+      Gradient.push({
+        offset: 1,
+        color: options.dataColors[0].color,
+      });
+    }else if(TP_value < range[1]){
+      Gradient.push(
+          {
+            offset: 0,
+            color: options.dataColors[0].color,
+          },
+          {
+            offset: 1,
+            color: options.dataColors[1].color,
+          }
+      );
+    }else if (TP_value < range[2]) {
+      Gradient.push(
+          {
+            offset: 0,
+            color: options.dataColors[0].color,
+          },
+          {
+            offset: 0.5,
+            color: options.dataColors[1].color,
+          },
+          {
+            offset: 1,
+            color: options.dataColors[2].color,
+          }
+      );
+    }else if (TP_value < range[3]) {
+      Gradient.push(
+          {
+            offset: 0,
+            color: options.dataColors[0].color,
+          },
+          {
+            offset: 0.33,
+            color: options.dataColors[1].color,
+          },
+          {
+            offset: 0.66,
+            color: options.dataColors[2].color,
+          },
+          {
+            offset: 1,
+            color: options.dataColors[3].color,
+          }
+      );
+    }else {
       Gradient.push(
           {
             offset: 0,
@@ -260,57 +385,9 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
             color: options.dataColors[4].color,
           }
       );
-    }else if (TP_value > range[3]) {
-      Gradient.push(
-          {
-            offset: 0,
-            color: options.dataColors[0].color,
-          },
-          {
-            offset: 0.33,
-            color: options.dataColors[1].color,
-          },
-          {
-            offset: 0.66,
-            color: options.dataColors[2].color,
-          },
-          {
-            offset: 1,
-            color: options.dataColors[3].color,
-          }
-      );
-    } else if (TP_value > range[2]) {
-      Gradient.push(
-        {
-          offset: 0,
-          color: options.dataColors[0].color,
-        },
-        {
-          offset: 0.5,
-          color: options.dataColors[1].color,
-        },
-        {
-          offset: 1,
-          color: options.dataColors[2].color,
-        }
-      );
-    } else if (TP_value > range[1]) {
-      Gradient.push(
-        {
-          offset: 0,
-          color: options.dataColors[0].color,
-        },
-        {
-          offset: 1,
-          color: options.dataColors[1].color,
-        }
-      );
-    } else {
-      Gradient.push({
-        offset: 1,
-        color: options.dataColors[0].color,
-      });
     }
+
+
     if (TP_value > max - offset + scale * 2) {
       showValue = max - offset + scale * 2;
     } else if (TP_value < min - offset) {
@@ -593,11 +670,14 @@ export function getTimelineOption(
     if (charts.lineX.length > 9) {
       charts.lineX.shift();
     }else{
-      for(let i=0;i<9;i++){
-        charts.lineX.push('')
-      }
+      // for(let i=0;i<9;i++){
+      //   charts.lineX.push('')
+      // }
     }
-    charts.lineX.push(moment(socketData.time).format('LTS') + '');
+    const foratTime=moment(socketData.time).format('LTS') + '';
+    if(!charts.lineX.includes(foratTime)){
+      charts.lineX.push(foratTime);
+    }
   }
   if (node != undefined) {
     (node.property.dataPointSelectedRows || []).map((row, index) => {
@@ -607,10 +687,12 @@ export function getTimelineOption(
 
       if (charts.value[index] && charts.value[index].length > 9) {
         charts.value[index].shift();
+      }else{
+        // for(let i=0;i<9;i++){
+        //   charts.value[index].push(null)
+        // }
       }
-      // for(let i=0;i<9;i++){
-      //   charts.value[index].push(null)
-      // }
+
       charts.names[index] = row.dataName||row.name;
       charts.unit=row.unit;
       if (socketData && row.id == socketData.id) {
