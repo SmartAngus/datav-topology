@@ -193,10 +193,6 @@ export default class CanvasContextMenu extends Component<
                 message: '请输入组件名称',
               },
               {
-                max: 20,
-                message: '最长为20个字符',
-              },
-              {
                 min: 1,
                 message: '不低于1个字符',
               },
@@ -204,7 +200,7 @@ export default class CanvasContextMenu extends Component<
             label="组件名字"
             name="componentName"
           >
-            <Input placeholder="输入组件名字" id="componentName" />
+            <Input placeholder="输入组件名字" id="componentName" maxLength={20} />
           </Form.Item>
         </Form>
       </Modal>

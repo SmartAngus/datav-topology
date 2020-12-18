@@ -847,7 +847,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
               }}
             >
               <Tooltip title={props.boardData.code}>
-                <span>{props.boardData.code}</span>
+                <span>No.{props.boardData.code}</span>
               </Tooltip>
               <span style={{ margin: '0 5px' }}>/</span>
               <Tooltip title={props.boardData.name}>
