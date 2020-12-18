@@ -82,7 +82,14 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
 
   const onHandleUpload = ({ file }) => {
     if (file.status === 'done') {
-      const url = file.response?.data[0];
+      const data = file.response?.data;
+      let url=''
+      if(data!=null){
+        url=data[0];
+      }else{
+        message.error('服务器繁忙，请稍后再试！');
+        return;
+      }
       if (url) {
         let _data = [...list];
         _data.unshift({ name: file.name, url: url });
@@ -122,6 +129,10 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
   };
 
   const handleDelete = () => {
+    if(selectedItem==null){
+      message.error('请选择要删除的组件！');
+      return;
+    }
     clientParam(uploaConfig.baseURL)
       .get(uploaConfig.self.apiUrl.delete, {
         headers: {

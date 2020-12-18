@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 
-import { Topology, Node, Line, Lock } from '../../topology/core';
+import {Topology, Node, Line, Lock, s8} from '../../topology/core';
 
 import styles from './index.module.scss';
 import { Form, Input, Modal, message } from 'antd';
 import { FormInstance } from 'antd/es/form';
 import { client, clientParam } from '../data/api';
 import {replacer} from "../utils/serializing";
+import * as _ from 'lodash'
 
 export interface CanvasContextMenuProps {
   data: {
@@ -129,8 +130,11 @@ export default class CanvasContextMenu extends Component<
       ]);
       this.setState({ componentName: values.componentName });
       this.setState({ newComVisible: false });
-      if (this.props.data.nodes) {
-        this.props.data.nodes.forEach(item => {
+      const cloneNodes = _.cloneDeep(this.props.data.nodes);
+      const cloneNode = _.cloneDeep(this.props.data.node)
+      if (cloneNodes) {
+        cloneNodes.forEach(item => {
+          item.id=s8();
           if ('property' in item && item.property) {
             item.property.dataPointSelectedRows = [];
             item.property.dataPointParam.qtDataList= [];
@@ -140,18 +144,19 @@ export default class CanvasContextMenu extends Component<
           }
         })
       }else {
-        if ('property' in this.props.data.node && this.props.data.node.property) {
-          this.props.data.node.property.dataPointSelectedRows = [];
-          this.props.data.node.property.dataPointParam.qtDataList = [];
-          if (this.props.data.node.property.echartsType === 'timeLine') {
-            const series = this.props.data.node.data.echarts.option.series
-            this.props.data.node.data.echarts.option.series = series.filter(item => item.name === '上限' || item.name === '下限')
+        cloneNode.id=s8();
+        if ('property' in cloneNode && cloneNode.property) {
+          cloneNode.property.dataPointSelectedRows = [];
+          cloneNode.property.dataPointParam.qtDataList = [];
+          if (cloneNode.property.echartsType === 'timeLine') {
+            const series = cloneNode.data.echarts.option.series
+            cloneNode.data.echarts.option.series = series.filter(item => item.name === '上限' || item.name === '下限')
           }
         }
       }
-      const newNode = this.props.data.nodes
-        ? this.props.canvas.toComponent(this.props.data.nodes)
-        : this.props.canvas.toComponent([this.props.data.node]);
+      const newNode = cloneNodes
+        ? this.props.canvas.toComponent(cloneNodes)
+        : this.props.canvas.toComponent([cloneNode]);
       // this.props.canvas.delete();
       // this.props.canvas.addNode(newNode);
       this.props.canvas.render();

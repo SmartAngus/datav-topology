@@ -164,7 +164,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const onDrag = (event, node, custom = false) => {
     if (custom) {
       let data = node;
-      data.id = s8();
+      //data.id = s8();
       event.dataTransfer.setData('Topology', JSON.stringify(data, replacer));
     } else {
       event.dataTransfer.setData(
@@ -570,7 +570,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         setIsSave(false);
         break;
       case 'node': // 节点切换或者点击
-        console.log(data)
         setSelected({
           node: data,
           line: null,

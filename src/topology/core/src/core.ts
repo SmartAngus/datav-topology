@@ -2655,10 +2655,15 @@ export class Topology {
 
     for (const item of pens) {
       if (item !== node) {
-        item.parentId = node.id;
-        item.calcRectInParent(node);
-        node.children.push(item);
+        const newItem = _.cloneDeep(item)
+        newItem.parentId = node.id;
+        newItem.calcRectInParent(node);
+        node.children.push(newItem);
       }
+    }
+
+    if(pens.length==1){
+      node = _.cloneDeep(pens[0]) as Node;
     }
 
     return node;
