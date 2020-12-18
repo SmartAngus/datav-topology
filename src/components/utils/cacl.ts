@@ -75,7 +75,7 @@ export function roundFun(value: any, n: any) {
   if(typeof value!=='number'){
     return value;
   }
-  let s = (Math.round(value * Math.pow(10, n)) / Math.pow(10, n)).toString();
+  let s = (Math.round(value * Math.pow(10, n)) / Math.pow(10, n));
   // let rs = s.indexOf('.');
   // if (rs < 0) {
   //   s += '.';
