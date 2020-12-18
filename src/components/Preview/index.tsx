@@ -165,9 +165,8 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
               if (row.id == r.id) {
                 node.data.echarts.option = getTimelineOption(node, r);
               }
-              updateChartNode(node);
             });
-
+            updateChartNode(node);
             break;
           default:
         }

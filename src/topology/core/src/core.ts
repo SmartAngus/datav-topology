@@ -524,16 +524,32 @@ export class Topology {
       }
     }
     // end.
-
     if (data.pens) {
       for (const item of data.pens) {
         if (!item.from) {
-          this.data.pens.push(new Node(item));
+          let hasChart=false;
+          if(item.name=="combine"){
+            for(const child of item.children){
+              if(child.name=="echarts"){
+                hasChart=true;
+              }
+            }
+            if(hasChart){// 如果是图表组件，解组
+              for(const child of item.children){
+                this.data.pens.push(new Node(child));
+              }
+            }else{
+              this.data.pens.push(new Node(item));
+            }
+          }else{
+            this.data.pens.push(new Node(item));
+          }
         } else {
           this.data.pens.push(new Line(item));
         }
       }
     }
+
 
     this.data.websocket = data.websocket;
     this.data.mqttUrl = data.mqttUrl;

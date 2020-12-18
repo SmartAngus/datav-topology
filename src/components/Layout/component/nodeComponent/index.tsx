@@ -316,9 +316,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
   // 获得选中的数据点
   const onDataPointBind = (selectedRowKeys, selectedRows) => {
-    if (selectedRows.length === 0) {
-      return;
-    }
+    // if (selectedRows.length === 0) {
+    //   return;
+    // }
     const nodeType = getNodeType(data.node);
     if (property && property.dataPointSelectedRows) {
       if (nodeType == 'timeLine') {
