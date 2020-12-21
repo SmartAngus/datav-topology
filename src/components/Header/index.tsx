@@ -1,15 +1,16 @@
-import type { Topology } from '../../topology/core';
-import React, { useEffect, useImperativeHandle, useState } from 'react';
-import { History } from 'history';
-import { Button, Menu, Popover, Tag, Space, Tooltip, message } from 'antd';
-import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
-import { useFullscreen } from 'ahooks';
-import { BasicTarget } from 'ahooks/lib/utils/dom';
-import { base64ToFile } from '../utils/cacl';
+import type {Topology} from '../../topology/core';
+import React, {useEffect, useImperativeHandle, useState} from 'react';
+import {History} from 'history';
+import {Button, Menu, Popover, Tag, Space, Tooltip, message} from 'antd';
+import {PlusOutlined, MinusOutlined} from '@ant-design/icons';
+import {useFullscreen} from 'ahooks';
+import {BasicTarget} from 'ahooks/lib/utils/dom';
+import {base64ToFile} from '../utils/cacl';
 import CustomIcon from '../config/iconConfig';
 
 import styles from './index.module.scss';
 import {replacer, reviver} from '../utils/serializing';
+import _ from "lodash";
 
 const headTools = [
   {
@@ -112,9 +113,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
     const [scaleNumber, setScaleNumber] = useState(undefined); // 缩放的基数
     const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
 
-    const [isFullscreen, { toggleFull }] = useFullscreen(rootRef, {onFull: () => {
-        console.log("全屏", canvas)
-      }});
+    const [isFullscreen, {toggleFull}] = useFullscreen(rootRef);
 
     useEffect(() => {
       if (scaleVal && scaleNumber === undefined) {
@@ -163,12 +162,12 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         const saveData = new Blob([JSON.stringify(canvas.data, replacer)], {
           type: 'text/plain;charset=utf-8',
         });
-       // const screenshot = base64ToFile(canvas.toImage());
+        // const screenshot = base64ToFile(canvas.toImage());
         // canvas.saveAsImage();
         saveData.text().then((r) => {
           const json = JSON.parse(r);
           // json.screenshot = screenshot;
-           props.onEditorSaveCb && props.onEditorSaveCb(json);
+          props.onEditorSaveCb && props.onEditorSaveCb(json);
         });
       } else {
         message.warn('数据已经保存！');
@@ -287,7 +286,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           reader.onload = (e) => {
             history.push({
               pathname: '/preview',
-              state: { data: JSON.parse(reader.result as any) },
+              state: {data: JSON.parse(reader.result as any)},
             });
           };
         }
@@ -297,7 +296,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
      * 点击额外配置
      */
     const handleExtraSetting = () => {
-      const { onExtraSetting } = props;
+      const {onExtraSetting} = props;
       onExtraSetting && onExtraSetting();
       setIsSave(false);
     };
@@ -308,7 +307,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
     const scaleMenu = (
       <Menu
         onClick={(data) => handleSelectScaleMenu(data)}
-        style={{ border: 0 }}
+        style={{border: 0}}
       >
         <Menu.Item key="50">50%</Menu.Item>
         <Menu.Item key="100">100%</Menu.Item>
@@ -322,7 +321,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
     return (
       <div className={styles.toolsHeader}>
         <a className={styles.toolItem} onClick={handleExitEditor}>
-          <CustomIcon type="icontuichu" />
+          <CustomIcon type="icontuichu"/>
           <span>退出</span>
         </a>
         {/* <a className={styles.toolItem}>
@@ -340,7 +339,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
               className={styles.toolItem}
               onClick={() => handleHeaderClick(item.key)}
             >
-              <CustomIcon type={item.icon} />
+              <CustomIcon type={item.icon}/>
               <span>{item.name}</span>
             </a>
           </Tooltip>
@@ -359,7 +358,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           <Button
             size="small"
             shape="circle"
-            icon={<MinusOutlined style={{ color: '#666666' }} />}
+            icon={<MinusOutlined style={{color: '#666666'}}/>}
             onClick={() => scaleZoomIn()}
           />
           <Popover
@@ -381,27 +380,24 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           <Button
             size="small"
             shape="circle"
-            icon={<PlusOutlined style={{ color: '#666666' }} />}
+            icon={<PlusOutlined style={{color: '#666666'}}/>}
             onClick={() => scaleZoomOut()}
           />
         </a>
         <a
           className={styles.toolItem}
-          style={{ margin: '0 30px' }}
-          onClick={() => {
-            console.log('全屏before', canvas)
-            toggleFull()
-          }}
+          style={{margin: '0 30px'}}
+          onClick={toggleFull}
         >
-          <CustomIcon type="iconquanping1" />
+          <CustomIcon type="iconquanping1"/>
           <span>{isFullscreen ? '退出全屏' : '全屏'}</span>
         </a>
         <a
-          style={{ lineHeight: '48px', marginRight: 30 }}
+          style={{lineHeight: '48px', marginRight: 30}}
           onClick={handleExtraSetting}
         >
-          <CustomIcon type="iconpeizhikanban" />
-          <span style={{ marginLeft: 5 }}>配置看板</span>
+          <CustomIcon type="iconpeizhikanban"/>
+          <span style={{marginLeft: 5}}>配置看板</span>
         </a>
 
         <Tag
@@ -418,7 +414,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         </Tag>
 
         <ButtonGroup
-          style={{ flex: 1, flexDirection: 'row-reverse', right: 20 }}
+          style={{flex: 1, flexDirection: 'row-reverse', right: 20}}
         >
           <Space size="large">
             <Button onClick={handlePreview}>预览</Button>
