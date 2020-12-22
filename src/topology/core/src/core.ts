@@ -683,8 +683,8 @@ export class Topology {
       if (b) {
         const canvasPos = this.divLayer.canvas.getBoundingClientRect() as DOMRect;
         this.translate(
-          e.x - this.mouseDown.x - canvasPos.x,
-          e.y - this.mouseDown.y - canvasPos.y,
+            (e.x - canvasPos.x)/this.data.scale - this.mouseDown.x,
+            (e.y - canvasPos.y)/this.data.scale - this.mouseDown.y,
           true
         );
         return false;
@@ -701,7 +701,7 @@ export class Topology {
 
     this.scheduledAnimationFrame = true;
     const canvasPos = this.divLayer.canvas.getBoundingClientRect() as DOMRect;
-    const pos = new Point(e.x - canvasPos.x, e.y - canvasPos.y);
+    const pos = new Point((e.x - canvasPos.x)/this.data.scale, (e.y - canvasPos.y)/this.data.scale);
 
     if (this.raf) cancelAnimationFrame(this.raf);
     this.raf = requestAnimationFrame(() => {
@@ -811,8 +811,7 @@ export class Topology {
             pos.x - this.mouseDown.x,
             pos.y - this.mouseDown.y
           );
-          console.log(this.hoverLayer.dragRect)
-          console.log(this.hoverLayer)
+
 
           break;
         case MoveInType.Nodes:
@@ -909,10 +908,7 @@ export class Topology {
 
 
     const canvasPos = this.divLayer.canvas.getBoundingClientRect() as DOMRect;
-    this.mouseDown = { x: e.x - canvasPos.x, y: e.y - canvasPos.y };
-    console.log("onmousedown")
-    console.log(canvasPos)
-    console.log(this.mouseDown)
+    this.mouseDown = { x: (e.x - canvasPos.x)/this.data.scale, y: (e.y - canvasPos.y)/this.data.scale };
     if (e.altKey) {
       this.divLayer.canvas.style.cursor = 'move';
     }
@@ -1195,7 +1191,7 @@ export class Topology {
         !this.moveIn.hoverLine.text ||
         this.moveIn.hoverLine
           .getTextRect()
-          .hit(new Point(e.x - canvasPos.x, e.y - canvasPos.y))
+          .hit(new Point((e.x - canvasPos.x)/this.data.scale, (e.y - canvasPos.y)/this.data.scale))
       ) {
         this.showInput(this.moveIn.hoverLine);
       }
@@ -2445,7 +2441,7 @@ export class Topology {
 
   // scale for origin canvas:
   scaleTo(scale: number, center?: Point) {
-    this.scale(scale / this.data.scale, center);
+   // this.scale(scale / this.data.scale, center);
     this.data.scale = scale;
   }
 

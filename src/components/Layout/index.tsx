@@ -568,7 +568,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     const node = data;
     switch (event) {
       case 'resize':
-        console.log(data)
         break
       case 'dblclick':
         setIsSave(false);
@@ -735,39 +734,18 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    * @param scale
    */
   const handleScaleCanvas=(scale:number)=>{
-    const svgStyle={
-      minWidth: canvasSizeInfo.minWidth,
-      minHeight: canvasSizeInfo.minHeight,
-      transform:`scale(${scale})`
+    let x=(scale*canvasSizeInfo.width-canvasSizeInfo.width)*0.5;
+    let y=(scale*canvasSizeInfo.height-canvasSizeInfo.height)*0.5;
+    if(scale<=1){
+      x=0;y=0;
     }
-    const canvasStyle={
-      position: 'absolute',
-      borderWidth: 1,
-      overflow: 'hidden',
-      left: canvasSizeInfo.left,
-      top: canvasSizeInfo.top,
-      width: canvasSizeInfo.width,
-      height: canvasSizeInfo.height,
-      background: '#fff',
-      boxShadow: '0px 0px 2px 1px #d1d1d1',
-      border: '1px solid #f3f3f3',
-      transform:`scale(${scale})`
-    }
-    const containerStyle={
-      transform:`scale(${scale})`
+    const containerStyle= {
+      transformOrigin: 'center center',
+      transform: `translate(${x}px,${y}px) scale(${scale})`
     }
     $("#topology-canvas-wrapper").css(containerStyle)
-
-    // $("#topology-canvas").vascss(canvasStyle)
-    canvas.divLayer.canvas.style.transform=`scale(${scale}) `;
     canvas.render()
-
-    // d3Selection.select("#topology-canvas").call(d3Zoom.zoom().on("zoom", (p)=>{
-    //   console.log("----")
-    //   console.log(p)
-    // }))
-
-
+    scrollCenter()
   }
 
   /**
