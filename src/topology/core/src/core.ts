@@ -809,6 +809,9 @@ export class Topology {
             pos.x - this.mouseDown.x,
             pos.y - this.mouseDown.y
           );
+          console.log(this.hoverLayer.dragRect)
+          console.log(this.hoverLayer)
+
           break;
         case MoveInType.Nodes:
           if (this.activeLayer.locked()) {
@@ -902,8 +905,12 @@ export class Topology {
   private onmousedown = (e: MouseEvent) => {
     if (e.button !== 0) return;
 
+
     const canvasPos = this.divLayer.canvas.getBoundingClientRect() as DOMRect;
     this.mouseDown = { x: e.x - canvasPos.x, y: e.y - canvasPos.y };
+    console.log("onmousedown")
+    console.log(canvasPos)
+    console.log(this.mouseDown)
     if (e.altKey) {
       this.divLayer.canvas.style.cursor = 'move';
     }

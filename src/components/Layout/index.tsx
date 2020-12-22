@@ -6,7 +6,6 @@ import {message, Modal, Tabs, Tooltip} from 'antd';
 import {Tools} from '../config/config';
 import {useClickAway} from 'ahooks';
 import {replacer, reviver} from '../utils/serializing';
-import {s8} from '../../topology/core/src/utils/uuid';
 import Header from '../Header';
 import NodeComponent from './component/nodeComponent';
 import BackgroundComponent from './component/backgroundComponent';
@@ -23,7 +22,9 @@ import ResizePanel from '../common/resizeSidebar';
 import {getGaugeOption, getMeasureOption2, getTimelineOption,} from '../config/chartMeasure';
 import * as _ from 'lodash';
 import moment from 'moment';
-import {ActiveLayer} from "../../topology/core/src/activeLayer";
+import $ from "cash-dom";
+import * as d3Zoom from 'd3-zoom'
+import * as d3Selection from 'd3-selection'
 
 const { confirm } = Modal;
 const { TabPane } = Tabs;
@@ -726,6 +727,45 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     isLoadCanvas,
     canvas,
   ]);
+  /**
+   * 处理放大缩小
+   * @param scale
+   */
+  const handleScaleCanvas=(scale:number)=>{
+    const svgStyle={
+      minWidth: canvasSizeInfo.minWidth,
+      minHeight: canvasSizeInfo.minHeight,
+      transform:`scale(${scale})`
+    }
+    const canvasStyle={
+      position: 'absolute',
+      borderWidth: 1,
+      overflow: 'hidden',
+      left: canvasSizeInfo.left,
+      top: canvasSizeInfo.top,
+      width: canvasSizeInfo.width,
+      height: canvasSizeInfo.height,
+      background: '#fff',
+      boxShadow: '0px 0px 2px 1px #d1d1d1',
+      border: '1px solid #f3f3f3',
+      transform:`scale(${scale})`
+    }
+    const containerStyle={
+      transform:`scale(${scale})`
+    }
+    $("#topology-canvas-wrapper").css(containerStyle)
+
+    // $("#topology-canvas").vascss(canvasStyle)
+    canvas.divLayer.canvas.style.transform=`scale(${scale}) `;
+    canvas.render()
+
+    // d3Selection.select("#topology-canvas").call(d3Zoom.zoom().on("zoom", (p)=>{
+    //   console.log("----")
+    //   console.log(p)
+    // }))
+
+
+  }
 
   /**
    * 渲染画布右侧区域操作栏
@@ -758,6 +798,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           onPoweroff={props.onPoweroff}
           autoSaveInterval={props.autoSaveInterval}
           onPreview={props.onPreview}
+          onScaleCanvas={handleScaleCanvas}
         />
       );
     }
@@ -830,8 +871,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           id="full"
           style={{ background: '#f8f9fa' }}
         >
+          <div id="topology-canvas-wrapper">
           <svg
             className={styles.svg}
+            id="topology-canvas-svg"
             ref={svgRef}
             style={{
               minWidth: canvasSizeInfo.minWidth,
@@ -877,13 +920,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
               height: canvasSizeInfo.height,
               background: '#fff',
               boxShadow: '0px 0px 2px 1px #d1d1d1',
-              // backgroundSize: 'cover',
-              // backgroundRepeat: 'no-repeat',
-              // backgroundImage: `url(${bkImageUrl})`,
               border: '1px solid #f3f3f3',
             }}
             onContextMenu={handleContextMenu}
           />
+        </div>
         </div>
         <div className={styles.props} id="props">
           {renderRightArea}

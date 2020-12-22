@@ -5,6 +5,7 @@ import { TopologyData } from './models/data';
 import { Lock } from './models/status';
 import { PenType } from './models/pen';
 import { Layer } from './layer';
+import {s8} from "./utils";
 
 export class DivLayer extends Layer {
   protected data: TopologyData;
@@ -46,6 +47,7 @@ export class DivLayer extends Layer {
     this.canvas.style.top = '0';
     this.canvas.style.outline = 'none';
     this.canvas.style.background = 'transparent';
+    this.canvas.id=s8()
     parentElem.appendChild(this.canvas);
     parentElem.appendChild(this.player);
     this.createPlayer();
