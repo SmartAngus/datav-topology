@@ -312,8 +312,11 @@ export class Topology {
     if (timer) {
       clearTimeout(timer);
     }
+    const {width, height} = this.canvas
     timer = setTimeout(() => {
-      this.resize();
+      // this.resize();
+      // 改动过，解决全屏 画布大小自动改变的问题，不让自动计算
+      this.resize({width, height});
       this.overflow();
     }, 100);
   };
@@ -321,7 +324,6 @@ export class Topology {
   resize(size?: { width: number; height: number }) {
     this.data.width = size?.width || 826;
     this.data.height = size?.height || 1168;
-
     this.canvas.resize(size);
     this.offscreen.resize(size);
     this.divLayer.resize(size);

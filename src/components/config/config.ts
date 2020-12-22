@@ -17,6 +17,7 @@ export const Tools = [
             height: 50,
           },
           font: {
+            fontSize: 14,
             fontFamily: '"Microsoft YaHei"',
           },
           paddingLeft: 10,
@@ -38,6 +39,7 @@ export const Tools = [
             height: 100,
           },
           font: {
+            fontSize: 14,
             fontFamily: '"Microsoft YaHei"',
           },
           name: 'circle',
@@ -54,6 +56,7 @@ export const Tools = [
             height: 30,
           },
           font: {
+            fontSize: 14,
             fontFamily: '"Microsoft YaHei"',
           },
           name: 'text',
@@ -70,6 +73,7 @@ export const Tools = [
             height: 45,
           },
           font: {
+            fontSize: 14,
             fontFamily: 'Arial',
           },
           name: 'biciTimer',
@@ -98,6 +102,7 @@ export const Tools = [
             height: 45,
           },
           font: {
+            fontSize: 14,
             fontFamily: 'Arial',
           },
           name: 'biciVarer',

@@ -43,6 +43,7 @@ import { echartsObjs } from '../../../../topology/chart-diagram/src/echarts';
 import { reviver } from '../../../utils/serializing';
 import {eraseOverlapIntervals} from "../../../utils/cacl";
 import {colorList} from '../../../data/defines'
+import {backgroundColor} from "html2canvas/dist/types/css/property-descriptors/background-color";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -599,7 +600,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const renderFontForm = useMemo(() => {
 
     return (
-      <Panel header="文字" key="font">
+      <Panel header="字符" key="font">
         <Form form={form} onValuesChange={handleValuesChange}>
           <Col span={24}>
             <Form.Item name="color" label="颜色">
@@ -670,42 +671,44 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               </Button.Group>
             </Form.Item>
           </Col>
-          <Col span={24}>
-            <Form.Item name="textAlign" wrapperCol={{ offset: 4 }}>
-              <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
-                <Radio.Button
-                  value="left"
-                  style={{ width: '25%', textAlign: 'center' }}
-                >
-                  <CustomIcon type="iconleft" />
-                </Radio.Button>
-                <Radio.Button
-                  value="center"
-                  style={{ width: '25%', textAlign: 'center' }}
-                >
-                  <CustomIcon type="iconjuzhongduiqi" />
-                </Radio.Button>
-                <Radio.Button
-                  value="right"
-                  style={{ width: '25%', textAlign: 'center' }}
-                >
-                  <CustomIcon type="iconyouduiqi2" />
-                </Radio.Button>
-                <Radio.Button
-                  value="justify"
-                  style={{ width: '25%', textAlign: 'center' }}
-                >
-                  <CustomIcon type="iconjustify" />
-                </Radio.Button>
-              </Radio.Group>
-            </Form.Item>
-          </Col>
           {data.node.name !== 'biciPilot' && (
-            <Col span={24}>
-              <Form.Item name="text" label="内容">
-                <Input />
-              </Form.Item>
-            </Col>
+            <Fragment>
+              <Col span={24}>
+                <Form.Item name="textAlign" wrapperCol={{ offset: 4 }}>
+                  <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
+                    <Radio.Button
+                      value="left"
+                      style={{ width: '25%', textAlign: 'center' }}
+                    >
+                      <CustomIcon type="iconleft" />
+                    </Radio.Button>
+                    <Radio.Button
+                      value="center"
+                      style={{ width: '25%', textAlign: 'center' }}
+                    >
+                      <CustomIcon type="iconjuzhongduiqi" />
+                    </Radio.Button>
+                    <Radio.Button
+                      value="right"
+                      style={{ width: '25%', textAlign: 'center' }}
+                    >
+                      <CustomIcon type="iconyouduiqi2" />
+                    </Radio.Button>
+                    <Radio.Button
+                      value="justify"
+                      style={{ width: '25%', textAlign: 'center' }}
+                    >
+                      <CustomIcon type="iconjustify" />
+                    </Radio.Button>
+                  </Radio.Group>
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item name="text" label="内容">
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Fragment>
           )}
         </Form>
       </Panel>
@@ -1122,6 +1125,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    * 渲染指示灯样式
    */
   const renderLight = useMemo(() => {
+
+    const radioButtonStyle = {height: 26, lineHeight: '24px'}
+
     return (
       <Panel header="样式" key="biciLight">
         <Form
@@ -1151,7 +1157,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 <Button
                   block
                   size="small"
-                  type={pilotBtnSize === 'small' ? 'primary' : 'default'}
+                  style={{
+                    background: pilotBtnSize === 'small' ? '#1890ff' : '#F0F0F0',
+                    color: pilotBtnSize === 'small' ? '#ffffff' : '#000000'
+                  }}
                   onClick={() => changePolitSize(15)}
                 >
                   小
@@ -1159,7 +1168,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 <Button
                   block
                   size="small"
-                  type={pilotBtnSize === 'middle' ? 'primary' : 'default'}
+                  style={{
+                    background: pilotBtnSize === 'middle' ? '#1890ff' : '#F0F0F0',
+                    color: pilotBtnSize === 'middle' ? '#ffffff' : '#000000'
+                  }}
                   onClick={() => changePolitSize(20)}
                 >
                   中
@@ -1167,7 +1179,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 <Button
                   block
                   size="small"
-                  type={pilotBtnSize === 'large' ? 'primary' : 'default'}
+                  style={{
+                    background: pilotBtnSize === 'large' ? '#1890ff' : '#F0F0F0',
+                    color: pilotBtnSize === 'large' ? '#ffffff' : '#000000'
+                  }}
                   onClick={() => changePolitSize(30)}
                 >
                   大
@@ -1199,9 +1214,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           >
             <Radio.Group
               options={[
-                { label: '单点值', value: 'single' },
-                { label: '范围值', value: 'range' },
+                { label: '单点值', value: 'single', style: radioButtonStyle },
+                { label: '范围值', value: 'range', style: radioButtonStyle },
               ]}
+              style={{float: 'right'}}
               onChange={() => propertyForm.setFieldsValue({ lightRange: [] })}
               optionType="button"
               buttonStyle="solid"
@@ -1692,7 +1708,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
 
   return (
     <div className={styles.rightArea}>
-      {data.multi && renderAlign}
+      {renderAlign}
       {!data.multi && (
         <Tabs defaultActiveKey="1" centered>
           <TabPane tab="外观" key="1" style={{ margin: 0 }}>
