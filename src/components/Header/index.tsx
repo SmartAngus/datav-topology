@@ -30,6 +30,7 @@ const headTools = [
     name: '粘贴',
     icon: 'iconniantie',
     title: 'Ctrl+V',
+    style: {marginRight: 60}
   },
   {
     key: 'undo',
@@ -42,6 +43,7 @@ const headTools = [
     name: '恢复',
     icon: 'iconhuifu',
     title: 'Ctrl+Y',
+    style: {marginRight: 60}
   },
   {
     key: 'bottom',
@@ -66,6 +68,7 @@ const headTools = [
     name: '置于顶层',
     icon: 'iconzhiyudingceng',
     title: 'Ctrl+Alt+]',
+    style: {marginRight: 60}
   },
   {
     key: 'combo',
@@ -270,26 +273,23 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
      */
     const handlePreview = () => {
       if (!isSave) {
-        message.config({
-          getContainer: () => document.querySelector('#editLayout'),
-        });
-        message.warn('预览之前请先保存数据！');
+        handleSave();
+      }
+
+      if (props.onPreview && typeof props.onPreview == 'function') {
+        props.onPreview({});
       } else {
-        if (props.onPreview && typeof props.onPreview == 'function') {
-          props.onPreview({});
-        } else {
-          let reader = new FileReader();
-          const result = new Blob([JSON.stringify(canvas.data)], {
-            type: 'text/plain;charset=utf-8',
+        let reader = new FileReader();
+        const result = new Blob([JSON.stringify(canvas.data)], {
+          type: 'text/plain;charset=utf-8',
+        });
+        reader.readAsText(result, 'text/plain;charset=utf-8');
+        reader.onload = (e) => {
+          history.push({
+            pathname: '/preview',
+            state: {data: JSON.parse(reader.result as any)},
           });
-          reader.readAsText(result, 'text/plain;charset=utf-8');
-          reader.onload = (e) => {
-            history.push({
-              pathname: '/preview',
-              state: {data: JSON.parse(reader.result as any)},
-            });
-          };
-        }
+        };
       }
     };
     /**
@@ -320,7 +320,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
 
     return (
       <div className={styles.toolsHeader}>
-        <a className={styles.toolItem} onClick={handleExitEditor}>
+        <a className={styles.toolItem} onClick={handleExitEditor} style={{marginRight: 100}}>
           <CustomIcon type="icontuichu"/>
           <span>退出</span>
         </a>
@@ -338,8 +338,9 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
             <a
               className={styles.toolItem}
               onClick={() => handleHeaderClick(item.key)}
+              style={item.style ? item.style : {}}
             >
-              <CustomIcon type={item.icon}/>
+              <CustomIcon type={item.icon} style={{width: 18, height: 18}}/>
               <span>{item.name}</span>
             </a>
           </Tooltip>
@@ -348,7 +349,8 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         <a
           style={{
             display: 'inline-block',
-            marginTop: '5px',
+            marginTop: 5,
+            marginLeft: 60,
             background: '#F0F0F0',
             borderRadius: '4px',
             height: 36,
@@ -393,7 +395,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           <span>{isFullscreen ? '退出全屏' : '全屏'}</span>
         </a>
         <a
-          style={{lineHeight: '48px', marginRight: 30}}
+          style={{lineHeight: '48px', margin: '0 30px 60px'}}
           onClick={handleExtraSetting}
         >
           <CustomIcon type="iconpeizhikanban"/>

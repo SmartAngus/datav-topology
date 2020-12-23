@@ -566,9 +566,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const onMessage = (event: string, data: any) => {
     const node = data;
     switch (event) {
-      case 'resize':
-        console.log(data)
-        break
       case 'dblclick':
         setIsSave(false);
         break;

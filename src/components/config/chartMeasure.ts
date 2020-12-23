@@ -159,7 +159,8 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
     },
   ];
   const defaultOption={
-    dataName:'计量器',
+    // dataName:'计量器',
+    dataName:'',
     value: 0,
     chartUnit: '',
     dataColors: dataColors,

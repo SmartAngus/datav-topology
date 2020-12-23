@@ -182,7 +182,7 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
             {industrialLibrary?.map((item, index) => (
               <Col
                 key={index}
-                span={12}
+                span={8}
                 className={styles.colStyle}
                 style={{ textAlign: 'center' }}
               >
@@ -196,13 +196,11 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
                   <img
                     alt={item.name}
                     src={item.url}
-                    style={{ width: 100, height: 100 }}
+                    style={{height: 60, width: 60 }}
                   />
                   <span
                     style={{
                       marginTop: 5,
-                      marginLeft: 8,
-                      width: 100,
                       overflow: 'hidden',
                       display: 'block',
                       whiteSpace: 'nowrap',
@@ -221,7 +219,7 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
             {list?.map((item, index) => (
               <Col
                 key={index}
-                span={12}
+                span={8}
                 className={styles.colStyle}
                 style={{ textAlign: 'center' }}
                 onContextMenu={(event) => handleContextMenu(event, item)}
@@ -236,13 +234,11 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
                   <img
                     alt={item.name}
                     src={item.url}
-                    style={{ width: 100, height: 100 }}
+                    style={{ width: 60, height: 60 }}
                   />
                   <span
                     style={{
                       marginTop: 5,
-                      marginLeft: 8,
-                      width: 100,
                       overflow: 'hidden',
                       display: 'block',
                       whiteSpace: 'nowrap',

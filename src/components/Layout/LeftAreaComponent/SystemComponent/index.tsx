@@ -27,10 +27,9 @@ const Layout = ({ Tools, onDrag }) => {
                       onClick={(e) => e.preventDefault()}
                       onDragStart={(ev) => onDrag(ev, item)}
                     >
-                      <CustomIcon type={item.icon} style={{ fontSize: 28 }} />
+                      <CustomIcon type={item.icon} style={{ fontSize: 30, width: 53, height: 53, lineHeight: '53px' }} />
                       <span
                         style={{
-                          marginTop: 5,
                           overflow: 'hidden',
                           display: 'block',
                           whiteSpace: 'nowrap',

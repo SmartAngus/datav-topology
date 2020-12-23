@@ -25,6 +25,7 @@ export const Tools = [
           paddingTop: 10,
           paddingBottom: 10,
           borderRadius: 0,
+          fillStyle: '#F0F0F0',
           name: 'rectangle',
         },
       },
@@ -34,6 +35,7 @@ export const Tools = [
         data: {
           text: '',
           hideRotateCP: false,
+          fillStyle: '#F0F0F0',
           rect: {
             width: 100,
             height: 100,

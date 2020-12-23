@@ -473,28 +473,28 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           <Row>
             <Col span={14}>
               <Form.Item name="x" label="位置">
-                <Input suffix="X" />
+                <Input suffix={<span style={{color: '#999999'}}>X</span>} />
               </Form.Item>
             </Col>
             <Col span={9} push={1}>
               <Form.Item name="y">
-                <Input suffix="Y" />
+                <Input suffix={<span style={{color: '#999999'}}>Y</span>} />
               </Form.Item>
             </Col>
             <Col span={14}>
               <Form.Item name="width" label="宽高">
-                <Input suffix="W" />
+                <Input suffix={<span style={{color: '#999999'}}>W</span>} />
               </Form.Item>
             </Col>
             <Col span={9} push={1}>
               <Form.Item name="height">
-                <Input suffix="H" />
+                <Input suffix={<span style={{color: '#999999'}}>H</span>} />
               </Form.Item>
             </Col>
             {!disabledRotateList.includes(data?.node.name) && (
               <Col span={14}>
                 <Form.Item name="rotate" label="旋转">
-                  <Input suffix="°" />
+                  <Input suffix={<span style={{color: '#999999'}}>°</span>} />
                 </Form.Item>
               </Col>
             )}
@@ -648,7 +648,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Col>
           <Col span={24}>
             <Form.Item name="fontSize" label="大小">
-              <InputNumber min={0} />
+              <InputNumber min={0} style={{width: '100%'}}/>
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -658,13 +658,13 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               >
                 <Button
                   size="small"
-                  style={{ width: '33%', background: btnColor.italicBtn}}
+                  style={{width: '50%', background: btnColor.italicBtn}}
                   icon={<CustomIcon type="iconzu" />}
                   onClick={() => fontStyleChange('fontStyle')}
                 />
                 <Button
                   size="small"
-                  style={{ width: '33%', background: btnColor.boldBtn}}
+                  style={{width: '50%', background: btnColor.boldBtn}}
                   icon={<CustomIcon type="iconjiacu" />}
                   onClick={() =>fontStyleChange('fontWeight')}
                 />
@@ -841,7 +841,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Form.Item>
           {(property?.dataPointSelectedRows || []).map((item, index) => {
             return (
-              <Form.Item label={`数据点${index + 1}`} key={index}>
+              <Form.Item label={`数据点${index + 1}`} key={index} wrapperCol={{style: {alignItems: 'flex-end'}}}>
                 <span>{item.dataName || item.name}</span>
                 <Button
                   type="link"

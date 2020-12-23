@@ -163,10 +163,9 @@ const Layout = forwardRef((props: Props, ref) => {
                       onDrag(ev, JSON.parse(item.componentProperty), true)
                     }
                   >
-                    <CustomIcon type="iconzidingyi" style={{ fontSize: 28 }} />
+                    <CustomIcon type="iconzidingyi" style={{ fontSize: 30, width: 53, height: 53, lineHeight: '53px' }} />
                     <span
                       style={{
-                        marginTop: 5,
                         overflow: 'hidden',
                         display: 'block',
                         whiteSpace: 'nowrap',
