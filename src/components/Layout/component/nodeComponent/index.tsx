@@ -910,6 +910,30 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     }
   };
 
+  const limitTypeOnChange = (e) => {
+    const selectRows = data.node.property.dataPointSelectedRows;
+    if (e.target.value === 'dataPoint' && selectRows && selectRows.length > 0) {
+      const selectedData = selectRows[0];
+      const scopeMin = !isNaN(Number(selectedData?.scopeMin))
+        ? selectedData?.scopeMin
+        : undefined;
+      const scopeMax = !isNaN(Number(selectedData?.scopeMax))
+        ? selectedData?.scopeMax
+        : undefined;
+      propertyForm.setFieldsValue({
+        showLimit: false,
+        'limit.bottom': scopeMin,
+        'limit.top': scopeMax,
+      });
+    } else {
+      propertyForm.setFieldsValue({
+        showLimit: false,
+        'limit.bottom': undefined,
+        'limit.top': undefined,
+      });
+    }
+  };
+
   /**
    * 渲染数据卡片样式设置  property
    */
@@ -955,13 +979,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   { label: '自定义', value: 'custom' },
                 ]}
                 style={{ float: 'right' }}
-                onChange={() =>
-                  propertyForm.setFieldsValue({
-                    showLimit: false,
-                    'limit.bottom': undefined,
-                    'limit.top': undefined,
-                  })
-                }
+                onChange={limitTypeOnChange}
                 optionType="button"
                 buttonStyle="solid"
               />
