@@ -113,7 +113,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
       setIsSave,
       onScaleCanvas,
     } = props;
-    const [scaleNumber, setScaleNumber] = useState(undefined); // 缩放的基数
+    const [scaleNumber, setScaleNumber] = useState(1); // 缩放的基数
     const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
 
     const [isFullscreen, {toggleFull}] = useFullscreen(rootRef);
@@ -233,7 +233,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
       if (scaleNumber < 3) {
         setScaleNumber(scaleNumber + 0.1);
         canvas.scaleTo(scaleNumber + 0.1);
-        // onScaleCanvas && onScaleCanvas(scaleNumber + 0.1);
+        onScaleCanvas && onScaleCanvas(scaleNumber + 0.1);
         props.setIsSave(false);
       }
     };
@@ -245,7 +245,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
       if (scaleNumber > 0.3) {
         setScaleNumber(scaleNumber - 0.1);
         canvas.scaleTo(scaleNumber - 0.1);
-        // onScaleCanvas && onScaleCanvas(scaleNumber + 0.1);
+        onScaleCanvas && onScaleCanvas(scaleNumber - 0.1);
         props.setIsSave(false);
       }
     };
