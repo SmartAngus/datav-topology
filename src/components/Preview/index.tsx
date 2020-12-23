@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Node, Topology } from '../../topology/core';
 import { roundFun } from '../utils/cacl';
 import { formatTimer, getNodeType } from '../utils/Property2NodeProps';
-import {dynamicTimelineOption, getMeasureOption2, getTimelineOption} from '../config/chartMeasure';
+import { getMeasureOption2, getTimelineOption } from '../config/chartMeasure';
 import echarts from 'echarts/lib/echarts';
 
 import {
@@ -11,6 +11,7 @@ import {
 } from '../../topology/chart-diagram';
 import { replacer, reviver } from '../utils/serializing';
 import { register as registerBiciComp } from '../../topology/bici-diagram';
+import {pieOption} from "../config/charts/pie";
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -130,7 +131,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       }
     });
   };
-  const timedata=[]
+  let timedata=[];
   const updateComp = (pens: any, data: any) => {
     (pens || []).map((node: Node) => {
       if (node.name == 'combine') {
@@ -164,11 +165,23 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           case 'timeLine':
             (node.property.dataPointSelectedRows || []).map((row) => {
               if (row.id == r.id) {
+                node.data.echarts.option = getTimelineOption(node, r);
+              }
+            });
+            updateChartNode(node);
+            break;
+          case 'pie':
+            (node.property.dataPointSelectedRows || []).map((row) => {
+              if (row.id == r.id) {
+
+                if (timedata.length >30) {
+                  timedata.shift()
+                }
                 timedata.push({
                   name:r.time,
                   value:[r.time,parseInt(r.value)]
                 })
-                node.data.echarts.option = getTimelineOption(node, r,null);
+                node.data.echarts.option = pieOption(timedata);
                 updateChartNode(node);
               }
             });

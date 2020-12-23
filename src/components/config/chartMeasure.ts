@@ -159,8 +159,7 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
     },
   ];
   const defaultOption={
-    // dataName:'计量器',
-    dataName:'',
+    dataName:'计量器',
     value: 0,
     chartUnit: '',
     dataColors: dataColors,
@@ -662,29 +661,49 @@ export function getTimelineOption(
   var charts = {
     unit: '',
     names: [],
-    data: [],
+    lineX: [],
+    value: [],
   };
   var color = ['rgba(23, 255, 243', 'rgba(255,100,97'];
   var lineY = [];
-
+  if (socketData != undefined) {
+    charts.lineX = node.data.echarts.option.xAxis.data;
+    if (charts.lineX.length > 9) {
+      charts.lineX.shift();
+    }else{
+      // for(let i=0;i<9;i++){
+      //   charts.lineX.push('')
+      // }
+    }
+    const foratTime=moment(socketData.time).format('LTS') + '';
+    if(!charts.lineX.includes(foratTime)){
+      charts.lineX.push(foratTime);
+    }
+  }
   if (node != undefined) {
     (node.property.dataPointSelectedRows || []).map((row, index) => {
+      charts.value[index] = node.data.echarts.option.series[index]
+        ? node.data.echarts.option.series[index].data
+        : [];
+
+      if (charts.value[index] && charts.value[index].length > 9) {
+        charts.value[index].shift();
+      }else{
+        // for(let i=0;i<9;i++){
+        //   charts.value[index].push(null)
+        // }
+      }
+
       charts.names[index] = row.dataName||row.name;
       charts.unit=row.unit;
-      charts.data[index]=node.data.echarts.option.series[index]?.data||[]
-      if(charts.data[index][0]==0){
-        charts.data[index]=[]
-      }
       if (socketData && row.id == socketData.id) {
-        if(charts.data[index].length>10){
-          charts.data[index].shift()
+        if(charts.value[index][0]==0){
+          charts.value[index].shift();
         }
-        charts.data[index].push({
-          name:socketData.time,
-          value:[socketData.time,roundFun(socketData.value, node.property.dataDot)]
-        })
+        charts.value[index].push(
+          +roundFun(socketData.value, node.property.dataDot)
+        );
       }
-      console.log(charts.data[index])
     });
   }
   let smooth;
@@ -703,9 +722,32 @@ export function getTimelineOption(
       type: 'line',
       color: color[x] + ')',
       smooth: smooth,
+      // areaStyle: {
+      //   normal: {
+      //     color: new echarts.graphic.LinearGradient(
+      //       0,
+      //       0,
+      //       0,
+      //       1,
+      //       [
+      //         {
+      //           offset: 0,
+      //           color: color[x] + ', 0.3)',
+      //         },
+      //         {
+      //           offset: 0.8,
+      //           color: color[x] + ', 0)',
+      //         },
+      //       ],
+      //       false
+      //     ),
+      //     shadowColor: 'rgba(0, 0, 0, 0.1)',
+      //     shadowBlur: 10,
+      //   },
+      // },
       symbol: 'circle',
       symbolSize: 5,
-      data: charts.data[i],
+      data: charts.value[i],
       itemStyle: {
         normal: {
           color: colorList[i],
@@ -833,116 +875,43 @@ export function getTimelineOption(
       containLabel: true,
     },
     xAxis: {
-      type: 'time',
-      splitLine: {
-        show: false
-      },
-      axisTick: {
-        show: false
-      },
-      axisLine: {
-        show: false
+      type: 'category',
+      boundaryGap: false,
+      data: charts.lineX,
+      axisLabel: {
+        textStyle: {
+          color: 'rgb(0,253,255,0.6)',
+        },
+        formatter: function (params) {
+          if (params) {
+            return params.split(' ')[0];
+          }
+        },
       },
     },
     yAxis: {
+      name: '',//charts.unit,//
       type: 'value',
       axisLabel: {
-        color: '#999',
+        formatter: '{value}',
         textStyle: {
-          fontSize: 12
+          color: 'rgb(0,253,255,0.6)',
         },
       },
       splitLine: {
-        show: true,
+        show: showReference,
         lineStyle: {
-          color: '#F3F4F4'
-        }
-      },
-      axisTick: {
-        show: false
+          color: showReferenceColor,
+        },
       },
       axisLine: {
-        show: false
+        lineStyle: {
+          color: 'rgb(0,253,255,0.6)',
+        },
       },
     },
     series: lineY,
   };
 
-  return option;
-}
-
-export function dynamicTimelineOption(
-    selectedNode?: any,
-    socketData?: any,
-    changeValues?: any
-) {
-  function randomData() {
-    let now = new Date();
-    now = new Date(+now + oneDay);
-    value = value + Math.random() * 21 - 10;
-    return {
-      name: now.toString(),
-      value: [
-        [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'),
-        Math.round(value)
-      ]
-    };
-  }
-  var data = [];
-  var now = +new Date(1997, 9, 3);
-  var oneDay = 24 * 3600 * 1000;
-  var value = Math.random() * 1000;
-  for (var i = 0; i < 1000; i++) {
-    data.push(randomData());
-  }
-
-  const option = {
-    title: {
-      text: '动态数据 + 时间坐标轴'
-    },
-    tooltip: {
-      trigger: 'axis',
-      formatter: function (params) {
-        params = params[0];
-        var date = new Date(params.name);
-        return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
-      },
-      axisPointer: {
-        animation: false
-      }
-    },
-    xAxis: {
-      type: 'time',
-      splitLine: {
-        show: false
-      }
-    },
-    yAxis: {
-      type: 'value',
-      boundaryGap: [0, '100%'],
-      splitLine: {
-        show: false
-      }
-    },
-    series: [{
-      name: '模拟数据',
-      type: 'line',
-      showSymbol: false,
-      hoverAnimation: false,
-      data: data
-    }]
-  };
-
-  setInterval(function () {
-
-    for (var i = 0; i < 5; i++) {
-      data.shift();
-      data.push(randomData());
-    }
-
-
-    data=data
-
-  }, 1000);
   return option;
 }
