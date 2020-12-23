@@ -136,10 +136,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       setIsLoadCanvas(false);
     }
     setShowHeader(true);
+
   }, [props.editorData]);
 
   useEffect(() => {
-    scrollCenter();
+    handleScaleCanvas(scaleVal)
   }, [canvasSizeInfo]);
 
   /**

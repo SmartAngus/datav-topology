@@ -159,8 +159,7 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
     },
   ];
   const defaultOption={
-    // dataName:'计量器',
-    dataName:'',
+    dataName:'计量器',
     value: 0,
     chartUnit: '',
     dataColors: dataColors,
@@ -662,29 +661,49 @@ export function getTimelineOption(
   var charts = {
     unit: '',
     names: [],
-    data: [],
+    lineX: [],
+    value: [],
   };
   var color = ['rgba(23, 255, 243', 'rgba(255,100,97'];
   var lineY = [];
-
+  if (socketData != undefined) {
+    charts.lineX = node.data.echarts.option.xAxis.data;
+    if (charts.lineX.length > 9) {
+      charts.lineX.shift();
+    }else{
+      // for(let i=0;i<9;i++){
+      //   charts.lineX.push('')
+      // }
+    }
+    const foratTime=moment(socketData.time).format('LTS') + '';
+    if(!charts.lineX.includes(foratTime)){
+      charts.lineX.push(foratTime);
+    }
+  }
   if (node != undefined) {
     (node.property.dataPointSelectedRows || []).map((row, index) => {
+      charts.value[index] = node.data.echarts.option.series[index]
+        ? node.data.echarts.option.series[index].data
+        : [];
+
+      if (charts.value[index] && charts.value[index].length > 9) {
+        charts.value[index].shift();
+      }else{
+        // for(let i=0;i<9;i++){
+        //   charts.value[index].push(null)
+        // }
+      }
+
       charts.names[index] = row.dataName||row.name;
       charts.unit=row.unit;
-      charts.data[index]=node.data.echarts.option.series[index]?.data||[]
-      if(charts.data[index][0]==0){
-        charts.data[index]=[]
-      }
       if (socketData && row.id == socketData.id) {
-        if(charts.data[index].length>10){
-          charts.data[index].shift()
+        if(charts.value[index][0]==0){
+          charts.value[index].shift();
         }
-        charts.data[index].push({
-          name:socketData.time,
-          value:[socketData.time,roundFun(socketData.value, node.property.dataDot)]
-        })
+        charts.value[index].push(
+          +roundFun(socketData.value, node.property.dataDot)
+        );
       }
-      console.log(charts.data[index])
     });
   }
   let smooth;
@@ -703,9 +722,32 @@ export function getTimelineOption(
       type: 'line',
       color: color[x] + ')',
       smooth: smooth,
+      // areaStyle: {
+      //   normal: {
+      //     color: new echarts.graphic.LinearGradient(
+      //       0,
+      //       0,
+      //       0,
+      //       1,
+      //       [
+      //         {
+      //           offset: 0,
+      //           color: color[x] + ', 0.3)',
+      //         },
+      //         {
+      //           offset: 0.8,
+      //           color: color[x] + ', 0)',
+      //         },
+      //       ],
+      //       false
+      //     ),
+      //     shadowColor: 'rgba(0, 0, 0, 0.1)',
+      //     shadowBlur: 10,
+      //   },
+      // },
       symbol: 'circle',
       symbolSize: 5,
-      data: charts.data[i],
+      data: charts.value[i],
       itemStyle: {
         normal: {
           color: colorList[i],
@@ -833,139 +875,43 @@ export function getTimelineOption(
       containLabel: true,
     },
     xAxis: {
-      type: 'time',
-      splitLine: {
-        show: false
-      },
-      axisTick: {
-        show: false
-      },
-      axisLine: {
-        show: false
+      type: 'category',
+      boundaryGap: false,
+      data: charts.lineX,
+      axisLabel: {
+        textStyle: {
+          color: 'rgb(0,253,255,0.6)',
+        },
+        formatter: function (params) {
+          if (params) {
+            return params.split(' ')[0];
+          }
+        },
       },
     },
     yAxis: {
+      name: '',//charts.unit,//
       type: 'value',
       axisLabel: {
-        color: '#999',
+        formatter: '{value}',
         textStyle: {
-          fontSize: 12
+          color: 'rgb(0,253,255,0.6)',
         },
       },
       splitLine: {
-        show: true,
+        show: showReference,
         lineStyle: {
-          color: '#F3F4F4'
-        }
-      },
-      axisTick: {
-        show: false
+          color: showReferenceColor,
+        },
       },
       axisLine: {
-        show: false
+        lineStyle: {
+          color: 'rgb(0,253,255,0.6)',
+        },
       },
     },
     series: lineY,
   };
-  console.log(lineY)
 
-  return option;
-}
-
-export function dynamicTimelineOption(
-    selectedNode?: any,
-    socketData?: any,
-    changeValues?: any
-) {
-  const data=[{"name":1608515735391,"value":[1608515735391,99.1]},{"name":1608515736391,"value":[1608515736391,115.2]},{"name":1608515737391,"value":[1608515737391,63.1]},{"name":1608515738391,"value":[1608515738391,122.1]},{"name":1608515739391,"value":[1608515739391,68.3]},{"name":1608515740391,"value":[1608515740391,62.3]},{"name":1608515741391,"value":[1608515741391,72.7]},{"name":1608515742391,"value":[1608515742391,119.2]},{"name":1608515743391,"value":[1608515743391,90.3]},{"name":1608515744391,"value":[1608515744391,63.8]},{"name":1608515745391,"value":[1608515745391,78.4]},{"name":1608515746391,"value":[1608515746391,110.4]},{"name":1608515747391,"value":[1608515747391,91]},{"name":1608515748391,"value":[1608515748391,61.6]},{"name":1608515749391,"value":[1608515749391,121.5]},{"name":1608515750391,"value":[1608515750391,92.1]},{"name":1608515751391,"value":[1608515751391,109.4]},{"name":1608515752391,"value":[1608515752391,74.3]},{"name":1608515753391,"value":[1608515753391,69.8]},{"name":1608515754391,"value":[1608515754391,59.8]},{"name":1608515755391,"value":[1608515755391,104.3]}]
-  const data2=[{"name":1608515735391,"value":[1608515735391,10.1]},{"name":1608515736391,"value":[1608515736391,15.2]},{"name":1608515737391,"value":[1608515737391,63.1]},{"name":1608515738391,"value":[1608515738391,12.1]},{"name":1608515739391,"value":[1608515739391,68.3]},{"name":1608515740391,"value":[1608515740391,62.3]},{"name":1608515741391,"value":[1608515741391,72.7]},{"name":1608515742391,"value":[1608515742391,119.2]},{"name":1608515743391,"value":[1608515743391,90.3]},{"name":1608515744391,"value":[1608515744391,63.8]},{"name":1608515745391,"value":[1608515745391,78.4]},{"name":1608515746391,"value":[1608515746391,110.4]},{"name":1608515747391,"value":[1608515747391,91]},{"name":1608515748391,"value":[1608515748391,61.6]},{"name":1608515749391,"value":[1608515749391,121.5]},{"name":1608515750391,"value":[1608515750391,92.1]},{"name":1608515751391,"value":[1608515751391,109.4]},{"name":1608515752391,"value":[1608515752391,74.3]},{"name":1608515753391,"value":[1608515753391,69.8]},{"name":1608515754391,"value":[1608515754391,59.8]},{"name":1608515755391,"value":[1608515755391,104.3]}]
-
-  const option = {
-    backgroundColor: '#fff',
-    title: {
-      text: "订单量（个）",
-      left: "18px",
-      top: "0",
-      textStyle: {
-        color: "#999",
-        fontSize: 12,
-        fontWeight: '400'
-      }
-    },
-    color: ['#73A0FA', '#73DEB3', '#FFB761'],
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-        crossStyle: {
-          color: '#999'
-        },
-        lineStyle: {
-          type: 'dashed'
-        }
-      }
-    },
-    grid: {
-      left: '25',
-      right: '25',
-      bottom: '24',
-      top: '75',
-      containLabel: true
-    },
-    legend: {
-      data: ['订单总笔数',"订单总笔数2"],
-      orient: 'horizontal',
-      icon: "rect",
-      show: true,
-      left: 20,
-      top: 25,
-    },
-    xAxis: {
-      type: 'time',
-      maxInterval: 3600 * 24 * 1000,
-      data:changeValues,
-      splitLine: {
-        show: false
-      },
-      axisTick: {
-        show: false
-      },
-      axisLine: {
-        show: false
-      },
-    },
-    yAxis: {
-      type: 'value',
-      // max: max_value>=100? max_value + 100: max_value+10,
-      // max: max_value > 100 ? max_value * 2 : max_value + 10,
-      // interval: 10,
-      // nameLocation: "center",
-      axisLabel: {
-        color: '#999',
-        textStyle: {
-          fontSize: 12
-        },
-      },
-      splitLine: {
-        show: true,
-        lineStyle: {
-          color: '#F3F4F4'
-        }
-      },
-      axisTick: {
-        show: false
-      },
-      axisLine: {
-        show: false
-      },
-    },
-    series: [{
-      name: '订单总笔数',
-      type: 'line',
-      smooth: true,
-      data: changeValues
-    }
-    ]
-  };
   return option;
 }
