@@ -1,16 +1,16 @@
-import type {Topology} from '../../topology/core';
-import React, {useEffect, useImperativeHandle, useState} from 'react';
-import {History} from 'history';
-import {Button, Menu, Popover, Tag, Space, Tooltip, message} from 'antd';
-import {PlusOutlined, MinusOutlined} from '@ant-design/icons';
-import {useFullscreen} from 'ahooks';
-import {BasicTarget} from 'ahooks/lib/utils/dom';
-import {base64ToFile} from '../utils/cacl';
+import type { Topology } from '../../topology/core';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
+import { History } from 'history';
+import { Button, Menu, Popover, Tag, Space, Tooltip, message } from 'antd';
+import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { useFullscreen } from 'ahooks';
+import { BasicTarget } from 'ahooks/lib/utils/dom';
+import { base64ToFile } from '../utils/cacl';
 import CustomIcon from '../config/iconConfig';
 
 import styles from './index.module.scss';
-import {replacer, reviver} from '../utils/serializing';
-import _ from "lodash";
+import { replacer, reviver } from '../utils/serializing';
+import _ from 'lodash';
 
 const headTools = [
   {
@@ -30,7 +30,6 @@ const headTools = [
     name: '粘贴',
     icon: 'iconniantie',
     title: 'Ctrl+V',
-    style: {marginRight: 60}
   },
   {
     key: 'undo',
@@ -43,7 +42,6 @@ const headTools = [
     name: '恢复',
     icon: 'iconhuifu',
     title: 'Ctrl+Y',
-    style: {marginRight: 60}
   },
   {
     key: 'bottom',
@@ -68,7 +66,6 @@ const headTools = [
     name: '置于顶层',
     icon: 'iconzhiyudingceng',
     title: 'Ctrl+Alt+]',
-    style: {marginRight: 60}
   },
   {
     key: 'combo',
@@ -116,7 +113,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
     const [scaleNumber, setScaleNumber] = useState(1); // 缩放的基数
     const [scaleVisible, setScaleVisible] = useState(false); // 缩放Popover的可见
 
-    const [isFullscreen, {toggleFull}] = useFullscreen(rootRef);
+    const [isFullscreen, { toggleFull }] = useFullscreen(rootRef);
 
     useEffect(() => {
       if (scaleVal && scaleNumber === undefined) {
@@ -287,7 +284,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         reader.onload = (e) => {
           history.push({
             pathname: '/preview',
-            state: {data: JSON.parse(reader.result as any)},
+            state: { data: JSON.parse(reader.result as any) },
           });
         };
       }
@@ -296,7 +293,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
      * 点击额外配置
      */
     const handleExtraSetting = () => {
-      const {onExtraSetting} = props;
+      const { onExtraSetting } = props;
       onExtraSetting && onExtraSetting();
       setIsSave(false);
     };
@@ -307,7 +304,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
     const scaleMenu = (
       <Menu
         onClick={(data) => handleSelectScaleMenu(data)}
-        style={{border: 0}}
+        style={{ border: 0 }}
       >
         <Menu.Item key="50">50%</Menu.Item>
         <Menu.Item key="100">100%</Menu.Item>
@@ -320,8 +317,8 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
 
     return (
       <div className={styles.toolsHeader}>
-        <a className={styles.toolItem} onClick={handleExitEditor} style={{marginRight: 100}}>
-          <CustomIcon type="icontuichu"/>
+        <a className={styles.toolItem} onClick={handleExitEditor}>
+          <CustomIcon type="icontuichu" />
           <span>退出</span>
         </a>
         {/* <a className={styles.toolItem}>
@@ -338,9 +335,8 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
             <a
               className={styles.toolItem}
               onClick={() => handleHeaderClick(item.key)}
-              style={item.style ? item.style : {}}
             >
-              <CustomIcon type={item.icon} style={{width: 18, height: 18}}/>
+              <CustomIcon type={item.icon} style={{ width: 18, height: 18 }} />
               <span>{item.name}</span>
             </a>
           </Tooltip>
@@ -350,7 +346,6 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           style={{
             display: 'inline-block',
             marginTop: 5,
-            marginLeft: 60,
             background: '#F0F0F0',
             borderRadius: '4px',
             height: 36,
@@ -360,7 +355,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           <Button
             size="small"
             shape="circle"
-            icon={<MinusOutlined style={{color: '#666666'}}/>}
+            icon={<MinusOutlined style={{ color: '#666666' }} />}
             onClick={() => scaleZoomIn()}
           />
           <Popover
@@ -382,24 +377,24 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           <Button
             size="small"
             shape="circle"
-            icon={<PlusOutlined style={{color: '#666666'}}/>}
+            icon={<PlusOutlined style={{ color: '#666666' }} />}
             onClick={() => scaleZoomOut()}
           />
         </a>
         <a
           className={styles.toolItem}
-          style={{margin: '0 30px'}}
+          style={{ margin: '0 30px' }}
           onClick={toggleFull}
         >
-          <CustomIcon type="iconquanping1"/>
+          <CustomIcon type="iconquanping1" />
           <span>{isFullscreen ? '退出全屏' : '全屏'}</span>
         </a>
         <a
-          style={{lineHeight: '48px', margin: '0 30px 60px'}}
+          style={{ lineHeight: '48px', margin: '0 30px 60px' }}
           onClick={handleExtraSetting}
         >
-          <CustomIcon type="iconpeizhikanban"/>
-          <span style={{marginLeft: 5}}>配置看板</span>
+          <CustomIcon type="iconpeizhikanban" />
+          <span style={{ marginLeft: 5 }}>配置看板</span>
         </a>
 
         <Tag
@@ -416,7 +411,7 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
         </Tag>
 
         <ButtonGroup
-          style={{flex: 1, flexDirection: 'row-reverse', right: 20}}
+          style={{ flex: 1, flexDirection: 'row-reverse', right: 20 }}
         >
           <Space size="large">
             <Button onClick={handlePreview}>预览</Button>
