@@ -435,9 +435,9 @@ export class Topology {
       }
     }
 
-    if (this.data.scale !== 1) {
-      node.scale(this.data.scale);
-    }
+    // if (this.data.scale !== 1) {
+    //   node.scale(this.data.scale);
+    // }
 
     this.data.pens.push(node);
 
