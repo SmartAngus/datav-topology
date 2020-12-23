@@ -115,6 +115,8 @@ export default class DataPointTable extends Component<any,any> {
     if (statusList && statusList.length) {
       params.statusList = statusList
     }
+    // 毒刺
+    params.isOtherPoint = 0;
     fetchSearchDataPointManageList(params).then((res) => {
       if(res["data"].data){
         const {list,total}=res["data"].data

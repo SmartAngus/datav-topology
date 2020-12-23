@@ -1,3 +1,4 @@
+import moment from "moment";
 
 var now = new Date(1997, 9, 3);
 var oneDay = 24 * 3600 * 1000;
@@ -14,14 +15,10 @@ function randomData() {
         ]
     };
 }
-
 export function pieOption(dat?:any[]) {
     var data = [];
 
 
-    for (var i = 0; i < 20; i++) {
-        data.push(randomData());
-    }
     if(dat){
         data=dat
     }
@@ -43,8 +40,16 @@ export function pieOption(dat?:any[]) {
         },
         xAxis: {
             type: 'time',
+            // minInterval: 5*1000,
+            // splitNumber:5,
             splitLine: {
                 show: false
+            },
+            axisLabel:{
+                formatter: function (value, index) {
+                    // 格式化成月/日，只在第一个刻度显示年份
+                    return moment(value).format('LTS') + '';
+                }
             }
         },
         yAxis: {

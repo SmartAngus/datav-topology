@@ -12,6 +12,7 @@ import {
 import { replacer, reviver } from '../utils/serializing';
 import { register as registerBiciComp } from '../../topology/bici-diagram';
 import {pieOption} from "../config/charts/pie";
+import moment from "moment";
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -173,12 +174,11 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           case 'pie':
             (node.property.dataPointSelectedRows || []).map((row) => {
               if (row.id == r.id) {
-
-                if (timedata.length >30) {
+                if (timedata.length >9) {
                   timedata.shift()
                 }
                 timedata.push({
-                  name:r.time,
+                  name:moment(r.time),
                   value:[r.time,parseInt(r.value)]
                 })
                 node.data.echarts.option = pieOption(timedata);
