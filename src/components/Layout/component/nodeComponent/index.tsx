@@ -20,7 +20,8 @@ import {
   Space,
   Tooltip,
   Radio,
-  Modal, message,
+  Modal,
+  message,
 } from 'antd';
 import {
   PlusOutlined,
@@ -41,9 +42,9 @@ import * as _ from 'lodash';
 import { getTimelineOption } from '../../../config/chartMeasure';
 import { echartsObjs } from '../../../../topology/chart-diagram/src/echarts';
 import { reviver } from '../../../utils/serializing';
-import {eraseOverlapIntervals} from "../../../utils/cacl";
-import {colorList} from '../../../data/defines'
-import {backgroundColor} from "html2canvas/dist/types/css/property-descriptors/background-color";
+import { eraseOverlapIntervals } from '../../../utils/cacl';
+import { colorList } from '../../../data/defines';
+import { backgroundColor } from 'html2canvas/dist/types/css/property-descriptors/background-color';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -91,8 +92,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const [pilotBtnSize, setPilotBtnSize] = useState('small');
   const [btnColor, setBtnColor] = useState({
     italicBtn: '#fff',
-    boldBtn: '#fff'
-  })
+    boldBtn: '#fff',
+  });
 
   const { x, y, width, height } = data?.node?.rect || {};
   const { rotate, lineWidth, strokeStyle, text, id, name, fillStyle } =
@@ -102,17 +103,17 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const [dataPointSelectedRows, setDataPointSelectedRows] = useState(
     property?.dataPointSelectedRows || []
   );
-  const [showSelectDataPoint,setShowSelectDataPoint]=useState(false)
-  const addLineColorBtnRef = React.useRef()
-  const removeLineColorBtnRef = React.useRef()
+  const [showSelectDataPoint, setShowSelectDataPoint] = useState(false);
+  const addLineColorBtnRef = React.useRef();
+  const removeLineColorBtnRef = React.useRef();
   const { dataMethod, dataDot } = property || {};
-  const [refreshProperty,setRefreshProperty]=useState(false)
+  const [refreshProperty, setRefreshProperty] = useState(false);
   useEffect(() => {
     if (data.node.font.fontStyle !== 'normal') {
-      setBtnColor({...btnColor, italicBtn: '#1890ff'})
+      setBtnColor({ ...btnColor, italicBtn: '#1890ff' });
     }
     if (data.node.font.fontWeight !== 'normal') {
-      setBtnColor({...btnColor, boldBtn: '#1890ff'})
+      setBtnColor({ ...btnColor, boldBtn: '#1890ff' });
     }
     // 设置基本表单
     form.setFieldsValue({
@@ -150,9 +151,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     property,
   ]);
 
-
   useEffect(() => {
-    setShowSelectDataPoint(property?.dataTopSource=="custom")
+    setShowSelectDataPoint(property?.dataTopSource == 'custom');
     propertyForm.setFieldsValue({
       dataMethod,
       dataDot,
@@ -199,22 +199,26 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         width / 2 <= 15 ? 'small' : width / 2 <= 20 ? 'middle' : 'large';
       setPilotBtnSize(btnSize);
     } else if (data.node.name == 'echarts') {
-      let lineRangedefaultColor=colorList.map(color=>{
+      let lineRangedefaultColor = colorList.map((color) => {
         return {
-          lineGraphRangeColor:color
-        }
-      })
+          lineGraphRangeColor: color,
+        };
+      });
 
-      let nodeLineRangeColor=[]
-      if(property&&property.lineGraphRange){
-        nodeLineRangeColor=_.compact(property.lineGraphRange)
+      let nodeLineRangeColor = [];
+      if (property && property.lineGraphRange) {
+        nodeLineRangeColor = _.compact(property.lineGraphRange);
       }
-      lineRangedefaultColor.map((colorObj,index)=>{
-        if(nodeLineRangeColor[index]!=null){
-          lineRangedefaultColor[index]=nodeLineRangeColor[index];
+      lineRangedefaultColor.map((colorObj, index) => {
+        if (nodeLineRangeColor[index] != null) {
+          lineRangedefaultColor[index] = nodeLineRangeColor[index];
         }
-      })
-      lineRangedefaultColor=_.slice(lineRangedefaultColor,0,property.dataPointSelectedRows.length)
+      });
+      lineRangedefaultColor = _.slice(
+        lineRangedefaultColor,
+        0,
+        property.dataPointSelectedRows.length
+      );
       propertyForm.setFieldsValue({
         dataMax: property.dataMax,
         dataMin: property.dataMin,
@@ -255,11 +259,13 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           property.chartUnitChecked && property.chartUnitChecked,
         chartUnit: property.chartUnit && property.chartUnit,
         lineGraphRange: lineRangedefaultColor,
-        chartBackgroundColor:property.chartBackgroundColor && property.chartBackgroundColor,
-        chartBackgroundChecked:property.chartBackgroundChecked && property.chartBackgroundChecked,
+        chartBackgroundColor:
+          property.chartBackgroundColor && property.chartBackgroundColor,
+        chartBackgroundChecked:
+          property.chartBackgroundChecked && property.chartBackgroundChecked,
       });
     }
-  }, [property,refreshProperty]);
+  }, [property, refreshProperty]);
 
   // 字段值更新时触发的回掉
   const handleValuesChange = (changedValues) => {
@@ -324,20 +330,20 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     if (property && property.dataPointSelectedRows) {
       if (nodeType == 'timeLine') {
         // 最多可绑定十个数据点
-        selectedRows=selectedRows.slice(0,10)
+        selectedRows = selectedRows.slice(0, 10);
         if (data.node.property.dataPointSelectedRows.length < 10) {
-          const tmp=_.cloneDeep(data.node.property.dataPointSelectedRows)
+          const tmp = _.cloneDeep(data.node.property.dataPointSelectedRows);
           data.node.property.dataPointSelectedRows = selectedRows;
-          selectedRows.map((row,index)=>{
-            const q={
+          selectedRows.map((row, index) => {
+            const q = {
               id: selectedRows[index].id,
               type: selectedRows[index].dataType || selectedRows[index].type,
             };
-            data.node.property.dataPointParam.qtDataList[index]=q;
+            data.node.property.dataPointParam.qtDataList[index] = q;
             // if(index>(tmp.length-1)){
             //   (addLineColorBtnRef as any)?.current.click()
             // }
-          })
+          });
           setDataPointSelectedRows(selectedRows);
           updateTimelineOption();
         }
@@ -357,10 +363,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           //   'limit.bottom': scopeMin,
           //   'limit.top': scopeMax,
           // })
-          property.limitType = 'dataPoint'
-          property.showLimit = false
-          property.limit.bottom = scopeMin
-          property.limit.top = scopeMax
+          property.limitType = 'dataPoint';
+          property.showLimit = false;
+          property.limit.bottom = scopeMin;
+          property.limit.top = scopeMax;
         }
         data.node.property.dataPointSelectedRows = selectedRows;
         data.node.property.dataPointParam.qtDataList[0] = {
@@ -371,7 +377,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       }
       setIsSave(false);
     }
-    setRefreshProperty(!refreshProperty)
+    setRefreshProperty(!refreshProperty);
   };
   // 删除数据点
   const handleDeleteDataPoint = (item) => {
@@ -384,7 +390,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       getContainer: () => document.querySelector('#editLayout'),
       onOk() {
         setIsSave(false);
-        setRefreshProperty(!refreshProperty)
+        setRefreshProperty(!refreshProperty);
         if (data.node.property.echartsType == 'timeLine') {
           const itemRowIndex = _.findIndex(
             property.dataPointSelectedRows,
@@ -402,7 +408,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
           setDataPointSelectedRows(newRows);
           updateTimelineOption();
-         //(removeLineColorBtnRef as any).current.click();
+          //(removeLineColorBtnRef as any).current.click();
         } else {
           data.node.property.dataPointParam.qtDataList = [];
           data.node.property.dataPointSelectedRows = [];
@@ -413,17 +419,18 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     });
   };
   // 选择数据点，将数值配置上区
-  const handleChangeDataPoint=(value)=>{
-    const dataTween=value.split("~");
+  const handleChangeDataPoint = (value) => {
+    const dataTween = value.split('~');
     propertyForm.setFieldsValue({
-      dataBottom:dataTween[0]=='undefined'?'':dataTween[0],
-      dataTop:dataTween[1]=='undefined'?'':dataTween[1],
+      dataBottom: dataTween[0] == 'undefined' ? '' : dataTween[0],
+      dataTop: dataTween[1] == 'undefined' ? '' : dataTween[1],
     });
-    onPropertyFormValueChange && onPropertyFormValueChange({
-      dataBottom:dataTween[0]=='undefined'?'':dataTween[0],
-      dataTop:dataTween[1]=='undefined'?'':dataTween[1],
-    });
-  }
+    onPropertyFormValueChange &&
+      onPropertyFormValueChange({
+        dataBottom: dataTween[0] == 'undefined' ? '' : dataTween[0],
+        dataTop: dataTween[1] == 'undefined' ? '' : dataTween[1],
+      });
+  };
   const updateTimelineOption = () => {
     data.node.data.echarts.option = getTimelineOption(
       data.node,
@@ -443,11 +450,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     disableSource = [];
   }
   // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
-  const selectedRowKeys=[];
-  data.node.property&&(data.node.property.dataPointSelectedRows||[]).map(row=>{
-    selectedRowKeys.push(row.id)
-    return row;
-  })
+  const selectedRowKeys = [];
+  data.node.property &&
+    (data.node.property.dataPointSelectedRows || []).map((row) => {
+      selectedRowKeys.push(row.id);
+      return row;
+    });
   const renderDataPointModal = useCallback(() => {
     return (
       <DataBindModal
@@ -458,7 +466,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         onGetSelectRow={onDataPointBind}
         selectedRowKeys={selectedRowKeys}
         node={data.node}
-        mode={data.node.property.echartsType=='timeLine'?'checkbox':'radio'}
+        mode={
+          data.node.property.echartsType == 'timeLine' ? 'checkbox' : 'radio'
+        }
       ></DataBindModal>
     );
   }, [visible]);
@@ -473,28 +483,28 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           <Row>
             <Col span={14}>
               <Form.Item name="x" label="位置">
-                <Input suffix={<span style={{color: '#999999'}}>X</span>} />
+                <Input suffix={<span style={{ color: '#999999' }}>X</span>} />
               </Form.Item>
             </Col>
             <Col span={9} push={1}>
               <Form.Item name="y">
-                <Input suffix={<span style={{color: '#999999'}}>Y</span>} />
+                <Input suffix={<span style={{ color: '#999999' }}>Y</span>} />
               </Form.Item>
             </Col>
             <Col span={14}>
               <Form.Item name="width" label="宽高">
-                <Input suffix={<span style={{color: '#999999'}}>W</span>} />
+                <Input suffix={<span style={{ color: '#999999' }}>W</span>} />
               </Form.Item>
             </Col>
             <Col span={9} push={1}>
               <Form.Item name="height">
-                <Input suffix={<span style={{color: '#999999'}}>H</span>} />
+                <Input suffix={<span style={{ color: '#999999' }}>H</span>} />
               </Form.Item>
             </Col>
             {!disabledRotateList.includes(data?.node.name) && (
               <Col span={14}>
                 <Form.Item name="rotate" label="旋转">
-                  <Input suffix={<span style={{color: '#999999'}}>°</span>} />
+                  <Input suffix={<span style={{ color: '#999999' }}>°</span>} />
                 </Form.Item>
               </Col>
             )}
@@ -575,19 +585,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       // 斜体
       if (data.node.font.fontStyle === 'normal') {
         data.node.font.fontStyle = 'italic';
-        setBtnColor({...btnColor, italicBtn: '#1890ff'})
+        setBtnColor({ ...btnColor, italicBtn: '#1890ff' });
       } else {
         data.node.font.fontStyle = 'normal';
-        setBtnColor({...btnColor, italicBtn: '#fff'})
+        setBtnColor({ ...btnColor, italicBtn: '#fff' });
       }
     } else {
       // 加粗
       if (data.node.font.fontWeight === 'normal') {
         data.node.font.fontWeight = 'bold';
-        setBtnColor({...btnColor, boldBtn: '#1890ff'})
+        setBtnColor({ ...btnColor, boldBtn: '#1890ff' });
       } else {
         data.node.font.fontWeight = 'normal';
-        setBtnColor({...btnColor, boldBtn: '#fff'})
+        setBtnColor({ ...btnColor, boldBtn: '#fff' });
       }
     }
     setIsSave(false);
@@ -598,7 +608,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
    * 渲染字体的表单
    */
   const renderFontForm = useMemo(() => {
-
     return (
       <Panel header="字符" key="font">
         <Form form={form} onValuesChange={handleValuesChange}>
@@ -648,7 +657,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Col>
           <Col span={24}>
             <Form.Item name="fontSize" label="大小">
-              <InputNumber min={0} style={{width: '100%'}}/>
+              <InputNumber min={0} style={{ width: '100%' }} />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -658,15 +667,15 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               >
                 <Button
                   size="small"
-                  style={{width: '50%', background: btnColor.italicBtn}}
+                  style={{ width: '50%', background: btnColor.italicBtn }}
                   icon={<CustomIcon type="iconzu" />}
                   onClick={() => fontStyleChange('fontStyle')}
                 />
                 <Button
                   size="small"
-                  style={{width: '50%', background: btnColor.boldBtn}}
+                  style={{ width: '50%', background: btnColor.boldBtn }}
                   icon={<CustomIcon type="iconjiacu" />}
-                  onClick={() =>fontStyleChange('fontWeight')}
+                  onClick={() => fontStyleChange('fontWeight')}
                 />
               </Button.Group>
             </Form.Item>
@@ -841,7 +850,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           </Form.Item>
           {(property?.dataPointSelectedRows || []).map((item, index) => {
             return (
-              <Form.Item label={`数据点${index + 1}`} key={index} wrapperCol={{style: {alignItems: 'flex-end'}}}>
+              <Form.Item
+                label={`数据点${index + 1}`}
+                key={index}
+                wrapperCol={{ style: { alignItems: 'flex-end' } }}
+              >
                 <span>{item.dataName || item.name}</span>
                 <Button
                   type="link"
@@ -886,7 +899,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     );
   }, [alignObj, data?.node]);
 
-
   const checkCardRange = () => {
     const bottom = propertyForm.getFieldValue('limit.bottom');
     const top = propertyForm.getFieldValue('limit.top');
@@ -894,10 +906,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       message.config({
         getContainer: () => document.getElementById('editLayout'),
       });
-      message.error('上限不能超过下限')
+      message.error('上限不能超过下限');
     }
-  }
-
+  };
 
   /**
    * 渲染数据卡片样式设置  property
@@ -943,12 +954,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   { label: '数据点', value: 'dataPoint' },
                   { label: '自定义', value: 'custom' },
                 ]}
-                onChange={() => propertyForm.setFieldsValue({'showLimit': false ,'limit.bottom': undefined, 'limit.top': undefined})}
+                style={{ float: 'right' }}
+                onChange={() =>
+                  propertyForm.setFieldsValue({
+                    showLimit: false,
+                    'limit.bottom': undefined,
+                    'limit.top': undefined,
+                  })
+                }
                 optionType="button"
                 buttonStyle="solid"
               />
             </Form.Item>
-            <Row>
+            <Row justify="space-between">
               <Col span={4}>
                 <Form.Item name="showLimit" valuePropName="checked">
                   <Checkbox />
@@ -957,7 +975,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               <Col span={20}>
                 <Input.Group compact>
                   <Form.Item name="limit.bottom">
-                    <InputNumber style={{ width: 80 }} placeholder="下限" />
+                    <InputNumber style={{ width: 85 }} placeholder="下限" />
                   </Form.Item>
                   <Input
                     style={{
@@ -968,7 +986,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                     disabled
                   />
                   <Form.Item name="limit.top">
-                    <InputNumber style={{ width: 80 }} placeholder="上限" onBlur={checkCardRange} />
+                    <InputNumber
+                      style={{ width: 85 }}
+                      placeholder="上限"
+                      onBlur={checkCardRange}
+                    />
                   </Form.Item>
                 </Input.Group>
               </Col>
@@ -1086,47 +1108,47 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
 
   const checkPilotSingleRepeat = () => {
-    const vals = propertyForm.getFieldValue('lightRange').map((item) => item?.lightRangeVal);
+    const vals = propertyForm
+      .getFieldValue('lightRange')
+      .map((item) => item?.lightRangeVal);
     const tmpSet = new Set(vals);
     if (tmpSet.size !== vals.length) {
       message.config({
         getContainer: () => document.getElementById('editLayout'),
       });
-      message.error('单点值不能重复')
+      message.error('单点值不能重复');
     }
-  }
+  };
 
   const checkPilotRangeRepeat = () => {
-    const vals = propertyForm.getFieldValue('lightRange').map((item) => [
-      item?.lightRangeBottom,
-      item?.lightRangeTop,
-    ]);
-    let flag = false
-    if (!vals.flat().includes(undefined)){
+    const vals = propertyForm
+      .getFieldValue('lightRange')
+      .map((item) => [item?.lightRangeBottom, item?.lightRangeTop]);
+    let flag = false;
+    if (!vals.flat().includes(undefined)) {
       message.config({
         getContainer: () => document.getElementById('editLayout'),
       });
-      vals.some(item => {
+      vals.some((item) => {
         if (item[1] < item[0]) {
-          message.error('下限不能大于上限')
-          flag = true
-          return true
+          message.error('下限不能大于上限');
+          flag = true;
+          return true;
         }
-      })
-      if(flag) return
+      });
+      if (flag) return;
       const nums = eraseOverlapIntervals(vals);
       if (nums.length !== 0) {
-        message.error('范围值出现重叠')
+        message.error('范围值出现重叠');
       }
     }
-  }
+  };
 
   /**
    * 渲染指示灯样式
    */
   const renderLight = useMemo(() => {
-
-    const radioButtonStyle = {height: 26, lineHeight: '24px'}
+    const radioButtonStyle = { height: 26, lineHeight: '24px' };
 
     return (
       <Panel header="样式" key="biciLight">
@@ -1158,8 +1180,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   block
                   size="small"
                   style={{
-                    background: pilotBtnSize === 'small' ? '#1890ff' : '#F0F0F0',
-                    color: pilotBtnSize === 'small' ? '#ffffff' : '#000000'
+                    background:
+                      pilotBtnSize === 'small' ? '#1890ff' : '#F0F0F0',
+                    color: pilotBtnSize === 'small' ? '#ffffff' : '#000000',
                   }}
                   onClick={() => changePolitSize(15)}
                 >
@@ -1169,8 +1192,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   block
                   size="small"
                   style={{
-                    background: pilotBtnSize === 'middle' ? '#1890ff' : '#F0F0F0',
-                    color: pilotBtnSize === 'middle' ? '#ffffff' : '#000000'
+                    background:
+                      pilotBtnSize === 'middle' ? '#1890ff' : '#F0F0F0',
+                    color: pilotBtnSize === 'middle' ? '#ffffff' : '#000000',
                   }}
                   onClick={() => changePolitSize(20)}
                 >
@@ -1180,8 +1204,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   block
                   size="small"
                   style={{
-                    background: pilotBtnSize === 'large' ? '#1890ff' : '#F0F0F0',
-                    color: pilotBtnSize === 'large' ? '#ffffff' : '#000000'
+                    background:
+                      pilotBtnSize === 'large' ? '#1890ff' : '#F0F0F0',
+                    color: pilotBtnSize === 'large' ? '#ffffff' : '#000000',
                   }}
                   onClick={() => changePolitSize(30)}
                 >
@@ -1207,22 +1232,20 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               </Form.Item>
             </Col>
           </Row>
-          <Form.Item
-            name="stateType"
-            label="状态定义"
-            wrapperCol={{ offset: 3 }}
-          >
-            <Radio.Group
-              options={[
-                { label: '单点值', value: 'single', style: radioButtonStyle },
-                { label: '范围值', value: 'range', style: radioButtonStyle },
-              ]}
-              style={{float: 'right'}}
-              onChange={() => propertyForm.setFieldsValue({ lightRange: [] })}
-              optionType="button"
-              buttonStyle="solid"
-            />
-          </Form.Item>
+          <Col span={24}>
+            <Form.Item name="stateType" label="状态定义">
+              <Radio.Group
+                options={[
+                  { label: '单点值', value: 'single', style: radioButtonStyle },
+                  { label: '范围值', value: 'range', style: radioButtonStyle },
+                ]}
+                style={{ float: 'right' }}
+                onChange={() => propertyForm.setFieldsValue({ lightRange: [] })}
+                optionType="button"
+                buttonStyle="solid"
+              />
+            </Form.Item>
+          </Col>
           <Form.List name="lightRange">
             {(fields, { add, remove }) => (
               <Fragment>
@@ -1248,7 +1271,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                           fieldKey={[field.fieldKey, 'lightRangeVal']}
                           rules={[{ required: true, message: '必填' }]}
                         >
-                          <InputNumber placeholder="数值" onBlur={checkPilotSingleRepeat} />
+                          <InputNumber
+                            placeholder="数值"
+                            onBlur={checkPilotSingleRepeat}
+                          />
                         </Form.Item>
                         <Form.Item
                           {...field}
@@ -1519,30 +1545,27 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Form.Item>
               </Col>
             </Row>
-             <Col span={24}>
-               <Form.Item
-                 label="上下限"
-                 name="dataTopSource"
-               >
-                 <Radio.Group
-                   options={[
-                     { label: '自定义', value: 'custom' },
-                     { label: '数据点', value: 'dataPoint' },
-                   ]}
-                   style={{float: 'right'}}
-                   optionType="button"
-                   buttonStyle="solid"
-                   onChange={(value)=>{
-                     if(value.target.value=='custom'){
-                       setShowSelectDataPoint(true)
-                     }else{
-                       setShowSelectDataPoint(false)
-                     }
-                   }}
-                 />
-               </Form.Item>
-             </Col>
-            <Row justify='space-between'>
+            <Col span={24}>
+              <Form.Item label="上下限" name="dataTopSource">
+                <Radio.Group
+                  options={[
+                    { label: '自定义', value: 'custom' },
+                    { label: '数据点', value: 'dataPoint' },
+                  ]}
+                  style={{ float: 'right' }}
+                  optionType="button"
+                  buttonStyle="solid"
+                  onChange={(value) => {
+                    if (value.target.value == 'custom') {
+                      setShowSelectDataPoint(true);
+                    } else {
+                      setShowSelectDataPoint(false);
+                    }
+                  }}
+                />
+              </Form.Item>
+            </Col>
+            <Row justify="space-between">
               <Col>
                 <Form.Item name="dataTopChecked" valuePropName="checked">
                   <Checkbox />
@@ -1579,17 +1602,30 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Input.Group>
               </Col>
             </Row>
-            <Row style={{
-              display:showSelectDataPoint?"none":"block"
-            }}>
+            <Row
+              style={{
+                display: showSelectDataPoint ? 'none' : 'block',
+              }}
+            >
               <Col push={4} span={20}>
                 <Form.Item name="selectDataPoint">
-                  <Select style={{ width: '100%' }} onChange={handleChangeDataPoint} placeholder="选择数据点">
-                    {
-                      (data.node.property?.dataPointSelectedRows||[]).map((item,index)=>{
-                        return <Option value={item.scopeMin+'~'+item.scopeMax} key={index}>{item.dataName}</Option>
-                      })
-                    }
+                  <Select
+                    style={{ width: '100%' }}
+                    onChange={handleChangeDataPoint}
+                    placeholder="选择数据点"
+                  >
+                    {(data.node.property?.dataPointSelectedRows || []).map(
+                      (item, index) => {
+                        return (
+                          <Option
+                            value={item.scopeMin + '~' + item.scopeMax}
+                            key={index}
+                          >
+                            {item.dataName}
+                          </Option>
+                        );
+                      }
+                    )}
                   </Select>
                 </Form.Item>
               </Col>
@@ -1598,27 +1634,27 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
         <Panel header="样式" key="lineStyle">
           <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-           <Col span={24}>
-             <Form.Item label="线型" name="smooth">
-               <Radio.Group
-                 options={[
-                   { label: '曲线', value: true },
-                   { label: '折线', value: false },
-                 ]}
-                 style={{float: "right"}}
-                 optionType="button"
-                 buttonStyle="solid"
-               />
-             </Form.Item>
-           </Col>
+            <Col span={24}>
+              <Form.Item label="线型" name="smooth">
+                <Radio.Group
+                  options={[
+                    { label: '曲线', value: true },
+                    { label: '折线', value: false },
+                  ]}
+                  style={{ float: 'right' }}
+                  optionType="button"
+                  buttonStyle="solid"
+                />
+              </Form.Item>
+            </Col>
             <Row>
               <Col span={10}>
                 <Form.Item
-                    label="背景色"
-                    labelCol={{ span: 16 }}
-                    labelAlign="left"
-                    name="chartBackgroundChecked"
-                    valuePropName="checked"
+                  label="背景色"
+                  labelCol={{ span: 16 }}
+                  labelAlign="left"
+                  name="chartBackgroundChecked"
+                  valuePropName="checked"
                 >
                   <Checkbox />
                 </Form.Item>
@@ -1665,7 +1701,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                         name={[field.name, 'lineGraphRangeCheck']}
                         fieldKey={[field.fieldKey, 'lineGraphRangeCheck']}
                         valuePropName="checked"
-                        style={{display:'none'}}
+                        style={{ display: 'none' }}
                       >
                         <Checkbox />
                       </Form.Item>
@@ -1676,16 +1712,16 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                       >
                         <ColorPicker />
                       </Form.Item>
-                      <Form.Item style={{display:'none'}}>
+                      <Form.Item style={{ display: 'none' }}>
                         <MinusCircleOutlined
-                            ref={removeLineColorBtnRef}
+                          ref={removeLineColorBtnRef}
                           onClick={() => remove(field.name)}
                         />
                       </Form.Item>
                     </Space>
                   ))}
                   {fields.length < 10 ? (
-                    <Form.Item style={{display:'none'}}>
+                    <Form.Item style={{ display: 'none' }}>
                       <Button
                         type="dashed"
                         ref={addLineColorBtnRef}
@@ -1704,7 +1740,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         </Panel>
       </Fragment>
     );
-  }, [property, data?.node,showSelectDataPoint,refreshProperty]);
+  }, [property, data?.node, showSelectDataPoint, refreshProperty]);
 
   return (
     <div className={styles.rightArea}>
@@ -1712,7 +1748,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       {!data.multi && (
         <Tabs defaultActiveKey="1" centered>
           <TabPane tab="外观" key="1" style={{ margin: 0 }}>
-            <Collapse defaultActiveKey={['pos','lineInfo','lineStyle']}>
+            <Collapse defaultActiveKey={['pos', 'lineInfo', 'lineStyle']}>
               {renderPositionForm}
               {fontStyleNodeList.includes(name) && renderFontForm}
               {fillStyleNodeList.includes(name) && renderFillStyle}
