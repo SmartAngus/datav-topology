@@ -87,8 +87,6 @@
     "axios": "^0.21.0",
     "bici-transformers": "^0.19.7",
     "cash-dom": "^8.1.0",
-    "d3-selection": "^2.0.0",
-    "d3-zoom": "^2.0.0",
     "echarts": "^4.9.0",
     "file-saver": "^2.0.2",
     "html2canvas": "^1.0.0-rc.7",

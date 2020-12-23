@@ -23,8 +23,7 @@ import {getGaugeOption, getMeasureOption2, getTimelineOption,} from '../config/c
 import * as _ from 'lodash';
 import moment from 'moment';
 import $ from "cash-dom";
-import * as d3Zoom from 'd3-zoom'
-import * as d3Selection from 'd3-selection'
+
 
 const { confirm } = Modal;
 const { TabPane } = Tabs;
@@ -736,9 +735,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const handleScaleCanvas=(scale:number)=>{
     let x=(scale*canvasSizeInfo.width-canvasSizeInfo.width)*0.5;
     let y=(scale*canvasSizeInfo.height-canvasSizeInfo.height)*0.5;
-    if(scale<=1){
-      x=0;y=0;
-    }
+    // if(scale<=1){
+    //   x=0;y=0;
+    // }
     const containerStyle= {
       transformOrigin: 'center center',
       transform: `translate(${x}px,${y}px) scale(${scale})`
