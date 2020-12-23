@@ -165,10 +165,10 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             (node.property.dataPointSelectedRows || []).map((row) => {
               if (row.id == r.id) {
                 timedata.push({
-                  name:r.time+"",
-                  value:[r.time+"",parseInt(r.value)]
+                  name:r.time,
+                  value:[r.time,parseInt(r.value)]
                 })
-                node.data.echarts.option = dynamicTimelineOption(node, r,timedata);
+                node.data.echarts.option = getTimelineOption(node, r,null);
                 updateChartNode(node);
               }
             });

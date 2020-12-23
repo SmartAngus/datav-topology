@@ -867,7 +867,6 @@ export function getTimelineOption(
     },
     series: lineY,
   };
-  console.log(lineY)
 
   return option;
 }
@@ -877,95 +876,73 @@ export function dynamicTimelineOption(
     socketData?: any,
     changeValues?: any
 ) {
-  const data=[{"name":1608515735391,"value":[1608515735391,99.1]},{"name":1608515736391,"value":[1608515736391,115.2]},{"name":1608515737391,"value":[1608515737391,63.1]},{"name":1608515738391,"value":[1608515738391,122.1]},{"name":1608515739391,"value":[1608515739391,68.3]},{"name":1608515740391,"value":[1608515740391,62.3]},{"name":1608515741391,"value":[1608515741391,72.7]},{"name":1608515742391,"value":[1608515742391,119.2]},{"name":1608515743391,"value":[1608515743391,90.3]},{"name":1608515744391,"value":[1608515744391,63.8]},{"name":1608515745391,"value":[1608515745391,78.4]},{"name":1608515746391,"value":[1608515746391,110.4]},{"name":1608515747391,"value":[1608515747391,91]},{"name":1608515748391,"value":[1608515748391,61.6]},{"name":1608515749391,"value":[1608515749391,121.5]},{"name":1608515750391,"value":[1608515750391,92.1]},{"name":1608515751391,"value":[1608515751391,109.4]},{"name":1608515752391,"value":[1608515752391,74.3]},{"name":1608515753391,"value":[1608515753391,69.8]},{"name":1608515754391,"value":[1608515754391,59.8]},{"name":1608515755391,"value":[1608515755391,104.3]}]
-  const data2=[{"name":1608515735391,"value":[1608515735391,10.1]},{"name":1608515736391,"value":[1608515736391,15.2]},{"name":1608515737391,"value":[1608515737391,63.1]},{"name":1608515738391,"value":[1608515738391,12.1]},{"name":1608515739391,"value":[1608515739391,68.3]},{"name":1608515740391,"value":[1608515740391,62.3]},{"name":1608515741391,"value":[1608515741391,72.7]},{"name":1608515742391,"value":[1608515742391,119.2]},{"name":1608515743391,"value":[1608515743391,90.3]},{"name":1608515744391,"value":[1608515744391,63.8]},{"name":1608515745391,"value":[1608515745391,78.4]},{"name":1608515746391,"value":[1608515746391,110.4]},{"name":1608515747391,"value":[1608515747391,91]},{"name":1608515748391,"value":[1608515748391,61.6]},{"name":1608515749391,"value":[1608515749391,121.5]},{"name":1608515750391,"value":[1608515750391,92.1]},{"name":1608515751391,"value":[1608515751391,109.4]},{"name":1608515752391,"value":[1608515752391,74.3]},{"name":1608515753391,"value":[1608515753391,69.8]},{"name":1608515754391,"value":[1608515754391,59.8]},{"name":1608515755391,"value":[1608515755391,104.3]}]
+  function randomData() {
+    let now = new Date();
+    now = new Date(+now + oneDay);
+    value = value + Math.random() * 21 - 10;
+    return {
+      name: now.toString(),
+      value: [
+        [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'),
+        Math.round(value)
+      ]
+    };
+  }
+  var data = [];
+  var now = +new Date(1997, 9, 3);
+  var oneDay = 24 * 3600 * 1000;
+  var value = Math.random() * 1000;
+  for (var i = 0; i < 1000; i++) {
+    data.push(randomData());
+  }
 
   const option = {
-    backgroundColor: '#fff',
     title: {
-      text: "订单量（个）",
-      left: "18px",
-      top: "0",
-      textStyle: {
-        color: "#999",
-        fontSize: 12,
-        fontWeight: '400'
-      }
+      text: '动态数据 + 时间坐标轴'
     },
-    color: ['#73A0FA', '#73DEB3', '#FFB761'],
     tooltip: {
       trigger: 'axis',
+      formatter: function (params) {
+        params = params[0];
+        var date = new Date(params.name);
+        return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
+      },
       axisPointer: {
-        type: 'cross',
-        crossStyle: {
-          color: '#999'
-        },
-        lineStyle: {
-          type: 'dashed'
-        }
+        animation: false
       }
-    },
-    grid: {
-      left: '25',
-      right: '25',
-      bottom: '24',
-      top: '75',
-      containLabel: true
-    },
-    legend: {
-      data: ['订单总笔数',"订单总笔数2"],
-      orient: 'horizontal',
-      icon: "rect",
-      show: true,
-      left: 20,
-      top: 25,
     },
     xAxis: {
       type: 'time',
-      maxInterval: 3600 * 24 * 1000,
-      data:changeValues,
       splitLine: {
         show: false
-      },
-      axisTick: {
-        show: false
-      },
-      axisLine: {
-        show: false
-      },
+      }
     },
     yAxis: {
       type: 'value',
-      // max: max_value>=100? max_value + 100: max_value+10,
-      // max: max_value > 100 ? max_value * 2 : max_value + 10,
-      // interval: 10,
-      // nameLocation: "center",
-      axisLabel: {
-        color: '#999',
-        textStyle: {
-          fontSize: 12
-        },
-      },
+      boundaryGap: [0, '100%'],
       splitLine: {
-        show: true,
-        lineStyle: {
-          color: '#F3F4F4'
-        }
-      },
-      axisTick: {
         show: false
-      },
-      axisLine: {
-        show: false
-      },
+      }
     },
     series: [{
-      name: '订单总笔数',
+      name: '模拟数据',
       type: 'line',
-      smooth: true,
-      data: changeValues
-    }
-    ]
+      showSymbol: false,
+      hoverAnimation: false,
+      data: data
+    }]
   };
+
+  setInterval(function () {
+
+    for (var i = 0; i < 5; i++) {
+      data.shift();
+      data.push(randomData());
+    }
+
+
+    data=data
+
+  }, 1000);
   return option;
 }
