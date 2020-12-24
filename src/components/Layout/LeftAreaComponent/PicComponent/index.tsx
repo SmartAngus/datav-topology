@@ -133,6 +133,34 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
         requstPicList();
       });
   };
+  const scaleWidthHeight=(width:number,height:number,maxSize:number)=>{
+    if(width>maxSize && width>height){
+      const w=maxSize;
+      const h=Math.round(w*height/width);
+      return {
+        width:w,
+        height:h,
+      }
+    }else {
+      const h=maxSize;
+      const w=Math.round(h*width/height);
+      return {
+        width:w,
+        height:h,
+      }
+    }
+  }
+  const rtnImg=(nImg:any,resolve:any,maxSize:number,img:any)=>{
+    const width = nImg.width;
+    const height = nImg.height;
+    const r=scaleWidthHeight(width,height,maxSize);
+    resolve({
+      ...img,
+      url:img.url+'?_t='+new Date().getTime(),
+      width:r.width,
+      height:r.height,
+    })
+  }
   /**
    *
    * @param img
@@ -143,19 +171,12 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
       if(!img.width){// 如果没有图片的宽度
         var nImg = new Image();
         nImg.src = img.url;
-        nImg.onload = function () {
-          const width = nImg.width;
-          const height = nImg.height;
-          resolve({
-            ...img,
-            width,
-            height,
-          })
-          console.log({
-            ...img,
-            width,
-            height,
-          })
+        if(img.complete){
+          rtnImg(nImg,resolve,maxSize,img)
+        }else{
+          nImg.onload = function () {
+            rtnImg(nImg,resolve,maxSize,img)
+          }
         }
       }else if(typeof img==='object'){// 包含图片大小的对象
         if(img.width<=maxSize&&img.height<=maxSize){
@@ -184,9 +205,23 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
   }
 
   const onDrag = (event, item: any) => {
+    if(!item.width){
+      console.log(item)
+      event.dataTransfer.setData(
+          'Text',
+          JSON.stringify({
+            name: 'image',
+            rect: {
+              width: 150,
+              height: 150,
+            },
+            image: item.url
+          })
+      );
+      return;
+    }
     const eventClone=_.cloneDeep(event)
     fitImageSize(item).then((r:any)=>{
-      console.log(eventClone)
       eventClone.dataTransfer.setData(
           'Text',
           JSON.stringify({

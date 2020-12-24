@@ -320,6 +320,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
 
   const updateChartNode = (node) => {
     // 更新图表数据
+    node.elementRendered = false;
     echartsObjs[node.id].chart.setOption(
       JSON.parse(JSON.stringify(node.data.echarts.option, replacer), reviver)
     );

@@ -128,3 +128,162 @@ export function calcRepeatIndex(newArr) {
     return res;
   }
 }
+export function rgbaStringToRgb(rgba,isFilter) {
+  //用来判断是否把连续的0去掉
+  isFilter = isFilter || false;
+  if (typeof rgba === "string") {
+    // var arr = Str.match(/(0\d{2,})|([1-9]\d+)/g);
+    //"/[1-9]\d{1,}/g",表示匹配1到9,一位数以上的数字(不包括一位数).
+    //"/\d{2,}/g",  表示匹配至少二个数字至多无穷位数字
+    var arr = rgba.match( isFilter ? /[1-9]\d{1,}/g : /\d{2,}/g);
+    return (arr||[]).map(function (item) {
+      //转换为整数，
+      //但是提取出来的数字，如果是连续的多个0会被改为一个0，如000---->0，
+      //或者0开头的连续非零数字，比如015，会被改为15，这是一个坑
+      return parseInt(item);
+      //字符串，连续的多个0也会存在，不会被去掉
+      // return item;
+    });
+  } else {
+    return [];
+  }
+}
+export function getContrastColor(rgbStr) {
+  const rgb=rgbaStringToRgb(rgbStr,true);
+
+  var hsl = rgbToHsl(rgb[0],rgb[1],rgb[2]);
+  if(hsl[2]){
+    hsl[2] = (hsl[2] + 0.5) % 1.0;
+    var new_rgb = hslToRgb.apply(this, hsl);
+    return ['rgb(',parseInt(new_rgb[0]),',',parseInt(new_rgb[1]),',',parseInt(new_rgb[2]),')'].join('');
+  }else{
+    return "rgba(255,255,255,0.8)";
+  }
+
+}
+/**
+
+ * Converts an HSL color value to RGB. Conversion formula
+
+ * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+
+ * Assumes h, s, and l are contained in the set [0, 1] and
+
+ * returns r, g, and b in the set [0, 255].
+
+ *
+
+ * @param   Number  h       The hue
+
+ * @param   Number  s       The saturation
+
+ * @param   Number  l       The lightness
+
+ * @return  Array           The RGB representation
+
+ */
+
+export function hslToRgb(h, s, l) {
+
+  var r, g, b;
+
+
+
+  if (s == 0) {
+
+    r = g = b = l; // achromatic
+
+  } else {
+
+
+    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+
+    var p = 2 * l - q;
+
+    r = hue2rgb(p, q, h + 1 / 3);
+
+    g = hue2rgb(p, q, h);
+
+    b = hue2rgb(p, q, h - 1 / 3);
+
+  }
+
+
+
+  return [r * 255, g * 255, b * 255];
+
+}
+function hue2rgb(p, q, t) {
+
+  if (t < 0) t += 1;
+
+  if (t > 1) t -= 1;
+
+  if (t < 1 / 6) return p + (q - p) * 6 * t;
+
+  if (t < 1 / 2) return q;
+
+  if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+
+  return p;
+
+}
+
+
+/**
+
+ * Converts an RGB color value to HSL. Conversion formula
+
+ * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+
+ * Assumes r, g, and b are contained in the set [0, 255] and
+
+ * returns h, s, and l in the set [0, 1].
+
+ *
+
+ * @param   Number  r       The red color value
+
+ * @param   Number  g       The green color value
+
+ * @param   Number  b       The blue color value
+
+ * @return  Array           The HSL representation
+
+ */
+
+export function rgbToHsl(r, g, b) {
+
+  r /= 255, g /= 255, b /= 255;
+
+  var max = Math.max(r, g, b), min = Math.min(r, g, b);
+
+  var h, s, l = (max + min) / 2;
+
+
+
+  if (max == min) {
+
+    h = s = 0; // achromatic
+
+  } else {
+
+    var d = max - min;
+
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+    switch (max) {
+
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+
+      case g: h = (b - r) / d + 2; break;
+
+      case b: h = (r - g) / d + 4; break;
+
+    }
+
+    h /= 6;
+
+  }
+  return [h, s, l];
+}

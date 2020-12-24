@@ -11,7 +11,7 @@ import preBgImg2 from './bg02.jpg';
 import preBgImg3 from './bg03.jpg';
 
 const { confirm } = Modal;
-const token = 'O1s9g9rRwiT01DvXLACID';
+const token = '6tVFu43mindHSMTSNqQsFe';
 
 const testId = 'e2e697e719194b188c1bfe5b0dcb0604';
 
@@ -38,7 +38,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     {
       name: '测试2',
       url:
-        'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        'https://bici-qt.oss-cn-hangzhou.aliyuncs.com/ooip6ffe388d487db754b885b8aa65b9/自定义组件/2020/12/27d978a2e1c24faf9c14e02d8ca4283b测图片.png',
     },
   ];
   const selfIndustrialLibrary = [

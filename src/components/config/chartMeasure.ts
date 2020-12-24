@@ -1,8 +1,89 @@
 import echarts from 'echarts/lib/echarts';
 import moment from 'moment';
 import * as _ from 'lodash';
-import { roundFun } from '../utils/cacl';
+import {getContrastColor, rgbaStringToRgb, rgbToHsl, roundFun} from '../utils/cacl';
 import {colorList} from '../data/defines'
+
+moment.locale('zh-cn', {
+  months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
+  monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
+  weekdays: '星期日_星期一_星期二_星期三_星期四_星期五_星期六'.split('_'),
+  weekdaysShort: '周日_周一_周二_周三_周四_周五_周六'.split('_'),
+  weekdaysMin: '日_一_二_三_四_五_六'.split('_'),
+  longDateFormat: {
+    LT: 'HH:mm A',
+    LTS: 'HH:mm:ss',
+    L: 'YYYY-MM-DD',
+    LL: 'YYYY/MM/DD',
+    LLL: 'YYYY年MM月DD日Ah点mm分',
+    LLLL: 'YYYY年MM月DD日ddddAh点mm分',
+    l: 'YY/MM/DD',
+    ll: 'MM/DD',
+    lll: 'YYYY年M月D日 HH:mm',
+    llll: 'YYYY年M月D日dddd HH:mm',
+  },
+  meridiemParse: /凌晨|早上|上午|中午|下午|晚上/,
+  meridiemHour: function (hour, meridiem) {
+    if (hour === 12) {
+      hour = 0;
+    }
+    if (meridiem === '凌晨' || meridiem === '早上' ||
+        meridiem === '上午') {
+      return hour;
+    } else if (meridiem === '下午' || meridiem === '晚上') {
+      return hour + 12;
+    } else {
+      // '中午'
+      return hour >= 11 ? hour : hour + 12;
+    }
+  },
+  meridiem: function (hour, minute, isLower) {
+    const hm = hour * 100 + minute;
+    if (hm < 600) {
+      return '凌晨';
+    } else if (hm < 900) {
+      return '早上';
+    } else if (hm < 1130) {
+      return '上午';
+    } else if (hm < 1230) {
+      return '中午';
+    } else if (hm < 1800) {
+      return '下午';
+    } else {
+      return '晚上';
+    }
+  },
+  calendar: {
+    sameDay: '[今天]LT',
+    nextDay: '[明天]LT',
+    nextWeek: '[下]ddddLT',
+    lastDay: '[昨天]LT',
+    lastWeek: '[上]ddddLT',
+    sameElse: 'L'
+  },
+  dayOfMonthOrdinalParse: /\d{1,2}(日|月|周)/,
+  relativeTime: {
+    future: '%s内',
+    past: '%s前',
+    s: '几秒',
+    ss: '%d秒',
+    m: '1分钟',
+    mm: '%d分钟',
+    h: '1小时',
+    hh: '%d小时',
+    d: '1天',
+    dd: '%d天',
+    M: '1个月',
+    MM: '%d个月',
+    y: '1年',
+    yy: '%d年'
+  },
+  week: {
+    // GB/T 7408-1994《数据元和交换格式·信息交换·日期和时间表示法》与ISO 8601:1988等效
+    dow: 1, // Monday is the first day of the week.
+    doy: 4  // The week that contains Jan 4th is the first week of the year.
+  }
+})
 
 /***
  * 仪表盘
@@ -661,48 +742,30 @@ export function getTimelineOption(
   var charts = {
     unit: '',
     names: [],
-    lineX: [],
     value: [],
   };
   var color = ['rgba(23, 255, 243', 'rgba(255,100,97'];
   var lineY = [];
-  if (socketData != undefined) {
-    charts.lineX = node.data.echarts.option.xAxis.data;
-    if (charts.lineX.length > 9) {
-      charts.lineX.shift();
-    }else{
-      // for(let i=0;i<9;i++){
-      //   charts.lineX.push('')
-      // }
-    }
-    const foratTime=moment(socketData.time).format('LTS') + '';
-    if(!charts.lineX.includes(foratTime)){
-      charts.lineX.push(foratTime);
-    }
-  }
   if (node != undefined) {
     (node.property.dataPointSelectedRows || []).map((row, index) => {
       charts.value[index] = node.data.echarts.option.series[index]
         ? node.data.echarts.option.series[index].data
         : [];
 
-      if (charts.value[index] && charts.value[index].length > 9) {
-        charts.value[index].shift();
-      }else{
-        // for(let i=0;i<9;i++){
-        //   charts.value[index].push(null)
-        // }
-      }
 
       charts.names[index] = row.dataName||row.name;
       charts.unit=row.unit;
       if (socketData && row.id == socketData.id) {
-        if(charts.value[index][0]==0){
+        if (charts.value[index] && charts.value[index].length > 19 ) {
           charts.value[index].shift();
         }
-        charts.value[index].push(
-          +roundFun(socketData.value, node.property.dataDot)
-        );
+        const v =  roundFun(socketData.value, node.property.dataDot);
+        charts.value[index].push({
+          name:moment(socketData.time),
+          value:[
+            socketData.time,v
+          ]
+        });
       }
     });
   }
@@ -745,8 +808,10 @@ export function getTimelineOption(
       //     shadowBlur: 10,
       //   },
       // },
-      symbol: 'circle',
-      symbolSize: 5,
+      // symbol: 'circle',
+      // symbolSize: 5,
+      showSymbol: false,
+      hoverAnimation: false,
       data: charts.value[i],
       itemStyle: {
         normal: {
@@ -770,50 +835,50 @@ export function getTimelineOption(
     dataBottom = node.property.dataBottom;
   }
 
-  lineY.push({
-    name: '下限',
-    type: 'line',
-    symbolSize: 0,
-    data: [dataBottom],
-    markLine: {
-      itemStyle: {
-        normal: {
-          lineStyle: {
-            color: '#18D8F7',
-            opacity: dataTopShow,
-          },
-        },
-      },
-      data: [
-        {
-          type: 'average',
-          name: '下限',
-        },
-      ],
-    },
-  });
-  lineY.push({
-    name: '上限',
-    type: 'line',
-    data: [dataTop],
-    symbolSize: 0,
-    markLine: {
-      itemStyle: {
-        normal: {
-          lineStyle: {
-            color: '#FF0000',
-            opacity: dataTopShow,
-          },
-        },
-      },
-      data: [
-        {
-          type: 'average',
-          name: '上限',
-        },
-      ],
-    },
-  });
+  // lineY.push({
+  //   name: '下限',
+  //   type: 'line',
+  //   symbolSize: 0,
+  //   data: [dataBottom],
+  //   markLine: {
+  //     itemStyle: {
+  //       normal: {
+  //         lineStyle: {
+  //           color: '#18D8F7',
+  //           opacity: dataTopShow,
+  //         },
+  //       },
+  //     },
+  //     data: [
+  //       {
+  //         type: 'average',
+  //         name: '下限',
+  //       },
+  //     ],
+  //   },
+  // });
+  // lineY.push({
+  //   name: '上限',
+  //   type: 'line',
+  //   data: [dataTop],
+  //   symbolSize: 0,
+  //   markLine: {
+  //     itemStyle: {
+  //       normal: {
+  //         lineStyle: {
+  //           color: '#FF0000',
+  //           opacity: dataTopShow,
+  //         },
+  //       },
+  //     },
+  //     data: [
+  //       {
+  //         type: 'average',
+  //         name: '上限',
+  //       },
+  //     ],
+  //   },
+  // });
   let showReference;
   let showReferenceColor="#1b2735";
   let showBackground;
@@ -847,6 +912,8 @@ export function getTimelineOption(
     chartTitle = '';
     chartTitleColor = '#c0c0c0';
   }
+const trastColor = getContrastColor(showBackgroundColor)
+
   var option = {
     title: {
       text: chartTitle,
@@ -874,28 +941,27 @@ export function getTimelineOption(
       bottom: '12%',
       containLabel: true,
     },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: charts.lineX,
-      axisLabel: {
-        textStyle: {
-          color: 'rgb(0,253,255,0.6)',
-        },
-        formatter: function (params) {
-          if (params) {
-            return params.split(' ')[0];
-          }
-        },
+    xAxis: [{
+      type: 'time',
+      splitLine: {
+        show: false
       },
-    },
-    yAxis: {
-      name: '',//charts.unit,//
-      type: 'value',
       axisLabel: {
-        formatter: '{value}',
         textStyle: {
-          color: 'rgb(0,253,255,0.6)',
+          color: trastColor,
+        },
+        formatter: function (value, index) {
+          // 格式化成月/日，只在第一个刻度显示年份
+          return moment(value).format('LTS');
+        }
+      },
+    }],
+    yAxis: {
+      type: 'value',
+      boundaryGap: [0, '100%'],
+      axisLabel: {
+        textStyle: {
+          color: trastColor,
         },
       },
       splitLine: {
@@ -906,7 +972,7 @@ export function getTimelineOption(
       },
       axisLine: {
         lineStyle: {
-          color: 'rgb(0,253,255,0.6)',
+          color: trastColor,
         },
       },
     },
