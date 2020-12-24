@@ -5,6 +5,7 @@ import { clientParam } from '../../../data/api';
 import { useClickAway } from 'ahooks';
 import CompContextMenu from '../../../common/CompContextMenu';
 import styles from './index.module.scss';
+import * as _ from 'lodash'
 
 const { Panel } = Collapse;
 
@@ -132,19 +133,73 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
         requstPicList();
       });
   };
+  /**
+   *
+   * @param img
+   * @param maxSize
+   */
+  const fitImageSize = (img:any,maxSize:number=250)=>{
+    return new Promise((resolve,reject)=>{
+      if(!img.width){// 如果没有图片的宽度
+        var nImg = new Image();
+        nImg.src = img.url;
+        nImg.onload = function () {
+          const width = nImg.width;
+          const height = nImg.height;
+          resolve({
+            ...img,
+            width,
+            height,
+          })
+          console.log({
+            ...img,
+            width,
+            height,
+          })
+        }
+      }else if(typeof img==='object'){// 包含图片大小的对象
+        if(img.width<=maxSize&&img.height<=maxSize){
+          resolve({
+            ...img,
+          })
+        }else if(img.width>maxSize&&img.width>img.height){
+          const width=maxSize;
+          const height=width*img.height/img.width;
+          resolve({
+            ...img,
+            width,
+            height,
+          })
+        }else {
+          const height=maxSize;
+          const width=height*img.width/img.height;
+          resolve({
+            ...img,
+            width,
+            height,
+          })
+        }
+      }
+    })
+  }
 
-  const onDrag = (event, image: string) => {
-    event.dataTransfer.setData(
-      'Text',
-      JSON.stringify({
-        name: 'image',
-        rect: {
-          width: 100,
-          height: 100,
-        },
-        image,
-      })
-    );
+  const onDrag = (event, item: any) => {
+    const eventClone=_.cloneDeep(event)
+    fitImageSize(item).then((r:any)=>{
+      console.log(eventClone)
+      eventClone.dataTransfer.setData(
+          'Text',
+          JSON.stringify({
+            name: 'image',
+            rect: {
+              width: r.width,
+              height: r.height,
+            },
+            image: r.url
+          })
+      );
+    })
+
   };
 
   // 右键菜单
@@ -191,7 +246,7 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
                   draggable
                   href="#"
                   onClick={(e) => e.preventDefault()}
-                  onDragStart={(ev) => onDrag(ev, item.url)}
+                  onDragStart={(ev) => onDrag(ev, item)}
                 >
                   <img
                     alt={item.name}
@@ -229,7 +284,7 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
                   draggable
                   href="#"
                   onClick={(e) => e.preventDefault()}
-                  onDragStart={(ev) => onDrag(ev, item.url)}
+                  onDragStart={(ev) => onDrag(ev, item)}
                 >
                   <img
                     alt={item.name}

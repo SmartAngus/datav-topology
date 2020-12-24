@@ -133,6 +133,12 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
     });
   };
   let timedata=[];
+  for(let i=0;i<10;i++){
+    timedata.push({
+      name:moment().subtract(1, "seconds"),
+      value:[moment().subtract(1, "seconds"),null]
+    })
+  }
   const updateComp = (pens: any, data: any) => {
     (pens || []).map((node: Node) => {
       if (node.name == 'combine') {
@@ -174,15 +180,23 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           case 'pie':
             (node.property.dataPointSelectedRows || []).map((row) => {
               if (row.id == r.id) {
-                if (timedata.length >9) {
+                if (timedata.length >20) {
                   timedata.shift()
                 }
                 timedata.push({
                   name:moment(r.time),
                   value:[r.time,parseInt(r.value)]
                 })
+
+                // if(timedata.length<9){
+                //   for(let i=0;i<9-timedata.length;i++){
+                //     timedata.unshift(undefined)
+                //   }
+                // }
                 node.data.echarts.option = pieOption(timedata);
                 updateChartNode(node);
+
+
               }
             });
             break;

@@ -50,6 +50,9 @@ export function pieOption(dat?:any[]) {
                     // 格式化成月/日，只在第一个刻度显示年份
                     return moment(value).format('LTS') + '';
                 }
+            },
+            axisLine:{
+                symbolOffset:-50
             }
         },
         yAxis: {
@@ -57,13 +60,18 @@ export function pieOption(dat?:any[]) {
             boundaryGap: [0, '100%'],
             splitLine: {
                 show: false
-            }
+            },
+        },
+        animationDuration: function (idx) {
+            // 越往后的数据时长越大
+            return idx * 100;
         },
         series: [{
             name: '模拟数据',
             type: 'line',
             showSymbol: false,
             hoverAnimation: false,
+            smooth:true,
             data: data
         }]
     };
