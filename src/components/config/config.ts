@@ -616,7 +616,7 @@ export const Tools = [
             dataTopChecked: false,
             dataTop: 100,
             dataBottom: 0,
-            chartTitleChecked: true,
+            chartTitleChecked: false,
             chartTitle: '实时曲线',
             chartTitleColor: '#c0c0c0',
             chartBackgroundColor: '#1b2735',
@@ -913,38 +913,38 @@ export const Tools = [
           },
         },
       },
-      {
-        elementRendered: false,
-        name: '饼状图',
-        icon: 'iconjiliangqi',
-        data: {
-          text: '',
-          rect: {
-            width: 100,
-            height: 250,
-          },
-          name: 'echarts',
-          strokeStyle: 'rgba(0,0,0,0)',
-          elementRendered: false,
-          hideRotateCP: true,
-          hideInput: true,
-          data: {
-            echarts: {
-              option: pieOption(),
-            },
-          },
-          property: {
-            echartsType: 'pie',
-            dataMethod: 'point',
-            dataPointSelectedRows: [],
-            dataDot: 1,
-            dataPointParam: {
-              qtDataList: [],
-              subscribe: true,
-            },
-          }
-        }
-      }
+      // {
+      //   elementRendered: false,
+      //   name: '饼状图',
+      //   icon: 'iconjiliangqi',
+      //   data: {
+      //     text: '',
+      //     rect: {
+      //       width: 100,
+      //       height: 250,
+      //     },
+      //     name: 'echarts',
+      //     strokeStyle: 'rgba(0,0,0,0)',
+      //     elementRendered: false,
+      //     hideRotateCP: true,
+      //     hideInput: true,
+      //     data: {
+      //       echarts: {
+      //         option: pieOption(),
+      //       },
+      //     },
+      //     property: {
+      //       echartsType: 'pie',
+      //       dataMethod: 'point',
+      //       dataPointSelectedRows: [],
+      //       dataDot: 1,
+      //       dataPointParam: {
+      //         qtDataList: [],
+      //         subscribe: true,
+      //       },
+      //     }
+      //   }
+      // }
     ],
   },
 ];

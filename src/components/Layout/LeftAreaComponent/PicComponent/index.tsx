@@ -35,7 +35,10 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
   // 请求获取图片列表
   const requstPicList = () => {
     clientParam(uploaConfig.self.baseURL)
-      .post(uploaConfig.self.apiUrl.list, uploaConfig.self.data, {
+      .request({
+        url:uploaConfig.self.apiUrl.list,
+        data:uploaConfig.self.data,
+        method:'post',
         headers: {
           token: uploaConfig.self.token,
           'Content-Type': 'application/json',
@@ -206,7 +209,6 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
 
   const onDrag = (event, item: any) => {
     if(!item.width){
-      console.log(item)
       event.dataTransfer.setData(
           'Text',
           JSON.stringify({

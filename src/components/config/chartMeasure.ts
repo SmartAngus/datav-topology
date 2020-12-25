@@ -394,6 +394,7 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
     //   });
     // }
     // 相反
+    console.log(options.dataColors)
     if(TP_value < range[0]){
       Gradient.push({
         offset: 1,
@@ -759,6 +760,9 @@ export function getTimelineOption(
         if (charts.value[index] && charts.value[index].length > 19 ) {
           charts.value[index].shift();
         }
+        // if(charts.value[index][0]&&charts.value[index][0]==0){
+        //   charts.value[index].shift();
+        // }
         const v =  roundFun(socketData.value, node.property.dataDot);
         charts.value[index].push({
           name:moment(socketData.time),
@@ -835,50 +839,51 @@ export function getTimelineOption(
     dataBottom = node.property.dataBottom;
   }
 
-  // lineY.push({
-  //   name: '下限',
-  //   type: 'line',
-  //   symbolSize: 0,
-  //   data: [dataBottom],
-  //   markLine: {
-  //     itemStyle: {
-  //       normal: {
-  //         lineStyle: {
-  //           color: '#18D8F7',
-  //           opacity: dataTopShow,
-  //         },
-  //       },
-  //     },
-  //     data: [
-  //       {
-  //         type: 'average',
-  //         name: '下限',
-  //       },
-  //     ],
-  //   },
-  // });
-  // lineY.push({
-  //   name: '上限',
-  //   type: 'line',
-  //   data: [dataTop],
-  //   symbolSize: 0,
-  //   markLine: {
-  //     itemStyle: {
-  //       normal: {
-  //         lineStyle: {
-  //           color: '#FF0000',
-  //           opacity: dataTopShow,
-  //         },
-  //       },
-  //     },
-  //     data: [
-  //       {
-  //         type: 'average',
-  //         name: '上限',
-  //       },
-  //     ],
-  //   },
-  // });
+   lineY.push({
+     name: '下限',
+     type: 'line',
+     symbolSize: 0,
+     data: [dataBottom],
+     markLine: {
+       itemStyle: {
+         normal: {
+           lineStyle: {
+             color: '#18D8F7',
+             opacity:dataTopShow
+           },
+         },
+       },
+       data: [
+         {
+           type: 'median',
+           name: '下限',
+         },
+       ],
+     },
+   });
+   lineY.push({
+     name: '上限',
+     type: 'line',
+     data: [dataTop],
+     symbolSize: 0,
+     markLine: {
+       itemStyle: {
+         normal: {
+           lineStyle: {
+             color: '#FF0000',
+             opacity:dataTopShow
+           },
+         },
+       },
+       data: [
+         {
+           type: 'median',
+           name: '上限',
+         },
+       ],
+     },
+   });
+
   let showReference;
   let showReferenceColor="#1b2735";
   let showBackground;
@@ -888,7 +893,9 @@ export function getTimelineOption(
     showBackgroundColor=node.property.chartBackgroundColor;
   } else {
     showBackground = false;
-    showBackgroundColor="transparent";
+    if(node){
+      showBackgroundColor="transparent";
+    }
   }
   if (node && node.property.lineReferenceChecked == true) {
     showReference = true;
@@ -912,7 +919,11 @@ export function getTimelineOption(
     chartTitle = '';
     chartTitleColor = '#c0c0c0';
   }
-const trastColor = getContrastColor(showBackgroundColor)
+
+let trastColor = getContrastColor(showBackgroundColor)
+  if(showBackgroundColor=='transparent'){
+    trastColor="#4a4a4a"
+  }
 
   var option = {
     title: {
@@ -923,9 +934,6 @@ const trastColor = getContrastColor(showBackgroundColor)
       },
     },
     backgroundColor: showBackgroundColor,
-    tooltip: {
-      trigger: 'axis',
-    },
     legend: {
       data: charts.names,
       textStyle: {
@@ -934,6 +942,17 @@ const trastColor = getContrastColor(showBackgroundColor)
       },
       left: 'center',
     },
+    tooltip: {
+      trigger: 'axis',
+      formatter: function (params) {
+        params = params[0];
+        var date = new Date(params.name);
+        return moment(date).format("LTS")
+      },
+      axisPointer: {
+        animation: false
+      }
+    },
     grid: {
       top: '24%',
       left: '4%',
@@ -941,10 +960,15 @@ const trastColor = getContrastColor(showBackgroundColor)
       bottom: '12%',
       containLabel: true,
     },
-    xAxis: [{
-      type: 'time',
+    xAxis: {
+      type: 'category',
       splitLine: {
         show: false
+      },
+      axisLine:{
+        lineStyle:{
+          color:trastColor
+        }
       },
       axisLabel: {
         textStyle: {
@@ -952,10 +976,10 @@ const trastColor = getContrastColor(showBackgroundColor)
         },
         formatter: function (value, index) {
           // 格式化成月/日，只在第一个刻度显示年份
-          return moment(value).format('LTS');
+          return moment(Number(value)).format('LTS');
         }
       },
-    }],
+    },
     yAxis: {
       type: 'value',
       boundaryGap: [0, '100%'],
