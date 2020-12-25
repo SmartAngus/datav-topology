@@ -764,7 +764,7 @@ export function getTimelineOption(
       charts.names[index] = row.dataName||row.name;
       charts.unit=row.unit;
       if (socketData && row.id == socketData.id) {
-        if (charts.value[index] && charts.value[index].length > 50 ) {
+        if (charts.value[index] && charts.value[index].length > 29 ) {
           charts.value[index].shift();
         }
         // if(charts.value[index][0]&&charts.value[index][0]==0){
@@ -772,9 +772,9 @@ export function getTimelineOption(
         // }
         const v =  roundFun(socketData.value, node.property.dataDot);
         charts.value[index].push({
-          name:moment(socketData.time),
+          name:moment(Number(socketData.time)).format("L"),
           value:[
-            socketData.time,v
+            moment(Number(socketData.time)).format('LTS'),v
           ]
         });
       }
@@ -981,10 +981,10 @@ let trastColor = getContrastColor(showBackgroundColor)
         textStyle: {
           color: trastColor,
         },
-        formatter: function (value, index) {
-          // 格式化成月/日，只在第一个刻度显示年份
-          return moment(Number(value)).format('LTS');
-        }
+        // formatter: function (value, index) {
+        //   // 格式化成月/日，只在第一个刻度显示年份
+        //   return moment(Number(value)).format('LTS');
+        // }
       },
     },
     yAxis: {
