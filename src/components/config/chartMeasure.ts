@@ -116,6 +116,9 @@ export function getGaugeOption(
   if(lineColors[lineColors.length-1][0]<1){
     lineColors.push([1, '#f56c6c'])
   }
+  lineColors.sort((a,b)=>{
+    return a[0]-b[0]
+  })
   let showTitle = true;
   let unit;
   let title;
@@ -216,31 +219,31 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
     },
     {
       checked: true,
-      color: '#E4D225',
+      color: '#E4D875',
       top: 40,
       bottom: 20,
     },
     {
       checked: true,
-      color: '#E01F28',
-      top: 70,
+      color: '#E98F28',
+      top: 60,
       bottom: 40,
     },
     {
       checked: true,
-      color: '#E4D225',
-      top: 40,
+      color: '#49D225',
+      top: 80,
       bottom: 20,
     },
     {
       checked: true,
       color: '#E01F28',
-      top: 70,
+      top: 100,
       bottom: 40,
     },
   ];
   const defaultOption={
-    dataName:'计量器',
+    dataName:'',
     value: 0,
     chartUnit: '',
     dataColors: dataColors,
@@ -264,7 +267,13 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
       }
     })
   }
-
+  options.dataColors.sort((a,b)=>{
+    return a.top-b.top
+  })
+  options.dataColors=_.sortedUniqBy(options.dataColors,(item:any)=>{
+    return item.top
+  })
+  console.log(options.dataColors)
   function f() {
     /*****设置*****/
     var TP_name = options.dataName ;
@@ -394,7 +403,6 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
     //   });
     // }
     // 相反
-    console.log(options.dataColors)
     if(TP_value < range[0]){
       Gradient.push({
         offset: 1,
@@ -418,7 +426,7 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
             color: options.dataColors[0].color,
           },
           {
-            offset: 0.5,
+            offset: (options.dataColors[1].top-min)/max,
             color: options.dataColors[1].color,
           },
           {
@@ -433,11 +441,11 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
             color: options.dataColors[0].color,
           },
           {
-            offset: 0.33,
+            offset: (options.dataColors[1].top-min)/max,
             color: options.dataColors[1].color,
           },
           {
-            offset: 0.66,
+            offset: (options.dataColors[2].top-min)/max,
             color: options.dataColors[2].color,
           },
           {
@@ -452,15 +460,15 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
             color: options.dataColors[0].color,
           },
           {
-            offset: 0.25,
+            offset: (options.dataColors[1].top-min)/max,
             color: options.dataColors[1].color,
           },
           {
-            offset: 0.5,
+            offset: (options.dataColors[2].top-min)/max,
             color: options.dataColors[2].color,
           },
           {
-            offset: 0.75,
+            offset: (options.dataColors[3].top-min)/max,
             color: options.dataColors[3].color,
           },
           {
@@ -757,7 +765,7 @@ export function getTimelineOption(
       charts.names[index] = row.dataName||row.name;
       charts.unit=row.unit;
       if (socketData && row.id == socketData.id) {
-        if (charts.value[index] && charts.value[index].length > 19 ) {
+        if (charts.value[index] && charts.value[index].length > 50 ) {
           charts.value[index].shift();
         }
         // if(charts.value[index][0]&&charts.value[index][0]==0){
