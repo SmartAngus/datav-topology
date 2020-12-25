@@ -13,7 +13,7 @@ moment.locale('zh-cn', {
   longDateFormat: {
     LT: 'HH:mm A',
     LTS: 'HH:mm:ss',
-    L: 'YYYY-MM-DD',
+    L: 'YYYY-MM-DD HH:mm:ss',
     LL: 'YYYY/MM/DD',
     LLL: 'YYYY年MM月DD日Ah点mm分',
     LLLL: 'YYYY年MM月DD日ddddAh点mm分',
@@ -270,10 +270,9 @@ export function getMeasureOption2(node?:any,changeValues?:any,socketData?:any) {
   options.dataColors.sort((a,b)=>{
     return a.top-b.top
   })
-  options.dataColors=_.sortedUniqBy(options.dataColors,(item:any)=>{
-    return item.top
-  })
-  console.log(options.dataColors)
+  // options.dataColors=_.sortedUniqBy(options.dataColors,(item:any)=>{
+  //   return item.top
+  // })
   function f() {
     /*****设置*****/
     var TP_name = options.dataName ;
@@ -952,11 +951,11 @@ let trastColor = getContrastColor(showBackgroundColor)
     },
     tooltip: {
       trigger: 'axis',
-      formatter: function (params) {
-        params = params[0];
-        var date = new Date(params.name);
-        return moment(date).format("LTS")
-      },
+      // formatter: function (params) {
+      //   params = params[0];
+      //   var date = new Date(params.name);
+      //   return moment(date).format("LTS")+": "+ params.value[1]
+      // },
       axisPointer: {
         animation: false
       }

@@ -828,7 +828,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     <div id="editLayout" ref={layoutRef}>
       {renderHeader}
       <div className={styles.page}>
-        <ResizePanel direction="e" style={{ width: 250 }}>
+        {/*<ResizePanel direction="e" style={{ width: 250 }}>*/}
           <div className={styles.tool}>
             <Tabs defaultActiveKey="1" centered>
               <TabPane tab="组件" key="1" style={{ margin: 0 }}>
@@ -847,7 +847,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
               </TabPane>
             </Tabs>
           </div>
-        </ResizePanel>
+        {/*</ResizePanel>*/}
         <div
           className={styles.full}
           id="full"

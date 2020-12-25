@@ -13,6 +13,7 @@ import { replacer, reviver } from '../utils/serializing';
 import { register as registerBiciComp } from '../../topology/bici-diagram';
 import {pieOption} from "../config/charts/pie";
 import moment from "moment";
+import styles from './index.module.scss'
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -376,9 +377,12 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       {/*/>*/}
       <div
         id="topology-canvas-preview"
+        className={styles.topology_canvas_preview}
         style={{
-          height: '100vh',
-          width: '100vw',
+          height: data?.height,
+          width: data?.width,
+          overflow: "hidden!important",
+          backgroundColor:data?.bkColor,
           backgroundImage: `url(${data?.bkImage})`,
         }}
       />
