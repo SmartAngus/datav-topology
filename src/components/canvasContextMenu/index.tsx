@@ -5,7 +5,7 @@ import {Topology, Node, Line, Lock, s8} from '../../topology/core';
 import styles from './index.module.scss';
 import { Form, Input, Modal, message } from 'antd';
 import { FormInstance } from 'antd/es/form';
-import { client, clientParam } from '../data/api';
+import { clientParam } from '../data/api';
 import {replacer} from "../utils/serializing";
 import * as _ from 'lodash'
 

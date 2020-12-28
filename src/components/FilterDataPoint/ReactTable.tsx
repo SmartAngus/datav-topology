@@ -2,19 +2,10 @@
  * 用户侧：数字机理 > 列表
  */
 import React, { Component } from 'react'
-import { ComplexTable, biciNotification } from 'bici-transformers'
-import { client, clientParam } from '../data/api'
+import { ComplexTable } from 'bici-transformers'
+import { fetchSearchReactStackList } from '../data/api'
 
-// 查询反应堆列表
-export function fetchSearchReactStackList (params) {
-  return clientParam(window["API_URL"]).post('/applications/reactor/list', params,{
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      token: window['token'],
-      'Content-Type': 'application/json',
-    }
-  })
-}
+
 const initialQueryParams = {
   code: '',
   position: '',

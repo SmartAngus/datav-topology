@@ -2,19 +2,10 @@
  * 用户侧：复杂感知点 > 列表
  */
 import React, { PureComponent } from 'react'
-import { biciNotification, ComplexTable } from 'bici-transformers'
+import { ComplexTable } from 'bici-transformers'
 import _ from 'lodash'
-import {clientParam} from '../data/api'
-// 获取复杂感知点列表
-export function fetchPerceptualPointList(params) {
-  return clientParam(window["API_URL"]).post('/applications/complexData/list', params,{
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      token: window["token"],
-      'Content-Type': 'application/json',
-    }
-  })
-}
+import {fetchPerceptualPointList} from '../data/api'
+
 // 传感器状态
 export const DEVICE_STATUS = [
   {

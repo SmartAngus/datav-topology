@@ -2,23 +2,13 @@
  * 用户侧：数据点管理 > 列表
  */
 import React, { Component } from 'react'
-import { ComplexTable, biciNotification } from 'bici-transformers'
+import { ComplexTable } from 'bici-transformers'
 import { DATAPOINT_STATUS, DATA_ORIGIN } from '../common/userSide'
-// import { Tooltip } from 'antd'
 import _ from 'lodash'
-import {apiClientParam} from '../data/api'
+import {fetchSearchDataPointManageList} from '../data/api'
 
 
-// 查询数据点列表
-export function fetchSearchDataPointManageList(params) {
-  return apiClientParam(window["API_URL"]).post('/datapoint/list', params,{
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      token: window["token"],
-      'Content-Type': 'application/json',
-    }
-  })
-}
+
 
 const initialQueryParams = {
   dataName: '',

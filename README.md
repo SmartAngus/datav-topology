@@ -97,9 +97,9 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     },
   ];
   const uploadConfig = {
-    baseURL: 'http://qt.test.bicisims.com',
+    baseURL: 'http://qt.bicisims.com',
     self: {
-      baseURL: 'http://qt.test.bicisims.com',
+      baseURL: 'http://qt.bicisims.com',
       token: token,
       url: '/api/file/file/uploadReturnPath',
       apiUrl: {
@@ -113,7 +113,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       },
     },
     preInstall: {
-      baseURL: 'http://qt.test.bicisims.com',
+      baseURL: 'http://qt.bicisims.com',
       token: token,
       url: '/api/file/file/uploadReturnPath',
       data: {
@@ -122,7 +122,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       },
     },
     combineCom: {
-      apiURL: 'http://qt.test.bicisims.com',
+      apiURL: 'http://qt.bicisims.com',
       token: '9XO2Khne0e18KCiDEl8sC',
       list: {
         url: '/applications/customComponent/list',
@@ -142,7 +142,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       },
     },
   };
-  const apiURL = 'http://qt.test.bicisims.com';
+  const apiURL = 'http://qt.bicisims.com';
   const websocketConf = {
     url: 'ws://47.96.159.115:51060/ws?token=5KmTbcul1R4RNxnSiwTlpr',
   };
@@ -152,7 +152,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     formData.append('mappingId', '23233');
     formData.append('mappingType', '107');
     const instance = axios.create({
-      baseURL: 'http://qt.test.bicisims.com',
+      baseURL: 'http://qt.bicisims.com',
       timeout: 10000000,
       maxContentLength: 1000000000,
     });
@@ -243,12 +243,12 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
 
     formData.append('mappingType', '107');
     api.post(
-      `http://qt.test.bicisims.com//api/file/file/uploadReturnPath`,
+      `http://qt.bicisims.com//api/file/file/uploadReturnPath`,
       formData
     );
 
     const instance = axios.create({
-      baseURL: 'http://qt.test.bicisims.com',
+      baseURL: 'http://qt.bicisims.com',
       timeout: 10000000,
       maxContentLength: 1000000000,
     });
@@ -366,7 +366,7 @@ const PreviewLayout: React.FC<any>=({history})=>{
   };
   useEffect(()=>{
     const instance = axios.create({
-      baseURL: 'http://qt.test.bicisims.com',
+      baseURL: 'http://qt.bicisims.com',
       timeout: 10000000,
       maxContentLength: 1000000000,
     });

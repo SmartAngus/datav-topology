@@ -772,9 +772,9 @@ export function getTimelineOption(
         // }
         const v =  roundFun(socketData.value, node.property.dataDot);
         charts.value[index].push({
-          name:moment(Number(socketData.time)).format("L"),
+          name:moment(socketData.time),
           value:[
-            moment(Number(socketData.time)).format('LTS'),v
+            socketData.time,v
           ]
         });
       }
@@ -951,6 +951,7 @@ let trastColor = getContrastColor(showBackgroundColor)
     },
     tooltip: {
       trigger: 'axis',
+      show:false,
       // formatter: function (params) {
       //   params = params[0];
       //   var date = new Date(params.name);
@@ -981,10 +982,10 @@ let trastColor = getContrastColor(showBackgroundColor)
         textStyle: {
           color: trastColor,
         },
-        // formatter: function (value, index) {
-        //   // 格式化成月/日，只在第一个刻度显示年份
-        //   return moment(Number(value)).format('LTS');
-        // }
+        formatter: function (value, index) {
+          // 格式化成月/日，只在第一个刻度显示年份
+          return moment(Number(value)).format('LTS');
+        }
       },
     },
     yAxis: {

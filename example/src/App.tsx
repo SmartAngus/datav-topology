@@ -69,7 +69,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       url: '/api/file/file/uploadReturnPath',
       apiUrl: {
         list: '/applications/custom/component/componentList',
-        delete: '/file/file/delete',
+        delete: '/file/file/deleteDbData',
         update: '/file/file/updateFile',
       },
       data: {
