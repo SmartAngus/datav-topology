@@ -207,15 +207,19 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           break;
         case 'bottom':
           pens.forEach((pen) => canvas.bottom(pen));
+          canvas.updateProps(true)
           break;
         case 'top':
           pens.forEach((pen) => canvas.top(pen));
+            canvas.updateProps(true)
           break;
         case 'up':
           pens.forEach((pen) => canvas.up(pen));
+            canvas.updateProps(true)
           break;
         case 'down':
           pens.forEach((pen) => canvas.down(pen));
+            canvas.updateProps(true)
           break;
         default:
           break;

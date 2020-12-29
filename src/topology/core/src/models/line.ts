@@ -26,12 +26,13 @@ export class Line extends Pen {
 
   animateColor = '';
   animateSpan = 1;
-  animatePos = 0;
+
   animateLineDash: number[];
 
   isAnimate = false;
   animateFromSize = 0;
   animateToSize = 0;
+  animatePos = 0;
 
   animateDot: { x: number; y: number };
   animateDotSize = 3;
@@ -43,14 +44,20 @@ export class Line extends Pen {
 
   constructor(json?: any) {
     super(json);
-
     this.type = PenType.Line;
     if (json) {
       if (json.from) {
-        this.from = new Point(json.from.x, json.from.y, json.from.direction, json.from.anchorIndex, json.from.id);
+        this.from = new Point(
+            json.from.x,
+            json.from.y,
+            json.from.direction,
+            json.from.anchorIndex,
+            json.from.id,
+            json.autoAnchor
+        );
       }
       if (json.to) {
-        this.to = new Point(json.to.x, json.to.y, json.to.direction, json.to.anchorIndex, json.to.id);
+        this.to = new Point(json.to.x, json.to.y, json.to.direction, json.to.anchorIndex, json.to.id, json.autoAnchor);
       }
 
       this.fromArrow = json.fromArrow || '';
@@ -62,14 +69,17 @@ export class Line extends Pen {
       if (json.animateColor) {
         this.animateColor = json.animateColor;
       }
-      if (json.animatePos) {
-        this.animatePos = json.animatePos;
-      }
       if (json.animateSpan) {
         this.animateSpan = json.animateSpan;
       }
       if (json.animateLineDash) {
         this.animateLineDash = json.animateLineDash;
+      }
+      if (json.animatePlay) {
+        this.animatePlay = json.animatePlay;
+      }
+      if (json.animateStart) {
+        this.animateStart = json.animateStart;
       }
       if (json.length) {
         this.length = json.length;
@@ -182,11 +192,11 @@ export class Line extends Pen {
       let f = this.to;
       if (this.name === 'curve') {
         f = getBezierPoint(
-          0.95 - this.lineWidth / 100,
-          this.to,
-          this.controlPoints[1],
-          this.controlPoints[0],
-          this.from
+            0.95 - this.lineWidth / 100,
+            this.to,
+            this.controlPoints[1],
+            this.controlPoints[0],
+            this.from
         );
       } else if (this.name !== 'line' && this.controlPoints.length) {
         f = this.controlPoints[0];
@@ -204,19 +214,19 @@ export class Line extends Pen {
       let f = this.from;
       if (this.name === 'curve') {
         f = getBezierPoint(
-          0.95 - this.lineWidth / 100,
-          this.from,
-          this.controlPoints[0],
-          this.controlPoints[1],
-          this.to
+            0.95 - this.lineWidth / 100,
+            this.from,
+            this.controlPoints[0],
+            this.controlPoints[1],
+            this.to
         );
       } else if (this.name === 'mind') {
         f = getBezierPoint(
-          0.96 - this.lineWidth / 100,
-          this.from,
-          this.controlPoints[0],
-          this.controlPoints[1],
-          this.controlPoints[2]
+            0.96 - this.lineWidth / 100,
+            this.from,
+            this.controlPoints[0],
+            this.controlPoints[1],
+            this.controlPoints[2]
         );
       } else if (this.name !== 'line' && this.controlPoints.length) {
         f = this.controlPoints[this.controlPoints.length - 1];
@@ -233,7 +243,7 @@ export class Line extends Pen {
     }
   }
 
-  pointIn(pt: Point) {
+  pointIn(pt: { x: number; y: number }) {
     return drawLineFns[this.name].pointIn(pt, this);
   }
 
@@ -269,9 +279,9 @@ export class Line extends Pen {
       width = 100;
     }
     const height =
-      this.font.lineHeight *
-      this.font.fontSize *
-      (this.textMaxLine || (this.text && this.text.split('\n').length) || 1);
+        this.font.lineHeight *
+        this.font.fontSize *
+        (this.textMaxLine || (this.text && this.text.split('\n').length) || 1);
     this.textRect = new Rect(center.x - width / 2, center.y - height / 2, width, height);
   }
 
@@ -366,15 +376,15 @@ export class Line extends Pen {
     const parentW = parent.rect.width - parent.paddingLeftNum - parent.paddingRightNum;
     const parentH = parent.rect.height - parent.paddingTopNum - parent.paddingBottomNum;
     let x =
-      parent.rect.x +
-      parent.paddingLeftNum +
-      abs(parentW, this.rectInParent.x) +
-      abs(parentW, this.rectInParent.marginLeft);
+        parent.rect.x +
+        parent.paddingLeftNum +
+        abs(parentW, this.rectInParent.x) +
+        abs(parentW, this.rectInParent.marginLeft);
     let y =
-      parent.rect.y +
-      parent.paddingTopNum +
-      abs(parentH, this.rectInParent.y) +
-      abs(parentW, this.rectInParent.marginTop);
+        parent.rect.y +
+        parent.paddingTopNum +
+        abs(parentH, this.rectInParent.y) +
+        abs(parentW, this.rectInParent.marginTop);
 
     if (this.rectInParent.marginLeft === undefined && this.rectInParent.marginRight) {
       x -= abs(parentW, this.rectInParent.marginRight);
@@ -384,6 +394,22 @@ export class Line extends Pen {
     }
 
     this.translate(x - this.from.x, y - this.from.y);
+  }
+
+  initAnimate() {
+    this.animatePos = 0;
+  }
+
+  pauseAnimate() {
+    Store.set(this.generateStoreKey('LT:AnimatePlay'), {
+      pen: this,
+      stop: true,
+    });
+  }
+
+  stopAnimate() {
+    this.pauseAnimate();
+    this.initAnimate();
   }
 
   animate(now: number) {
@@ -418,6 +444,7 @@ export class Line extends Pen {
     if (this.animatePos > this.length + this.animateSpan - this.animateFromSize - this.animateToSize) {
       if (++this.animateCycleIndex >= this.animateCycle && this.animateCycle > 0) {
         this.animateStart = 0;
+        this.animatePos = 0;
         Store.set(this.generateStoreKey('animateEnd'), {
           type: 'line',
           data: this,
@@ -471,8 +498,8 @@ export class Line extends Pen {
     this.to.y = center.y - (center.y - this.to.y) * scale;
     this.lineWidth *= scale;
     this.borderWidth *= scale;
-    if (this.text && this.font && this.font.fontSize) {
-      this.font.fontSize *= scale;
+    this.font.fontSize *= scale;
+    if (this.text) {
       this.textRect = null;
     }
 
@@ -482,6 +509,12 @@ export class Line extends Pen {
     }
 
     Store.set(this.generateStoreKey('pts-') + this.id, null);
+  }
+
+  hit(pt: Point, padding = 0): any {
+    if (this.from.hit(pt, padding) || this.to.hit(pt, padding)) {
+      return this;
+    }
   }
 
   clone() {

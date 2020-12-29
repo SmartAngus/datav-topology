@@ -1,5 +1,6 @@
+import { Lock } from './models/status';
 export enum KeyType {
-  None = -1,
+  Any = -1,
   CtrlOrAlt,
   Ctrl,
   Shift,
@@ -16,6 +17,7 @@ export type Padding = number | string | number[];
 
 export interface Options {
   cacheLen?: number;
+  locked?:Lock;
   extDpiRatio?: number;
   width?: string | number;
   height?: string | number;
@@ -37,7 +39,6 @@ export interface Options {
     textBaseline?: string;
   };
   rotateCursor?: string;
-  locked?: number;
   hoverCursor?: string;
   hideInput?: boolean;
   hideRotateCP?: boolean;
@@ -51,6 +52,7 @@ export interface Options {
   disableEmptyLine?: boolean;
   disableRepeatLine?: boolean;
   disableScale?: boolean;
+  disableTranslate?: boolean;
   disableMoveOutParent?: boolean;
   disableDockLine?: boolean;
   playIcon?: string;
@@ -64,31 +66,32 @@ export interface Options {
   autoExpandDistance?: number;
   keydown?: KeydownType;
   viewPadding?: Padding;
+  bkColor?: string;
   grid?: boolean;
+  gridColor?: string;
+  gridSize?: number;
+  rule?: boolean;
+  ruleColor?: string;
   on?: (event: string, data: any) => void;
 }
 
 export const DefalutOptions: Options = {
   cacheLen: 30,
   font: {
-    color: '#222',
-    fontFamily:
-      '"Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial',
+    color: '#222222',
+    fontFamily: '"Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial',
     fontSize: 12,
     lineHeight: 1.5,
     textAlign: 'center',
     textBaseline: 'middle',
   },
-  color: '#222',
+  color: '#222222',
   activeColor: '#1890ff',
-  // hoverColor: '#fa541c',
-  hoverColor: '#096DD9',
+  hoverColor: '#fa541c',
   anchorRadius: 4,
   anchorFillStyle: '#fff',
-  // dockStrokeStyle: '#fa541c',
-  dockStrokeStyle: '#096DD9',
-  // dockFillStyle: '#fa541c',
-  dockFillStyle: '#096DD9',
+  dockStrokeStyle: '#fa541c',
+  dockFillStyle: '#fa541c',
   dragColor: '#1890ff',
   rotateCursor: '/assets/img/rotate.cur',
   hoverCursor: 'pointer',
@@ -99,4 +102,7 @@ export const DefalutOptions: Options = {
   keydown: KeydownType.Document,
   viewPadding: 0,
   autoAnchor: true,
+  gridSize: 10,
+  gridColor: '#f3f3f3',
+  ruleColor: '#888888',
 };

@@ -16,17 +16,19 @@ export class Point {
   mode: AnchorMode;
   data: any;
   constructor(
-    public x: number,
-    public y: number,
-    direction?: Direction,
-    anchorIndex?: number,
-    id?: number | string,
-    hidden?: boolean
+      public x: number,
+      public y: number,
+      direction?: Direction,
+      anchorIndex?: number,
+      id?: number | string,
+      hidden?: boolean,
+      autoAnchor?: boolean
   ) {
     this.direction = direction;
     this.anchorIndex = anchorIndex;
     this.id = id;
     this.hidden = hidden;
+    this.autoAnchor = autoAnchor;
   }
 
   floor() {
@@ -40,8 +42,7 @@ export class Point {
   }
 
   clone(): Point {
-    const pt = new Point(this.x, this.y, this.direction, this.anchorIndex, this.id, this.hidden);
-    pt.autoAnchor = this.autoAnchor;
+    const pt = new Point(this.x, this.y, this.direction, this.anchorIndex, this.id, this.hidden, this.autoAnchor);
     if (this.data) {
       pt.data = this.data;
     }
@@ -51,7 +52,7 @@ export class Point {
     return pt;
   }
 
-  hit(pt: Point, radius = 5) {
+  hit(pt: { x: number; y: number }, radius = 5) {
     return pt.x > this.x - radius && pt.x < this.x + radius && pt.y > this.y - radius && pt.y < this.y + radius;
   }
 
@@ -72,3 +73,5 @@ export class Point {
     return this.anchorIndex === pt.anchorIndex && this.direction === pt.direction && this.id === pt.id;
   }
 }
+
+(window as any).topologyPoint = Point;

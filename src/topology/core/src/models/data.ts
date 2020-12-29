@@ -3,12 +3,14 @@ import { Node } from './node';
 import { Line } from './line';
 import { Lock } from './status';
 import { s8 } from '../utils';
+import { EventAction, EventType } from './event';
 
 export class TopologyData {
   pens: Pen[] = [];
   lineName = 'curve';
   fromArrow = '';
   toArrow = 'triangleSolid';
+  lineWidth?: number;
   scale = 1;
   locked = Lock.None;
   bkImage: string;
@@ -18,6 +20,8 @@ export class TopologyData {
   gridSize?: number;
   width?:number;
   height?:number;
+  rule?: boolean;
+  ruleColor?: string;
   websocket?: string;
   mqttUrl?: string;
   mqttOptions?: {
@@ -28,6 +32,7 @@ export class TopologyData {
     clientId: s8(),
   };
   mqttTopics?: string;
+  events?: { type: EventType; action: EventAction; value: string; params: string; name?: string }[];
   manualCps?: boolean;
   tooltip?: boolean | number;
   data?: any;
@@ -49,13 +54,10 @@ export class TopologyData {
       this.bkImage = json.bkImage;
       this.bkColor = json.bkColor;
       this.grid = json.grid;
-      this.gridColor = json.gridColor;
-      this.gridSize = json.gridSize;
       this.manualCps = json.manualCps;
 
       this.width=json.width;
       this.height=json.height;
-
 
       this.websocket = json.websocket;
       this.mqttUrl = json.mqttUrl;
@@ -76,6 +78,10 @@ export class TopologyData {
         this.data = JSON.parse(JSON.stringify(json.data));
       } else {
         this.data = json.data || '';
+      }
+
+      if (json.events) {
+        this.events = json.events;
       }
     }
     if (!this.mqttOptions) {

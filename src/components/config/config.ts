@@ -271,6 +271,18 @@ export const Tools = [
           },
         },
       },
+      {
+        name: 'line',
+        icon: 'icon-line',
+        data: {
+          text: '直线',
+          rect: {
+            width: 100,
+            height: 100,
+          },
+          name: 'line',
+        },
+      },
     ],
   },
   // {
@@ -404,18 +416,6 @@ export const Tools = [
   //       height: 100,
   //     },
   //     name: 'twowayArrow',
-  //   },
-  // },
-  // {
-  //   name: 'line',
-  //   icon: 'icon-line',
-  //   data: {
-  //     text: '直线',
-  //     rect: {
-  //       width: 100,
-  //       height: 100,
-  //     },
-  //     name: 'line',
   //   },
   // },
   // {

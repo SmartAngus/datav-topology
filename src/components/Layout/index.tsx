@@ -1,5 +1,5 @@
 import React, {CSSProperties, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState,} from 'react';
-import {Options, Topology} from '../../topology/core';
+import {Lock, Options, Topology} from '../../topology/core';
 import {echartsObjs, register as registerChart,} from '../../topology/chart-diagram';
 import {register as registerBiciComp} from '../../topology/bici-diagram';
 import {message, Modal, Tabs, Tooltip} from 'antd';
@@ -57,7 +57,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     line: null,
     multi: false,
     nodes: null,
-    locked: 0,
+    // locked: Lock.None
   });
 
   // 是否显示右键菜单
@@ -80,14 +80,17 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
 
   const canvasOptions: Options = {
     rotateCursor: '/rotate.cur',
-    locked: 1,
     autoExpandDistance: 0,
     viewPadding: [0],
     autoAnchor: false,
     cacheLen: 50,
     hideInput: false,
     disableEmptyLine: true,
-    disableScale:true
+    disableScale:false,
+    minScale:0.2,
+    maxScale:3.1,
+    color:'#096DD9',
+    // locked: Lock.None
   };
 
   useClickAway(() => {
@@ -118,7 +121,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     canvas = new Topology('topology-canvas', canvasOptions);
 
     if (props.editorData != undefined && typeof props.editorData == 'object') {
-      props.editorData.locked = 0;
       canvas.open(props.editorData);
     }
     if (props.editorData) {
@@ -130,6 +132,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       if (canvas.data.grid) {
         canvas.data.grid = true;
       }
+      console.log(props.editorData)
       setIsLoadCanvas(true);
       canvas.resize({ width: w, height: h });
       canvas.render();
@@ -579,7 +582,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           line: null,
           multi: false,
           nodes: null,
-          locked: data.locked,
+          // locked: Lock.None
         });
         break;
       case 'addNode':
@@ -589,7 +592,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           line: null,
           multi: false,
           nodes: null,
-          locked: data.locked,
+          // locked: Lock.None
         });
         setIsLoadCanvas(true);
         canvas.activeLayer.saveNodeRects();
@@ -604,7 +607,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           line: null,
           multi: false,
           nodes: null,
-          locked: 0,
+          // locked: Lock.None
         });
         break;
       case 'line': // 连线
@@ -615,7 +618,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           line: data,
           multi: false,
           nodes: null,
-          locked: data.locked,
+          // locked: Lock.None
         });
         break;
       case 'space': // 空白处
@@ -625,7 +628,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           line: null,
           multi: false,
           nodes: null,
-          locked: null,
+          // locked: Lock.None
         });
         break;
       case 'rotated':
@@ -672,7 +675,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
               line: null,
               multi: true,
               nodes: data,
-              locked: 0,
+              // locked: Lock.None
             }
           )
         );
@@ -680,6 +683,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       case 'scale':
         if (typeof data === 'number') {
           setScaleVal(data);
+          scrollCenter()
         }
         break;
       default:
@@ -735,16 +739,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    * @param scale
    */
   const handleScaleCanvas=(scale:number)=>{
-    let x=(scale*canvasSizeInfo.width-canvasSizeInfo.width)*0.5;
-    let y=(scale*canvasSizeInfo.height-canvasSizeInfo.height)*0.5;
-    // if(scale<=1){
-    //   x=0;y=0;
-    // }
-    const containerStyle= {
-      transformOrigin: 'center center',
-      transform: `translate(${x}px,${y}px) scale(${scale})`
-    }
-    $("#topology-canvas-wrapper").css(containerStyle)
     canvas.render()
     scrollCenter()
   }

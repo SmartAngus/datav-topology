@@ -5,7 +5,6 @@ import { TopologyData } from './models/data';
 import { Lock } from './models/status';
 import { PenType } from './models/pen';
 import { Layer } from './layer';
-import {s8} from "./utils";
 
 export class DivLayer extends Layer {
   protected data: TopologyData;
@@ -26,7 +25,7 @@ export class DivLayer extends Layer {
 
   private subcribe: Observer;
   private subcribeNode: Observer;
-  constructor(public parentElem: HTMLElement, public options: Options = {}, TID: String) {
+  constructor(public parentElem: HTMLElement, public options: Options = {}, TID: string) {
     super(TID);
     this.data = Store.get(this.generateStoreKey('topology-data'));
     if (!this.options.playIcon) {
@@ -47,7 +46,6 @@ export class DivLayer extends Layer {
     this.canvas.style.top = '0';
     this.canvas.style.outline = 'none';
     this.canvas.style.background = 'transparent';
-    this.canvas.id=s8()
     parentElem.appendChild(this.canvas);
     parentElem.appendChild(this.player);
     this.createPlayer();
@@ -110,11 +108,19 @@ export class DivLayer extends Layer {
       }
       this.setElemPosition(node, (this.videos[node.id] && this.videos[node.id].player) || this.addMedia(node, 'video'));
     }
+
     if (node.iframe) {
-      if (this.iframes[node.id] && this.iframes[node.id].src !== node.iframe) {
-        this.iframes[node.id].src = node.iframe;
+      if (!this.iframes[node.id]) {
+        this.addIframe(node);
+        setTimeout(() => {
+          this.addDiv(node);
+        });
+      } else {
+        if (this.iframes[node.id].src !== node.iframe) {
+          this.iframes[node.id].src = node.iframe;
+        }
+        this.setElemPosition(node, this.iframes[node.id]);
       }
-      this.setElemPosition(node, this.iframes[node.id] || this.addIframe(node));
     }
 
     if (node.elementId) {
@@ -245,9 +251,9 @@ export class DivLayer extends Layer {
       return;
     }
     this.currentTime.innerText =
-      this.formatSeconds(this.media.currentTime) + ' / ' + this.formatSeconds(this.media.duration);
+        this.formatSeconds(this.media.currentTime) + ' / ' + this.formatSeconds(this.media.duration);
     this.progressCurrent.style.width =
-      (this.media.currentTime / this.media.duration) * this.progress.clientWidth + 'px';
+        (this.media.currentTime / this.media.duration) * this.progress.clientWidth + 'px';
   }
 
   addMedia(node: Node, type: string) {
@@ -415,7 +421,7 @@ export class DivLayer extends Layer {
     }
   }
 
-  clear() {
+  clear(shallow?: boolean) {
     this.canvas.innerHTML = '';
     this.audios = {};
     this.videos = {};
@@ -423,9 +429,11 @@ export class DivLayer extends Layer {
     this.elements = {};
     this.gifs = {};
 
-    // tslint:disable-next-line:forin
-    for (const key in images) {
-      delete images[key];
+    if (!shallow) {
+      // tslint:disable-next-line:forin
+      for (const key in images) {
+        delete images[key];
+      }
     }
 
     this.player.style.top = '-99999px';
