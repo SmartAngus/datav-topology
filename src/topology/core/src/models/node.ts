@@ -194,10 +194,10 @@ export class Node extends Pen {
     this.play = json.play;
     this.nextPlay = json.nextPlay;
 
-    if (json.elementLoaded !== undefined) {
-      this.elementId = null;
-      this.elementLoaded = false;
-    }
+    // if (json.elementLoaded !== undefined) {
+    //   this.elementId = null;
+    //   this.elementLoaded = false;
+    // }
 
     this.init();
 
@@ -875,9 +875,15 @@ export class Node extends Pen {
     if (this.animateFrames && this.animateFrames.length) {
       for (const item of this.animateFrames) {
         if (item.initState) {
+          if (!item.initState.scale) {
+            item.initState = new Node(item.initState);
+          }
           item.initState.scale(scale, center);
         }
         if (item.state) {
+          if (!item.state.scale) {
+            item.state = new Node(item.state);
+          }
           item.state.scale(scale, center);
         }
 

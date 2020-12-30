@@ -32,10 +32,11 @@ export function echarts(ctx: CanvasRenderingContext2D, node: Node) {
     document.body.appendChild(echartsObjs[node.id].div);
     // 添加当前节点到div层
     node.addToDiv();
-    echartsObjs[node.id].chart = echarts.init(
-      echartsObjs[node.id].div,
-      node.data.echarts.theme
-    );
+    // echartsObjs[node.id].chart = echarts.init(
+    //   echartsObjs[node.id].div,
+    //   node.data.echarts.theme
+    // );
+    echartsObjs[node.id].chart = echarts.init(echartsObjs[node.id].div, node.data.echarts.theme);
 
     node.elementRendered = false;
 

@@ -90,6 +90,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     minScale:0.2,
     maxScale:3.1,
     color:'#096DD9',
+    rule:true
     // locked: Lock.None
   };
 

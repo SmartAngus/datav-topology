@@ -134,6 +134,14 @@ export class Topology {
         this.setupSubscribe();
         this.setupMouseEvent();
 
+        // Wait for parent dom load
+        setTimeout(() => {
+            this.canvasPos = this.divLayer.canvas.getBoundingClientRect();
+        }, 500);
+        setTimeout(() => {
+            this.canvasPos = this.divLayer.canvas.getBoundingClientRect();
+        }, 1000);
+
         this.cache();
 
         (window as any).topology = this;
@@ -234,6 +242,8 @@ export class Topology {
         };
 
         if (isMobile()) {
+            this.options.refresh = 50;
+            // end
             // ipad
             document.addEventListener('gesturestart', this.preventDefault);
 
@@ -256,6 +266,8 @@ export class Topology {
 
                 this.getMoveIn(pos);
                 this.hoverLayer.node = this.moveIn.hoverNode;
+                this.lastTranlated.x = pos.x;
+                this.lastTranlated.y = pos.y;
                 this.onmousedown({
                     x: pos.x,
                     y: pos.y,
@@ -578,12 +590,22 @@ export class Topology {
         this.data.pens.push(node);
 
         if (focus) {
-            this.activeLayer.setPens([node]);
-            this.render();
-            this.animate(true);
-            this.cache();
-            this.dispatch('addNode', node);
+            // fix bug: add echart
+            if (node.name === 'echarts') {
+                setTimeout(() => {
+                    this.activeLayer.pens = [node];
+                    this.render();
+                }, 50);
+            } else {
+                this.activeLayer.pens = [node];
+            }
+
         }
+        // this.activeLayer.setPens([node]);
+        this.render();
+        this.animate(true);
+        this.cache();
+        this.dispatch('addNode', node);
 
         return node;
     }
@@ -2385,11 +2407,12 @@ export class Topology {
         for (const item of this.data.pens) {
             item.translate(offsetX, offsetY);
         }
-        this.animateLayer.pens.forEach((pen) => {
-            if (pen instanceof Line) {
-                pen.translate(offsetX, offsetY);
-            }
-        });
+        // this.animateLayer.pens.forEach((pen) => {
+        //     if (pen instanceof Line) {
+        //         pen.translate(offsetX, offsetY);
+        //     }
+        // });
+        Store.set(this.generateStoreKey('LT:updateLines'), this.data.pens);
 
         this.lastTranlated.x = x;
         this.lastTranlated.y = y;
@@ -2419,6 +2442,7 @@ export class Topology {
         //     }
         // });
         this.scaleContainer(this.data.scale)
+        Store.set(this.generateStoreKey('LT:updateLines'), this.data.pens);
         Store.set(this.generateStoreKey('LT:scale'), this.data.scale);
 
         this.render();
