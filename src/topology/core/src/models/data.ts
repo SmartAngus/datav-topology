@@ -36,6 +36,7 @@ export class TopologyData {
   manualCps?: boolean;
   tooltip?: boolean | number;
   data?: any;
+  property?:any;
   constructor(json?: any) {
     if (json) {
       this.pens = [];
@@ -58,6 +59,8 @@ export class TopologyData {
 
       this.width=json.width;
       this.height=json.height;
+
+      this.property=json.property;
 
       this.websocket = json.websocket;
       this.mqttUrl = json.mqttUrl;

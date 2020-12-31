@@ -85,11 +85,13 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     autoAnchor: false,
     cacheLen: 50,
     hideInput: false,
-    disableEmptyLine: true,
+    disableEmptyLine: false,
     disableScale:false,
     minScale:0.2,
     maxScale:3.1,
     color:'#096DD9',
+    hoverColor:'#096DD9',
+    activeColor:'#999999',
     rule:true
     // locked: Lock.None
   };
@@ -133,8 +135,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       if (canvas.data.grid) {
         canvas.data.grid = true;
       }
-      console.log(props.editorData)
       setIsLoadCanvas(true);
+      canvas.scaleContainer( props.editorData.scale)
       canvas.resize({ width: w, height: h });
       canvas.render();
     } else {
@@ -193,7 +195,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     (selected.node.property.dataColors || []).map((item) => {
       if (item.checked) {
         let lineColor = [];
-        lineColor[0] = Math.abs(item.top / selected.node.property.dataMax);
+        lineColor[0] = Math.abs((item.top- selected.node.property.dataMin)/ (selected.node.property.dataMax-selected.node.property.dataMin));
         lineColor[1] = item.color;
         lineColors.push(lineColor);
       }
@@ -236,7 +238,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       JSON.parse(JSON.stringify(selected.node.data.echarts.option), reviver)
     );
     echartsObjs[selected.node.id].chart.resize();
-    selected.node.elementRendered = true;
+    selected.node.elementRendered = false;
     canvas.updateProps(true, [selected.node]);
   };
   // 计量器
@@ -485,7 +487,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }
           break;
       }
-
       setIsSave(false);
       // 更新属性变化
       canvas.updateProps(false, [selected.node]);
@@ -557,7 +558,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }
         }
       }
-      canvas.updateProps(true, selected.line);
+      canvas.updateProps(true, [selected.line]);
       setIsSave(false);
     },
     [selected]

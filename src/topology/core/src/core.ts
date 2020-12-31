@@ -24,6 +24,7 @@ import { Socket } from './socket';
 import { MQTT } from './mqtt';
 import { Direction } from './models';
 import { isMobile } from './utils';
+
 const resizeCursors = ['nw-resize', 'ne-resize', 'se-resize', 'sw-resize'];
 enum MoveInType {
     None,
@@ -222,7 +223,6 @@ export class Topology {
     }
 
     private setupMouseEvent() {
-        console.log(this.divLayer.canvas)
         this.canvasPos = this.divLayer.canvas.getBoundingClientRect();
         this.parentElem.addEventListener('scroll', this.onScroll);
         window.addEventListener('scroll', this.onScroll);
@@ -1787,8 +1787,6 @@ export class Topology {
         if (this.activeLayer.pens.length === 1) {
             return angle - this.activeLayer.pens[0].rotate;
         }
-        console.log("getAngle",angle)
-        console.log(this.activeLayer.rect.center)
         return angle;
     }
 
@@ -2107,7 +2105,6 @@ export class Topology {
 
         const idMaps: any = {};
         for (const pen of this.clipboard.pens) {
-            console.log(pen)
             if (pen.type === PenType.Node) {
                 this.newId(pen, idMaps);
                 pen.rect.x += 20;

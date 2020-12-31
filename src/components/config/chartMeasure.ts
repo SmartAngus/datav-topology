@@ -163,29 +163,44 @@ export function getGaugeOption(
       {
         name: '',
         type: 'gauge',
-        radius: '100%',
-        max: max,
         min: min,
-        data: [{ value: 0, name: title }],
-        axisLine: {
-          lineStyle: {
-            color: lineColors,
+        max: max,
+        radius: '100%',
+        axisLine: {            // 坐标轴线
+          lineStyle: {       // 属性lineStyle控制线条样式
             width: 22,
-          },
+            color:lineColors
+          }
         },
-        axisTick: { // 坐标轴小标记
-          lineStyle: { // 属性lineStyle控制线条样式
+        axisTick: {            // 坐标轴小标记
+          length: 27,        // 属性length控制线长
+          lineStyle: {       // 属性lineStyle控制线条样式
             color: 'auto'
           }
         },
-        splitLine: {
-          length: 12,
-          lineStyle: {
-            width: 1,
-          },
+        splitLine: {           // 分隔线
+          length: 30,         // 属性length控制线长
+          lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+            color: 'auto'
+          }
         },
-        itemStyle:{
-          color:'auto'
+        axisLabel: {
+          // backgroundColor: 'auto',
+          // borderRadius: 2,
+          color: '#345678',
+          padding: 3,
+          // textShadowBlur: 2,
+          // textShadowOffsetX: 1,
+          // textShadowOffsetY: 1,
+          // textShadowColor: '#222'
+        },
+        title: {
+          // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+          fontWeight: 'bolder',
+          fontSize: 20,
+          fontStyle: 'italic',
+          show: showTitle,
+          offsetCenter: [0, '90%'],
         },
         detail: {
           formatter: '{value} ' + unit,
@@ -195,10 +210,7 @@ export function getGaugeOption(
             color: '#F37B1D',
           },
         },
-        title: {
-          show: showTitle,
-          offsetCenter: [0, '90%'],
-        },
+        data: [{value: 0, name: title}]
       },
     ],
   };

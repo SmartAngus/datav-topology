@@ -11,9 +11,12 @@ import preBgImg2 from './bg02.jpg';
 import preBgImg3 from './bg03.jpg';
 
 const { confirm } = Modal;
-const token = '3VT5JlGfnqgzCJ1f7ek6AB';
+const token = '4mXSTXiT25gJExXs2MESsk';
 
 const testId = 'e2e697e719194b188c1bfe5b0dcb0604';
+
+const apiURL = 'http://qt.test.bicisims.com';
+
 
 const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   const history = props.history;
@@ -62,9 +65,9 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     },
   ];
   const uploadConfig = {
-    baseURL: 'http://qt.test.bicisims.com',
+    baseURL: apiURL,
     self: {
-      baseURL: 'http://qt.test.bicisims.com',
+      baseURL: apiURL,
       token: token,
       url: '/api/file/file/uploadReturnPath',
       apiUrl: {
@@ -78,7 +81,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       },
     },
     preInstall: {
-      baseURL: 'http://qt.test.bicisims.com',
+      baseURL: apiURL,
       token: token,
       url: '/api/file/file/uploadReturnPath',
       data: {
@@ -87,7 +90,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       },
     },
     combineCom: {
-      apiURL: 'http://qt.test.bicisims.com',
+      apiURL: apiURL,
       token: token,
       list: {
         url: '/applications/customComponent/list',
@@ -107,7 +110,6 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       },
     },
   };
-  const apiURL = 'http://qt.test.bicisims.com';
 
   const websocketConf = {
     url: 'ws://47.96.159.115:51060/ws?token=' + token,
@@ -205,12 +207,12 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
 
     formData.append('mappingType', '107');
     api.post(
-      `http://qt.test.bicisims.com//api/file/file/uploadReturnPath`,
+      `${apiURL}/api/file/file/uploadReturnPath`,
       formData
     );
 
     const instance = axios.create({
-      baseURL: 'http://qt.test.bicisims.com',
+      baseURL: apiURL,
       timeout: 10000000,
       maxContentLength: 1000000000,
     });
@@ -323,7 +325,7 @@ const PreviewLayout: React.FC<any> = ({ history }) => {
   };
   useEffect(() => {
     const instance = axios.create({
-      baseURL: 'http://qt.test.bicisims.com',
+      baseURL: apiURL,
       timeout: 10000000,
       maxContentLength: 1000000000,
     });

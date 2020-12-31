@@ -135,7 +135,7 @@ export default class CanvasContextMenu extends Component<
       if (cloneNodes) {
         cloneNodes.forEach(item => {
           item.id=s8();
-          if ('property' in item && item.property) {
+          if ('property' in item && item.property && cloneNode.property.dataPointSelectedRows!=undefined) {
             item.property.dataPointSelectedRows = [];
             item.property.dataPointParam.qtDataList= [];
             if (item.property.echartsType === 'timeLine') {
@@ -149,7 +149,7 @@ export default class CanvasContextMenu extends Component<
         })
       }else {
         cloneNode.id=s8();
-        if ('property' in cloneNode && cloneNode.property) {
+        if ('property' in cloneNode && cloneNode.property && cloneNode.property.dataPointSelectedRows!=undefined) {
           cloneNode.property.dataPointSelectedRows = [];
           cloneNode.property.dataPointParam.qtDataList = [];
           if (cloneNode.property.echartsType === 'timeLine') {

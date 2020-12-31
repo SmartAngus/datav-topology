@@ -522,7 +522,7 @@ export class ActiveLayer extends Layer {
       if (item instanceof Node) {
         const tmp = new Node(item, true);
         tmp.setTID(TID);
-        tmp.data = item.data;
+        tmp.data = null;// tmp.data = item.data;源码是这样，出现echarts不更新的问题，并且会不断加div
         tmp.fillStyle = null;
         tmp.bkType = 0;
         tmp.icon = '';

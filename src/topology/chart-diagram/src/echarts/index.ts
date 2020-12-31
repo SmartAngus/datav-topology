@@ -15,6 +15,10 @@ export function echarts(ctx: CanvasRenderingContext2D, node: Node) {
   if (typeof node.data === 'string') {
     node.data = JSON.parse(node.data, reviver);
   }
+  if (typeof node.property === 'string') {
+    node.property = JSON.parse(node.property, reviver);
+  }
+
 
   if (!node.data.echarts) {
     return;
