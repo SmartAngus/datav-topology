@@ -91,8 +91,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     maxScale:3.1,
     color:'#096DD9',
     hoverColor:'#096DD9',
-    activeColor:'#999999',
-    rule:true
+    // activeColor:'#999999',
+    rule:false
     // locked: Lock.None
   };
 
