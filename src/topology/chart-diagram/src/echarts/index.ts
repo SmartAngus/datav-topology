@@ -27,7 +27,6 @@ export function echarts(ctx: CanvasRenderingContext2D, node: Node) {
   if (!node.elementId) {
     node.elementId = s8();
   }
-
   if (!node.elementLoaded) {
     echartsObjs[node.id] = {
       div: createDiv(node),

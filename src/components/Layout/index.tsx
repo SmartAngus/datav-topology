@@ -1,5 +1,5 @@
 import React, {CSSProperties, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState,} from 'react';
-import {Lock, Options, Topology} from '../../topology/core';
+import {Lock, Options, s8, Topology} from '../../topology/core';
 import {echartsObjs, register as registerChart,} from '../../topology/chart-diagram';
 import {register as registerBiciComp} from '../../topology/bici-diagram';
 import {message, Modal, Tabs, Tooltip} from 'antd';
@@ -18,11 +18,10 @@ import styles from './index.module.scss';
 import CanvasContextMenu from '../canvasContextMenu';
 import {DataVEditorProps} from '../data/defines';
 import {calcCanvas, eraseOverlapIntervals} from '../utils/cacl';
-import ResizePanel from '../common/resizeSidebar';
-import {getGaugeOption, getMeasureOption2, getTimelineOption,} from '../config/chartMeasure';
+import {getMeasureOption2, getTimelineOption} from '../config/chartMeasure';
 import * as _ from 'lodash';
 import moment from 'moment';
-import $ from "cash-dom";
+import {getGaugeOption} from '../config/charts/gauge'
 
 
 const { confirm } = Modal;
@@ -170,9 +169,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   };
 
   const onDrag = (event, node, custom = false) => {
+    console.log("data==",node)
     if (custom) {
       let data = node;
-      //data.id = s8();
+
+      // data.id = s8();
       event.dataTransfer.setData('Topology', JSON.stringify(data, replacer));
     } else {
       event.dataTransfer.setData(
@@ -189,8 +190,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         selected.node.property.dataColors[index][kindex[0]] = values[k];
       }
     }
-    selected.node.property.dataMax = values.dataMax || 100;
-    selected.node.property.dataMin = values.dataMin || 0;
+    selected.node.property.dataMax = values.dataMax;
+    selected.node.property.dataMin = values.dataMin;
     let lineColors = [];
     (selected.node.property.dataColors || []).map((item) => {
       if (item.checked) {

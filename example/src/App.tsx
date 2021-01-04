@@ -9,9 +9,10 @@ import { Modal } from 'antd';
 import preBgImg1 from './bg01.jpg';
 import preBgImg2 from './bg02.jpg';
 import preBgImg3 from './bg03.jpg';
+import preBgImg4 from './bg04.svg';
 
 const { confirm } = Modal;
-const token = '4mXSTXiT25gJExXs2MESsk';
+const token = '66pYv2fboCWsksbQqT3UXs';
 
 const testId = 'e2e697e719194b188c1bfe5b0dcb0604';
 
@@ -26,6 +27,7 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     { key: 1, img: preBgImg1 },
     { key: 2, img: preBgImg2 },
     { key: 3, img: preBgImg3 },
+    { key: 4, img: preBgImg4 },
   ];
   const industrialLibrary = [
     {
@@ -42,6 +44,10 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       name: '测试2',
       url:
         'https://bici-qt.oss-cn-hangzhou.aliyuncs.com/ooip6ffe388d487db754b885b8aa65b9/自定义组件/2020/12/27d978a2e1c24faf9c14e02d8ca4283b测图片.png',
+    },
+    {
+      name: 'svg',
+      url: preBgImg4,
     },
   ];
   const selfIndustrialLibrary = [

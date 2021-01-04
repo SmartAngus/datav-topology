@@ -105,8 +105,15 @@ export function getGaugeOption(
   if (opt) {
     opt = Object.assign({}, opt, changeValues);
   }
-  const min = opt?.min || 0;
-  const max = opt?.max || 100;
+  let min = 0;
+  if(opt){
+    min=opt.min
+  }
+  let max = 100;
+  if(opt){
+    console.log(opt.max)
+    max=opt.max
+  }
   const lineColors = opt?.lineColors || [
     //数组第一个属性是颜色所占line百分比
     [0.4, '#49afff'],

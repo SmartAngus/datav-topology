@@ -24,6 +24,7 @@ import { Socket } from './socket';
 import { MQTT } from './mqtt';
 import { Direction } from './models';
 import { isMobile } from './utils';
+import * as _ from 'lodash';
 
 const resizeCursors = ['nw-resize', 'ne-resize', 'se-resize', 'sw-resize'];
 enum MoveInType {
@@ -577,17 +578,17 @@ export class Topology {
         //     node.scale(this.data.scale);
         // }
 
-        // if (node.autoRect) {
-        //   const ctx = this.canvas.canvas.getContext('2d');
-        //   const rect = calcTextRect(ctx, node);
-        //   node.rect.width = rect.width + node.lineWidth * 2;
-        //   node.rect.height = rect.height;
-        //   node.init();
-        //   node.initRect();
-        // }
+        if (node.autoRect) {
+          const ctx = this.canvas.canvas.getContext('2d');
+          const rect = calcTextRect(ctx, node);
+          node.rect.width = rect.width + node.lineWidth * 2;
+          node.rect.height = rect.height;
+          node.init();
+          node.initRect();
+        }
 
         node.setTID(this.id);
-        this.data.pens.push(node);
+       this.data.pens.push(node);
 
         if (focus) {
             // fix bug: add echart
@@ -692,15 +693,33 @@ export class Topology {
         // end.
 
         if (data.pens) {
+            let hasChart=false;
             for (const item of data.pens) {
                 if (!item.type) {
                     item.TID = this.id;
-                    this.data.pens.push(new Node(item));
+                    // this.data.pens.push(new Node(item));
+                    if(item.name=="combine"){
+                        for(const child of item.children){
+                            if(child.name=="echarts"){
+                                hasChart=true;
+                            }
+                        }
+                        if(hasChart){// 如果是图表组件，解组
+                            for(const child of item.children){
+                                this.data.pens.push(new Node(child));
+                            }
+                        }else{
+                            this.data.pens.push(new Node(item));
+                        }
+                    }else{
+                        this.data.pens.push(new Node(item));
+                    }
                 } else {
                     this.data.pens.push(new Line(item));
                 }
             }
         }
+
 
         this.data.websocket = data.websocket;
         this.data.mqttUrl = data.mqttUrl;
@@ -2320,16 +2339,16 @@ export class Topology {
             children: [],
         });
 
-        for (let i = 0; i < pens.length; ++i) {
-            if (pens[i].type === PenType.Node && rect.width === pens[i].rect.width && rect.height === pens[i].rect.height) {
-                node = pens[i] as Node;
-                if (!node.children) {
-                    node.children = [];
-                }
-                pens.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < pens.length; ++i) {
+        //     if (pens[i].type === PenType.Node && rect.width === pens[i].rect.width && rect.height === pens[i].rect.height) {
+        //         node = pens[i] as Node;
+        //         if (!node.children) {
+        //             node.children = [];
+        //         }
+        //         pens.splice(i, 1);
+        //         break;
+        //     }
+        // }
 
         for (const item of pens) {
             item.stand = stand;
@@ -2675,8 +2694,21 @@ export class Topology {
             if (item !== node) {
                 item.parentId = node.id;
                 item.calcRectInParent(node);
-                node.children.push(item);
+                const nodeItem = _.cloneDeep(item) as Node;
+                nodeItem.elementLoaded=false;
+                nodeItem.elementRendered=false;
+                nodeItem.elementId=null;
+                delete nodeItem.id;
+                node.children.push(nodeItem);
             }
+        }
+        // 解决一个组件不能自定义组件的问题
+        if(pens.length==1){
+            node = _.cloneDeep(pens[0]) as Node;
+            node.elementLoaded=false;
+            node.elementRendered=false;
+            node.elementId=null;
+            delete node.id;
         }
 
         return node;
