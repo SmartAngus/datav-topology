@@ -39,12 +39,11 @@ import DataBindModal from '../../../FilterDataPoint';
 import styles from './index.module.scss';
 import { getNodeType } from '../../../utils/Property2NodeProps';
 import * as _ from 'lodash';
-import { getTimelineOption } from '../../../config/chartMeasure';
 import { echartsObjs } from '../../../../topology/chart-diagram/src/echarts';
 import { reviver } from '../../../utils/serializing';
 import { eraseOverlapIntervals } from '../../../utils/cacl';
-import { colorList } from '../../../data/defines';
-import { backgroundColor } from 'html2canvas/dist/types/css/property-descriptors/background-color';
+import { defaultLineColors } from '../../../data/defines';
+import {getTimeLineOption} from "../../../config/charts/timeline";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -199,7 +198,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         width / 2 <= 15 ? 'small' : width / 2 <= 20 ? 'middle' : 'large';
       setPilotBtnSize(btnSize);
     } else if (data.node.name == 'echarts') {
-      let lineRangedefaultColor = colorList.map((color) => {
+      let lineRangedefaultColor = defaultLineColors.map((color) => {
         return {
           lineGraphRangeColor: color,
         };
@@ -432,7 +431,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       });
   };
   const updateTimelineOption = () => {
-    data.node.data.echarts.option = getTimelineOption(
+    data.node.data.echarts.option = getTimeLineOption(
       data.node,
       undefined,
       undefined

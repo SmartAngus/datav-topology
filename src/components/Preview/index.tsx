@@ -14,6 +14,8 @@ import { register as registerBiciComp } from '../../topology/bici-diagram';
 import {pieOption} from "../config/charts/pie";
 import moment from "moment";
 import styles from './index.module.scss'
+import {getTimeLineOption} from "../config/charts/timeline";
+import {defaultTimelineShowData} from "../data/defines";
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -140,8 +142,11 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       value:[moment().subtract(1, "seconds"),null]
     })
   }
+
   const updateComp = (pens: any, data: any) => {
     (pens || []).map((node: Node) => {
+      // 实时曲线第一根有数据的曲线标志
+      let flag=true;
       if (node.name == 'combine') {
         updateComp(node.children, data);
       } else if (node.name == 'echarts') {
@@ -171,9 +176,24 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             }
             break;
           case 'timeLine':
-            (node.property.dataPointSelectedRows || []).map((row) => {
+            node.property.dataPointSelectedRows.sort((a,b)=>{
+              return a.intervalTime-b.intervalTime
+            })
+            let selectedRows = node.property.dataPointSelectedRows;
+
+            const timesxAix=node.data.echarts.option.dataset.source[0];
+            (selectedRows || []).map((row,index) => {
               if (row.id == r.id) {
-                node.data.echarts.option = getTimelineOption(node, r);
+                if(index==0){
+                  timesxAix.push(moment(parseInt(r.time/1000+"")*1000).format("LTS"))
+                  if(timesxAix.length>defaultTimelineShowData){
+                    timesxAix.splice(1,1)
+                  }
+                  node.data.echarts.option = getTimeLineOption(node, null, r, timesxAix);
+                }else{
+                  node.data.echarts.option = getTimeLineOption(node, null, r);
+                }
+
               }
             });
             updateChartNode(node);

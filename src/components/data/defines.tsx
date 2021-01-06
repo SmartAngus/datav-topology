@@ -269,6 +269,21 @@ export const colorList=[
   "rgba(97, 147, 39, 1)"
 ]
 
+export const defaultLineColors=[
+  "#E63C5F",
+  "#6236FF",
+  "#157EFB",
+  "#1EC622",
+  "#F7B500",
+  "#673D3D",
+  "#44D7B6",
+  "#71A3CB",
+  "#766863",
+  "#FA6400"
+]
+// 实时曲线显示多少个时刻点
+export const defaultTimelineShowData=30;
+
 /** 处理弹窗全屏挂载 */
 export function getContainer() {
   const pipelineDoms = document.getElementsByClassName("pipeline-canvas");

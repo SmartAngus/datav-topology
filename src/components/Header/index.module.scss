@@ -26,5 +26,11 @@
   justify-content: center;
   align-items: center;
   padding: 5px 5px;
-  margin: 0 10px;
+  margin: 0 0px;
+}
+.toolItem:active{
+  background: rgba(222,222,222,0.5);
+}
+.toolSplit{
+  width: 30px;
 }

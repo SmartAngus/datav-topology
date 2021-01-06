@@ -22,6 +22,7 @@ import {getMeasureOption2, getTimelineOption} from '../config/chartMeasure';
 import * as _ from 'lodash';
 import moment from 'moment';
 import {getGaugeOption} from '../config/charts/gauge'
+import {getTimeLineOption} from "../config/charts/timeline";
 
 
 const { confirm } = Modal;
@@ -229,10 +230,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         }
       }
     }
-    selected.node.data.echarts.option = getTimelineOption(
+    selected.node.data.echarts.option = getTimeLineOption(
       selected.node,
-      undefined,
-      values
+      values,
+      undefined
     );
     // 更新图表数据
     echartsObjs[selected.node.id].chart.setOption(

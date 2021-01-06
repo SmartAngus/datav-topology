@@ -4,6 +4,8 @@ import {
   getTimelineOption,
 } from './chartMeasure';
 import {pieOption} from "./charts/pie";
+import {getThermometerOption} from "./charts/thermometer";
+import {getTimeLineOption} from "./charts/timeline";
 export const Tools = [
   {
     group: '通用组件',
@@ -899,6 +901,51 @@ export const Tools = [
             dataMax: 100,
             dataMin: 0,
           },
+        },
+      },
+      {
+        elementRendered: false,
+        name: '实时曲线',
+        icon: 'iconjiliangqi',
+        data: {
+          text: '',
+          rect: {
+            width: 500,
+            height: 350,
+          },
+          name: 'echarts',
+          strokeStyle: 'rgba(0,0,0,0)',
+          elementRendered: false,
+          hideRotateCP: true,
+          hideInput: true,
+          data: {
+            echarts: {
+              option: getTimeLineOption(),
+            },
+          },
+          property: {
+            echartsType: 'timeLine',
+            dataMethod: 'point',
+            dataDot: 1,
+            dataPointSelectedRows: [],
+            dataPointParam: {
+              qtDataList: [],
+              subscribe: true,
+            },
+            smooth: true,
+            dataTopSource: 'custom', // dataPoint数据点或者custom=自定义
+            dataTopChecked: false,
+            dataTop: 100,
+            dataBottom: 0,
+            chartTitleChecked: false,
+            chartTitle: '实时曲线',
+            chartTitleColor: '#c0c0c0',
+            chartBackgroundColor: '#1b2735',
+            chartBackgroundChecked:false,
+            lineReferenceChecked: false, // splitLine
+            lineReferenceColor: '#ccc',
+            lineColors: [],
+          }
         },
       },
       // {
