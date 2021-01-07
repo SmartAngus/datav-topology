@@ -197,7 +197,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       const btnSize =
         width / 2 <= 15 ? 'small' : width / 2 <= 20 ? 'middle' : 'large';
       setPilotBtnSize(btnSize);
-    } else if (data.node.name == 'echarts') {
+    } else if (data.node.name == 'echarts'||data.node.name == 'biciMeasure') {
       let lineRangedefaultColor = defaultLineColors.map((color) => {
         return {
           lineGraphRangeColor: color,
@@ -221,6 +221,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       propertyForm.setFieldsValue({
         dataMax: property.dataMax,
         dataMin: property.dataMin,
+        marks: property.marks,
+        markChecked: property.markChecked,
         'checked-0': property.dataColors && property.dataColors[0]?.checked,
         'color-0': property.dataColors && property.dataColors[0]?.color,
         'top-0': property.dataColors && property.dataColors[0]?.top,
@@ -406,13 +408,13 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           data.node.property.dataPointSelectedRows.splice(itemRowIndex, 1);
           const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
           setDataPointSelectedRows(newRows);
-          updateTimelineOption();
           //(removeLineColorBtnRef as any).current.click();
         } else {
           data.node.property.dataPointParam.qtDataList = [];
           data.node.property.dataPointSelectedRows = [];
           setDataPointSelectedRows([]);
         }
+        updateTimelineOption();
       },
       onCancel() {},
     });
@@ -431,6 +433,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       });
   };
   const updateTimelineOption = () => {
+    data.node.elementRendered = false;
     data.node.data.echarts.option = getTimeLineOption(
       data.node,
       undefined,
@@ -1370,7 +1373,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     return (
       <Panel header="样式" key="style">
         <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-          {property?.echartsType === 'chartMeasure' && (
+          {data?.node.name === 'biciMeasure' && (
+              <React.Fragment>
             <Row>
               <Col span={10}>
                 <Form.Item
@@ -1389,6 +1393,25 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Form.Item>
               </Col>
             </Row>
+            <Row>
+            <Col span={10}>
+            <Form.Item
+            label="刻度"
+            name="markChecked"
+            labelCol={{ span: 12 }}
+            labelAlign="left"
+            valuePropName="checked"
+            >
+            <Checkbox />
+            </Form.Item>
+            </Col>
+            <Col span={14}>
+            <Form.Item name="marks">
+              <InputNumber placeholder="刻度个数" min={0} max={100}></InputNumber>
+            </Form.Item>
+            </Col>
+            </Row>
+              </React.Fragment>
           )}
           <Row>
             <Col>
@@ -1773,7 +1796,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               {name === 'biciPilot' && renderLight}
               {name === 'biciTimer' && renderBiciTimerDataForm}
               {name === 'biciCard' && renderDataCard}
-              {property?.echartsType === 'chartMeasure' && renderMeter}
+              {data?.node.name === 'biciMeasure' && renderMeter}
               {property?.echartsType === 'timeLine' && renderLineGraph}
               {property?.echartsType === 'gauge' && renderGauge}
             </Collapse>
@@ -1786,7 +1809,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               {(data.node.name == 'biciVarer' ||
                 data.node.name == 'echarts' ||
                 data.node.name == 'biciCard' ||
-                data.node.name == 'biciPilot') && (
+                data.node.name == 'biciPilot'||
+                data.node.name == 'biciMeasure'
+              ) && (
                 <Panel header="自定义数据" key="2">
                   {renderExtraDataForm}
                 </Panel>

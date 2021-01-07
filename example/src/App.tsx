@@ -12,7 +12,7 @@ import preBgImg3 from './bg03.jpg';
 import preBgImg4 from './bg04.svg';
 
 const { confirm } = Modal;
-const token = '3SqvMMzrl0HKVk6jK0ZJID';
+const token = '2uAfslteM1jVbKgKknqmqH';
 
 const testId = 'e2e697e719194b188c1bfe5b0dcb0604';
 

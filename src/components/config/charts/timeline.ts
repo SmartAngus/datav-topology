@@ -173,7 +173,7 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
         (node.property.dataPointSelectedRows||[]).map((item)=>{
             const source = [];
             source.push(item.dataName)
-            series.push({type: 'line', smooth: smooth, seriesLayoutBy: 'row',symbol:'none'})
+            series.push({type: 'line', smooth: smooth, seriesLayoutBy: 'row',symbol:'none',label:{color:'auto'}})
             datasetSource.push(source)
         })
     }
@@ -297,6 +297,9 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
             show: true,
             left: 20,
             top: 25,
+            textStyle: {
+                color: trastColor
+            },
         },
         xAxis: {
             type: 'category',
@@ -333,12 +336,19 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
                     fontSize: 12
                 },
             },
+            // splitLine: {
+            //     show: true,
+            //     lineStyle: {
+            //         color: '#F3F4F4',
+            //         type: 'dashed',
+            //     }
+            // },
             splitLine: {
-                show: true,
+                show: showReference,
                 lineStyle: {
-                    color: '#F3F4F4',
+                    color: showReferenceColor,
                     type: 'dashed',
-                }
+                },
             },
             axisTick: {
                 show: false

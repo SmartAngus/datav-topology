@@ -18,7 +18,6 @@ import styles from './index.module.scss';
 import CanvasContextMenu from '../canvasContextMenu';
 import {DataVEditorProps} from '../data/defines';
 import {calcCanvas, eraseOverlapIntervals} from '../utils/cacl';
-import {getMeasureOption2, getTimelineOption} from '../config/chartMeasure';
 import * as _ from 'lodash';
 import moment from 'moment';
 import {getGaugeOption} from '../config/charts/gauge'
@@ -249,6 +248,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       if (k.indexOf('-') > 0) {
         let kindex = k.split('-');
         let index = parseInt(kindex[1]);
+
         selected.node.property.dataColors[index][kindex[0]] = values[k];
       }
     }
@@ -266,11 +266,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (lineColors.length == 0) {
       lineColors = undefined;
     }
-    const option = getMeasureOption2(selected.node,values,undefined);
-    selected.node.data.echarts.option = JSON.parse(
-      JSON.stringify(option, replacer),
-      reviver
-    );
   };
 
   /**
@@ -462,6 +457,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         case 'biciPilot':
           handlePilot(value);
           break;
+        case 'biciMeasure':
+          handleChartMeasureOption(value);
+          break;
         case 'biciTimer':
           let y = '';
           let h = '';
@@ -482,8 +480,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           const theChart = selected.node.property.echartsType;
           if (theChart == 'gauge') {
             handleGaugeOption(value);
-          } else if (theChart == 'chartMeasure') {
-            handleChartMeasureOption(value);
           } else if (theChart === 'timeLine') {
             handleTimeLineOption(value);
           }

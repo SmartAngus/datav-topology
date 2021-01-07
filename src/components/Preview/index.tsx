@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Node, Topology } from '../../topology/core';
 import { roundFun } from '../utils/cacl';
 import { formatTimer, getNodeType } from '../utils/Property2NodeProps';
-import { getMeasureOption2, getTimelineOption } from '../config/chartMeasure';
 import echarts from 'echarts/lib/echarts';
 
 import {
@@ -168,13 +167,6 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
               // updateChartNode(node)
             }
             break;
-          case 'chartMeasure':
-            if (node.property.dataPointSelectedRows[0]?.id == r.id) {
-              const option = getMeasureOption2(node,undefined,r);
-              node.data.echarts.option = option;
-              updateChartNode(node);
-            }
-            break;
           case 'timeLine':
             node.property.dataPointSelectedRows.sort((a,b)=>{
               return a.intervalTime-b.intervalTime
@@ -246,6 +238,11 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             if(r.value==false||r.value=='false'){
               node.text=node.property.dataPointSelectedRows[0].falseDisplay||r.value
             }
+            canvas.updateProps(false);
+          }
+        }else if(node.name === 'biciMeasure'){
+          if (node.property.dataPointSelectedRows[0]?.id == r.id) {
+            node.property.value = r.value;
             canvas.updateProps(false);
           }
         } else if (node.name === 'biciCard') {

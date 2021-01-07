@@ -24,7 +24,6 @@ export function getGaugeOption(
     }
     let max = 100;
     if(opt){
-        console.log(opt.max)
         max=opt.max
     }
     const lineColors = opt?.lineColors || [
@@ -117,8 +116,9 @@ export function getGaugeOption(
                 title: {
                     // 其余属性默认使用全局文本样式，详见TEXTSTYLE
                     fontWeight: 'bolder',
-                    fontSize: 20,
-                    fontStyle: 'italic',
+                    fontSize: 14,
+                    fontStyle: 'normal',
+                    color:'#222222',
                     show: showTitle,
                     offsetCenter: [0, '90%'],
                 },
@@ -127,7 +127,7 @@ export function getGaugeOption(
                     offsetCenter: [0, '60%'],
                     textStyle: {
                         fontSize: 16,
-                        color: '#F37B1D',
+                        color: '#333333',
                     },
                 },
                 data: [{value: 0, name: title}]
