@@ -22,6 +22,7 @@ import * as _ from 'lodash';
 import moment from 'moment';
 import {getGaugeOption} from '../config/charts/gauge'
 import {getTimeLineOption} from "../config/charts/timeline";
+import set = Reflect.set;
 
 
 const { confirm } = Modal;
@@ -584,6 +585,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           nodes: null,
           // locked: Lock.None
         });
+        setIsSave(false)
         break;
       case 'addNode':
         setIsSave(false);
@@ -595,10 +597,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           // locked: Lock.None
         });
         setIsLoadCanvas(true);
-        canvas.activeLayer.saveNodeRects();
-        canvas.activeLayer.move(1, 0);
-        canvas.overflow();
-        canvas.animateLayer.animate();
+        // 老代码，解决拖动图表组件到画布不显示的问题
+        // canvas.activeLayer.saveNodeRects();
+        // canvas.activeLayer.move(1, 0);
+        // canvas.overflow();
+        // canvas.animateLayer.animate();
         break;
       case 'delete':
         setIsSave(false);
@@ -630,6 +633,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           nodes: null,
           // locked: Lock.None
         });
+        setIsSave(false)
         break;
       case 'rotated':
         let temp = data[0];

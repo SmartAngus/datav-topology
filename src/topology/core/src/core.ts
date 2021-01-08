@@ -1404,6 +1404,36 @@ export class Topology {
                     this.undo();
                 }
                 break;
+            case 'g':
+            case 'G':
+                if (key.ctrlKey) {
+                    this.combine(this.activeLayer.pens);
+                    key.returnValue = false;
+                }
+                break;
+            case 'u':
+            case 'U':
+                if (key.ctrlKey) {
+                    this.activeLayer.pens
+                        .filter((pen) => pen.name === 'combine')
+                        .forEach((pen) => this.uncombine(pen));
+                    key.returnValue = false;
+                }
+                break;
+            case '[':
+                if (key.ctrlKey && key.altKey) {
+                    this.activeLayer.pens.forEach((pen) => this.bottom(pen));
+                } else if (key.ctrlKey) {
+                    this.activeLayer.pens.forEach((pen) => this.down(pen));
+                }
+                break;
+            case ']':
+                if (key.ctrlKey && key.altKey) {
+                    this.activeLayer.pens.forEach((pen) => this.top(pen));
+                } else if (key.ctrlKey) {
+                    this.activeLayer.pens.forEach((pen) => this.up(pen));
+                }
+                break;
         }
 
         if (!done) {
