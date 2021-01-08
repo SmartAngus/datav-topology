@@ -208,6 +208,7 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
 
 
     // 添加标注线
+
     series.push({
         name: '',
         type: 'line',

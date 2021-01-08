@@ -333,7 +333,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         // 最多可绑定十个数据点
         selectedRows = selectedRows.slice(0, 10);
         if (data.node.property.dataPointSelectedRows.length < 10) {
-          const tmp = _.cloneDeep(data.node.property.dataPointSelectedRows);
           data.node.property.dataPointSelectedRows = selectedRows;
           selectedRows.map((row, index) => {
             const q = {
@@ -341,9 +340,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               type: selectedRows[index].dataType || selectedRows[index].type,
             };
             data.node.property.dataPointParam.qtDataList[index] = q;
-            // if(index>(tmp.length-1)){
-            //   (addLineColorBtnRef as any)?.current.click()
-            // }
           });
           setDataPointSelectedRows(selectedRows);
           updateTimelineOption();
@@ -408,13 +404,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           data.node.property.dataPointSelectedRows.splice(itemRowIndex, 1);
           const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
           setDataPointSelectedRows(newRows);
-          //(removeLineColorBtnRef as any).current.click();
+          updateTimelineOption();
         } else {
           data.node.property.dataPointParam.qtDataList = [];
           data.node.property.dataPointSelectedRows = [];
           setDataPointSelectedRows([]);
         }
-        updateTimelineOption();
       },
       onCancel() {},
     });
@@ -434,17 +429,18 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   };
   const updateTimelineOption = () => {
     data.node.elementRendered = false;
-    data.node.data.echarts.option = getTimeLineOption(
+    const newOption = getTimeLineOption(
       data.node,
       undefined,
       undefined
     );
+    data.node.data.echarts.option=newOption;
+
     // 更新图表数据
     echartsObjs[data.node.id].chart.setOption(
-      JSON.parse(JSON.stringify(data.node.data.echarts.option), reviver)
+      JSON.parse(JSON.stringify(newOption), reviver),true
     );
     echartsObjs[data.node.id].chart.resize();
-    data.node.elementRendered = true;
     canvas.updateProps(true, [data.node]);
   };
   let disableSource = ['react'];
