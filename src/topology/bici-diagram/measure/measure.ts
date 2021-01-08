@@ -66,6 +66,8 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
     if((top-dataMin)>(dataMax-dataMin)){
       top=dataMax;
     }
+    if(top<dataMin) top=dataMin;
+    if(top>dataMax) top=dataMax;
     ctx.beginPath();
     ctx.fillStyle = item.color;
     if((dataMax-dataMin)!=0){// 分母不能为0

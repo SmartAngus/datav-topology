@@ -2116,7 +2116,6 @@ export class Topology {
         if (!this.clipboard || this.data.locked) {
             return;
         }
-
         this.hoverLayer.node = null;
         this.hoverLayer.line = null;
 
@@ -2171,6 +2170,8 @@ export class Topology {
     newId(node: any, idMaps: any) {
         const old = node.id;
         node.id = s8();
+        // 解决图表组件复制粘贴只显示一个问题
+        node.elementId=null;
         idMaps[old] = node.id;
         if (node.children) {
             for (const item of node.children) {
