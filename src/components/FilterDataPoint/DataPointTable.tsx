@@ -66,7 +66,7 @@ export default class DataPointTable extends Component<any,any> {
     //   params.dataTypeList = [1]
     // }
     // 根据node返回的type决定查询的数据类型
-    if(this.props.node.name=="echarts"){
+    if(this.props.node.name=="echarts"||this.props.node.name=="biciMeasure"){
       params.dataTypeList = [1]
     }else{
       const nodeType = this.props.node.name;

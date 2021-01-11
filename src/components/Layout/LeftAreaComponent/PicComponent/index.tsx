@@ -268,7 +268,7 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
 
   return (
     <div className={styles.container}>
-      <Collapse defaultActiveKey={['1']}>
+      <Collapse defaultActiveKey={['1']} expandIconPosition="right" ghost={false} bordered={true}>
         <Panel header="工业图库" key="1">
           <Row>
             {industrialLibrary?.map((item, index) => (

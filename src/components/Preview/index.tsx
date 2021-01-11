@@ -250,10 +250,10 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             const n = node.property.dataDot;
             const val = roundFun(parseFloat(r.value), n);
             node.children[0].text = val;
-            const bottom = node.property.limit.bottom ? parseInt(node.property.limit.bottom) : undefined;
-            const top = node.property.limit.bottom ? parseInt(node.property.limit.top) : undefined;
+            const bottom = node.property.limit.bottom ? parseFloat(node.property.limit.bottom) : undefined;
+            const top = node.property.limit.bottom ? parseFloat(node.property.limit.top) : undefined;
             const tempVal = parseFloat(val);
-            if (bottom && tempVal < bottom) {
+            if (bottom && tempVal < bottom && node.property.showLimit) {
               const showColor = node.property.bottomLimit.showBkColor
                 ? node.property.bottomLimit.bkColor
                 : node.property.normal.bkColor;
@@ -265,7 +265,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 parseInt(node.property.bottomLimit.fontSize),
                 showColor
               );
-            } else if (top && tempVal > top) {
+            } else if (top && tempVal > top && node.property.showLimit) {
               const showColor = node.property.bottomLimit.showBkColor
                 ? node.property.topLimit.bkColor
                 : node.property.normal.bkColor;

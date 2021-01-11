@@ -201,6 +201,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       let lineRangedefaultColor = defaultLineColors.map((color) => {
         return {
           lineGraphRangeColor: color,
+          lineGraphRangeCheck:true
+
         };
       });
 
@@ -213,11 +215,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           lineRangedefaultColor[index] = nodeLineRangeColor[index];
         }
       });
-      lineRangedefaultColor = _.slice(
-        lineRangedefaultColor,
-        0,
-        property.dataPointSelectedRows.length
-      );
+      // lineRangedefaultColor = _.slice(
+      //   lineRangedefaultColor,
+      //   0,
+      //   property.dataPointSelectedRows.length
+      // );
       propertyForm.setFieldsValue({
         dataMax: property.dataMax,
         dataMin: property.dataMin,
@@ -1720,58 +1722,64 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               </Col>
             </Row>
             <Row>
-              <Form.Item label="曲线颜色"></Form.Item>
+              <Col span={8}>
+                <Form.Item label="曲线颜色"></Form.Item>
+              </Col>
+              <Col span={16}>
+                <Form.List name="lineGraphRange">
+                  {(fields, { add, remove }) => (
+                      <Fragment>
+                        {fields.map((field) => (
+                            <Space
+                                key={field.key}
+                                style={{ display: 'flex', marginBottom: 8 }}
+                                align="center"
+                                size={20}
+                            >
+                              <Form.Item
+                                  {...field}
+                                  name={[field.name, 'lineGraphRangeCheck']}
+                                  fieldKey={[field.fieldKey, 'lineGraphRangeCheck']}
+                                  valuePropName="checked"
+                                  style={{marginBottom:0}}
+                              >
+                                <Checkbox />
+                              </Form.Item>
+                              <Form.Item
+                                  {...field}
+                                  name={[field.name, 'lineGraphRangeColor']}
+                                  fieldKey={[field.fieldKey, 'lineGraphRangeColor']}
+                                  style={{marginBottom:0}}
+                              >
+                                <ColorPicker />
+                              </Form.Item>
+                              <Form.Item style={{ display: 'none' }}>
+                                <MinusCircleOutlined
+                                    ref={removeLineColorBtnRef}
+                                    onClick={() => remove(field.name)}
+                                />
+                              </Form.Item>
+                            </Space>
+                        ))}
+                        {fields.length < 10 ? (
+                            <Form.Item style={{ display: 'none' }}>
+                              <Button
+                                  type="dashed"
+                                  ref={addLineColorBtnRef}
+                                  onClick={() => add()}
+                                  block
+                                  icon={<PlusOutlined />}
+                              >
+                                添加
+                              </Button>
+                            </Form.Item>
+                        ) : null}
+                      </Fragment>
+                  )}
+                </Form.List>
+              </Col>
             </Row>
-            <Form.List name="lineGraphRange">
-              {(fields, { add, remove }) => (
-                <Fragment>
-                  {fields.map((field) => (
-                    <Space
-                      key={field.key}
-                      style={{ display: 'flex', marginBottom: 8 }}
-                      align="center"
-                      size={20}
-                    >
-                      <Form.Item
-                        {...field}
-                        name={[field.name, 'lineGraphRangeCheck']}
-                        fieldKey={[field.fieldKey, 'lineGraphRangeCheck']}
-                        valuePropName="checked"
-                        style={{ display: 'none' }}
-                      >
-                        <Checkbox />
-                      </Form.Item>
-                      <Form.Item
-                        {...field}
-                        name={[field.name, 'lineGraphRangeColor']}
-                        fieldKey={[field.fieldKey, 'lineGraphRangeColor']}
-                      >
-                        <ColorPicker />
-                      </Form.Item>
-                      <Form.Item style={{ display: 'none' }}>
-                        <MinusCircleOutlined
-                          ref={removeLineColorBtnRef}
-                          onClick={() => remove(field.name)}
-                        />
-                      </Form.Item>
-                    </Space>
-                  ))}
-                  {fields.length < 10 ? (
-                    <Form.Item style={{ display: 'none' }}>
-                      <Button
-                        type="dashed"
-                        ref={addLineColorBtnRef}
-                        onClick={() => add()}
-                        block
-                        icon={<PlusOutlined />}
-                      >
-                        添加
-                      </Button>
-                    </Form.Item>
-                  ) : null}
-                </Fragment>
-              )}
-            </Form.List>
+
           </Form>
         </Panel>
       </Fragment>

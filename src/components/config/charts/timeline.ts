@@ -86,6 +86,7 @@ moment.locale('zh-cn', {
 export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,timesxAix?:any[]) {
     let datasetSource=[];
     let source0:(string|number)[]=[null]
+    let lineColors = _.cloneDeep(defaultLineColors)
     const series=[]
     // 改变属性
     if (node != undefined) {
@@ -94,10 +95,10 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
 
     if(node != undefined){
         (node.property.lineGraphRange || []).map((colorObj, index) => {
-            if(colorObj!=undefined&&colorObj.lineGraphRangeColor){
-                defaultLineColors[index]=colorObj.lineGraphRangeColor
+            if(colorObj.lineGraphRangeCheck){
+                lineColors[index]=colorObj.lineGraphRangeColor
             }else{
-                defaultLineColors[index]=defaultLineColors[index]
+                lineColors[index]=defaultLineColors[index]
             }
         })
     }
@@ -224,6 +225,9 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
                     },
                 },
             },
+            label:{
+                show:dataTopShow
+            },
             data: [
                 {
                     type: 'median',
@@ -250,6 +254,9 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
                     },
                 },
             },
+            label:{
+                show:dataTopShow
+            },
             data: [
                 {
                     type: 'median',
@@ -272,7 +279,7 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
             }
         },
         backgroundColor: showBackgroundColor,
-        color: defaultLineColors,
+        color: lineColors,
         tooltip: {
             trigger: 'axis',
             axisPointer: {

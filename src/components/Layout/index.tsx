@@ -170,10 +170,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   };
 
   const onDrag = (event, node, custom = false) => {
-    console.log("data==",node)
     if (custom) {
       let data = node;
-
       // data.id = s8();
       event.dataTransfer.setData('Topology', JSON.stringify(data, replacer));
     } else {
@@ -197,7 +195,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     (selected.node.property.dataColors || []).map((item) => {
       if (item.checked) {
         let lineColor = [];
-        lineColor[0] = Math.abs((item.top- selected.node.property.dataMin)/ (selected.node.property.dataMax-selected.node.property.dataMin));
+        lineColor[0] = Math.abs(
+            (item.top- selected.node.property.dataMin)/ (selected.node.property.dataMax-selected.node.property.dataMin));
         lineColor[1] = item.color;
         lineColors.push(lineColor);
       }
