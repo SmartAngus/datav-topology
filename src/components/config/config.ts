@@ -59,6 +59,7 @@ export const Tools = [
             fontFamily: '"Microsoft YaHei"',
           },
           name: 'text',
+          hideInput:false
         },
       },
       {

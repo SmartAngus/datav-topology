@@ -1295,32 +1295,30 @@ export class Topology {
     private ondblclick = (e: MouseEvent) => {
         if (this.moveIn.hoverNode) {
             this.dispatch('dblclick', this.moveIn.hoverNode);
+            // const isHoverLineText =  this.moveIn.hoverNode
+            //     .getTextRect()
+            //     .hit(
+            //         new Point(
+            //             e.x - window.scrollX - (this.canvasPos.left || this.canvasPos.x),
+            //             e.y - window.scrollY - (this.canvasPos.top || this.canvasPos.y)
+            //         )
+            //     );
+            const isHoverLineText = this.moveIn.hoverNode.getTextRect().hit(new Point(e.offsetX, e.offsetY));
 
-            if (
-                this.moveIn.hoverNode
-                    .getTextRect()
-                    .hit(
-                        new Point(
-                            e.x - window.scrollX - (this.canvasPos.left || this.canvasPos.x),
-                            e.y - window.scrollY - (this.canvasPos.top || this.canvasPos.y)
-                        )
-                    )
-            ) {
+            if (isHoverLineText) {
                 this.showInput(this.moveIn.hoverNode);
             }
 
             this.moveIn.hoverNode.dblclick();
         } else if (this.moveIn.hoverLine) {
+            // const isHoverLineText = this.moveIn.hoverLine
+            //     .getTextRect()
+            //     .hit(
+            //         new Point(e.x - (this.canvasPos.x || this.canvasPos.left), e.y - (this.canvasPos.y || this.canvasPos.top))
+            //     );
+            const isHoverLineText = this.moveIn.hoverLine.getTextRect().hit(new Point(e.offsetX, e.offsetY));
             this.dispatch('dblclick', this.moveIn.hoverLine);
-
-            if (
-                !this.moveIn.hoverLine.text ||
-                this.moveIn.hoverLine
-                    .getTextRect()
-                    .hit(
-                        new Point(e.x - (this.canvasPos.x || this.canvasPos.left), e.y - (this.canvasPos.y || this.canvasPos.top))
-                    )
-            ) {
+            if (!this.moveIn.hoverLine.text || isHoverLineText) {
                 this.showInput(this.moveIn.hoverLine);
             }
 

@@ -12,7 +12,10 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
 
   const scale=node.property.marks||10
   const step=node.rect.height/scale;
-  let dataMax = node.property.dataMax || 100;
+  let dataMax =  100;
+  if(isNotNaN(node.property.dataMax)){
+    dataMax = node.property.dataMax
+  }
   let dataMin = node.property.dataMin || 0;
   let value = node.property.value||0
   if(value<dataMin) value=dataMin;
@@ -85,7 +88,13 @@ function getFixed(num,fix) {
   let numStr = num.toString()
   let index = numStr.indexOf('.')
   if(index<0) return numStr;
-  return numStr.slice(0, index + fix +1)
+  if(fix==0){
+    return numStr.slice(0, index + fix)
+  }
+  return numStr.slice(0, index + fix+1)
 }
-
+function isNotNaN(value) {
+  const r = typeof value === 'number' && !isNaN(value);
+  return r;
+}
 

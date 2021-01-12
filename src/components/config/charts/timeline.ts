@@ -181,7 +181,7 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
     datasetSource.map((item,index)=>{
         if(item.length<defaultTimelineShowData){
             for(let i=0;i<defaultTimelineShowData;i++){
-                item.push(null)
+                item.push("")
             }
             datasetSource[index]=item;
         }

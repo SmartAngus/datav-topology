@@ -138,7 +138,8 @@ const Layout = forwardRef((props: Props, ref) => {
   };
 
   return (
-    <Collapse style={{ borderTop: 0 }}>
+    <Collapse expandIconPosition="right"
+              ghost={false} bordered={false}>
       <Panel header="自定义组件" key={'custom'}>
         <div className={styles.button}>
           <Row align="middle">

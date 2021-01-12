@@ -1614,7 +1614,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   <Form.Item name="dataBottom">
                     <InputNumber
                       style={{ width: 85 }}
-                      min={0}
                       placeholder="下限"
                       readOnly={!showSelectDataPoint}
                     />
@@ -1792,7 +1791,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       {!data.multi && (
         <Tabs defaultActiveKey="1" centered>
           <TabPane tab="外观" key="1" style={{ margin: 0 }}>
-            <Collapse defaultActiveKey={['pos', 'lineInfo', 'lineStyle']}>
+            <Collapse defaultActiveKey={['pos', 'lineInfo', 'lineStyle']}
+                      expandIconPosition="right"
+                      ghost={false} bordered={true}>
               {renderPositionForm}
               {fontStyleNodeList.includes(name) && renderFontForm}
               {fillStyleNodeList.includes(name) && renderFillStyle}
@@ -1806,7 +1807,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
             </Collapse>
           </TabPane>
           <TabPane tab="数据" key="2" style={{ margin: 0 }}>
-            <Collapse defaultActiveKey={['2']}>
+            <Collapse defaultActiveKey={['2']}
+                      expandIconPosition="right"
+                      ghost={false} bordered={true}>
               {/*<Panel header="本身数据" key="1">*/}
               {/*  {renderDataForm}*/}
               {/*</Panel>*/}

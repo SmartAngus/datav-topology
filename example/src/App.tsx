@@ -115,6 +115,14 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
         params: {},
       },
     },
+    industry:{
+      baseURL: apiURL,
+      mappingId: 'ooip6ffe388d487db754b885b8aa65b9',
+      token: token,
+      list:{
+        url:"/applications/custom/component/industryList"
+      }
+    }
   };
 
   const websocketConf = {
@@ -174,32 +182,34 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     //   .then((res) => {
     //   });
     // 获取获取当前租户下 指定自定义组件图片列表
-    // instance
-    //   .post(
-    //     '/api/applications/custom/component/componentList',
-    //     { mappingType: '106' },
-    //     {
-    //       method: 'post',
-    //       headers: {
-    //         token: 'development_of_special_token_by_star_quest',
-    //         'Content-Type': 'application/json',
-    //       },
-    //     }
-    //   )
-    //   .then((res) => {
-    //     (res.data.data || []).map((image: any) => {
-    //       const newImg = {
-    //         ...image,
-    //         name: image.name.replace(/\.(jpg|png)$/g, ''),
-    //         width: 100,
-    //         height: 100,
-    //         type: 'image',
-    //         key: image.id,
-    //       };
-    //       selfIndustrialLibrary.push(newImg);
-    //       return null;
-    //     });
-    //   });
+    instance
+      .post(
+        '/api/applications/custom/component/industryList',
+        { mappingType: '121' },
+        {
+          method: 'post',
+          headers: {
+            token: token,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res)
+        // (res.data.data || []).map((image: any) => {
+        //   const newImg = {
+        //     ...image,
+        //     name: image.name.replace(/\.(jpg|png)$/g, ''),
+        //     width: 100,
+        //     height: 100,
+        //     type: 'image',
+        //     key: image.id,
+        //   };
+        //
+        //   selfIndustrialLibrary.push(newImg);
+        //   return null;
+        // });
+      });
   }, []);
   // 保存数据到数据库
   const handleSaveEditorData = (data: any) => {

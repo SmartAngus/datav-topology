@@ -252,8 +252,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         selected.node.property.dataColors[index][kindex[0]] = values[k];
       }
     }
-    selected.node.property.dataMax = values.dataMax || 100;
-    selected.node.property.dataMin = values.dataMin || 0;
+    selected.node.property.dataMax = values.dataMax;
+    selected.node.property.dataMin = values.dataMin;
     let lineColors = [];
     (selected.node.property.dataColors || []).map((item) => {
       if (item.checked) {
@@ -821,20 +821,23 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       />
     </div>
   );
+  const divHeight = document.body.clientHeight-92;
   return (
     <div id="editLayout" ref={layoutRef}>
       {renderHeader}
       <div className={styles.page}>
         {/*<ResizePanel direction="e" style={{ width: 250 }}>*/}
-          <div className={styles.tool}>
+          <div className={styles.tool} style={{overflow:'hidden'}}>
             <Tabs defaultActiveKey="1" centered>
               <TabPane tab="组件" key="1" style={{ margin: 0 }}>
-                <SystemComponent onDrag={onDrag} Tools={Tools} />
-                <CustomComponent
-                  ref={customCompRef}
-                  onDrag={onDrag}
-                  combineCom={props.uploadConfig.combineCom}
-                />
+                <div style={{height:divHeight,overflow:"auto"}}>
+                  <SystemComponent onDrag={onDrag} Tools={Tools} />
+                  <CustomComponent
+                    ref={customCompRef}
+                    onDrag={onDrag}
+                    combineCom={props.uploadConfig.combineCom}
+                  />
+                </div>
               </TabPane>
               <TabPane tab="图库" key="2" style={{ margin: 0 }}>
                 <PicComponent
