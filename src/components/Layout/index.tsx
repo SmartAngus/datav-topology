@@ -1,29 +1,38 @@
-import React, {CSSProperties, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState,} from 'react';
-import {Lock, Options, s8, Topology} from '../../topology/core';
-import {echartsObjs, register as registerChart,} from '../../topology/chart-diagram';
-import {register as registerBiciComp} from '../../topology/bici-diagram';
-import {message, Modal, Tabs, Tooltip} from 'antd';
-import {Tools} from '../config/config';
-import {useClickAway} from 'ahooks';
-import {replacer, reviver} from '../utils/serializing';
-import Header from '../Header';
-import NodeComponent from './component/nodeComponent';
-import BackgroundComponent from './component/backgroundComponent';
-import LineComponent from './component/lineComponent';
-import SystemComponent from './LeftAreaComponent/SystemComponent';
-import CustomComponent from './LeftAreaComponent/CustomComponent';
-import PicComponent from './LeftAreaComponent/PicComponent';
+import React, {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { Lock, Options, s8, Topology } from "../../topology/core";
+import { echartsObjs, register as registerChart } from "../../topology/chart-diagram";
+import { register as registerBiciComp } from "../../topology/bici-diagram";
+import { message, Modal, Tabs, Tooltip, ConfigProvider } from "antd";
+import { Tools } from "../config/config";
+import { useClickAway } from "ahooks";
+import { replacer, reviver } from "../utils/serializing";
+import Header from "../Header";
+import NodeComponent from "./component/nodeComponent";
+import BackgroundComponent from "./component/backgroundComponent";
+import LineComponent from "./component/lineComponent";
+import SystemComponent from "./LeftAreaComponent/SystemComponent";
+import CustomComponent from "./LeftAreaComponent/CustomComponent";
+import PicComponent from "./LeftAreaComponent/PicComponent";
 
-import styles from './index.module.scss';
-import CanvasContextMenu from '../canvasContextMenu';
-import {DataVEditorProps} from '../data/defines';
-import {calcCanvas, eraseOverlapIntervals} from '../utils/cacl';
-import * as _ from 'lodash';
-import moment from 'moment';
-import {getGaugeOption} from '../config/charts/gauge'
-import {getTimeLineOption} from "../config/charts/timeline";
+import styles from "./index.module.scss";
+import CanvasContextMenu from "../canvasContextMenu";
+import { DataVEditorProps } from "../data/defines";
+import { calcCanvas, eraseOverlapIntervals } from "../utils/cacl";
+import * as _ from "lodash";
+import moment from "moment";
+import { getGaugeOption } from "../config/charts/gauge";
+import { getTimeLineOption } from "../config/charts/timeline";
 import set = Reflect.set;
 
+import "antd/dist/antd.less";
 
 const { confirm } = Modal;
 const { TabPane } = Tabs;
@@ -41,7 +50,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const headerRef = useRef();
   const [isSave, setIsSave] = useState(true);
   const [scaleVal, setScaleVal] = useState(1);
-  const [bkImageUrl, setBkImageUrl] = useState('');
+  const [bkImageUrl, setBkImageUrl] = useState("");
 
   const [canvasSizeInfo, setCanvasSizeInfo] = useState({
     minWidth: 3199,
@@ -64,12 +73,12 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const [showContextmenu, setShowContextmenu] = useState(false);
 
   const [contextmenu, setContextmenu] = useState({
-    position: 'fixed',
-    zIndex: '10',
-    display: 'none',
-    left: '',
-    top: '',
-    bottom: '',
+    position: "fixed",
+    zIndex: "10",
+    display: "none",
+    left: "",
+    top: "",
+    bottom: "",
   });
 
   const [isLoadCanvas, setIsLoadCanvas] = useState(false);
@@ -79,20 +88,20 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const customCompRef = useRef<any>();
 
   const canvasOptions: Options = {
-    rotateCursor: '/rotate.cur',
+    rotateCursor: "/rotate.cur",
     autoExpandDistance: 0,
     viewPadding: [0],
     autoAnchor: false,
     cacheLen: 50,
     hideInput: false,
     disableEmptyLine: false,
-    disableScale:false,
-    minScale:0.2,
-    maxScale:3.1,
-    color:'#096DD9',
-    hoverColor:'#096DD9',
+    disableScale: false,
+    minScale: 0.2,
+    maxScale: 3.1,
+    color: "#096DD9",
+    hoverColor: "#096DD9",
     // activeColor:'#999999',
-    rule:false
+    rule: false,
     // locked: Lock.None
   };
 
@@ -117,13 +126,13 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   );
 
   useEffect(() => {
-    window['API_URL'] = props.apiURL;
-    window['token'] = props.token;
+    window["API_URL"] = props.apiURL;
+    window["token"] = props.token;
     canvasOptions.on = onMessage;
     canvasRegister();
-    canvas = new Topology('topology-canvas', canvasOptions);
+    canvas = new Topology("topology-canvas", canvasOptions);
 
-    if (props.editorData != undefined && typeof props.editorData == 'object') {
+    if (props.editorData != undefined && typeof props.editorData == "object") {
       canvas.open(props.editorData);
     }
     if (props.editorData) {
@@ -131,30 +140,29 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       const h = props.editorData.height as number;
       const r = calcCanvas(w, h);
       setCanvasSizeInfo({ ...r, width: w, height: h });
-      canvas.data['gridColor'] = props.editorData.gridColor;
+      canvas.data["gridColor"] = props.editorData.gridColor;
       if (canvas.data.grid) {
         canvas.data.grid = true;
       }
       setIsLoadCanvas(true);
-      canvas.scaleContainer( props.editorData.scale)
+      canvas.scaleContainer(props.editorData.scale);
       canvas.resize({ width: w, height: h });
       canvas.render();
     } else {
       setIsLoadCanvas(false);
     }
     setShowHeader(true);
-
   }, [props.editorData]);
 
   useEffect(() => {
-    handleScaleCanvas(scaleVal)
+    handleScaleCanvas(scaleVal);
   }, [canvasSizeInfo]);
 
   /**
    * 滚动条居中
    */
   const scrollCenter = () => {
-    const fullDiv = document.querySelector('#full') as HTMLElement;
+    const fullDiv = document.querySelector("#full") as HTMLElement;
     fullDiv.scrollTo(
       (fullDiv.scrollWidth - fullDiv.offsetWidth) / 2,
       (fullDiv.scrollHeight - fullDiv.offsetHeight) / 2
@@ -173,19 +181,16 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (custom) {
       let data = node;
       // data.id = s8();
-      event.dataTransfer.setData('Topology', JSON.stringify(data, replacer));
+      event.dataTransfer.setData("Topology", JSON.stringify(data, replacer));
     } else {
-      event.dataTransfer.setData(
-        'Topology',
-        JSON.stringify(node.data, replacer)
-      );
+      event.dataTransfer.setData("Topology", JSON.stringify(node.data, replacer));
     }
   };
   const handleGaugeOption = (values) => {
     for (let k in values) {
-      let kindex = k.split('-');
+      let kindex = k.split("-");
       let index = parseInt(kindex[1]);
-      if (k.indexOf('-') > 0) {
+      if (k.indexOf("-") > 0) {
         selected.node.property.dataColors[index][kindex[0]] = values[k];
       }
     }
@@ -196,7 +201,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       if (item.checked) {
         let lineColor = [];
         lineColor[0] = Math.abs(
-            (item.top- selected.node.property.dataMin)/ (selected.node.property.dataMax-selected.node.property.dataMin));
+          (item.top - selected.node.property.dataMin) /
+            (selected.node.property.dataMax - selected.node.property.dataMin)
+        );
         lineColor[1] = item.color;
         lineColors.push(lineColor);
       }
@@ -221,7 +228,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     const changedProps = values;
 
     for (const key in changedProps) {
-      if (typeof changedProps[key] === 'object') {
+      if (typeof changedProps[key] === "object") {
         selected.node.property[key] = changedProps[key];
       } else {
         if (changedProps[key] !== undefined) {
@@ -229,11 +236,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         }
       }
     }
-    selected.node.data.echarts.option = getTimeLineOption(
-      selected.node,
-      values,
-      undefined
-    );
+    selected.node.data.echarts.option = getTimeLineOption(selected.node, values, undefined);
     // 更新图表数据
     echartsObjs[selected.node.id].chart.setOption(
       JSON.parse(JSON.stringify(selected.node.data.echarts.option), reviver)
@@ -245,8 +248,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   // 计量器
   const handleChartMeasureOption = (values) => {
     for (let k in values) {
-      if (k.indexOf('-') > 0) {
-        let kindex = k.split('-');
+      if (k.indexOf("-") > 0) {
+        let kindex = k.split("-");
         let index = parseInt(kindex[1]);
 
         selected.node.property.dataColors[index][kindex[0]] = values[k];
@@ -274,42 +277,40 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const handleBiciCard = (value) => {
     const { cardTitle, showTitle, showLimit } = value;
     if (showTitle !== undefined) {
-      selected.node.text = showTitle ? cardTitle : '';
+      selected.node.text = showTitle ? cardTitle : "";
     }
     if (showLimit !== undefined) {
       selected.node.children[1].text = showLimit
-        ? `下限: ${
-            !isNaN(parseInt(value['limit.bottom'])) ? value['limit.bottom'] : ''
-          }   上限: ${
-            !isNaN(parseInt(value['limit.top'])) ? value['limit.top'] : ''
+        ? `下限: ${!isNaN(parseInt(value["limit.bottom"])) ? value["limit.bottom"] : ""}   上限: ${
+            !isNaN(parseInt(value["limit.top"])) ? value["limit.top"] : ""
           }`
-        : '';
+        : "";
     }
     if (selected.node.property.preType !== selected.node.property.limitType) {
       // 切换的标签
-      selected.node.children[1].text = ''
+      selected.node.children[1].text = "";
     }
-    if ('limit.top' in value) {
+    if ("limit.top" in value) {
       // 下限不能高于上限
-      const limitTop = value['limit.top'];
-      const limitBottom = value['limit.bottom'];
+      const limitTop = value["limit.top"];
+      const limitBottom = value["limit.bottom"];
       if (limitTop && limitBottom && limitTop < limitBottom) {
-        selected.node.property.limit.top = undefined
-        selected.node.property.limit.bottom = undefined
+        selected.node.property.limit.top = undefined;
+        selected.node.property.limit.bottom = undefined;
       }
     }
-    if ('normal.showBkColor' in value) {
-      if (value['normal.showBkColor']) {
-        selected.node.fillStyle = value['normal.bkColor'];
+    if ("normal.showBkColor" in value) {
+      if (value["normal.showBkColor"]) {
+        selected.node.fillStyle = value["normal.bkColor"];
       } else {
-        selected.node.fillStyle = '';
+        selected.node.fillStyle = "";
       }
     }
-    if ('normal.fontSize' in value) {
-      selected.node.children[0].font.fontSize = value['normal.fontSize'];
+    if ("normal.fontSize" in value) {
+      selected.node.children[0].font.fontSize = value["normal.fontSize"];
     }
-    if ('normal.color' in value) {
-      selected.node.children[0].font.color = value['normal.color'];
+    if ("normal.color" in value) {
+      selected.node.children[0].font.color = value["normal.color"];
     }
   };
   /**
@@ -318,41 +319,33 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const handlePilot = (value) => {
     const { color, text, showText, stateType, lightRange } = value;
     selected.node.strokeStyle = color;
-    selected.node.text = showText ? text : '';
+    selected.node.text = showText ? text : "";
     if (lightRange.length > 0) {
       if (lightRange.includes(undefined)) {
         return;
       }
 
-      if (stateType === 'single') {
+      if (stateType === "single") {
         const vals = lightRange.map((item) => item?.lightRangeVal);
         const tmpSet = new Set(vals);
         if (tmpSet.size !== vals.length) {
           let tmp = {};
           let lightRangeTmp = _.cloneDeep(lightRange);
           lightRangeTmp = lightRangeTmp.reduce((item, next) => {
-            tmp[next.lightRangeVal]
-              ? ''
-              : (tmp[next.lightRangeVal] = true && item.push(next));
+            tmp[next.lightRangeVal] ? "" : (tmp[next.lightRangeVal] = true && item.push(next));
             return item;
           }, []);
           selected.node.property.lightRange = lightRangeTmp;
         }
       } else {
-        const vals = lightRange.map((item) => [
-          item?.lightRangeBottom,
-          item?.lightRangeTop,
-        ]);
+        const vals = lightRange.map((item) => [item?.lightRangeBottom, item?.lightRangeTop]);
         if (!vals.flat().includes(undefined)) {
           const nums = eraseOverlapIntervals(vals);
           if (nums.length !== 0) {
             let lightRangeTmp = _.cloneDeep(lightRange);
             nums.forEach((num) => {
               lightRangeTmp.forEach((item, index) => {
-                if (
-                  item.lightRangeBottom === num[0] &&
-                  item.lightRangeTop === num[1]
-                ) {
+                if (item.lightRangeBottom === num[0] && item.lightRangeTop === num[1]) {
                   lightRangeTmp.splice(index, 1);
                 }
               });
@@ -407,7 +400,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       };
 
       for (const key in changedProps) {
-        if (typeof changedProps[key] === 'object') {
+        if (typeof changedProps[key] === "object") {
           for (const k in changedProps[key]) {
             if (changedProps[key][k] !== undefined) {
               selected.node[key][k] = changedProps[key][k];
@@ -433,14 +426,14 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // canvas.setValue(selected.node.id, 'setValue');
       // 通知有数据属性更新,会重新渲染画布
       const { name } = selected.node;
-      if (name === 'biciCard') {
-        selected.node.property.preType = selected.node.property.limitType
+      if (name === "biciCard") {
+        selected.node.property.preType = selected.node.property.limitType;
       }
 
       for (const key in value) {
-        if (key.indexOf('.') > 0) {
+        if (key.indexOf(".") > 0) {
           if (key != undefined) {
-            const k = key.split('.');
+            const k = key.split(".");
             selected.node.property[k[0]][k[1]] = value[key];
           }
         } else {
@@ -451,36 +444,36 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       }
 
       switch (name) {
-        case 'biciCard':
+        case "biciCard":
           handleBiciCard(value);
           break;
-        case 'biciPilot':
+        case "biciPilot":
           handlePilot(value);
           break;
-        case 'biciMeasure':
+        case "biciMeasure":
           handleChartMeasureOption(value);
           break;
-        case 'biciTimer':
-          let y = '';
-          let h = '';
+        case "biciTimer":
+          let y = "";
+          let h = "";
           let node = selected.node;
-          if (value['date.show']) {
-            y = moment().format(value['date.format']);
+          if (value["date.show"]) {
+            y = moment().format(value["date.format"]);
           }
-          if (value['time.show']) {
-            h = moment().format(value['time.format']);
+          if (value["time.show"]) {
+            h = moment().format(value["time.format"]);
           }
-          node.text = y + ' ' + h;
-          if (node.text == ' ') {
-            node.text = moment().format('LLLL');
+          node.text = y + " " + h;
+          if (node.text == " ") {
+            node.text = moment().format("LLLL");
           }
           canvas.updateProps(false);
           break;
-        case 'echarts':
+        case "echarts":
           const theChart = selected.node.property.echartsType;
-          if (theChart == 'gauge') {
+          if (theChart == "gauge") {
             handleGaugeOption(value);
-          } else if (theChart === 'timeLine') {
+          } else if (theChart === "timeLine") {
             handleTimeLineOption(value);
           }
           break;
@@ -523,15 +516,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
   const onHandleLineFormValueChange = useCallback(
     (value) => {
-      const {
-        dash,
-        lineWidth,
-        strokeStyle,
-        name,
-        fromArrow,
-        toArrow,
-        ...other
-      } = value;
+      const { dash, lineWidth, strokeStyle, name, fromArrow, toArrow, ...other } = value;
       const changedValues = {
         line: {
           rect: other,
@@ -547,7 +532,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         // 遍历查找修改的属性，赋值给原始line
         for (const key in changedValues.line) {
           if (Array.isArray(changedValues.line[key])) {
-          } else if (typeof changedValues.line[key] === 'object') {
+          } else if (typeof changedValues.line[key] === "object") {
             for (const k in changedValues.line[key]) {
               selected.line[key][k] = changedValues.line[key][k];
             }
@@ -571,12 +556,12 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const onMessage = (event: string, data: any) => {
     const node = data;
     switch (event) {
-      case 'resize':
-        break
-      case 'dblclick':
+      case "resize":
+        break;
+      case "dblclick":
         setIsSave(false);
         break;
-      case 'node': // 节点切换或者点击
+      case "node": // 节点切换或者点击
         setSelected({
           node: data,
           line: null,
@@ -584,9 +569,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           nodes: null,
           // locked: Lock.None
         });
-        setIsSave(false)
+        setIsSave(false);
         break;
-      case 'addNode':
+      case "addNode":
         setIsSave(false);
         setSelected({
           node: data,
@@ -602,7 +587,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         // canvas.overflow();
         // canvas.animateLayer.animate();
         break;
-      case 'delete':
+      case "delete":
         setIsSave(false);
         setSelected({
           node: undefined,
@@ -612,8 +597,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           // locked: Lock.None
         });
         break;
-      case 'line': // 连线
-      case 'addLine':
+      case "line": // 连线
+      case "addLine":
         setIsSave(false);
         setSelected({
           node: null,
@@ -623,7 +608,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           // locked: Lock.None
         });
         break;
-      case 'space': // 空白处
+      case "space": // 空白处
         setIsLoadCanvas(true);
         setSelected({
           node: null,
@@ -632,15 +617,15 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           nodes: null,
           // locked: Lock.None
         });
-        setIsSave(false)
+        setIsSave(false);
         break;
-      case 'rotated':
+      case "rotated":
         let temp = data[0];
         temp.rotate += temp.offsetRotate;
         setIsSave(false);
         setSelected({ ...selected, node: temp });
         break;
-      case 'move':
+      case "move":
         setIsSave(false);
         setSelected(
           Object.assign(
@@ -652,7 +637,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           )
         );
         break;
-      case 'resizePens':
+      case "resizePens":
         setIsSave(false);
         setSelected(
           Object.assign(
@@ -664,12 +649,12 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           )
         );
         // 重新绘制图表
-        if (node.name == 'echarts') {
+        if (node.name == "echarts") {
           const chart = echartsObjs[node.id].chart;
           chart.setOption(data.data.echarts.option, true);
         }
         break;
-      case 'multi':
+      case "multi":
         setSelected(
           Object.assign(
             {},
@@ -683,10 +668,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           )
         );
         break;
-      case 'scale':
-        if (typeof data === 'number') {
+      case "scale":
+        if (typeof data === "number") {
           setScaleVal(data);
-          scrollCenter()
+          scrollCenter();
         }
         break;
       default:
@@ -709,10 +694,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         />
       ), // 渲染Node节点类型的组件
       line: selected && (
-        <LineComponent
-          data={selected}
-          onFormValueChange={onHandleLineFormValueChange}
-        />
+        <LineComponent data={selected} onFormValueChange={onHandleLineFormValueChange} />
       ), // 渲染线条类型的组件
       default: canvas && (
         <BackgroundComponent
@@ -741,10 +723,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    * 处理放大缩小
    * @param scale
    */
-  const handleScaleCanvas=(scale:number)=>{
-    canvas.render()
-    scrollCenter()
-  }
+  const handleScaleCanvas = (scale: number) => {
+    canvas.render();
+    scrollCenter();
+  };
 
   /**
    * 渲染画布右侧区域操作栏
@@ -789,21 +771,21 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     event.stopPropagation();
     if (event.clientY + 360 < document.body.clientHeight) {
       setContextmenu({
-        position: 'fixed',
-        zIndex: '10',
-        display: 'block',
-        left: event.clientX + 'px',
-        top: event.clientY + 'px',
-        bottom: '',
+        position: "fixed",
+        zIndex: "10",
+        display: "block",
+        left: event.clientX + "px",
+        top: event.clientY + "px",
+        bottom: "",
       });
     } else {
       setContextmenu({
-        position: 'fixed',
-        zIndex: '10',
-        display: 'block',
-        left: event.clientX + 'px',
-        top: '',
-        bottom: document.body.clientHeight - event.clientY + 'px',
+        position: "fixed",
+        zIndex: "10",
+        display: "block",
+        left: event.clientX + "px",
+        top: "",
+        bottom: document.body.clientHeight - event.clientY + "px",
       });
     }
   };
@@ -823,14 +805,15 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   );
   const divHeight = document.body.clientHeight-134;
   return (
-    <div id="editLayout" ref={layoutRef}>
-      {renderHeader}
-      <div className={styles.page}>
-        {/*<ResizePanel direction="e" style={{ width: 250 }}>*/}
-          <div className={styles.tool} style={{overflow:'hidden'}}>
+    <ConfigProvider prefixCls="antdv4">
+      <div id="editLayout" ref={layoutRef}>
+        {renderHeader}
+        <div className={styles.page}>
+          {/*<ResizePanel direction="e" style={{ width: 250 }}>*/}
+          <div className={styles.tool} style={{ overflow: "hidden" }}>
             <Tabs defaultActiveKey="1" centered>
               <TabPane tab="组件" key="1" style={{ margin: 0 }}>
-                <div style={{height:divHeight,overflow:"auto"}}>
+                <div style={{ height: divHeight, overflow: "auto" }}>
                   <SystemComponent onDrag={onDrag} Tools={Tools} />
                   <CustomComponent
                     ref={customCompRef}
@@ -847,72 +830,69 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
               </TabPane>
             </Tabs>
           </div>
-        {/*</ResizePanel>*/}
-        <div
-          className={styles.full}
-          id="full"
-          style={{ background: '#f8f9fa' }}
-        >
-          <div id="topology-canvas-wrapper">
-          <svg
-            className={styles.svg}
-            id="topology-canvas-svg"
-            ref={svgRef}
-            style={{
-              minWidth: canvasSizeInfo.minWidth,
-              minHeight: canvasSizeInfo.minHeight,
-            }}
-          ></svg>
-          {props.boardData && (
-            <p
-              className={styles.titleInfo}
-              style={{
-                left: canvasSizeInfo.left,
-                top: canvasSizeInfo.top,
-              }}
-            >
-              <Tooltip title={props.boardData.code}>
-                <span>No.{props.boardData.code}</span>
-              </Tooltip>
-              <span style={{ margin: '0 5px' }}>/</span>
-              <Tooltip title={props.boardData.name}>
-                <span>{props.boardData.name}</span>
-              </Tooltip>
-              <span style={{ margin: '0 5px' }}>/</span>
-              <Tooltip title={props.boardData.typeName}>
-                <span>{props.boardData.typeName}</span>
-              </Tooltip>
-              <span style={{ margin: '0 5px' }}>/</span>
-              <Tooltip title={props.boardData.remark}>
-                <span>{props.boardData.remark}</span>
-              </Tooltip>
-            </p>
-          )}
-          <div
-            className={styles.topology_canvas}
-            ref={canvasRef}
-            id="topology-canvas"
-            style={{
-              position: 'absolute',
-              borderWidth: 1,
-              overflow: 'hidden',
-              left: canvasSizeInfo.left,
-              top: canvasSizeInfo.top,
-              width: canvasSizeInfo.width,
-              height: canvasSizeInfo.height,
-              background: '#fff',
-              boxShadow: '0px 0px 2px 1px #d1d1d1',
-              border: '1px solid #f3f3f3',
-            }}
-            onContextMenu={handleContextMenu}
-          />
+          {/*</ResizePanel>*/}
+          <div className={styles.full} id="full" style={{ background: "#f8f9fa" }}>
+            <div id="topology-canvas-wrapper">
+              <svg
+                className={styles.svg}
+                id="topology-canvas-svg"
+                ref={svgRef}
+                style={{
+                  minWidth: canvasSizeInfo.minWidth,
+                  minHeight: canvasSizeInfo.minHeight,
+                }}
+              ></svg>
+              {props.boardData && (
+                <p
+                  className={styles.titleInfo}
+                  style={{
+                    left: canvasSizeInfo.left,
+                    top: canvasSizeInfo.top,
+                  }}
+                >
+                  <Tooltip title={props.boardData.code}>
+                    <span>No.{props.boardData.code}</span>
+                  </Tooltip>
+                  <span style={{ margin: "0 5px" }}>/</span>
+                  <Tooltip title={props.boardData.name}>
+                    <span>{props.boardData.name}</span>
+                  </Tooltip>
+                  <span style={{ margin: "0 5px" }}>/</span>
+                  <Tooltip title={props.boardData.typeName}>
+                    <span>{props.boardData.typeName}</span>
+                  </Tooltip>
+                  <span style={{ margin: "0 5px" }}>/</span>
+                  <Tooltip title={props.boardData.remark}>
+                    <span>{props.boardData.remark}</span>
+                  </Tooltip>
+                </p>
+              )}
+              <div
+                className={styles.topology_canvas}
+                ref={canvasRef}
+                id="topology-canvas"
+                style={{
+                  position: "absolute",
+                  borderWidth: 1,
+                  overflow: "hidden",
+                  left: canvasSizeInfo.left,
+                  top: canvasSizeInfo.top,
+                  width: canvasSizeInfo.width,
+                  height: canvasSizeInfo.height,
+                  background: "#fff",
+                  boxShadow: "0px 0px 2px 1px #d1d1d1",
+                  border: "1px solid #f3f3f3",
+                }}
+                onContextMenu={handleContextMenu}
+              />
+            </div>
+          </div>
+          <div className={styles.props} id="props">
+            {renderRightArea}
+          </div>
+          {renderContextMenu}
         </div>
-        </div>
-        <div className={styles.props} id="props">
-          {renderRightArea}
-        </div>
-        {renderContextMenu}
       </div>
-    </div>
+    </ConfigProvider>
   );
 });

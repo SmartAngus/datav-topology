@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { EditorLayout, Preview } from 'bici-datav-npm';
-import 'antd/dist/antd.css';
-import 'bici-datav-npm/dist/index.css';
 import axios from 'axios';
 import { Route, BrowserRouter } from 'react-router-dom';
 import { Modal } from 'antd';
