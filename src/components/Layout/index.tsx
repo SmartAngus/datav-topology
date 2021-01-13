@@ -2,7 +2,7 @@ import React, {CSSProperties, useCallback, useEffect, useImperativeHandle, useMe
 import {Lock, Options, s8, Topology} from '../../topology/core';
 import {echartsObjs, register as registerChart,} from '../../topology/chart-diagram';
 import {register as registerBiciComp} from '../../topology/bici-diagram';
-import {message, Modal, Tabs, Tooltip} from 'antd';
+import {message, Modal, Tabs, Tooltip, ConfigProvider} from 'antd';
 import {Tools} from '../config/config';
 import {useClickAway} from 'ahooks';
 import {replacer, reviver} from '../utils/serializing';
@@ -23,6 +23,7 @@ import * as _ from 'lodash';
 import moment from 'moment';
 import {getGaugeOption} from '../config/charts/gauge'
 
+import 'antd/dist/antd.less';
 
 const { confirm } = Modal;
 const { TabPane } = Tabs;
@@ -822,94 +823,96 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     </div>
   );
   return (
-    <div id="editLayout" ref={layoutRef}>
-      {renderHeader}
-      <div className={styles.page}>
-        {/*<ResizePanel direction="e" style={{ width: 250 }}>*/}
-          <div className={styles.tool}>
-            <Tabs defaultActiveKey="1" centered>
-              <TabPane tab="组件" key="1" style={{ margin: 0 }}>
-                <SystemComponent onDrag={onDrag} Tools={Tools} />
-                <CustomComponent
-                  ref={customCompRef}
-                  onDrag={onDrag}
-                  combineCom={props.uploadConfig.combineCom}
-                />
-              </TabPane>
-              <TabPane tab="图库" key="2" style={{ margin: 0 }}>
-                <PicComponent
-                  uploaConfig={props.uploadConfig}
-                  industrialLibrary={props.industrialLibrary}
-                />
-              </TabPane>
-            </Tabs>
-          </div>
-        {/*</ResizePanel>*/}
-        <div
-          className={styles.full}
-          id="full"
-          style={{ background: '#f8f9fa' }}
-        >
-          <div id="topology-canvas-wrapper">
-          <svg
-            className={styles.svg}
-            id="topology-canvas-svg"
-            ref={svgRef}
-            style={{
-              minWidth: canvasSizeInfo.minWidth,
-              minHeight: canvasSizeInfo.minHeight,
-            }}
-          ></svg>
-          {props.boardData && (
-            <p
-              className={styles.titleInfo}
+    <ConfigProvider prefixCls="antdv4">
+      <div id="editLayout" ref={layoutRef}>
+        {renderHeader}
+        <div className={styles.page}>
+          {/*<ResizePanel direction="e" style={{ width: 250 }}>*/}
+            <div className={styles.tool}>
+              <Tabs defaultActiveKey="1" centered>
+                <TabPane tab="组件" key="1" style={{ margin: 0 }}>
+                  <SystemComponent onDrag={onDrag} Tools={Tools} />
+                  <CustomComponent
+                    ref={customCompRef}
+                    onDrag={onDrag}
+                    combineCom={props.uploadConfig.combineCom}
+                  />
+                </TabPane>
+                <TabPane tab="图库" key="2" style={{ margin: 0 }}>
+                  <PicComponent
+                    uploaConfig={props.uploadConfig}
+                    industrialLibrary={props.industrialLibrary}
+                  />
+                </TabPane>
+              </Tabs>
+            </div>
+          {/*</ResizePanel>*/}
+          <div
+            className={styles.full}
+            id="full"
+            style={{ background: '#f8f9fa' }}
+          >
+            <div id="topology-canvas-wrapper">
+            <svg
+              className={styles.svg}
+              id="topology-canvas-svg"
+              ref={svgRef}
               style={{
+                minWidth: canvasSizeInfo.minWidth,
+                minHeight: canvasSizeInfo.minHeight,
+              }}
+            ></svg>
+            {props.boardData && (
+              <p
+                className={styles.titleInfo}
+                style={{
+                  left: canvasSizeInfo.left,
+                  top: canvasSizeInfo.top,
+                }}
+              >
+                <Tooltip title={props.boardData.code}>
+                  <span>No.{props.boardData.code}</span>
+                </Tooltip>
+                <span style={{ margin: '0 5px' }}>/</span>
+                <Tooltip title={props.boardData.name}>
+                  <span>{props.boardData.name}</span>
+                </Tooltip>
+                <span style={{ margin: '0 5px' }}>/</span>
+                <Tooltip title={props.boardData.typeName}>
+                  <span>{props.boardData.typeName}</span>
+                </Tooltip>
+                <span style={{ margin: '0 5px' }}>/</span>
+                <Tooltip title={props.boardData.remark}>
+                  <span>{props.boardData.remark}</span>
+                </Tooltip>
+              </p>
+            )}
+            <div
+              className={styles.topology_canvas}
+              ref={canvasRef}
+              id="topology-canvas"
+              style={{
+                position: 'absolute',
+                borderWidth: 1,
+                overflow: 'hidden',
                 left: canvasSizeInfo.left,
                 top: canvasSizeInfo.top,
+                width: canvasSizeInfo.width,
+                height: canvasSizeInfo.height,
+                background: '#fff',
+                boxShadow: '0px 0px 2px 1px #d1d1d1',
+                border: '1px solid #f3f3f3',
               }}
-            >
-              <Tooltip title={props.boardData.code}>
-                <span>No.{props.boardData.code}</span>
-              </Tooltip>
-              <span style={{ margin: '0 5px' }}>/</span>
-              <Tooltip title={props.boardData.name}>
-                <span>{props.boardData.name}</span>
-              </Tooltip>
-              <span style={{ margin: '0 5px' }}>/</span>
-              <Tooltip title={props.boardData.typeName}>
-                <span>{props.boardData.typeName}</span>
-              </Tooltip>
-              <span style={{ margin: '0 5px' }}>/</span>
-              <Tooltip title={props.boardData.remark}>
-                <span>{props.boardData.remark}</span>
-              </Tooltip>
-            </p>
-          )}
-          <div
-            className={styles.topology_canvas}
-            ref={canvasRef}
-            id="topology-canvas"
-            style={{
-              position: 'absolute',
-              borderWidth: 1,
-              overflow: 'hidden',
-              left: canvasSizeInfo.left,
-              top: canvasSizeInfo.top,
-              width: canvasSizeInfo.width,
-              height: canvasSizeInfo.height,
-              background: '#fff',
-              boxShadow: '0px 0px 2px 1px #d1d1d1',
-              border: '1px solid #f3f3f3',
-            }}
-            onContextMenu={handleContextMenu}
-          />
+              onContextMenu={handleContextMenu}
+            />
+          </div>
+          </div>
+          <div className={styles.props} id="props">
+            {renderRightArea}
+          </div>
+          {renderContextMenu}
         </div>
-        </div>
-        <div className={styles.props} id="props">
-          {renderRightArea}
-        </div>
-        {renderContextMenu}
       </div>
-    </div>
+    </ConfigProvider>
   );
 });

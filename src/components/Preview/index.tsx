@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { ConfigProvider } from 'antd';
 import { Node, Topology } from '../../topology/core';
 import { roundFun } from '../utils/cacl';
 import { formatTimer, getNodeType } from '../utils/Property2NodeProps';
@@ -13,6 +14,7 @@ import { replacer, reviver } from '../utils/serializing';
 import { register as registerBiciComp } from '../../topology/bici-diagram';
 import {pieOption} from "../config/charts/pie";
 import moment from "moment";
+import 'antd/dist/antd.less';
 import styles from './index.module.scss'
 let canvas;
 let x, y;
@@ -353,7 +355,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
   };
 
   return (
-    <React.Fragment>
+    <ConfigProvider prefixCls="antdv4">
       {/*<PageHeader*/}
       {/*  style={{*/}
       {/*    border: '1px solid rgb(235, 237, 240)'*/}
@@ -386,7 +388,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           backgroundImage: `url(${data?.bkImage})`,
         }}
       />
-    </React.Fragment>
+    </ConfigProvider>
   );
 };
 
