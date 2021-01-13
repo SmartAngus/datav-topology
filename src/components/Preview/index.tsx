@@ -35,6 +35,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
     const canvasOptions = {
       rotateCursor: '/rotate.cur',
       locked: 1,
+      disableTranslate:true
     };
     canvasRegister();
     canvas = new Topology('topology-canvas-preview', canvasOptions);

@@ -73,6 +73,7 @@ const IndustryList=(props:IndustryListProps)=>{
                                     display: 'block',
                                     whiteSpace: 'nowrap',
                                     textOverflow: 'ellipsis',
+                                    color:"#333"
                                 }}
                             >
                     {item.name}
