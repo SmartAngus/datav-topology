@@ -3,7 +3,6 @@ import { ConfigProvider } from 'antd';
 import { Node, Topology } from '../../topology/core';
 import { roundFun } from '../utils/cacl';
 import { formatTimer, getNodeType } from '../utils/Property2NodeProps';
-import { getMeasureOption2, getTimelineOption } from '../config/chartMeasure';
 import echarts from 'echarts/lib/echarts';
 
 import {
@@ -16,6 +15,8 @@ import {pieOption} from "../config/charts/pie";
 import moment from "moment";
 import 'antd/dist/antd.less';
 import styles from './index.module.scss'
+import {getTimeLineOption} from "../config/charts/timeline";
+import {defaultTimelineShowData} from "../data/defines";
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -142,8 +143,11 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       value:[moment().subtract(1, "seconds"),null]
     })
   }
+
   const updateComp = (pens: any, data: any) => {
     (pens || []).map((node: Node) => {
+      // 实时曲线第一根有数据的曲线标志
+      let flag=true;
       if (node.name == 'combine') {
         updateComp(node.children, data);
       } else if (node.name == 'echarts') {
@@ -165,17 +169,25 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
               // updateChartNode(node)
             }
             break;
-          case 'chartMeasure':
-            if (node.property.dataPointSelectedRows[0]?.id == r.id) {
-              const option = getMeasureOption2(node,undefined,r);
-              node.data.echarts.option = option;
-              updateChartNode(node);
-            }
-            break;
           case 'timeLine':
-            (node.property.dataPointSelectedRows || []).map((row) => {
+            node.property.dataPointSelectedRows.sort((a,b)=>{
+              return a.intervalTime-b.intervalTime
+            })
+            let selectedRows = node.property.dataPointSelectedRows;
+
+            const timesxAix=node.data.echarts.option.dataset.source[0];
+            (selectedRows || []).map((row,index) => {
               if (row.id == r.id) {
-                node.data.echarts.option = getTimelineOption(node, r);
+                if(index==0){
+                  timesxAix.push(moment(parseInt(r.time/1000+"")*1000).format("LTS"))
+                  if(timesxAix.length>defaultTimelineShowData){
+                    timesxAix.splice(1,1)
+                  }
+                  node.data.echarts.option = getTimeLineOption(node, null, r, timesxAix);
+                }else{
+                  node.data.echarts.option = getTimeLineOption(node, null, r);
+                }
+
               }
             });
             updateChartNode(node);
@@ -230,15 +242,20 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             }
             canvas.updateProps(false);
           }
+        }else if(node.name === 'biciMeasure'){
+          if (node.property.dataPointSelectedRows[0]?.id == r.id) {
+            node.property.value = r.value;
+            canvas.updateProps(false);
+          }
         } else if (node.name === 'biciCard') {
           if (node.property.dataPointParam.qtDataList[0].id == r.id) {
             const n = node.property.dataDot;
             const val = roundFun(parseFloat(r.value), n);
             node.children[0].text = val;
-            const bottom = node.property.limit.bottom ? parseInt(node.property.limit.bottom) : undefined;
-            const top = node.property.limit.bottom ? parseInt(node.property.limit.top) : undefined;
+            const bottom = node.property.limit.bottom ? parseFloat(node.property.limit.bottom) : undefined;
+            const top = node.property.limit.bottom ? parseFloat(node.property.limit.top) : undefined;
             const tempVal = parseFloat(val);
-            if (bottom && tempVal < bottom) {
+            if (bottom && tempVal < bottom && node.property.showLimit) {
               const showColor = node.property.bottomLimit.showBkColor
                 ? node.property.bottomLimit.bkColor
                 : node.property.normal.bkColor;
@@ -250,7 +267,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 parseInt(node.property.bottomLimit.fontSize),
                 showColor
               );
-            } else if (top && tempVal > top) {
+            } else if (top && tempVal > top && node.property.showLimit) {
               const showColor = node.property.bottomLimit.showBkColor
                 ? node.property.topLimit.bkColor
                 : node.property.normal.bkColor;

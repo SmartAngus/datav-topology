@@ -8,7 +8,10 @@ const { Panel } = Collapse;
 
 const Layout = ({ Tools, onDrag }) => {
   return (
-    <Collapse defaultActiveKey={['0']}>
+    <Collapse defaultActiveKey={['0']}
+              expandIconPosition="right"
+              ghost={false} bordered={false}
+    >
       {Tools.map((item, index) => (
         <Panel header={item.group} key={index}>
           <div className={styles.button}>

@@ -512,7 +512,8 @@ export class Node extends Pen {
     }
 
     const img = new Image();
-    img.crossOrigin = 'anonymous';
+    // 不加这行代码还可以，加了还不出现跨域的问题
+    // img.crossOrigin = 'anonymous';
     img.src = this.image;
     img.onload = () => {
       this.lastImage = this.image;

@@ -1,12 +1,11 @@
 {
   "name": "bici-datav-topology-npm",
-  "version": "0.0.13",
+  "version": "0.0.15",
   "description": "Made with create-react-library",
   "author": "smartangus",
   "license": "bici",
   "repository": "smartangus/bici-datav-npm",
   "main": "dist/index.js",
-  "module": "dist/index.modern.js",
   "source": "src/index.tsx",
   "engines": {
     "node": ">=10"
@@ -30,7 +29,7 @@
     "ahooks": "^2.9.1",
     "antd": "^4.8.2",
     "axios": "^0.21.0",
-    "bici-transformers": "^0.19.7",
+    "bici-transformers": "^0.19.8",
     "echarts": "^4.9.0",
     "file-saver": "^2.0.2",
     "html2canvas": "^1.0.0-rc.7",

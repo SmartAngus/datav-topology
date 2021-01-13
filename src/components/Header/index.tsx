@@ -31,6 +31,7 @@ const headTools = [
     icon: 'iconniantie',
     title: 'Ctrl+V',
   },
+    null,
   {
     key: 'undo',
     name: '撤销',
@@ -43,6 +44,7 @@ const headTools = [
     icon: 'iconhuifu',
     title: 'Ctrl+Y',
   },
+    null,
   {
     key: 'bottom',
     name: '置于底层',
@@ -67,6 +69,7 @@ const headTools = [
     icon: 'iconzhiyudingceng',
     title: 'Ctrl+Alt+]',
   },
+    null,
   {
     key: 'combo',
     name: '编组',
@@ -325,12 +328,13 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
           <CustomIcon type="icontuichu" />
           <span>退出</span>
         </a>
+          <span className={styles.toolSplit}></span>
         {/* <a className={styles.toolItem}>
         <CustomIcon type="icon-lianxian_icon" />
         <span>连线</span>
       </a> */}
-        {headTools.map((item) => (
-          <Tooltip
+        {headTools.map((item,index) => (
+            item? <Tooltip
             placement="bottom"
             title={item.title}
             key={item.key}
@@ -343,9 +347,9 @@ const Header: React.FC<HeaderProps> = React.forwardRef(
               <CustomIcon type={item.icon} style={{ width: 18, height: 18 }} />
               <span>{item.name}</span>
             </a>
-          </Tooltip>
+          </Tooltip>:<span className={styles.toolSplit}  key={index}></span>
         ))}
-
+        <span className={styles.toolSplit}></span>
         <a
           style={{
             display: 'inline-block',

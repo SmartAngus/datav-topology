@@ -1,9 +1,5 @@
-import {
-  getGaugeOption,
-  getMeasureOption2,
-  getTimelineOption,
-} from './chartMeasure';
-import {pieOption} from "./charts/pie";
+import {getTimeLineOption} from "./charts/timeline";
+import {getGaugeOption} from "./charts/gauge"
 export const Tools = [
   {
     group: '通用组件',
@@ -18,7 +14,7 @@ export const Tools = [
             height: 50,
           },
           font: {
-            fontSize: 14,
+            fontSize: 12,
             fontFamily: '"Microsoft YaHei"',
           },
           paddingLeft: 10,
@@ -42,7 +38,7 @@ export const Tools = [
             height: 100,
           },
           font: {
-            fontSize: 14,
+            fontSize: 12,
             fontFamily: '"Microsoft YaHei"',
           },
           name: 'circle',
@@ -59,10 +55,11 @@ export const Tools = [
             height: 30,
           },
           font: {
-            fontSize: 14,
+            fontSize: 12,
             fontFamily: '"Microsoft YaHei"',
           },
           name: 'text',
+          hideInput:false
         },
       },
       {
@@ -76,7 +73,7 @@ export const Tools = [
             height: 45,
           },
           font: {
-            fontSize: 14,
+            fontSize: 12,
             fontFamily: 'Arial',
           },
           name: 'biciTimer',
@@ -105,7 +102,7 @@ export const Tools = [
             height: 45,
           },
           font: {
-            fontSize: 14,
+            fontSize: 12,
             fontFamily: 'Arial',
           },
           name: 'biciVarer',
@@ -138,7 +135,7 @@ export const Tools = [
           font: {
             fontFamily: '"Microsoft YaHei"',
             color: '#fff',
-            fontSize: 14,
+            fontSize: 12,
             fontWeight: 400,
           },
           fillStyle: '#6236FF',
@@ -189,7 +186,7 @@ export const Tools = [
               font: {
                 fontFamily: 'Arial',
                 color: '#fff',
-                fontSize: 14,
+                fontSize: 12,
                 fontWight: 400,
                 textAlign: 'center',
                 textBaseline: 'middle',
@@ -484,138 +481,6 @@ export const Tools = [
     group: '图表控件',
     children: [
       // {
-      //   elementRendered: false,
-      //   name: '折线图', // 用name来区分不同的组件
-      //   icon: 'icon-line-chart',
-      //   data: {
-      //     text: '',
-      //     rect: {
-      //       width: 300,
-      //       height: 200,
-      //     },
-      //     name: 'echarts',
-      //     data: {
-      //       echarts: {
-      //         option: {
-      //           title: {
-      //             text: '曲线图',
-      //           },
-      //           legend: {},
-      //           tooltip: {},
-      //           dataset: {
-      //             // 用 dimensions 指定了维度的顺序。直角坐标系中，
-      //             // 默认把第一个维度映射到 X 轴上，第二个维度映射到 Y 轴上。
-      //             // 如果不指定 dimensions，也可以通过指定 series.encode
-      //             // 完成映射，参见后文。
-      //             dimensions: ['product', '2015', '2016', '2017'],
-      //             source: [
-      //               {
-      //                 product: 'Matcha Latte',
-      //                 '2015': 43.3,
-      //                 '2016': 85.8,
-      //                 '2017': 93.7,
-      //               },
-      //               {
-      //                 product: 'Milk Tea',
-      //                 '2015': 83.1,
-      //                 '2016': 73.4,
-      //                 '2017': 55.1,
-      //               },
-      //               {
-      //                 product: 'Cheese Cocoa',
-      //                 '2015': 86.4,
-      //                 '2016': 65.2,
-      //                 '2017': 82.5,
-      //               },
-      //               {
-      //                 product: 'Walnut Brownie',
-      //                 '2015': 72.4,
-      //                 '2016': 53.9,
-      //                 '2017': 39.1,
-      //               },
-      //             ],
-      //           },
-      //           xAxis: { type: 'category' },
-      //           yAxis: {},
-      //           series: [{ type: 'line' }, { type: 'line' }, { type: 'line' }],
-      //         },
-      //       },
-      //       property: {
-      //         echartsType: 'line',
-      //         dataMethod: 'aa',
-      //         dataDot: 1,
-      //         dataPointParam: {
-      //           qtDataList: [
-      //             {
-      //               id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
-      //               type: 1,
-      //             },
-      //           ],
-      //           subscribe: true,
-      //         },
-      //       },
-      //     },
-      //   },
-      // },
-      {
-        elementRendered: false,
-        name: '实时曲线图', // 用name来区分不同的组件
-        icon: 'iconquxiantu',
-        data: {
-          text: '',
-          hideInput: true,
-          rect: {
-            width: 300,
-            height: 200,
-          },
-          name: 'echarts',
-          strokeStyle: 'rgba(0,0,0,0)',
-          hideRotateCP: true,
-          data: {
-            echarts: {
-              option: getTimelineOption(),
-            },
-            // property: {
-            //   echartsType: 'timeLine',
-            //   dataMethod: 'point',
-            //   dataDot: 1,
-            //   dataPointParam: {
-            //     qtDataList: [
-            //       {
-            //         id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
-            //         type: 1,
-            //       },
-            //     ],
-            //     subscribe: true,
-            //   },
-            // },
-          },
-          property: {
-            echartsType: 'timeLine',
-            dataMethod: 'point',
-            dataDot: 1,
-            dataPointSelectedRows: [],
-            dataPointParam: {
-              qtDataList: [],
-              subscribe: true,
-            },
-            smooth: true,
-            dataTopSource: 'custom', // dataPoint数据点或者custom=自定义
-            dataTopChecked: false,
-            dataTop: 100,
-            dataBottom: 0,
-            chartTitleChecked: false,
-            chartTitle: '实时曲线',
-            chartTitleColor: '#c0c0c0',
-            chartBackgroundColor: '#1b2735',
-            chartBackgroundChecked:false,
-            lineReferenceChecked: false, // splitLine
-            lineReferenceColor: '#ccc',
-            lineColors: [],
-          },
-        },
-      },
-      // {
       //   name: '柱状图',
       //   icon: 'icon-bar-chart',
       //   data: {
@@ -836,27 +701,27 @@ export const Tools = [
         },
       },
       {
-        elementRendered: false,
         name: '计量器',
         icon: 'iconjiliangqi',
         data: {
           text: '',
           rect: {
-            width: 100,
-            height: 250,
+            width: 30,
+            height: 150,
           },
-          name: 'echarts',
-          strokeStyle: 'rgba(0,0,0,0)',
-          elementRendered: false,
-          hideRotateCP: true,
-          hideInput: true,
-          data: {
-            echarts: {
-              option: getMeasureOption2(),
-            },
+          font: {
+            fontSize: 12,
+            fontFamily: '"Microsoft YaHei"',
           },
+          paddingLeft: 10,
+          paddingRight: 10,
+          paddingTop: 10,
+          paddingBottom: 10,
+          borderRadius: 0,
+          fillStyle: '#F0F0F0',
+          name: 'biciMeasure',
+          onlySizeX:true,
           property: {
-            echartsType: 'chartMeasure',
             dataMethod: 'point',
             dataPointSelectedRows: [],
             dataDot: 1,
@@ -898,7 +763,57 @@ export const Tools = [
             ],
             dataMax: 100,
             dataMin: 0,
+            marks:10,
+            markChecked:true,
+            value:0,
+            chartUnitChecked:false,
+            chartUnit:'T',
           },
+        },
+      },
+      {
+        elementRendered: false,
+        name: '实时曲线',
+        icon: 'iconquxiantu',
+        data: {
+          text: '',
+          rect: {
+            width: 500,
+            height: 350,
+          },
+          name: 'echarts',
+          strokeStyle: 'rgba(0,0,0,0)',
+          elementRendered: false,
+          hideRotateCP: true,
+          hideInput: true,
+          data: {
+            echarts: {
+              option: getTimeLineOption(),
+            },
+          },
+          property: {
+            echartsType: 'timeLine',
+            dataMethod: 'point',
+            dataDot: 1,
+            dataPointSelectedRows: [],
+            dataPointParam: {
+              qtDataList: [],
+              subscribe: true,
+            },
+            smooth: true,
+            dataTopSource: 'custom', // dataPoint数据点或者custom=自定义
+            dataTopChecked: false,
+            dataTop: 100,
+            dataBottom: 0,
+            chartTitleChecked: false,
+            chartTitle: '实时曲线',
+            chartTitleColor: '#c0c0c0',
+            chartBackgroundColor: '#1b2735',
+            chartBackgroundChecked:false,
+            lineReferenceChecked: false, // splitLine
+            lineReferenceColor: '#ccc',
+            lineColors: [],
+          }
         },
       },
       // {

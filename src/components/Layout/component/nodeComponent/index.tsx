@@ -39,12 +39,11 @@ import DataBindModal from '../../../FilterDataPoint';
 import styles from './index.module.scss';
 import { getNodeType } from '../../../utils/Property2NodeProps';
 import * as _ from 'lodash';
-import { getTimelineOption } from '../../../config/chartMeasure';
 import { echartsObjs } from '../../../../topology/chart-diagram/src/echarts';
 import { reviver } from '../../../utils/serializing';
 import { eraseOverlapIntervals } from '../../../utils/cacl';
-import { colorList } from '../../../data/defines';
-import { backgroundColor } from 'html2canvas/dist/types/css/property-descriptors/background-color';
+import { defaultLineColors } from '../../../data/defines';
+import {getTimeLineOption} from "../../../config/charts/timeline";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -198,10 +197,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       const btnSize =
         width / 2 <= 15 ? 'small' : width / 2 <= 20 ? 'middle' : 'large';
       setPilotBtnSize(btnSize);
-    } else if (data.node.name == 'echarts') {
-      let lineRangedefaultColor = colorList.map((color) => {
+    } else if (data.node.name == 'echarts'||data.node.name == 'biciMeasure') {
+      let lineRangedefaultColor = defaultLineColors.map((color) => {
         return {
           lineGraphRangeColor: color,
+          lineGraphRangeCheck:true
+
         };
       });
 
@@ -214,14 +215,16 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           lineRangedefaultColor[index] = nodeLineRangeColor[index];
         }
       });
-      lineRangedefaultColor = _.slice(
-        lineRangedefaultColor,
-        0,
-        property.dataPointSelectedRows.length
-      );
+      // lineRangedefaultColor = _.slice(
+      //   lineRangedefaultColor,
+      //   0,
+      //   property.dataPointSelectedRows.length
+      // );
       propertyForm.setFieldsValue({
         dataMax: property.dataMax,
         dataMin: property.dataMin,
+        marks: property.marks,
+        markChecked: property.markChecked,
         'checked-0': property.dataColors && property.dataColors[0]?.checked,
         'color-0': property.dataColors && property.dataColors[0]?.color,
         'top-0': property.dataColors && property.dataColors[0]?.top,
@@ -332,7 +335,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
         // 最多可绑定十个数据点
         selectedRows = selectedRows.slice(0, 10);
         if (data.node.property.dataPointSelectedRows.length < 10) {
-          const tmp = _.cloneDeep(data.node.property.dataPointSelectedRows);
           data.node.property.dataPointSelectedRows = selectedRows;
           selectedRows.map((row, index) => {
             const q = {
@@ -340,9 +342,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               type: selectedRows[index].dataType || selectedRows[index].type,
             };
             data.node.property.dataPointParam.qtDataList[index] = q;
-            // if(index>(tmp.length-1)){
-            //   (addLineColorBtnRef as any)?.current.click()
-            // }
           });
           setDataPointSelectedRows(selectedRows);
           updateTimelineOption();
@@ -408,7 +407,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
           const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
           setDataPointSelectedRows(newRows);
           updateTimelineOption();
-          //(removeLineColorBtnRef as any).current.click();
         } else {
           data.node.property.dataPointParam.qtDataList = [];
           data.node.property.dataPointSelectedRows = [];
@@ -432,17 +430,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       });
   };
   const updateTimelineOption = () => {
-    data.node.data.echarts.option = getTimelineOption(
+    data.node.elementRendered = false;
+    const newOption = getTimeLineOption(
       data.node,
       undefined,
       undefined
     );
+    data.node.data.echarts.option=newOption;
+
     // 更新图表数据
     echartsObjs[data.node.id].chart.setOption(
-      JSON.parse(JSON.stringify(data.node.data.echarts.option), reviver)
+      JSON.parse(JSON.stringify(newOption), reviver),true
     );
     echartsObjs[data.node.id].chart.resize();
-    data.node.elementRendered = true;
     canvas.updateProps(true, [data.node]);
   };
   let disableSource = ['react'];
@@ -1371,7 +1371,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     return (
       <Panel header="样式" key="style">
         <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-          {property?.echartsType === 'chartMeasure' && (
+          {data?.node.name === 'biciMeasure' && (
+              <React.Fragment>
             <Row>
               <Col span={10}>
                 <Form.Item
@@ -1390,6 +1391,25 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                 </Form.Item>
               </Col>
             </Row>
+            <Row>
+            <Col span={10}>
+            <Form.Item
+            label="刻度"
+            name="markChecked"
+            labelCol={{ span: 12 }}
+            labelAlign="left"
+            valuePropName="checked"
+            >
+            <Checkbox />
+            </Form.Item>
+            </Col>
+            <Col span={14}>
+            <Form.Item name="marks">
+              <InputNumber placeholder="刻度个数" min={0} max={100}></InputNumber>
+            </Form.Item>
+            </Col>
+            </Row>
+              </React.Fragment>
           )}
           <Row>
             <Col>
@@ -1594,7 +1614,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
                   <Form.Item name="dataBottom">
                     <InputNumber
                       style={{ width: 85 }}
-                      min={0}
                       placeholder="下限"
                       readOnly={!showSelectDataPoint}
                     />
@@ -1702,58 +1721,64 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               </Col>
             </Row>
             <Row>
-              <Form.Item label="曲线颜色"></Form.Item>
+              <Col span={8}>
+                <Form.Item label="曲线颜色"></Form.Item>
+              </Col>
+              <Col span={16}>
+                <Form.List name="lineGraphRange">
+                  {(fields, { add, remove }) => (
+                      <Fragment>
+                        {fields.map((field) => (
+                            <Space
+                                key={field.key}
+                                style={{ display: 'flex', marginBottom: 8 }}
+                                align="center"
+                                size={20}
+                            >
+                              <Form.Item
+                                  {...field}
+                                  name={[field.name, 'lineGraphRangeCheck']}
+                                  fieldKey={[field.fieldKey, 'lineGraphRangeCheck']}
+                                  valuePropName="checked"
+                                  style={{marginBottom:0}}
+                              >
+                                <Checkbox />
+                              </Form.Item>
+                              <Form.Item
+                                  {...field}
+                                  name={[field.name, 'lineGraphRangeColor']}
+                                  fieldKey={[field.fieldKey, 'lineGraphRangeColor']}
+                                  style={{marginBottom:0}}
+                              >
+                                <ColorPicker />
+                              </Form.Item>
+                              <Form.Item style={{ display: 'none' }}>
+                                <MinusCircleOutlined
+                                    ref={removeLineColorBtnRef}
+                                    onClick={() => remove(field.name)}
+                                />
+                              </Form.Item>
+                            </Space>
+                        ))}
+                        {fields.length < 10 ? (
+                            <Form.Item style={{ display: 'none' }}>
+                              <Button
+                                  type="dashed"
+                                  ref={addLineColorBtnRef}
+                                  onClick={() => add()}
+                                  block
+                                  icon={<PlusOutlined />}
+                              >
+                                添加
+                              </Button>
+                            </Form.Item>
+                        ) : null}
+                      </Fragment>
+                  )}
+                </Form.List>
+              </Col>
             </Row>
-            <Form.List name="lineGraphRange">
-              {(fields, { add, remove }) => (
-                <Fragment>
-                  {fields.map((field) => (
-                    <Space
-                      key={field.key}
-                      style={{ display: 'flex', marginBottom: 8 }}
-                      align="center"
-                      size={20}
-                    >
-                      <Form.Item
-                        {...field}
-                        name={[field.name, 'lineGraphRangeCheck']}
-                        fieldKey={[field.fieldKey, 'lineGraphRangeCheck']}
-                        valuePropName="checked"
-                        style={{ display: 'none' }}
-                      >
-                        <Checkbox />
-                      </Form.Item>
-                      <Form.Item
-                        {...field}
-                        name={[field.name, 'lineGraphRangeColor']}
-                        fieldKey={[field.fieldKey, 'lineGraphRangeColor']}
-                      >
-                        <ColorPicker />
-                      </Form.Item>
-                      <Form.Item style={{ display: 'none' }}>
-                        <MinusCircleOutlined
-                          ref={removeLineColorBtnRef}
-                          onClick={() => remove(field.name)}
-                        />
-                      </Form.Item>
-                    </Space>
-                  ))}
-                  {fields.length < 10 ? (
-                    <Form.Item style={{ display: 'none' }}>
-                      <Button
-                        type="dashed"
-                        ref={addLineColorBtnRef}
-                        onClick={() => add()}
-                        block
-                        icon={<PlusOutlined />}
-                      >
-                        添加
-                      </Button>
-                    </Form.Item>
-                  ) : null}
-                </Fragment>
-              )}
-            </Form.List>
+
           </Form>
         </Panel>
       </Fragment>
@@ -1766,7 +1791,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       {!data.multi && (
         <Tabs defaultActiveKey="1" centered>
           <TabPane tab="外观" key="1" style={{ margin: 0 }}>
-            <Collapse defaultActiveKey={['pos', 'lineInfo', 'lineStyle']}>
+            <Collapse defaultActiveKey={['pos', 'lineInfo', 'lineStyle']}
+                      expandIconPosition="right"
+                      ghost={false} bordered={true}>
               {renderPositionForm}
               {fontStyleNodeList.includes(name) && renderFontForm}
               {fillStyleNodeList.includes(name) && renderFillStyle}
@@ -1774,20 +1801,24 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
               {name === 'biciPilot' && renderLight}
               {name === 'biciTimer' && renderBiciTimerDataForm}
               {name === 'biciCard' && renderDataCard}
-              {property?.echartsType === 'chartMeasure' && renderMeter}
+              {data?.node.name === 'biciMeasure' && renderMeter}
               {property?.echartsType === 'timeLine' && renderLineGraph}
               {property?.echartsType === 'gauge' && renderGauge}
             </Collapse>
           </TabPane>
           <TabPane tab="数据" key="2" style={{ margin: 0 }}>
-            <Collapse defaultActiveKey={['2']}>
+            <Collapse defaultActiveKey={['2']}
+                      expandIconPosition="right"
+                      ghost={false} bordered={true}>
               {/*<Panel header="本身数据" key="1">*/}
               {/*  {renderDataForm}*/}
               {/*</Panel>*/}
               {(data.node.name == 'biciVarer' ||
                 data.node.name == 'echarts' ||
                 data.node.name == 'biciCard' ||
-                data.node.name == 'biciPilot') && (
+                data.node.name == 'biciPilot'||
+                data.node.name == 'biciMeasure'
+              ) && (
                 <Panel header="自定义数据" key="2">
                   {renderExtraDataForm}
                 </Panel>

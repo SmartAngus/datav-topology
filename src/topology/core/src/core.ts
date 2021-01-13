@@ -1295,32 +1295,30 @@ export class Topology {
     private ondblclick = (e: MouseEvent) => {
         if (this.moveIn.hoverNode) {
             this.dispatch('dblclick', this.moveIn.hoverNode);
+            // const isHoverLineText =  this.moveIn.hoverNode
+            //     .getTextRect()
+            //     .hit(
+            //         new Point(
+            //             e.x - window.scrollX - (this.canvasPos.left || this.canvasPos.x),
+            //             e.y - window.scrollY - (this.canvasPos.top || this.canvasPos.y)
+            //         )
+            //     );
+            const isHoverLineText = this.moveIn.hoverNode.getTextRect().hit(new Point(e.offsetX, e.offsetY));
 
-            if (
-                this.moveIn.hoverNode
-                    .getTextRect()
-                    .hit(
-                        new Point(
-                            e.x - window.scrollX - (this.canvasPos.left || this.canvasPos.x),
-                            e.y - window.scrollY - (this.canvasPos.top || this.canvasPos.y)
-                        )
-                    )
-            ) {
+            if (isHoverLineText) {
                 this.showInput(this.moveIn.hoverNode);
             }
 
             this.moveIn.hoverNode.dblclick();
         } else if (this.moveIn.hoverLine) {
+            // const isHoverLineText = this.moveIn.hoverLine
+            //     .getTextRect()
+            //     .hit(
+            //         new Point(e.x - (this.canvasPos.x || this.canvasPos.left), e.y - (this.canvasPos.y || this.canvasPos.top))
+            //     );
+            const isHoverLineText = this.moveIn.hoverLine.getTextRect().hit(new Point(e.offsetX, e.offsetY));
             this.dispatch('dblclick', this.moveIn.hoverLine);
-
-            if (
-                !this.moveIn.hoverLine.text ||
-                this.moveIn.hoverLine
-                    .getTextRect()
-                    .hit(
-                        new Point(e.x - (this.canvasPos.x || this.canvasPos.left), e.y - (this.canvasPos.y || this.canvasPos.top))
-                    )
-            ) {
+            if (!this.moveIn.hoverLine.text || isHoverLineText) {
                 this.showInput(this.moveIn.hoverLine);
             }
 
@@ -1402,6 +1400,36 @@ export class Topology {
                     this.redo();
                 } else {
                     this.undo();
+                }
+                break;
+            case 'g':
+            case 'G':
+                if (key.ctrlKey) {
+                    this.combine(this.activeLayer.pens);
+                    key.returnValue = false;
+                }
+                break;
+            case 'u':
+            case 'U':
+                if (key.ctrlKey) {
+                    this.activeLayer.pens
+                        .filter((pen) => pen.name === 'combine')
+                        .forEach((pen) => this.uncombine(pen));
+                    key.returnValue = false;
+                }
+                break;
+            case '[':
+                if (key.ctrlKey && key.altKey) {
+                    this.activeLayer.pens.forEach((pen) => this.bottom(pen));
+                } else if (key.ctrlKey) {
+                    this.activeLayer.pens.forEach((pen) => this.down(pen));
+                }
+                break;
+            case ']':
+                if (key.ctrlKey && key.altKey) {
+                    this.activeLayer.pens.forEach((pen) => this.top(pen));
+                } else if (key.ctrlKey) {
+                    this.activeLayer.pens.forEach((pen) => this.up(pen));
                 }
                 break;
         }
@@ -2116,7 +2144,6 @@ export class Topology {
         if (!this.clipboard || this.data.locked) {
             return;
         }
-
         this.hoverLayer.node = null;
         this.hoverLayer.line = null;
 
@@ -2171,6 +2198,8 @@ export class Topology {
     newId(node: any, idMaps: any) {
         const old = node.id;
         node.id = s8();
+        // 解决图表组件复制粘贴只显示一个问题
+        node.elementId=null;
         idMaps[old] = node.id;
         if (node.children) {
             for (const item of node.children) {
