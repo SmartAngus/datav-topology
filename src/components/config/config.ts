@@ -5,7 +5,7 @@ export const Tools = [
     group: '通用组件',
     children: [
       {
-        name: '矩形',
+        name: '矩形126',
         icon: 'iconjuxing',
         data: {
           text: '',

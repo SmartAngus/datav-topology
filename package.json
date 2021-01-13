@@ -11,7 +11,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --watch",
     "_build": "microbundle-crl --no-compress --format modern,cjs",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "prepare": "run-s build",
