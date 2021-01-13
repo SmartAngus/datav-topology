@@ -246,6 +246,7 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
                           display: 'block',
                           whiteSpace: 'nowrap',
                           textOverflow: 'ellipsis',
+                          color:"#333"
                         }}
                     >
                     {item.name}

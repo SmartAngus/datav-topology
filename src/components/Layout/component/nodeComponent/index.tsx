@@ -1785,31 +1785,35 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     );
   }, [property, data?.node, showSelectDataPoint, refreshProperty]);
 
+  const divHeight = document.body.clientHeight-134;
+
   return (
-    <div className={styles.rightArea}>
+    <div className={styles.rightArea}  style={{overflow:'hidden'}}>
       {renderAlign}
       {!data.multi && (
         <Tabs defaultActiveKey="1" centered>
           <TabPane tab="外观" key="1" style={{ margin: 0 }}>
-            <Collapse defaultActiveKey={['pos', 'lineInfo', 'lineStyle']}
-                      expandIconPosition="right"
-                      ghost={false} bordered={true}>
-              {renderPositionForm}
-              {fontStyleNodeList.includes(name) && renderFontForm}
-              {fillStyleNodeList.includes(name) && renderFillStyle}
-              {boardStyleNodeList.includes(name) && renderBorderStyle}
-              {name === 'biciPilot' && renderLight}
-              {name === 'biciTimer' && renderBiciTimerDataForm}
-              {name === 'biciCard' && renderDataCard}
-              {data?.node.name === 'biciMeasure' && renderMeter}
-              {property?.echartsType === 'timeLine' && renderLineGraph}
-              {property?.echartsType === 'gauge' && renderGauge}
-            </Collapse>
+            <div style={{height:divHeight,overflow:"auto"}}>
+              <Collapse defaultActiveKey={['pos', 'lineInfo', 'lineStyle']}
+                        expandIconPosition="right"
+                        ghost={false} bordered={false}>
+                {renderPositionForm}
+                {fontStyleNodeList.includes(name) && renderFontForm}
+                {fillStyleNodeList.includes(name) && renderFillStyle}
+                {boardStyleNodeList.includes(name) && renderBorderStyle}
+                {name === 'biciPilot' && renderLight}
+                {name === 'biciTimer' && renderBiciTimerDataForm}
+                {name === 'biciCard' && renderDataCard}
+                {data?.node.name === 'biciMeasure' && renderMeter}
+                {property?.echartsType === 'timeLine' && renderLineGraph}
+                {property?.echartsType === 'gauge' && renderGauge}
+              </Collapse>
+            </div>
           </TabPane>
           <TabPane tab="数据" key="2" style={{ margin: 0 }}>
             <Collapse defaultActiveKey={['2']}
                       expandIconPosition="right"
-                      ghost={false} bordered={true}>
+                      ghost={false} bordered={false}>
               {/*<Panel header="本身数据" key="1">*/}
               {/*  {renderDataForm}*/}
               {/*</Panel>*/}

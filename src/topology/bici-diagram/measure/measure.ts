@@ -8,6 +8,7 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
 
 // Wall
   ctx.fillRect(node.rect.x, node.rect.y-2, node.rect.width, node.rect.height+4);
+  // radiusRect(ctx,node.rect.x, node.rect.y-2, node.rect.width, node.rect.height+4,4)
   ctx.closePath();
 
   const scale=node.property.marks||10
@@ -24,7 +25,7 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
   ctx.beginPath();
   ctx.fillStyle = "#1890ff";
   let vh=node.rect.height*(value-dataMin)/(dataMax-dataMin)
-  ctx.fillRect(node.rect.x+8, node.rect.y+node.rect.height-vh, node.rect.width-16, vh+2);
+  ctx.fillRect(node.rect.x+6, node.rect.y+node.rect.height-vh, node.rect.width-12, vh+2);
   ctx.closePath();
   ctx.stroke();
   //-----
@@ -32,6 +33,7 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
   ctx.fillStyle = "#999999";
   //  画直线，也就是刻度
   ctx.font = '12px serif';
+  ctx.lineWidth = 1;
   if(node.property.markChecked){
     for(let i=scale;i>=0;i--){
       ctx.beginPath();
@@ -97,4 +99,14 @@ function isNotNaN(value) {
   const r = typeof value === 'number' && !isNaN(value);
   return r;
 }
+const radiusRect  = (ctx,left, top, width, height, r) => {
+    const pi = Math.PI;
+    ctx.beginPath();
+    ctx.arc(left + r, top + r, r, - pi, -pi / 2);
+    ctx.arc(left + width - r, top + r, r, -pi / 2, 0);
+    ctx.arc(left + width - r, top + height - r, r, 0, pi / 2);
+    ctx.arc(left + r, top + height - r, r, pi / 2, pi);
+    ctx.closePath();
+}
+
 
