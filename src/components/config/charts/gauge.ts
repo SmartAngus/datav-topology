@@ -1,3 +1,7 @@
+function isNotNaN(value) {
+    const r = typeof value === 'number' && !isNaN(value);
+    return r;
+}
 /***
  * 仪表盘
  * @param opt
@@ -20,11 +24,11 @@ export function getGaugeOption(
     }
     let min = 0;
     if(opt){
-        min=opt.min
+        min=isNotNaN(opt.min)?opt.min:0
     }
     let max = 100;
     if(opt){
-        max=opt.max
+        max=isNotNaN(opt.max)?opt.max:0
     }
     const lineColors = opt?.lineColors || [
         //数组第一个属性是颜色所占line百分比

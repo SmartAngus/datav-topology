@@ -11,6 +11,7 @@ import {
 } from 'antd';
 import './index.module.scss';
 import { FormProps } from 'antd/lib/form/Form';
+import ColorPicker from "../../../common/ColorPicker/ColorPicker";
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -51,7 +52,7 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
         <Row>
           <Col span={24}>
             <Form.Item name="strokeStyle" label="线条颜色">
-              <Input type="color" />
+              <ColorPicker />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -75,7 +76,7 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
           </Col>
           <Col span={24}>
             <Form.Item name="lineWidth" label="线条宽度">
-              <InputNumber style={{ width: '100%' }} min={0} />
+              <InputNumber style={{ width: '95%' }} min={0} />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -117,15 +118,12 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
 
   return (
     <div className="rightArea">
-      <Tabs defaultActiveKey="1" centered>
-        <TabPane tab="外观" key="1" style={{ margin: 0 }}>
-          <Collapse defaultActiveKey={['1']}>
-            <Panel header="样式" key="1">
-              {renderForm}
-            </Panel>
-          </Collapse>
-        </TabPane>
-      </Tabs>
+        <Collapse defaultActiveKey={['1']} expandIconPosition="right"
+                  ghost={false} bordered={false}>
+          <Panel header="样式" key="1">
+            {renderForm}
+          </Panel>
+        </Collapse>
     </div>
   );
 };

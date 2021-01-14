@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 import { EditorLayout, Preview } from 'bici-datav-npm';
 import axios from 'axios';
@@ -8,9 +8,12 @@ import preBgImg1 from './bg01.jpg';
 import preBgImg2 from './bg02.jpg';
 import preBgImg3 from './bg03.jpg';
 import preBgImg4 from './bg04.svg';
+import 'antd/dist/antd.css'
+import DataBindModal from "./FilterDataPoint";
+import {industry_List} from "./common/config";
 
 const { confirm } = Modal;
-const token = '6qrVOMSHLfjZ8WyDhxVGi9';
+const token = '5qj7Tn2PEionvLmR6oKJnI';
 
 const testId = 'e2e697e719194b188c1bfe5b0dcb0604';
 
@@ -21,6 +24,17 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
   const history = props.history;
   const [editorData, setEditorData] = useState(undefined);
   const [extraVisible, setExtraVisible] = useState(false);
+
+  const [dataPointVisible,setDataPointVisible]=useState(false)
+  const [node,setNode]=useState(null)
+  const [disableSource,setDisableSource]=useState([])
+  const [selectedRowKeys,setSelectedRowKeys]=useState([])
+  const [dataPointPropsMap,setDataPointPropsMap]=useState({
+    id:"id",
+    type:"dataType",
+    dataName:"dataName",
+    intervalTime:"intervalTime"
+  })
   const preInstallBgImages = [
     { key: 1, img: preBgImg1 },
     { key: 2, img: preBgImg2 },
@@ -119,7 +133,8 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       token: token,
       list:{
         url:"/applications/custom/component/industryList"
-      }
+      },
+      projectIndustryCats:industry_List
     }
   };
 
@@ -308,9 +323,70 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
       },
     });
   }
+
+/****添加数据点*******/
+  const addDataPoint=()=>{
+    setDataPointVisible(!dataPointVisible)
+  }
+  const onDataPointBind=(selectedRowKeys, selectedRows)=>{
+    // @ts-ignore
+    editorRef?.current.handleDataPointBind(selectedRowKeys, selectedRows);
+  }
+  const handleTabChange=(activeKey)=>{
+    if(activeKey=="dataPoint"){
+      setDataPointPropsMap({
+        id:"id",
+        type:"dataType",
+        dataName:"dataName",
+        intervalTime:"intervalTime"
+      })
+    }else if(activeKey=="complex"){
+      setDataPointPropsMap({
+        id:"id",
+        type:"type",
+        dataName:"dataName",
+        intervalTime:"intervalTime"
+      })
+    }else if(activeKey=="react"){
+      setDataPointPropsMap({
+        id:"id",
+        type:"type",
+        dataName:"source",
+        intervalTime:"period"
+      })
+    }
+  }
+
+
+  const renderDataPointModal = useCallback(() => {
+    return (
+        <DataBindModal
+            visible={true}
+            disableSource={disableSource}
+            selectedRows={node?.property?.dataPointSelectedRows}
+            onCancel={addDataPoint}
+            onGetSelectRow={onDataPointBind}
+            selectedRowKeys={selectedRowKeys}
+            node={node}
+            mode={
+              node.property.echartsType == 'timeLine' ? 'checkbox' : 'radio'
+            }
+            onTabChange={handleTabChange}
+        ></DataBindModal>
+    );
+  }, [dataPointVisible]);
+  // 点击添加数据点按钮的处理方法
+  const handleAddDataPoint=(node:any,disableSource:string[],selectedRowKeys:string[])=>{
+    setNode(node);
+    setDisableSource(disableSource)
+    setSelectedRowKeys(selectedRowKeys)
+    setDataPointVisible(true)
+  }
+  /****添加数据点*******/
   return (
     <div>
       <ExtraModel />
+      {dataPointVisible && renderDataPointModal()}
       <EditorLayout
         history={history}
         ref={editorRef}
@@ -326,7 +402,9 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
         websocketConf={websocketConf}
         apiURL={apiURL}
         token={token}
-        // onPreview={handlePreview}
+        onAddDataPoint={handleAddDataPoint}
+        dataPointPropsMap={dataPointPropsMap}
+          // onPreview={handlePreview}
       />
     </div>
   );

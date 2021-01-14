@@ -284,7 +284,7 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
           </Row>
         </Panel>
 
-        {industry_List.map((item,index)=>{
+        {(uploaConfig?.industry?.projectIndustryCats||industry_List).map((item,index)=>{
           return <Panel key={index} header={item[1]}>
             <IndustryList uploaConfig={uploaConfig} mappingType={item[0]}></IndustryList>
           </Panel>

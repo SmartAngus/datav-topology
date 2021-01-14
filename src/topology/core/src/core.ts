@@ -706,6 +706,7 @@ export class Topology {
                         }
                         if(hasChart){// 如果是图表组件，解组
                             for(const child of item.children){
+                                child.TID=this.id;
                                 this.data.pens.push(new Node(child));
                             }
                         }else{

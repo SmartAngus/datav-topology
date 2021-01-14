@@ -355,6 +355,16 @@ export class DataVEditorProps{
   history?: any;
   key?:number;
   ref?:any;
+  // 点击添加数据点的按钮
+  onAddDataPoint?:(node:Node,disableSource:string[],selectedRowKeys:string[])=>void;
+  dataPointPropsMap:DataPointPropsMap;
+}
+
+export class DataPointPropsMap {
+  id:string;
+  type:string;// 数据点、复杂感知点,数字机理，可能没有
+  dataName:string;
+  intervalTime:string;
 }
 
 export class uploadConfigProps{

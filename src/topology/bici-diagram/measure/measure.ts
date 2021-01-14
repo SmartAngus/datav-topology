@@ -11,14 +11,23 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
   // radiusRect(ctx,node.rect.x, node.rect.y-2, node.rect.width, node.rect.height+4,4)
   ctx.closePath();
 
-  const scale=node.property.marks||10
+  let scale=10
+  if(isNotNaN(node.property.marks)){
+    scale = node.property.marks
+  }
   const step=node.rect.height/scale;
   let dataMax =  100;
   if(isNotNaN(node.property.dataMax)){
     dataMax = node.property.dataMax
   }
-  let dataMin = node.property.dataMin || 0;
-  let value = node.property.value||0
+  let dataMin = 0;
+  if(isNotNaN(node.property.dataMin)){
+    dataMin = node.property.dataMin
+  }
+  let value = 0
+  if(isNotNaN(node.property.value)){
+    value = node.property.value
+  }
   if(value<dataMin) value=dataMin;
   if(value>dataMax) value=dataMax;
   // 绘制数据柱状图
@@ -41,7 +50,7 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
       ctx.lineTo(node.rect.x-4, node.rect.y+i*step);
       let txt=dataMin+(scale-i)*(dataMax-dataMin)/scale;
       txt = getFixed(txt,2);
-      ctx.fillText(txt, node.rect.x-(txt.length)*6-20, node.rect.y+i*step+4.5);
+      ctx.fillText(txt+'', node.rect.x-((txt+'').length)*6-20, node.rect.y+i*step+4.5);
       ctx.closePath();
       ctx.stroke();
     }

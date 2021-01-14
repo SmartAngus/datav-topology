@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useState,
   Fragment,
-  useCallback,
+  useCallback, useImperativeHandle,
 } from 'react';
 import {
   Form,
@@ -42,7 +42,7 @@ import * as _ from 'lodash';
 import { echartsObjs } from '../../../../topology/chart-diagram/src/echarts';
 import { reviver } from '../../../utils/serializing';
 import { eraseOverlapIntervals } from '../../../utils/cacl';
-import { defaultLineColors } from '../../../data/defines';
+import {DataPointPropsMap, defaultLineColors, Node} from '../../../data/defines';
 import {getTimeLineOption} from "../../../config/charts/timeline";
 
 const { Panel } = Collapse;
@@ -77,14 +77,19 @@ interface ICanvasProps extends FormProps {
   onPropertyFormValueChange?: any;
   onEventValueChange: any;
   setIsSave?: (isSave: boolean) => void;
+  onAddDataPoint?:(node:Node,disableSource:string[],selectedRowKeys:string[])=>void;
+  ref?:any;
+  dataPointPropsMap:DataPointPropsMap
 }
 
-const NodeCanvasProps: React.FC<ICanvasProps> = ({
+const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
   data,
   onFormValueChange,
   onPropertyFormValueChange,
   setIsSave,
-}) => {
+  onAddDataPoint,
+  dataPointPropsMap
+},ref) => {
   const [form] = Form.useForm();
   const [propertyForm] = Form.useForm();
   const [visible, setVisible] = useState(false);
@@ -107,6 +112,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
   const removeLineColorBtnRef = React.useRef();
   const { dataMethod, dataDot } = property || {};
   const [refreshProperty, setRefreshProperty] = useState(false);
+
+  let disableSource = ['react'];
+  if (data.node.name == 'biciPilot') {
+    disableSource = [];
+  }
+  // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
+  const selectedRowKeys = [];
+  data.node.property &&
+  (data.node.property.dataPointSelectedRows || []).map((row) => {
+    selectedRowKeys.push(row.id);
+    return row;
+  });
+
   useEffect(() => {
     if (data.node.font.fontStyle !== 'normal') {
       setBtnColor({ ...btnColor, italicBtn: '#1890ff' });
@@ -270,6 +288,17 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     }
   }, [property, refreshProperty]);
 
+  // 对父组件暴露保存数据的接口
+  useImperativeHandle(
+      ref,
+      () => ({
+        onDataPointBind:(selectedRowKeys, selectedRows)=>{
+          onDataPointBind(selectedRowKeys, selectedRows)
+        }
+      }),
+      [property]
+  );
+
   // 字段值更新时触发的回掉
   const handleValuesChange = (changedValues) => {
     if ('fillStyle' in changedValues) {
@@ -314,7 +343,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
 
   // 添加数据点
   const addDataPoint = () => {
-    setVisible(!visible);
+    //setVisible(!visible);
+    onAddDataPoint&&onAddDataPoint(data.node,disableSource,selectedRowKeys)
   };
   const handleSelectedDataPoint = (selectedPointIds) => {
     for (let k in selectedPointIds) {
@@ -334,12 +364,21 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       if (nodeType == 'timeLine') {
         // 最多可绑定十个数据点
         selectedRows = selectedRows.slice(0, 10);
+        (selectedRows||[]).map(row=>{
+          return {
+              ...row,
+            id:row[dataPointPropsMap.id],
+            type:row[dataPointPropsMap.type],
+            dataName:row[dataPointPropsMap.dataName],
+            intervalTime:row[dataPointPropsMap.intervalTime],
+          }
+        })
         if (data.node.property.dataPointSelectedRows.length < 10) {
           data.node.property.dataPointSelectedRows = selectedRows;
           selectedRows.map((row, index) => {
             const q = {
-              id: selectedRows[index].id,
-              type: selectedRows[index].dataType || selectedRows[index].type,
+              id: selectedRows[index][dataPointPropsMap.id],
+              type: selectedRows[index][dataPointPropsMap.type],
             };
             data.node.property.dataPointParam.qtDataList[index] = q;
           });
@@ -445,17 +484,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
     echartsObjs[data.node.id].chart.resize();
     canvas.updateProps(true, [data.node]);
   };
-  let disableSource = ['react'];
-  if (data.node.name == 'biciPilot') {
-    disableSource = [];
-  }
-  // 渲染数据点弹出窗口 不包含 disableSource:['react','complex','dataPoint]
-  const selectedRowKeys = [];
-  data.node.property &&
-    (data.node.property.dataPointSelectedRows || []).map((row) => {
-      selectedRowKeys.push(row.id);
-      return row;
-    });
+
   const renderDataPointModal = useCallback(() => {
     return (
       <DataBindModal
@@ -1834,6 +1863,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = ({
       {visible && renderDataPointModal()}
     </div>
   );
-};
+});
 
 export default NodeCanvasProps;

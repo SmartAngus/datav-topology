@@ -30,7 +30,6 @@ import * as _ from "lodash";
 import moment from "moment";
 import { getGaugeOption } from "../config/charts/gauge";
 import { getTimeLineOption } from "../config/charts/timeline";
-import set = Reflect.set;
 
 import "antd/dist/antd.less";
 
@@ -51,6 +50,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const [isSave, setIsSave] = useState(true);
   const [scaleVal, setScaleVal] = useState(1);
   const [bkImageUrl, setBkImageUrl] = useState("");
+  const nodeRef = useRef();
 
   const [canvasSizeInfo, setCanvasSizeInfo] = useState({
     minWidth: 3199,
@@ -121,6 +121,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           (headerRef as any).current.save();
         }
       },
+      handleDataPointBind:(selectedRowKeys, selectedRows)=>{
+        console.log("handleDataPointBind..",selectedRowKeys, selectedRows)
+        // @ts-ignore
+        nodeRef?.current.onDataPointBind(selectedRowKeys, selectedRows)
+      }
     }),
     [isSave]
   );
@@ -180,7 +185,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const onDrag = (event, node, custom = false) => {
     if (custom) {
       let data = node;
-      // data.id = s8();
       event.dataTransfer.setData("Topology", JSON.stringify(data, replacer));
     } else {
       event.dataTransfer.setData("Topology", JSON.stringify(node.data, replacer));
@@ -581,11 +585,18 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           // locked: Lock.None
         });
         setIsLoadCanvas(true);
-        // 老代码，解决拖动图表组件到画布不显示的问题
-        // canvas.activeLayer.saveNodeRects();
-        // canvas.activeLayer.move(1, 0);
-        // canvas.overflow();
-        // canvas.animateLayer.animate();
+        //=================解决新建组件添加到画布纵坐标不显示的问题
+       if(data.name=='echarts'){
+         data.data.echarts.option = getTimeLineOption(data, undefined, undefined);
+         // 更新图表数据
+         echartsObjs[data.id].chart.setOption(
+             JSON.parse(JSON.stringify(data.data.echarts.option), reviver)
+         );
+         echartsObjs[data.id].chart.resize();
+         data.elementRendered = false;
+         canvas.updateProps(true, [data]);
+       }
+        //==================
         break;
       case "delete":
         setIsSave(false);
@@ -691,6 +702,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           onEventValueChange={onEventValueChange}
           onPropertyFormValueChange={onHandlePropertyFormValueChange}
           setIsSave={setIsSave}
+          onAddDataPoint={props.onAddDataPoint}
+          ref={nodeRef}
+          dataPointPropsMap={props.dataPointPropsMap}
         />
       ), // 渲染Node节点类型的组件
       line: selected && (
@@ -803,7 +817,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       />
     </div>
   );
-  const divHeight = document.body.clientHeight-134;
+  const divHeight = document.body.clientHeight-92;
   return (
     <ConfigProvider prefixCls="antdv4">
       <div id="editLayout" ref={layoutRef}>
@@ -887,7 +901,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
               />
             </div>
           </div>
-          <div className={styles.props} id="props">
+          <div className={styles.props} id="props" style={{overflow:"hidden"}}>
             {renderRightArea}
           </div>
           {renderContextMenu}

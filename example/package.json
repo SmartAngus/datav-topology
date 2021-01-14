@@ -21,6 +21,8 @@
     "bici-datav-npm": "link:..",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
+    "bici-transformers": "link:../node_modules/bici-transformers",
+    "axios": "link:../node_modules/axios",
     "react-router-dom": "^5.2.0",
     "react-scripts": "link:../node_modules/react-scripts",
     "typescript": "link:../node_modules/typescript"
