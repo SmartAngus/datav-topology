@@ -706,7 +706,7 @@ export const Tools = [
         data: {
           text: '',
           rect: {
-            width: 30,
+            width: 20,
             height: 150,
           },
           font: {
@@ -779,7 +779,7 @@ export const Tools = [
           text: '',
           rect: {
             width: 500,
-            height: 350,
+            height: 270,
           },
           name: 'echarts',
           strokeStyle: 'rgba(0,0,0,0)',
@@ -805,12 +805,12 @@ export const Tools = [
             dataTopChecked: false,
             dataTop: 100,
             dataBottom: 0,
-            chartTitleChecked: false,
+            chartTitleChecked: true,
             chartTitle: '实时曲线',
             chartTitleColor: '#c0c0c0',
             chartBackgroundColor: '#1b2735',
             chartBackgroundChecked:false,
-            lineReferenceChecked: false, // splitLine
+            lineReferenceChecked: true, // splitLine
             lineReferenceColor: '#ccc',
             lineColors: [],
           }

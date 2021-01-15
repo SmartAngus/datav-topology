@@ -321,7 +321,7 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
                 show: false
             },
             axisLine: {
-                show: false,
+                show: true,
                 lineStyle:{
                     color:trastColor
                 }

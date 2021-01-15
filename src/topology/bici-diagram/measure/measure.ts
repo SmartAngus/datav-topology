@@ -3,13 +3,23 @@ import { Node } from '../../core';
 export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
   ctx.beginPath();
   ctx.fillStyle = "#EBEBEB";
+  ctx.strokeStyle="#ebebeb";
   // Set line width
   ctx.lineWidth = 0;
 
+  if(node.rect.width<20){
+    node.rect.width=20;
+  }
+
 // Wall
-  ctx.fillRect(node.rect.x, node.rect.y-2, node.rect.width, node.rect.height+4);
+//   ctx.fillRect(node.rect.x, node.rect.y-2, node.rect.width, node.rect.height+4);
+  // 绘制wall圆角
+  radiusRect(ctx,node.rect.x, node.rect.y-3, node.rect.width, node.rect.height+6,node.rect.width/2)
+  ctx.fill()
+  ctx.stroke()
   // radiusRect(ctx,node.rect.x, node.rect.y-2, node.rect.width, node.rect.height+4,4)
   ctx.closePath();
+
 
   let scale=10
   if(isNotNaN(node.property.marks)){
@@ -34,7 +44,11 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
   ctx.beginPath();
   ctx.fillStyle = "#1890ff";
   let vh=node.rect.height*(value-dataMin)/(dataMax-dataMin)
-  ctx.fillRect(node.rect.x+6, node.rect.y+node.rect.height-vh, node.rect.width-12, vh+2);
+  // ctx.fillRect(node.rect.x+1.5, node.rect.y+node.rect.height-vh, node.rect.width-3, vh+2);
+  if(node.property.value>dataMin){
+    radiusRect(ctx,node.rect.x+3, node.rect.y+node.rect.height-vh, node.rect.width-6, vh,(node.rect.width-6)/2)
+  }
+  ctx.fill();
   ctx.closePath();
   ctx.stroke();
   //-----
@@ -61,9 +75,9 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
   ctx.strokeStyle = "#333333";
   ctx.fillStyle = "#333333";
   if(node.property.chartUnitChecked){
-    ctx.fillText(getFixed(node.property.value,node.property.dataDot)+" "+node.property.chartUnit, node.rect.x, node.rect.y+node.rect.height+20);
+    ctx.fillText(getFixed(node.property.value,node.property.dataDot)+" "+node.property.chartUnit, node.rect.x-8, node.rect.y+node.rect.height+20);
   }else{
-    ctx.fillText(getFixed(node.property.value,node.property.dataDot), node.rect.x, node.rect.y+node.rect.height+20);
+    ctx.fillText(getFixed(node.property.value,node.property.dataDot), node.rect.x-8, node.rect.y+node.rect.height+20);
   }
   ctx.closePath();
   ctx.stroke();
@@ -86,13 +100,15 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
     ctx.fillStyle = item.color;
     if((dataMax-dataMin)!=0){// 分母不能为0
       let h=node.rect.height*((top-dataMin)/(dataMax-dataMin))
-      ctx.fillRect(node.rect.x, node.rect.y+(node.rect.height-h), 4, h-beforeHeight);
-      ctx.fillRect(node.rect.x+node.rect.width-4, node.rect.y+(node.rect.height-h), 4, h-beforeHeight);
+      ctx.fillRect(node.rect.x-4, node.rect.y+(node.rect.height-h), 4, h-beforeHeight);
+      // ctx.fillRect(node.rect.x+node.rect.width-4, node.rect.y+(node.rect.height-h), 4, h-beforeHeight);
       ctx.closePath();
       ctx.stroke();
       beforeHeight=h;
     }
   })
+
+
 }
 
 function getFixed(num,fix) {

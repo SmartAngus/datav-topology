@@ -122,7 +122,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         }
       },
       handleDataPointBind:(selectedRowKeys, selectedRows)=>{
-        console.log("handleDataPointBind..",selectedRowKeys, selectedRows)
         // @ts-ignore
         nodeRef?.current.onDataPointBind(selectedRowKeys, selectedRows)
       }
@@ -586,15 +585,15 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         });
         setIsLoadCanvas(true);
         //=================解决新建组件添加到画布纵坐标不显示的问题
-       if(data.name=='echarts'){
+       if(data.name=='echarts' && data.property.echartsType=="timeLine"){
          data.data.echarts.option = getTimeLineOption(data, undefined, undefined);
          // 更新图表数据
          echartsObjs[data.id].chart.setOption(
              JSON.parse(JSON.stringify(data.data.echarts.option), reviver)
          );
-         echartsObjs[data.id].chart.resize();
-         data.elementRendered = false;
-         canvas.updateProps(true, [data]);
+         // echartsObjs[data.id].chart.resize();
+         // data.elementRendered = false;
+         // canvas.updateProps(true, [data]);
        }
         //==================
         break;
@@ -826,7 +825,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           {/*<ResizePanel direction="e" style={{ width: 250 }}>*/}
           <div className={styles.tool} style={{ overflow: "hidden" }}>
             <Tabs defaultActiveKey="1" centered>
-              <TabPane tab="组件" key="1" style={{ margin: 0 }}>
+              <TabPane tab="&nbsp;&nbsp;&nbsp;&nbsp;组&nbsp;件&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" key="1" style={{ margin: 0 }}>
                 <div style={{ height: divHeight, overflow: "auto" }}>
                   <SystemComponent onDrag={onDrag} Tools={Tools} />
                   <CustomComponent
@@ -836,7 +835,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
                   />
                 </div>
               </TabPane>
-              <TabPane tab="图库" key="2" style={{ margin: 0 }}>
+              <TabPane tab="&nbsp;&nbsp;&nbsp;&nbsp;图&nbsp;&nbsp;库&nbsp;&nbsp;&nbsp;&nbsp;" key="2" style={{ margin: 0 }}>
                 <PicComponent
                   uploaConfig={props.uploadConfig}
                   industrialLibrary={props.industrialLibrary}

@@ -253,10 +253,10 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             const n = node.property.dataDot;
             const val = roundFun(parseFloat(r.value), n);
             node.children[0].text = val;
-            const bottom = node.property.limit.bottom ? parseFloat(node.property.limit.bottom) : undefined;
-            const top = node.property.limit.bottom ? parseFloat(node.property.limit.top) : undefined;
+            const bottom = node.property.limit.bottom;
+            const top = node.property.limit.top;
             const tempVal = parseFloat(val);
-            if (bottom && tempVal < bottom && node.property.showLimit) {
+            if (!isNaN(bottom)&&tempVal < bottom && node.property.showLimit) {
               const showColor = node.property.bottomLimit.showBkColor
                 ? node.property.bottomLimit.bkColor
                 : node.property.normal.bkColor;
@@ -268,7 +268,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 parseInt(node.property.bottomLimit.fontSize),
                 showColor
               );
-            } else if (top && tempVal > top && node.property.showLimit) {
+            } else if (!isNaN(top)&&tempVal > top && node.property.showLimit) {
               const showColor = node.property.bottomLimit.showBkColor
                 ? node.property.topLimit.bkColor
                 : node.property.normal.bkColor;
@@ -399,6 +399,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         id="topology-canvas-preview"
         className={styles.topology_canvas_preview}
         style={{
+          margin:"0 auto",
           height: data?.height,
           width: data?.width,
           overflow: "hidden!important",

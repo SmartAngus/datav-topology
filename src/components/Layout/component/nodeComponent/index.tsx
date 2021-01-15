@@ -856,7 +856,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
           <Form.Item
             name="dataMethod"
             label="数据传入方式"
-            rules={[{ required: true }]}
           >
             <Select
               placeholder="选择"
@@ -1821,7 +1820,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
       {renderAlign}
       {!data.multi && (
         <Tabs defaultActiveKey="1" centered>
-          <TabPane tab="外观" key="1" style={{ margin: 0 }}>
+          <TabPane tab="&nbsp;&nbsp;&nbsp;&nbsp;外&nbsp;&nbsp;观&nbsp;&nbsp;&nbsp;&nbsp;" key="1" style={{ margin: 0 }}>
             <div style={{height:divHeight,overflow:"auto"}}>
               <Collapse defaultActiveKey={['pos', 'lineInfo', 'lineStyle']}
                         expandIconPosition="right"
@@ -1839,7 +1838,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               </Collapse>
             </div>
           </TabPane>
-          <TabPane tab="数据" key="2" style={{ margin: 0 }}>
+          <TabPane tab="&nbsp;&nbsp;&nbsp;&nbsp;数&nbsp;&nbsp;据&nbsp;&nbsp;&nbsp;&nbsp;" key="2" style={{ margin: 0 }}>
             <Collapse defaultActiveKey={['2']}
                       expandIconPosition="right"
                       ghost={false} bordered={false}>

@@ -1,5 +1,5 @@
 import axios from 'axios'
-const timeout=20000;
+const timeout=2000000;
 const maxContentLength=200000000;
 const withCredentials = false
 export function clientParam(apiURL) {

@@ -321,18 +321,18 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
             </Form.Item>
           </Popover>
 
-          <Row style={{ marginTop: 15 }} gutter={[8, 0]} align="middle">
-            <Col span={8}>
+          <Row style={{ marginTop: 15 }} gutter={[9, 0]} align="middle">
+            <Col span={9}>
               <Form.Item name="w">
                 <Input suffix="W" onChange={panelSizeChange} />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={9}>
               <Form.Item name="h">
                 <Input suffix="H" onChange={panelSizeChange} />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={5}>
               <Form.Item>
                 <ReactSwitch
                   onChange={handleRCSwitchStateChange}
@@ -342,10 +342,10 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
                   offColor="#ccc"
                   onColor="#ccc"
                   uncheckedIcon={
-                    <CustomIcon style={{ lineHeight: 2.5 }} type="iconshu" />
+                    <CustomIcon style={{ lineHeight: 2.2 }} type="iconshu" />
                   }
                   checkedIcon={
-                    <CustomIcon style={{ lineHeight: 2.5 }} type="iconheng" />
+                    <CustomIcon style={{ lineHeight: 2.2 }} type="iconheng" />
                   }
                 />
               </Form.Item>

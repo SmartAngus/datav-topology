@@ -403,7 +403,6 @@ export class DivLayer extends Layer {
       this.iframes[item.id] = null;
     }
     if (item.elementId) {
-      console.log(this.elements[item.id])
       this.canvas.removeChild(this.elements[item.id]);
       this.elements[item.id] = null;
     }
