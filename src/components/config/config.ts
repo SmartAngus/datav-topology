@@ -1,5 +1,7 @@
 import {getTimeLineOption} from "./charts/timeline";
 import {getGaugeOption} from "./charts/gauge"
+import {defaultLineColors} from "../data/defines";
+
 export const Tools = [
   {
     group: '通用组件',
@@ -66,7 +68,7 @@ export const Tools = [
         name: '时间',
         icon: 'iconshijian',
         data: {
-          text: '1970-01-01 00:00:00',
+          text: '2021/01/01 12:00:00',
           hideInput: true,
           rect: {
             width: 200,
@@ -662,31 +664,31 @@ export const Tools = [
             dataColors: [
               {
                 checked: false,
-                color: '#9E87FF',
+                color: defaultLineColors[0],
                 top: 20,
                 bottom: null,
               },
               {
                 checked: false,
-                color: '#73DDFF',
+                color: defaultLineColors[1],
                 top: 40,
                 bottom: null,
               },
               {
                 checked: false,
-                color: '#fe9a8b',
+                color: defaultLineColors[2],
                 top: 60,
                 bottom: null,
               },
               {
                 checked: false,
-                color: '#F56948',
+                color: defaultLineColors[3],
                 top: 80,
                 bottom: null,
               },
               {
                 checked: false,
-                color: '#9E87FF',
+                color: defaultLineColors[4],
                 top: 100,
                 bottom: null,
               },
@@ -697,6 +699,11 @@ export const Tools = [
             chartTitleChecked: false,
             chartUnitChecked: false,
             chartUnit: 'C',
+            marks:10,// 刻度
+            markChecked:true,
+            chartTitleColor:"#222222",
+            chartTitleColorChecked: false,
+
           },
         },
       },
@@ -732,31 +739,31 @@ export const Tools = [
             dataColors: [
               {
                 checked: true,
-                color: '#93FE94',
+                color: defaultLineColors[0],
                 top: 20,
                 bottom: null,
               },
               {
                 checked: true,
-                color: '#E4D875',
+                color: defaultLineColors[1],
                 top: 40,
                 bottom: null,
               },
               {
                 checked: true,
-                color: '#E98F28',
+                color: defaultLineColors[2],
                 top: 60,
                 bottom: null,
               },
               {
                 checked: true,
-                color: '#49D225',
+                color: defaultLineColors[3],
                 top: 80,
                 bottom: null,
               },
               {
                 checked: true,
-                color: '#E01F28',
+                color: defaultLineColors[4],
                 top: 100,
                 bottom: null,
               },
@@ -768,6 +775,8 @@ export const Tools = [
             value:0,
             chartUnitChecked:false,
             chartUnit:'T',
+            chartTitleColor:"#222222",
+            chartTitleColorChecked: false,
           },
         },
       },

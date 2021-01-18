@@ -72,8 +72,8 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
   // 绘制单位
   ctx.beginPath();
   ctx.font = '14px serif';
-  ctx.strokeStyle = "#333333";
-  ctx.fillStyle = "#333333";
+  ctx.strokeStyle = node.property.chartTitleColor||"#333333";
+  ctx.fillStyle = node.property.chartTitleColor||"#333333";
   if(node.property.chartUnitChecked){
     ctx.fillText(getFixed(node.property.value,node.property.dataDot)+" "+node.property.chartUnit, node.rect.x-8, node.rect.y+node.rect.height+20);
   }else{

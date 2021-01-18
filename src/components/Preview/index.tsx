@@ -311,9 +311,12 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                     break;
                   }
                 } else {
+
                   if (
-                    item.lightRangeBottom <= r.value &&
-                    item.lightRangeTop > r.value
+                      (item.lightRangeBottom <= r.value &&
+                    item.lightRangeTop > r.value) ||
+                      item.lightRangeBottom <= r.value ||
+                      item.lightRangeTop > r.value
                   ) {
                     node.strokeStyle =
                       item?.lightRangeColor || node.strokeStyle;
@@ -399,7 +402,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         id="topology-canvas-preview"
         className={styles.topology_canvas_preview}
         style={{
-          margin:"0 auto",
+          margin:"auto auto",
           height: data?.height,
           width: data?.width,
           overflow: "hidden!important",

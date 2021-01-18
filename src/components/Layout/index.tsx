@@ -223,6 +223,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         chartTitleChecked: selected.node.property.chartTitleChecked,
         chartUnitChecked: selected.node.property.chartUnitChecked,
         chartUnit: selected.node.property.chartUnit,
+        chartTitleColor:selected.node.property.chartTitleColor,
+        markChecked:selected.node.property.markChecked,
+        marks:selected.node.property.marks,
       },
       values
     );
@@ -863,21 +866,33 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
                     top: canvasSizeInfo.top,
                   }}
                 >
-                  <Tooltip title={props.boardData.code}>
-                    <span>No.{props.boardData.code}</span>
-                  </Tooltip>
-                  <span style={{ margin: "0 5px" }}>/</span>
-                  <Tooltip title={props.boardData.name}>
-                    <span>{props.boardData.name}</span>
-                  </Tooltip>
-                  <span style={{ margin: "0 5px" }}>/</span>
-                  <Tooltip title={props.boardData.typeName}>
+                  {props.boardData.code?
+                      <React.Fragment>
+                      <Tooltip title={props.boardData.code}>
+                        <span>No.{props.boardData.code}</span>
+                      </Tooltip>
+                      <span style={{ margin: "0 5px" }}>/</span>
+                      </React.Fragment>
+                      :''}
+                  {props.boardData.name?
+                      <React.Fragment>
+                      <Tooltip title={props.boardData.name}>
+                        <span>{props.boardData.name}</span>
+                      </Tooltip>
+                      <span style={{ margin: "0 5px" }}>/</span>
+                      </React.Fragment>
+                    :''}
+                  {props.boardData.typeName?
+                      <React.Fragment>
+                      <Tooltip title={props.boardData.typeName}>
                     <span>{props.boardData.typeName}</span>
                   </Tooltip>
-                  <span style={{ margin: "0 5px" }}>/</span>
-                  <Tooltip title={props.boardData.remark}>
+                      <span style={{ margin: "0 5px" }}>/</span>
+                      </React.Fragment>
+                      :''}
+                  {props.boardData.remark?<Tooltip title={props.boardData.remark}>
                     <span>{props.boardData.remark}</span>
-                  </Tooltip>
+                  </Tooltip>:''}
                 </p>
               )}
               <div

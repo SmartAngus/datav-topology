@@ -97,6 +97,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
   const [btnColor, setBtnColor] = useState({
     italicBtn: '#fff',
     boldBtn: '#fff',
+    color:"#222",
   });
 
   const { x, y, width, height } = data?.node?.rect || {};
@@ -127,10 +128,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
 
   useEffect(() => {
     if (data.node.font.fontStyle !== 'normal') {
-      setBtnColor({ ...btnColor, italicBtn: '#1890ff' });
+      setBtnColor({ ...btnColor, italicBtn: '#1890ff',color:"#222" });
     }
     if (data.node.font.fontWeight !== 'normal') {
-      setBtnColor({ ...btnColor, boldBtn: '#1890ff' });
+      setBtnColor({ ...btnColor, boldBtn: '#1890ff',color:"#222" });
     }
     // 设置基本表单
     form.setFieldsValue({
@@ -243,6 +244,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
         dataMin: property.dataMin,
         marks: property.marks,
         markChecked: property.markChecked,
+        chartTitleColor:property.chartTitleColor,
+        chartTitleColorChecked:property.chartTitleColorChecked,
         'checked-0': property.dataColors && property.dataColors[0]?.checked,
         'color-0': property.dataColors && property.dataColors[0]?.color,
         'top-0': property.dataColors && property.dataColors[0]?.top,
@@ -271,7 +274,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
         chartTitleChecked:
           property.chartTitleChecked && property.chartTitleChecked,
         chartTitle: property.chartTitle && property.chartTitle,
-        chartTitleColor: property.chartTitleColor && property.chartTitleColor,
         lineReferenceChecked:
           property.lineReferenceChecked && property.lineReferenceChecked,
         lineReferenceColor:
@@ -614,19 +616,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
       // 斜体
       if (data.node.font.fontStyle === 'normal') {
         data.node.font.fontStyle = 'italic';
-        setBtnColor({ ...btnColor, italicBtn: '#1890ff' });
+        setBtnColor({ ...btnColor, italicBtn: '#1890ff',color:'#fff' });
       } else {
         data.node.font.fontStyle = 'normal';
-        setBtnColor({ ...btnColor, italicBtn: '#fff' });
+        setBtnColor({ ...btnColor, italicBtn: '#fff',color:"#222" });
       }
     } else {
       // 加粗
       if (data.node.font.fontWeight === 'normal') {
         data.node.font.fontWeight = 'bold';
-        setBtnColor({ ...btnColor, boldBtn: '#1890ff' });
+        setBtnColor({ ...btnColor, boldBtn: '#1890ff',color:'#fff' });
       } else {
         data.node.font.fontWeight = 'normal';
-        setBtnColor({ ...btnColor, boldBtn: '#fff' });
+        setBtnColor({ ...btnColor, boldBtn: '#fff',color:'#222' });
       }
     }
     setIsSave(false);
@@ -696,7 +698,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               >
                 <Button
                   size="small"
-                  style={{ width: '50%', background: btnColor.italicBtn }}
+                  style={{ width: '50%', background: btnColor.italicBtn}}
                   icon={<CustomIcon type="iconzu" />}
                   onClick={() => fontStyleChange('fontStyle')}
                 />
@@ -844,7 +846,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
         </Panel>
       </React.Fragment>
     );
-  }, [property, data?.node]);
+  }, [color, fontFamily, fontSize, text, data?.node, btnColor]);
 
   /**
    * 渲染元素额外数据 {"qtDataList":[{"id":"6413f3a606754c31987ec584ed56d5b7","type":2}],"subscribe":true,"page":"动态曲线"}
@@ -1419,24 +1421,42 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                 </Form.Item>
               </Col>
             </Row>
-            <Row>
-            <Col span={10}>
-            <Form.Item
-            label="刻度"
-            name="markChecked"
-            labelCol={{ span: 12 }}
-            labelAlign="left"
-            valuePropName="checked"
-            >
-            <Checkbox />
-            </Form.Item>
-            </Col>
-            <Col span={14}>
-            <Form.Item name="marks">
-              <InputNumber placeholder="刻度个数" min={0} max={100}></InputNumber>
-            </Form.Item>
-            </Col>
-            </Row>
+              <Row>
+                <Col span={10}>
+                <Form.Item
+                label="刻度"
+                name="markChecked"
+                labelCol={{ span: 12 }}
+                labelAlign="left"
+                valuePropName="checked"
+                >
+                <Checkbox />
+                </Form.Item>
+                </Col>
+                <Col span={14}>
+                <Form.Item name="marks">
+                  <InputNumber placeholder="刻度个数" min={1} max={100}></InputNumber>
+                </Form.Item>
+                </Col>
+              </Row>
+                <Row>
+                  {/*<Col span={13}>*/}
+                  {/*  <Form.Item*/}
+                  {/*      label="标题颜色"*/}
+                  {/*      name="chartTitleColorChecked"*/}
+                  {/*      labelCol={{ span: 12 }}*/}
+                  {/*      labelAlign="left"*/}
+                  {/*      valuePropName="checked"*/}
+                  {/*  >*/}
+                  {/*    <Checkbox />*/}
+                  {/*  </Form.Item>*/}
+                  {/*</Col>*/}
+                  <Col span={24}>
+                    <Form.Item name="chartTitleColor" label="标题颜色" labelCol={{ span: 10 }} labelAlign="left">
+                      <ColorPicker></ColorPicker>
+                    </Form.Item>
+                  </Col>
+                </Row>
               </React.Fragment>
           )}
           <Row>
@@ -1572,6 +1592,42 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               <Col span={14}>
                 <Form.Item name="chartUnit">
                   <Input placeholder="单位" maxLength={20} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={10}>
+                <Form.Item
+                    label="刻度"
+                    name="markChecked"
+                    labelCol={{ span: 12 }}
+                    labelAlign="left"
+                    valuePropName="checked"
+                >
+                  <Checkbox />
+                </Form.Item>
+              </Col>
+              <Col span={13}>
+                <Form.Item name="marks">
+                  <InputNumber placeholder="刻度个数" min={1} max={100}></InputNumber>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              {/*<Col span={12}>*/}
+              {/*  <Form.Item*/}
+              {/*      label="标题颜色"*/}
+              {/*      name="chartTitleColorChecked"*/}
+              {/*      labelCol={{ span: 14 }}*/}
+              {/*      labelAlign="left"*/}
+              {/*      valuePropName="checked"*/}
+              {/*  >*/}
+              {/*    <Checkbox />*/}
+              {/*  </Form.Item>*/}
+              {/*</Col>*/}
+              <Col span={24}>
+                <Form.Item name="chartTitleColor" label="标题颜色"  labelCol={{ span: 10 }} labelAlign="left">
+                  <ColorPicker></ColorPicker>
                 </Form.Item>
               </Col>
             </Row>

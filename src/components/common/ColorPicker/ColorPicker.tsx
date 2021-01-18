@@ -67,6 +67,7 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
         zIndex: '2',
         right: 300,
         top: 150,
+        textAlign: "center",
       },
       cover: {
         position: 'fixed',

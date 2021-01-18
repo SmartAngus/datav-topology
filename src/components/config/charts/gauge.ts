@@ -1,3 +1,5 @@
+import {defaultLineColors} from "../../data/defines";
+
 function isNotNaN(value) {
     const r = typeof value === 'number' && !isNaN(value);
     return r;
@@ -16,6 +18,9 @@ export function getGaugeOption(
         chartTitleChecked: boolean;
         chartUnitChecked: boolean;
         chartUnit: string;
+        chartTitleColor:string;
+        markChecked:boolean;
+        marks:number,
     },
     changeValues?: any
 ) {
@@ -32,9 +37,9 @@ export function getGaugeOption(
     }
     const lineColors = opt?.lineColors || [
         //数组第一个属性是颜色所占line百分比
-        [0.4, '#49afff'],
-        [0.6, '#68A54A'],
-        [1, '#f56c6c'],
+        [0.4, defaultLineColors[0]],
+        [0.6, defaultLineColors[1]],
+        [1, defaultLineColors[2]],
     ];
     if(lineColors[lineColors.length-1][0]<1){
         lineColors.push([1, '#f56c6c'])
@@ -45,6 +50,9 @@ export function getGaugeOption(
     let showTitle = true;
     let unit;
     let title;
+    let chartTitleColor="#f56c6c";
+    let marks=10;
+    let showMarks=true;
     if (opt) {
         if (opt.chartUnitChecked) {
             unit = opt?.chartUnit || '';
@@ -56,6 +64,15 @@ export function getGaugeOption(
             title = opt.chartTitle;
         } else {
             showTitle = false;
+        }
+        if(opt.chartTitleColor){
+            chartTitleColor=opt.chartTitleColor;
+        }
+        if(opt.markChecked){
+            marks=opt.marks
+            showMarks=true;
+        }else{
+            showMarks=false;
         }
     } else {
         unit = '';
@@ -89,6 +106,7 @@ export function getGaugeOption(
                 min: min,
                 max: max,
                 radius: '100%',
+                splitNumber:marks,
                 axisLine: {            // 坐标轴线
                     lineStyle: {       // 属性lineStyle控制线条样式
                         width: 22,
@@ -96,18 +114,25 @@ export function getGaugeOption(
                     }
                 },
                 axisTick: {            // 坐标轴小标记
+                    show:showMarks,
                     length: 27,        // 属性length控制线长
                     lineStyle: {       // 属性lineStyle控制线条样式
                         color: 'auto'
                     }
                 },
                 splitLine: {           // 分隔线
+                    show:showMarks,
                     length: 30,         // 属性length控制线长
                     lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
                         color: 'auto'
                     }
                 },
+                pointer:{ // 仪表盘指针
+                    length:"65%",
+                    width:6,
+                },
                 axisLabel: {
+                    show:showMarks,
                     // backgroundColor: 'auto',
                     // borderRadius: 2,
                     color: '#345678',
@@ -122,7 +147,7 @@ export function getGaugeOption(
                     fontWeight: 'bolder',
                     fontSize: 14,
                     fontStyle: 'normal',
-                    color:'#222222',
+                    color:chartTitleColor,
                     show: showTitle,
                     offsetCenter: [0, '90%'],
                 },
@@ -131,7 +156,7 @@ export function getGaugeOption(
                     offsetCenter: [0, '60%'],
                     textStyle: {
                         fontSize: 16,
-                        color: '#333333',
+                        color: chartTitleColor,
                     },
                 },
                 data: [{value: 0, name: title}]
