@@ -53,6 +53,26 @@ export function simpleCard(ctx: CanvasRenderingContext2D, node: Node) {
   ctx.moveTo(node.rect.x, height);
   //ctx.lineTo(node.rect.ex, height);
 
+  const linear = ctx.createLinearGradient(
+      node.rect.x+node.rect.width/2,
+      node.rect.y,
+      node.rect.x+node.rect.width/2,
+      node.rect.ey+node.rect.height);
+  // const linear = ctx.createRadialGradient(
+  //     node.rect.x+node.rect.width/2,
+  //     node.rect.y+node.rect.height/2,
+  //     10,
+  //     node.rect.x+node.rect.width/2,
+  //     node.rect.y+node.rect.height/2,
+  //     100);
+  const {fillStyle}=node;
+  if(fillStyle){
+    linear.addColorStop(0,fillStyle);
+    linear.addColorStop(1,'white');
+    ctx.fillStyle=linear;
+    ctx.strokeStyle=fillStyle;
+  }
+  ctx.lineWidth=0;
   (node.fillStyle || node.bkType) && ctx.fill();
   ctx.stroke();
 }

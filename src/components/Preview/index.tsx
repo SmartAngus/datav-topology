@@ -94,21 +94,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         if (canvas.data && canvas.data.pens.length > 0) {
           // 有数据，去遍历有websocket的组件，并订阅
           if (canvas.socket != undefined) {
-            const activePens = [];
-            (canvas.data.pens || []).map((node) => {
-              // 循环遍历
-              if (node.property?.dataPointParam?.qtDataList?.length > 0) {
-                activePens.push(node);
-                canvas.socket.socket.send(
-                  JSON.stringify({
-                    ...node.property.dataPointParam,
-                    nodeTid: node.TID,
-                    nodeId: node.id,
-                  })
-                );
-              }
-            });
-            // canvas.activeLayer.setPens(activePens);
+            sendMessage(canvas.data.pens)
           }
         }
       };
@@ -126,6 +112,22 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
     //canvas.data.pens
     updateTimerCom(canvas.data.pens);
   };
+  const sendMessage=(pens)=>{
+    (pens || []).map((node) => {
+      // 循环遍历
+      if(node.name=="combine"){
+        sendMessage(node.children)
+      }else if (node.property?.dataPointParam?.qtDataList?.length > 0) {
+        canvas.socket.socket.send(
+            JSON.stringify({
+              ...node.property.dataPointParam,
+              nodeTid: node.TID,
+              nodeId: node.id,
+            })
+        );
+      }
+    });
+  }
   const updateTimerCom = (pens: any) => {
     (pens || []).map((node) => {
       if (node.name == 'biciTimer') {
@@ -147,8 +149,6 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
 
   const updateComp = (pens: any, data: any) => {
     (pens || []).map((node: Node) => {
-      // 实时曲线第一根有数据的曲线标志
-      let flag=true;
       if (node.name == 'combine') {
         updateComp(node.children, data);
       } else if (node.name == 'echarts') {
@@ -220,6 +220,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         }
         //
       } else if (node.property?.dataPointParam?.qtDataList?.length > 0) {
+
         // 非图表组件
         const r = JSON.parse(data.data);
         const nodeType = getNodeType(node);

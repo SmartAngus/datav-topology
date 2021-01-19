@@ -130,18 +130,19 @@ export const Tools = [
           hideInput: true,
           hideRotateCP: true,
           rect: {
-            width: 278,
-            height: 128,
+            width: 160,
+            height: 100,
           },
           paddingTop: 30,
           font: {
             fontFamily: '"Microsoft YaHei"',
             color: '#fff',
-            fontSize: 12,
+            fontSize: 14,
             fontWeight: 400,
           },
-          fillStyle: '#6236FF',
+          fillStyle: '#71a3cb',
           strokeStyle: '#222',
+          lineWidth: 0,
           name: 'biciCard',
           children: [
             {
@@ -188,7 +189,7 @@ export const Tools = [
               font: {
                 fontFamily: 'Arial',
                 color: '#fff',
-                fontSize: 12,
+                fontSize: 14,
                 fontWight: 400,
                 textAlign: 'center',
                 textBaseline: 'middle',

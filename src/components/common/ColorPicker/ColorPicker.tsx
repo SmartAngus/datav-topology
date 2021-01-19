@@ -32,6 +32,7 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
   const handleClose = () => {
     setColor(value ? value : 'rgba(222, 222, 222 ,1)');
     setVisible(false);
+    handleSetColor()
   };
 
   const handleChange = (color: any) => {
@@ -92,10 +93,10 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
             color={color}
             onChange={handleChange}
           />
-          <Button onClick={handleClose} style={{ marginRight: 20 }}>
+          <Button onClick={handleClose} style={{ marginRight: 20,display:'none' }}>
             取消
           </Button>
-          <Button type="primary" onClick={handleSetColor} disabled={disabled}>
+          <Button type="primary" onClick={handleSetColor} disabled={disabled} style={{display:'none'}}>
             确定
           </Button>
         </div>

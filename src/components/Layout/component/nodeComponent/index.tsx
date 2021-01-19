@@ -22,6 +22,7 @@ import {
   Radio,
   Modal,
   message,
+  Popconfirm
 } from 'antd';
 import {
   PlusOutlined,
@@ -271,6 +272,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
         dataTopChecked: property.dataTopChecked && property.dataTopChecked,
         dataTop: property.dataTop && property.dataTop,
         dataBottom: property.dataBottom && property.dataBottom,
+        selectDataPoint:property.dataBottom+'~'+property.dataTop,
         chartTitleChecked:
           property.chartTitleChecked && property.chartTitleChecked,
         chartTitle: property.chartTitle && property.chartTitle,
@@ -848,6 +850,35 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
     );
   }, [color, fontFamily, fontSize, text, data?.node, btnColor]);
 
+  const handleDeleteConfirm=(y,item)=>{
+    if(y){
+      setIsSave(false);
+      setRefreshProperty(!refreshProperty);
+      if (data.node.property.echartsType == 'timeLine') {
+        const itemRowIndex = _.findIndex(
+            property.dataPointSelectedRows,
+            (r: any) => r.id == item.id
+        );
+        const itemQueryIndex = _.findIndex(
+            property.dataPointParam.qtDataList,
+            (r: any) => r.id == item.id
+        );
+        data.node.property.dataPointParam.qtDataList.splice(
+            itemQueryIndex,
+            1
+        );
+        data.node.property.dataPointSelectedRows.splice(itemRowIndex, 1);
+        const newRows = _.cloneDeep(data.node.property.dataPointSelectedRows);
+        setDataPointSelectedRows(newRows);
+        updateTimelineOption();
+      } else {
+        data.node.property.dataPointParam.qtDataList = [];
+        data.node.property.dataPointSelectedRows = [];
+        setDataPointSelectedRows([]);
+      }
+    }
+  }
+
   /**
    * 渲染元素额外数据 {"qtDataList":[{"id":"6413f3a606754c31987ec584ed56d5b7","type":2}],"subscribe":true,"page":"动态曲线"}
    */
@@ -857,7 +888,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
         <Col>
           <Form.Item
             name="dataMethod"
-            label="数据传入方式"
+            label="关联方式"
           >
             <Select
               placeholder="选择"
@@ -886,11 +917,14 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                 wrapperCol={{ style: { alignItems: 'flex-end' } }}
               >
                 <span>{item.dataName || item.name}</span>
-                <Button
-                  type="link"
-                  icon={<DeleteOutlined />}
-                  onClick={() => handleDeleteDataPoint(item)}
-                ></Button>
+                <Popconfirm
+                    placement="left"
+                    title="确定删除数据点吗？"
+                    onConfirm={(y)=>handleDeleteConfirm(y,item)}
+                    okText="是" cancelText="否">
+                  <Button type="link" icon={<DeleteOutlined />}></Button>
+                </Popconfirm>
+
               </Form.Item>
             );
           })}
@@ -1715,7 +1749,6 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                       style={{
                         width: 85,
                       }}
-                      min={0}
                       placeholder="上限"
                       readOnly={!showSelectDataPoint}
                     />
@@ -1869,7 +1902,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
     );
   }, [property, data?.node, showSelectDataPoint, refreshProperty]);
 
-  const divHeight = document.body.clientHeight-134;
+  const divHeight = document.body.clientHeight-170;
 
   return (
     <div className={styles.rightArea}  style={{overflow:'hidden'}}>

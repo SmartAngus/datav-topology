@@ -54,5 +54,5 @@ module.exports = {
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".jsx"],
   },
-  externals: ["react", "react-dom", "moment", "lodash", "bici-transformers", "@ant-design/icons"],
+  externals: ["react", "react-dom", "lodash", "bici-transformers", "@ant-design/icons"],
 };
