@@ -33,13 +33,15 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
     id:"id",
     type:"dataType",
     dataName:"dataName",
-    intervalTime:"intervalTime"
+    intervalTime:"intervalTime",
+    scopeMin:"scopeMin",
+    scopeMax:"scopeMax",
   })
   const preInstallBgImages = [
     { key: 1, img: preBgImg1 },
     { key: 2, img: preBgImg2 },
     { key: 3, img: preBgImg3 },
-    { key: 4, img: preBgImg4 },
+    // { key: 4, img: preBgImg4 },
   ];
   const industrialLibrary = [
     {
@@ -338,21 +340,27 @@ const EditorLayoutCanvas: React.FC<any> = ({ ...props }) => {
         id:"id",
         type:"dataType",
         dataName:"dataName",
-        intervalTime:"intervalTime"
+        intervalTime:"intervalTime",
+        scopeMin:"scopeMin",
+        scopeMax:"scopeMax",
       })
     }else if(activeKey=="complex"){
       setDataPointPropsMap({
         id:"id",
         type:"type",
         dataName:"dataName",
-        intervalTime:"intervalTime"
+        intervalTime:"intervalTime",
+        scopeMin:"scopeMin",
+        scopeMax:"scopeMax",
       })
     }else if(activeKey=="react"){
       setDataPointPropsMap({
         id:"id",
         type:"type",
         dataName:"source",
-        intervalTime:"period"
+        intervalTime:"period",
+        scopeMin:"scopeMin",
+        scopeMax:"scopeMax",
       })
     }
   }

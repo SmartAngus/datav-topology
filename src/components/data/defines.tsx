@@ -365,6 +365,8 @@ export class DataPointPropsMap {
   type:string;// 数据点、复杂感知点,数字机理，可能没有
   dataName:string;
   intervalTime:string;
+  scopeMin:string;
+  scopeMax:string;
 }
 
 export class uploadConfigProps{

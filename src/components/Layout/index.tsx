@@ -285,6 +285,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (showTitle !== undefined) {
       selected.node.text = showTitle ? cardTitle : "";
     }
+    console.log("showLimit==",showLimit)
     if (showLimit !== undefined) {
       selected.node.children[1].text = showLimit
         ? `下限: ${!isNaN(parseInt(value["limit.bottom"])) ? value["limit.bottom"] : ""}   上限: ${
@@ -292,10 +293,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }`
         : "";
     }
-    if (selected.node.property.preType !== selected.node.property.limitType) {
-      // 切换的标签
-      selected.node.children[1].text = "";
-    }
+    // if (selected.node.property.preType !== selected.node.property.limitType) {
+    //   // 切换的标签
+    //   selected.node.children[1].text = "";
+    // }
     if ("limit.top" in value) {
       // 下限不能高于上限
       const limitTop = value["limit.top"];
@@ -432,9 +433,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // canvas.setValue(selected.node.id, 'setValue');
       // 通知有数据属性更新,会重新渲染画布
       const { name } = selected.node;
-      if (name === "biciCard") {
-        selected.node.property.preType = selected.node.property.limitType;
-      }
+      // if (name === "biciCard") {
+      //   selected.node.property.preType = selected.node.property.limitType;
+      // }
+      console.log("onHandlePropertyFormValueChange==",value)
 
       for (const key in value) {
         if (key.indexOf(".") > 0) {
@@ -724,6 +726,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           onChangeBkImage={handleChangeBkImage}
           isSave={isSave}
           setIsSave={setIsSave}
+          uploadConfig={props.uploadConfig}
         />
       ), // 渲染画布背景的组件
     };

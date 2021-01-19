@@ -46,6 +46,7 @@ interface ICanvasProps extends FormProps {
   onChangeBkImage?: (imageUrl: string) => void;
   isSave?: boolean;
   setIsSave?: (value: boolean) => void;
+  uploadConfig?:any;
 }
 const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   data,
@@ -53,6 +54,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   onChangeCanvasSize,
   onChangeBkImage,
   websocketConf,
+  uploadConfig,
   ...props
 }) => {
   const [form] = Form.useForm();
@@ -402,14 +404,11 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
             <Col push={2}>
               <Form.Item>
                 <Upload
-                  action={`${baseUrl}/api/file/file/uploadReturnPath`}
+                  action={`${uploadConfig.preInstall.baseURL}/${uploadConfig.preInstall.url}`}
                   accept="image/*"
-                  data={{
-                    mappingType: 107,
-                    mappingId: 'ooip6ffe388d487db754b885b8aa65b9',
-                  }}
+                  data={uploadConfig.preInstall.data}
                   headers={{
-                    token: 'development_of_special_token_by_star_quest',
+                    token: uploadConfig.preInstall.token,
                   }}
                   showUploadList={false}
                   beforeUpload={beforeUpload}

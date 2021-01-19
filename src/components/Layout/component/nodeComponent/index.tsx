@@ -375,6 +375,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
             type:row[dataPointPropsMap.type],
             dataName:row[dataPointPropsMap.dataName],
             intervalTime:row[dataPointPropsMap.intervalTime],
+            scopeMin:row[dataPointPropsMap.scopeMin],
+            scopeMax:row[dataPointPropsMap.scopeMax],
           }
         })
         if (data.node.property.dataPointSelectedRows.length < 10) {
@@ -405,10 +407,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
           //   'limit.bottom': scopeMin,
           //   'limit.top': scopeMax,
           // })
-          property.limitType = 'dataPoint';
-          property.showLimit = false;
-          property.limit.bottom = scopeMin;
-          property.limit.top = scopeMax;
+          // property.limitType = 'dataPoint';
+          // property.showLimit = false;
+          if(property.limitType=='dataPoint'){
+            property.limit.bottom = scopeMin;
+            property.limit.top = scopeMax;
+          }
         }
         data.node.property.dataPointSelectedRows = selectedRows;
         data.node.property.dataPointParam.qtDataList[0] = {
@@ -462,15 +466,17 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
   // 选择数据点，将数值配置上区
   const handleChangeDataPoint = (value) => {
     const dataTween = value.split('~');
-    propertyForm.setFieldsValue({
-      dataBottom: dataTween[0] == 'undefined' ? '' : dataTween[0],
-      dataTop: dataTween[1] == 'undefined' ? '' : dataTween[1],
-    });
-    onPropertyFormValueChange &&
+    if(data.node.property.limitType=='dataPoint'){
+      propertyForm.setFieldsValue({
+        dataBottom: dataTween[0] == 'undefined' ? '' : dataTween[0],
+        dataTop: dataTween[1] == 'undefined' ? '' : dataTween[1],
+      });
+      onPropertyFormValueChange &&
       onPropertyFormValueChange({
         dataBottom: dataTween[0] == 'undefined' ? '' : dataTween[0],
         dataTop: dataTween[1] == 'undefined' ? '' : dataTween[1],
       });
+    }
   };
   const updateTimelineOption = () => {
     data.node.elementRendered = false;
@@ -1035,12 +1041,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               label="上下限"
               labelCol={{ span: 9 }}
               labelAlign="left"
-              initialValue="dataPoint"
             >
               <Radio.Group
                 options={[
-                  { label: '数据点', value: 'dataPoint' },
                   { label: '自定义', value: 'custom' },
+                  { label: '数据点', value: 'dataPoint' },
                 ]}
                 style={{ float: 'right' }}
                 onChange={limitTypeOnChange}

@@ -55,7 +55,7 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
   ctx.strokeStyle = "#999999";
   ctx.fillStyle = "#999999";
   //  画直线，也就是刻度
-  ctx.font = '12px serif';
+  ctx.font = '12px Arial';
   ctx.lineWidth = 1;
   if(node.property.markChecked){
     for(let i=scale;i>=0;i--){
@@ -71,7 +71,7 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
   }
   // 绘制单位
   ctx.beginPath();
-  ctx.font = '14px serif';
+  ctx.font = '14px Arial';
   ctx.strokeStyle = node.property.chartTitleColor||"#333333";
   ctx.fillStyle = node.property.chartTitleColor||"#333333";
   if(node.property.chartUnitChecked){
