@@ -313,11 +313,9 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                   }
                 } else {
 
-                  if (
-                      (item.lightRangeBottom <= r.value &&
-                    item.lightRangeTop > r.value) ||
-                      item.lightRangeBottom <= r.value ||
-                      item.lightRangeTop > r.value
+                  if ((item.lightRangeBottom <= r.value && item.lightRangeTop > r.value)||
+                      (!item.lightRangeBottom&&item.lightRangeTop > r.value)||
+                      (!item.lightRangeTop&&item.lightRangeBottom <= r.value)
                   ) {
                     node.strokeStyle =
                       item?.lightRangeColor || node.strokeStyle;

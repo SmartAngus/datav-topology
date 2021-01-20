@@ -184,6 +184,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const onDrag = (event, node, custom = false) => {
     if (custom) {
       let data = node;
+      // 解决拖动新建组件添加到页面会删除相同组件的bug
+      data.id=s8();
       event.dataTransfer.setData("Topology", JSON.stringify(data, replacer));
     } else {
       event.dataTransfer.setData("Topology", JSON.stringify(node.data, replacer));
@@ -285,7 +287,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (showTitle !== undefined) {
       selected.node.text = showTitle ? cardTitle : "";
     }
-    console.log("showLimit==",showLimit)
     if (showLimit !== undefined) {
       selected.node.children[1].text = showLimit
         ? `下限: ${!isNaN(parseInt(value["limit.bottom"])) ? value["limit.bottom"] : ""}   上限: ${
@@ -293,10 +294,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }`
         : "";
     }
-    // if (selected.node.property.preType !== selected.node.property.limitType) {
-    //   // 切换的标签
-    //   selected.node.children[1].text = "";
-    // }
     if ("limit.top" in value) {
       // 下限不能高于上限
       const limitTop = value["limit.top"];
@@ -436,7 +433,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       // if (name === "biciCard") {
       //   selected.node.property.preType = selected.node.property.limitType;
       // }
-      console.log("onHandlePropertyFormValueChange==",value)
 
       for (const key in value) {
         if (key.indexOf(".") > 0) {
@@ -596,9 +592,16 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
          echartsObjs[data.id].chart.setOption(
              JSON.parse(JSON.stringify(data.data.echarts.option), reviver)
          );
-         // echartsObjs[data.id].chart.resize();
-         // data.elementRendered = false;
-         // canvas.updateProps(true, [data]);
+       }else if(data.name=='combine'){
+         (data.children||[]).map(item=>{
+           if(item.name=='echarts' && item.property.echartsType=="timeLine"){
+             item.data.echarts.option = getTimeLineOption(item, undefined, undefined);
+             // 更新图表数据
+             echartsObjs[item.id].chart.setOption(
+                 JSON.parse(JSON.stringify(item.data.echarts.option), reviver)
+             );
+           }
+         })
        }
         //==================
         break;

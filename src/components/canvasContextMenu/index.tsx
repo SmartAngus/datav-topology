@@ -132,40 +132,13 @@ export default class CanvasContextMenu extends Component<
       this.setState({ newComVisible: false });
       const cloneNodes = _.cloneDeep(this.props.data.nodes);
       const cloneNode = _.cloneDeep(this.props.data.node)
-      if (cloneNodes) {
-        cloneNodes.forEach(item => {
-          item.id=s8();
-          if ('property' in item && item.property && cloneNode.property.dataPointSelectedRows!=undefined) {
-            item.property.dataPointSelectedRows = [];
-            item.property.dataPointParam.qtDataList= [];
-            if (item.property.echartsType === 'timeLine') {
-              // item.data.echarts.option.series = []
-              if(item.data.echarts.option.legend){
-                item.data.echarts.option.legend.data=[];
-              }
-              item.data.echarts.option.series = item.data.echarts.option.series.filter(item => item.name === '上限' || item.name === '下限')
-            }
-          }
-        })
-      }else {
-        cloneNode.id=s8();
-        if ('property' in cloneNode && cloneNode.property && cloneNode.property.dataPointSelectedRows!=undefined) {
-          cloneNode.property.dataPointSelectedRows = [];
-          cloneNode.property.dataPointParam.qtDataList = [];
-          if (cloneNode.property.echartsType === 'timeLine') {
-            const series = cloneNode.data.echarts.option.series
-            if(cloneNode.data.echarts.option.legend){
-              cloneNode.data.echarts.option.legend.data=[];
-            }
-            cloneNode.data.echarts.option.series = series.filter(item => item.name === '上限' || item.name === '下限')
-          }
-        }
+      const result = [];
+      if(cloneNodes&&cloneNodes.length>0){
+        this.uncombineNodes(cloneNodes,result)
+      }else{
+        this.uncombineNodes([cloneNode],result)
       }
-      const newNode = cloneNodes
-        ? this.props.canvas.toComponent(cloneNodes)
-        : this.props.canvas.toComponent([cloneNode]);
-      // this.props.canvas.delete();
-      // this.props.canvas.addNode(newNode);
+      const newNode = this.props.canvas.toComponent(result)
       this.props.canvas.render();
       this.saveNewComponent({
         componentName: this.state.componentName,
@@ -180,6 +153,20 @@ export default class CanvasContextMenu extends Component<
       this.formRef.current.resetFields();
     }
   };
+  uncombineNodes = (nodes,result)=>{
+    (nodes||[]).map(item=>{
+      if(item.name=='combine'){
+        this.uncombineNodes(item.children,result)
+      }else{
+        if ('property' in item && item.property && item.property.dataPointSelectedRows!=undefined) {
+            item.property.dataPointSelectedRows = [];
+            item.property.dataPointParam.qtDataList= [];
+        }
+        result.push(item);
+      }
+    })
+  }
+
   renderNewComponentModal = () => {
     return (
       <Modal

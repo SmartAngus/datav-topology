@@ -410,8 +410,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
           // property.limitType = 'dataPoint';
           // property.showLimit = false;
           if(property.limitType=='dataPoint'){
-            property.limit.bottom = scopeMin;
-            property.limit.top = scopeMax;
+            data.node.property.limit.bottom = scopeMin;
+            data.node.property.limit.top = scopeMax;
           }
         }
         data.node.property.dataPointSelectedRows = selectedRows;
@@ -991,16 +991,17 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
         ? selectedData?.scopeMax
         : undefined;
       propertyForm.setFieldsValue({
-        showLimit: false,
+        showLimit: property.showLimit,
         'limit.bottom': scopeMin,
         'limit.top': scopeMax,
       });
-    } else {
-      propertyForm.setFieldsValue({
-        showLimit: false,
-        'limit.bottom': undefined,
-        'limit.top': undefined,
-      });
+      data.node.property.limit.bottom=scopeMin;
+      data.node.property.limit.top=scopeMax;
+      onPropertyFormValueChange&&onPropertyFormValueChange({
+         showLimit: property.showLimit,
+        'limit.bottom': scopeMin,
+        'limit.top': scopeMax,
+      })
     }
   };
 
@@ -1177,7 +1178,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
         })}
       </Fragment>
     );
-  }, [propertyForm, property, data.node]);
+  }, [propertyForm, property, data.node,property?.limitType,data.node,property?.dataPointSelectedRows]);
 
   // 改变指示灯大小
   const changePolitSize = (size: number) => {
