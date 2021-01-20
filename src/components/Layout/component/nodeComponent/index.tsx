@@ -368,7 +368,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
       if (nodeType == 'timeLine') {
         // 最多可绑定十个数据点
         selectedRows = selectedRows.slice(0, 10);
-        (selectedRows||[]).map(row=>{
+        selectedRows=(selectedRows||[]).map(row=>{
           return {
               ...row,
             id:row[dataPointPropsMap.id],
@@ -379,7 +379,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
             scopeMax:row[dataPointPropsMap.scopeMax],
           }
         })
-        if (data.node.property.dataPointSelectedRows.length < 10) {
+        if (data.node.property.dataPointSelectedRows.length <= 10) {
           data.node.property.dataPointSelectedRows = selectedRows;
           selectedRows.map((row, index) => {
             const q = {
