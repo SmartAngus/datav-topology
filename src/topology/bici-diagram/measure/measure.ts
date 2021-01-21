@@ -62,7 +62,7 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
       ctx.beginPath();
       ctx.moveTo(node.rect.x-14, node.rect.y+i*step);
       ctx.lineTo(node.rect.x-4, node.rect.y+i*step);
-      let txt=dataMin+(scale-i)*(dataMax-dataMin)/scale;
+      let txt=dataMin+(scale-i)*(dataMax-dataMin)/scale+"";
       txt = getFixed(txt,2);
       ctx.fillText(txt+'', node.rect.x-((txt+'').length)*6-20, node.rect.y+i*step+4.5);
       ctx.closePath();
@@ -111,15 +111,19 @@ export function biciMeasure(ctx: CanvasRenderingContext2D, node: Node) {
 
 }
 
-function getFixed(num,fix) {
-  let numStr = num.toString()
+function getFixed(num,fix):string {
+  let sh=Math.round(num*Math.pow(10, fix))/Math.pow(10, fix);
+  let numStr = sh.toString()
   let index = numStr.indexOf('.')
   if(index<0) return numStr;
   if(fix==0){
-    return numStr.slice(0, index + fix)
+    return numStr.slice(0, index + fix)+""
   }
-  return numStr.slice(0, index + fix+1)
+  return numStr.slice(0, index + fix+1)+""
 }
+
+
+
 function isNotNaN(value) {
   const r = typeof value === 'number' && !isNaN(value);
   return r;

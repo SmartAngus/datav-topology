@@ -650,11 +650,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
     return (
       <Panel header="字符" key="font">
         <Form form={form} onValuesChange={handleValuesChange}>
-          <Col span={24}>
-            <Form.Item name="color" label="颜色">
-              <ColorPicker />
-            </Form.Item>
-          </Col>
+          <Row>
+            <Col span={10}>
+              <Form.Item name="color" label="颜色" labelCol={{ span: 10 }}>
+                <ColorPicker />
+              </Form.Item>
+            </Col>
+            <Col span={14}>
+              <Form.Item name="fontSize" >
+                <InputNumber min={0} style={{width:"100%"}}/>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
           <Col span={24}>
             <Form.Item name="fontFamily" label="字体">
               <Select
@@ -694,11 +702,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               </Select>
             </Form.Item>
           </Col>
-          <Col span={24}>
-            <Form.Item name="fontSize" label="大小">
-              <InputNumber min={0} style={{ width: '100%' }} />
-            </Form.Item>
-          </Col>
+          </Row>
+          <Row>
           <Col span={24}>
             <Form.Item wrapperCol={{ offset: 4 }}>
               <Button.Group
@@ -719,8 +724,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               </Button.Group>
             </Form.Item>
           </Col>
+          </Row>
           {data.node.name !== 'biciPilot' && (
             <Fragment>
+              <Row>
               <Col span={24}>
                 <Form.Item name="textAlign" wrapperCol={{ offset: 4 }}>
                   <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
@@ -751,11 +758,14 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                   </Radio.Group>
                 </Form.Item>
               </Col>
+              </Row>
+              <Row>
               <Col span={24}>
                 <Form.Item name="text" label="内容">
                   <Input />
                 </Form.Item>
               </Col>
+              </Row>
             </Fragment>
           )}
         </Form>
@@ -1033,37 +1043,41 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               </Col>
               <Col span={14}>
                 <Form.Item name="cardTitle">
-                  <Input placeholder="标题名称" maxLength={20} />
+                  <Input placeholder="标题名称" maxLength={20} style={{width:"100%"}} />
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item
-              name="limitType"
-              label="上下限"
-              labelCol={{ span: 9 }}
-              labelAlign="left"
-            >
-              <Radio.Group
-                options={[
-                  { label: '自定义', value: 'custom' },
-                  { label: '数据点', value: 'dataPoint' },
-                ]}
-                style={{ float: 'right' }}
-                onChange={limitTypeOnChange}
-                optionType="button"
-                buttonStyle="solid"
-              />
-            </Form.Item>
+            <Row>
+              <Col span={24}>
+                <Form.Item
+                  name="limitType"
+                  label="上下限"
+                  labelCol={{ span: 9 }}
+                  labelAlign="left"
+                >
+                  <Radio.Group
+                    options={[
+                      { label: ' 自定义 ', value: 'custom' },
+                      { label: ' 数据点 ', value: 'dataPoint' },
+                    ]}
+                    style={{ float: 'right' }}
+                    onChange={limitTypeOnChange}
+                    optionType="button"
+                    buttonStyle="solid"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
             <Row justify="space-between">
               <Col span={4}>
                 <Form.Item name="showLimit" valuePropName="checked">
                   <Checkbox />
                 </Form.Item>
               </Col>
-              <Col span={20}>
+              <Col span={19}>
                 <Input.Group compact>
                   <Form.Item name="limit.bottom">
-                    <InputNumber style={{ width: 85 }} placeholder="下限" />
+                    <InputNumber style={{ width: 90 }} placeholder="下限"  />
                   </Form.Item>
                   <Input
                     style={{
@@ -1075,7 +1089,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                   />
                   <Form.Item name="limit.top">
                     <InputNumber
-                      style={{ width: 85 }}
+                      style={{ width: 90 }}
                       placeholder="上限"
                       onBlur={checkCardRange}
                     />
@@ -1095,7 +1109,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                 <Form.Item
                   name={`${key}.fontFamily`}
                   label="字体"
-                  labelCol={{ span: 8 }}
+                  labelCol={{ span: 7 }}
                   labelAlign="left"
                 >
                   <Select
@@ -1150,7 +1164,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                   </Col>
                   <Col span={11}>
                     <Form.Item name={`${key}.fontSize`}>
-                      <InputNumber min={12} />
+                      <InputNumber min={12}  style={{width:"100%"}}/>
                     </Form.Item>
                   </Col>
                 </Row>

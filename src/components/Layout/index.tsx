@@ -100,7 +100,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     maxScale: 3.1,
     color: "#096DD9",
     hoverColor: "#096DD9",
-    // activeColor:'#999999',
+    activeColor:'#999999',
     rule: false,
     // locked: Lock.None
   };
@@ -153,7 +153,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       canvas.resize({ width: w, height: h });
       canvas.render();
     } else {
-      setIsLoadCanvas(false);
+      setIsLoadCanvas(true);
+      canvas.render();
     }
     setShowHeader(true);
   }, [props.editorData]);
@@ -600,6 +601,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
              echartsObjs[item.id].chart.setOption(
                  JSON.parse(JSON.stringify(item.data.echarts.option), reviver)
              );
+           }else if(item.name=='echarts' && item.property.echartsType=="gauge"){
+             handleGaugeOption(undefined)
            }
          })
        }
@@ -740,6 +743,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     onEventValueChange,
     isLoadCanvas,
     canvas,
+    showHeader,
   ]);
   /**
    * 处理放大缩小

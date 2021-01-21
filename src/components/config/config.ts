@@ -68,7 +68,7 @@ export const Tools = [
         name: '时间',
         icon: 'iconshijian',
         data: {
-          text: '2021/01/01 12:00:00',
+          text: '2021-01-01 12:00:00',
           hideInput: true,
           rect: {
             width: 200,
