@@ -1931,7 +1931,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
         <Tabs defaultActiveKey="1" centered>
           <TabPane tab="&nbsp;&nbsp;&nbsp;&nbsp;外&nbsp;&nbsp;观&nbsp;&nbsp;&nbsp;&nbsp;" key="1" style={{ margin: 0 }}>
             <div style={{height:divHeight,overflow:"auto"}}>
-              <Collapse defaultActiveKey={['pos', 'lineInfo', 'lineStyle']}
+              <Collapse defaultActiveKey={['pos', 'lineInfo', 'lineStyle','info','style']}
                         expandIconPosition="right"
                         ghost={false} bordered={false}>
                 {renderPositionForm}
