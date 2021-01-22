@@ -171,7 +171,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
   ]);
 
   useEffect(() => {
-    setShowSelectDataPoint(property?.dataTopSource == 'custom');
+    setShowSelectDataPoint(property?.limitType == 'custom');
     propertyForm.setFieldsValue({
       dataMethod,
       dataDot,
@@ -268,7 +268,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
         'top-4': property.dataColors && property.dataColors[4]?.top,
         'bottom-4': property.dataColors && property.dataColors[4]?.bottom,
         smooth: property.smooth && property.smooth,
-        dataTopSource: property.dataTopSource && property.dataTopSource,
+        limitType: property.limitType && property.limitType,
         dataTopChecked: property.dataTopChecked && property.dataTopChecked,
         dataTop: property.dataTop && property.dataTop,
         dataBottom: property.dataBottom && property.dataBottom,
@@ -363,22 +363,22 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
     // if (selectedRows.length === 0) {
     //   return;
     // }
+    selectedRows=(selectedRows||[]).map(row=>{
+      return {
+        ...row,
+        id:row[dataPointPropsMap.id],
+        type:row[dataPointPropsMap.type],
+        dataName:row[dataPointPropsMap.dataName],
+        intervalTime:row[dataPointPropsMap.intervalTime],
+        scopeMin:row[dataPointPropsMap.scopeMin],
+        scopeMax:row[dataPointPropsMap.scopeMax],
+      }
+    })
     const nodeType = getNodeType(data.node);
     if (property && property.dataPointSelectedRows) {
       if (nodeType == 'timeLine') {
         // 最多可绑定十个数据点
         selectedRows = selectedRows.slice(0, 10);
-        selectedRows=(selectedRows||[]).map(row=>{
-          return {
-              ...row,
-            id:row[dataPointPropsMap.id],
-            type:row[dataPointPropsMap.type],
-            dataName:row[dataPointPropsMap.dataName],
-            intervalTime:row[dataPointPropsMap.intervalTime],
-            scopeMin:row[dataPointPropsMap.scopeMin],
-            scopeMax:row[dataPointPropsMap.scopeMax],
-          }
-        })
         if (data.node.property.dataPointSelectedRows.length <= 10) {
           data.node.property.dataPointSelectedRows = selectedRows;
           selectedRows.map((row, index) => {
@@ -400,20 +400,16 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
           const scopeMax = !isNaN(Number(selectedData?.scopeMax))
             ? selectedData?.scopeMax
             : undefined;
-          // 不生效？？？
-          // propertyForm.setFieldsValue({
-          //   'limitType': 'dataPoint',
-          //   'showLimit': false,
-          //   'limit.bottom': scopeMin,
-          //   'limit.top': scopeMax,
-          // })
-          // property.limitType = 'dataPoint';
-          // property.showLimit = false;
           if(property.limitType=='dataPoint'){
             data.node.property.limit.bottom = scopeMin;
             data.node.property.limit.top = scopeMax;
+            propertyForm.setFieldsValue({
+              dataBottom: scopeMin,
+              dataTop: scopeMax,
+            });
           }
         }
+        // 只绑定一个数据点
         data.node.property.dataPointSelectedRows = selectedRows;
         data.node.property.dataPointParam.qtDataList[0] = {
           id: selectedData.id,
@@ -1074,10 +1070,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                   <Checkbox />
                 </Form.Item>
               </Col>
-              <Col span={19}>
+              <Col span={20}>
                 <Input.Group compact>
                   <Form.Item name="limit.bottom">
-                    <InputNumber style={{ width: 90 }} placeholder="下限"  />
+                    <InputNumber style={{ width: 88 }} placeholder="下限"  />
                   </Form.Item>
                   <Input
                     style={{
@@ -1089,7 +1085,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                   />
                   <Form.Item name="limit.top">
                     <InputNumber
-                      style={{ width: 90 }}
+                      style={{ width: 88 }}
                       placeholder="上限"
                       onBlur={checkCardRange}
                     />
@@ -1722,7 +1718,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               </Col>
             </Row>
             <Col span={24}>
-              <Form.Item label="上下限" name="dataTopSource">
+              <Form.Item label="上下限" name="limitType">
                 <Radio.Group
                   options={[
                     { label: '自定义', value: 'custom' },
