@@ -982,7 +982,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
       message.config({
         getContainer: () => document.getElementById('editLayout'),
       });
-      message.error('上限不能超过下限');
+      message.error('下限不能大于上限');
     }
   };
 
@@ -1072,8 +1072,20 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               </Col>
               <Col span={20}>
                 <Input.Group compact>
-                  <Form.Item name="limit.bottom">
-                    <InputNumber style={{ width: 88 }} placeholder="下限"  />
+                  <Form.Item name="limit.bottom"
+                             dependencies={['limit.top']}
+                             rules={[
+                               ({ getFieldValue }) => ({
+                                 validator(_, value) {
+                                   if (!value || getFieldValue('limit.top') >= value) {
+                                     return Promise.resolve();
+                                   }
+                                   return Promise.reject('');
+                                 },
+                               }),
+                             ]}
+                  >
+                    <InputNumber style={{ width: 88 }} placeholder="下限"/>
                   </Form.Item>
                   <Input
                     style={{
@@ -1083,7 +1095,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                     placeholder="~"
                     disabled
                   />
-                  <Form.Item name="limit.top">
+                  <Form.Item name="limit.top"
+                             dependencies={['limit.bottom']}
+                             rules={[
+                               ({ getFieldValue }) => ({
+                                 validator(_, value) {
+                                   if (!value || getFieldValue('limit.bottom') <= value) {
+                                     return Promise.resolve();
+                                   }
+                                   return Promise.reject('');
+                                 },
+                               }),
+                             ]}
+                  >
                     <InputNumber
                       style={{ width: 88 }}
                       placeholder="上限"
@@ -1517,7 +1541,17 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               <Input.Group compact>
                 <Form.Item
                   name="dataMin"
-                  rules={[{ required: true, message: ' ' }]}
+                  dependencies={['dataMax']}
+                  rules={[
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('dataMax') >= value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject('');
+                      },
+                    }),
+                  ]}
                 >
                   <InputNumber style={{ width: 85 }} placeholder="下限" />
                 </Form.Item>
@@ -1745,7 +1779,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               </Col>
               <Col>
                 <Input.Group compact>
-                  <Form.Item name="dataBottom">
+                  <Form.Item name="dataBottom"
+                             dependencies={['dataTop']}
+                             rules={[
+                               ({ getFieldValue }) => ({
+                                 validator(_, value) {
+                                   if (!value || getFieldValue('dataTop') >= value) {
+                                     return Promise.resolve();
+                                   }
+                                   return Promise.reject('');
+                                 },
+                               }),
+                             ]}
+                  >
                     <InputNumber
                       style={{ width: 85 }}
                       placeholder="下限"
@@ -1760,7 +1806,19 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                     placeholder="~"
                     disabled
                   />
-                  <Form.Item name="dataTop">
+                  <Form.Item name="dataTop"
+                             dependencies={['dataBottom']}
+                             rules={[
+                               ({ getFieldValue }) => ({
+                                 validator(_, value) {
+                                   if (!value || getFieldValue('dataBottom') <= value) {
+                                     return Promise.resolve();
+                                   }
+                                   return Promise.reject('');
+                                 },
+                               }),
+                             ]}
+                  >
                     <InputNumber
                       style={{
                         width: 85,
