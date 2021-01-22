@@ -66,6 +66,8 @@ export class Topology {
     animateLayer: AnimateLayer;
     divLayer: DivLayer;
 
+    private isMac:boolean;
+
     private subcribe: Observer;
     private subcribeRender: Observer;
     private subcribeImage: Observer;
@@ -135,6 +137,8 @@ export class Topology {
         this.setupDom(parent);
         this.setupSubscribe();
         this.setupMouseEvent();
+
+        this.isMac = navigator.platform.startsWith('Mac');
 
         // Wait for parent dom load
         setTimeout(() => {
@@ -272,7 +276,7 @@ export class Topology {
                 this.onmousedown({
                     x: pos.x,
                     y: pos.y,
-                    ctrlKey: event.ctrlKey,
+                    ctrlKey: this.isMac?event.metaKey:event.ctrlKey,
                     shiftKey: event.shiftKey,
                     altKey: event.altKey,
                     button: 0,
@@ -328,7 +332,7 @@ export class Topology {
                 this.onMouseMove({
                     x: pos.x,
                     y: pos.y,
-                    ctrlKey: event.ctrlKey,
+                    ctrlKey: this.isMac?event.metaKey:event.ctrlKey,
                     shiftKey: event.shiftKey,
                     altKey: event.altKey,
                     buttons: 1,
@@ -341,43 +345,52 @@ export class Topology {
             };
         } else {
             this.divLayer.canvas.onmousedown = (event: MouseEvent) => {
-                // const e = {
-                //     x: event.pageX - window.scrollX - (this.canvasPos.left || this.canvasPos.x),
-                //     y: event.pageY - window.scrollY - (this.canvasPos.top || this.canvasPos.y),
-                //     ctrlKey: event.ctrlKey,
-                //     shiftKey: event.shiftKey,
-                //     altKey: event.altKey,
-                //     button: event.button,
-                // };
-                const e = {
+                const ctrlKey=this.isMac?event.metaKey:event.ctrlKey;
+                let e = {
                     x: event.offsetX,
                     y: event.offsetY,
-                    ctrlKey: event.ctrlKey,
+                    ctrlKey: ctrlKey,
                     shiftKey: event.shiftKey,
                     altKey: event.altKey,
                     button: event.button,
                 };
+                if(ctrlKey){
+                    e = {
+                        x: event.pageX - this.parentElem.scrollLeft - (this.canvasPos.left || this.canvasPos.x),
+                        y: event.pageY - this.parentElem.scrollTop - (this.canvasPos.top || this.canvasPos.y),
+                        ctrlKey: ctrlKey,
+                        shiftKey: event.shiftKey,
+                        altKey: event.altKey,
+                        button: event.button,
+                    };
+                }
                 this.lastTranlated.x = e.x;
                 this.lastTranlated.y = e.y;
                 this.onmousedown(e);
             };
             this.divLayer.canvas.onmousemove = (event: MouseEvent) => {
-                // this.onMouseMove({
-                //     x: event.pageX - window.scrollX - (this.canvasPos.left || this.canvasPos.x),
-                //     y: event.pageY - window.scrollY - (this.canvasPos.top || this.canvasPos.y),
-                //     ctrlKey: event.ctrlKey,
-                //     shiftKey: event.shiftKey,
-                //     altKey: event.altKey,
-                //     buttons: event.buttons,
-                // });
-                this.onMouseMove({
-                    x: event.offsetX,
-                    y: event.offsetY,
-                    ctrlKey: event.ctrlKey,
-                    shiftKey: event.shiftKey,
-                    altKey: event.altKey,
-                    buttons: event.buttons,
-                });
+                const ctrlKey=this.isMac?event.metaKey:event.ctrlKey;
+                let e;
+                if(ctrlKey){
+                    e={
+                        x: event.pageX - this.parentElem.scrollLeft - (this.canvasPos.left || this.canvasPos.x),
+                        y: event.pageY - this.parentElem.scrollTop - (this.canvasPos.top || this.canvasPos.y),
+                        ctrlKey: this.isMac?event.metaKey:event.ctrlKey,
+                        shiftKey: event.shiftKey,
+                        altKey: event.altKey,
+                        buttons: event.buttons,
+                    }
+                }else{
+                    e={
+                        x: event.offsetX,
+                        y: event.offsetY,
+                        ctrlKey: this.isMac?event.metaKey:event.ctrlKey,
+                        shiftKey: event.shiftKey,
+                        altKey: event.altKey,
+                        buttons: event.buttons,
+                    }
+                }
+                this.onMouseMove(e);
             };
             this.divLayer.canvas.onmouseup = (event: MouseEvent) => {
                 this.onmouseup();
@@ -408,7 +421,8 @@ export class Topology {
                 case KeyType.Any:
                     break;
                 case KeyType.Ctrl:
-                    if (!event.ctrlKey) {
+                    const ctrlKey2 = this.isMac?event.metaKey:event.ctrlKey;
+                    if (!ctrlKey2) {
                         return;
                     }
                     break;
@@ -425,7 +439,8 @@ export class Topology {
                 case KeyType.Any:
                     break;
                 default:
-                    if (!event.ctrlKey && !event.altKey) {
+                    const ctrlKey = this.isMac?event.metaKey:event.ctrlKey;
+                    if (!ctrlKey && !event.altKey) {
                         return;
                     }
             }
@@ -2450,22 +2465,23 @@ export class Topology {
         const offsetX = x - this.lastTranlated.x;
         const offsetY = y - this.lastTranlated.y;
 
-        for (const item of this.data.pens) {
-            item.translate(offsetX, offsetY);
-        }
-        // this.animateLayer.pens.forEach((pen) => {
-        //     if (pen instanceof Line) {
-        //         pen.translate(offsetX, offsetY);
-        //     }
-        // });
-        Store.set(this.generateStoreKey('LT:updateLines'), this.data.pens);
 
+        // for (const item of this.data.pens) {
+        //     item.translate(offsetX, offsetY);
+        // }
+        // // this.animateLayer.pens.forEach((pen) => {
+        // //     if (pen instanceof Line) {
+        // //         pen.translate(offsetX, offsetY);
+        // //     }
+        // // });
+        // Store.set(this.generateStoreKey('LT:updateLines'), this.data.pens);
+        //
         this.lastTranlated.x = x;
         this.lastTranlated.y = y;
-        this.render();
-        this.cache();
+        // this.render();
+        // this.cache();
 
-        !noNotice && this.dispatch('translate', { x, y });
+        !noNotice && this.dispatch('translate', { x, y,offsetX,offsetY,process });
     }
 
     // scale for scaled canvas:
@@ -2506,10 +2522,10 @@ export class Topology {
     }
 
     scaleContainer(scale: number){
-        let x=(scale*this.canvasPos.width-this.canvasPos.width)*0.5;
-        let y=(scale*this.canvasPos.height-this.canvasPos.height)*0.5;
+        let x=(scale*this.canvasPos.width-this.canvasPos.width)*0.412;
+        let y=(scale*this.canvasPos.height-this.canvasPos.height)*0.412;
         const containerStyle= {
-            transformOrigin: 'center center',
+            transformOrigin: `center center`,
             transform: `translate(${x}px,${y}px) scale(${scale})`
         }
         const canvasContainer = this.divLayer.canvas.parentElement.parentElement;

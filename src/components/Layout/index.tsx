@@ -82,7 +82,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   });
 
   const [isLoadCanvas, setIsLoadCanvas] = useState(false);
-  const [isLoadBackSetting, setIsLoadBackSetting] = useState(false);
   const [showHeader, setShowHeader] = useState(false);
   const svgRef = useRef();
   const canvasRef = useRef();
@@ -150,13 +149,11 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
         canvas.data.grid = true;
       }
       setIsLoadCanvas(true);
-      setIsLoadBackSetting(true);
       canvas.scaleContainer(props.editorData.scale);
       canvas.resize({ width: w, height: h });
       canvas.render();
     } else {
       setIsLoadCanvas(false);
-      setIsLoadBackSetting(true)
       canvas.render();
     }
     setShowHeader(true);
@@ -698,6 +695,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           scrollCenter();
         }
         break;
+      case "translate":
+        const fullDiv = document.querySelector("#full") as HTMLElement;
+        fullDiv.scrollBy(-data.offsetX,-data.offsetY);
+        break;
       default:
         break;
     }
@@ -746,7 +747,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     onEventValueChange,
     isLoadCanvas,
     canvas,
-    isLoadBackSetting,
   ]);
   /**
    * 处理放大缩小
