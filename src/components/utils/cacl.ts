@@ -86,6 +86,20 @@ export function roundFun(value: any, n: any) {
   return s;
 }
 
+export function getFixed(num,fix):string {
+  if(typeof num!=='number'){
+    return num;
+  }
+  let sh=Math.round(num*Math.pow(10, fix))/Math.pow(10, fix);
+  let numStr = sh.toString()
+  let index = numStr.indexOf('.')
+  if(index<0) return numStr;
+  if(fix==0){
+    return numStr.slice(0, index + fix)+""
+  }
+  return numStr.slice(0, index + fix+1)+""
+}
+
 // 判断区间是否有重叠，返回重叠区
 export function eraseOverlapIntervals(intervals):any[] {
   intervals.sort((a, b) => a[1] - b[1]); //按照区间末位对这些区间排个位，保证结束时间是按序上升的，从前往后取总是能取到当前结束时间的最小值

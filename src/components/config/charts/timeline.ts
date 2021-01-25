@@ -2,7 +2,7 @@ import {Node} from '../../../topology/core';
 import {defaultLineColors, defaultTimelineShowData} from "../../data/defines";
 import * as _ from 'lodash'
 import moment from 'moment';
-import {getContrastColor} from "../../utils/cacl";
+import {getContrastColor, getFixed} from "../../utils/cacl";
 moment.locale('zh-cn', {
     months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
     monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
@@ -198,7 +198,7 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
             if(node.data.echarts.option.dataset.source){
                 datasetSource=node.data.echarts.option.dataset.source;
             }
-            datasetSource[rowIndex+1].push(socketData.value);
+            datasetSource[rowIndex+1].push(getFixed(socketData.value,node.property.dataDot));
             if(datasetSource[rowIndex+1].length>defaultTimelineShowData){
                 datasetSource[rowIndex+1].splice(1,1)
             }

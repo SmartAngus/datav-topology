@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Lock, Options, s8, Topology } from "../../topology/core";
+import {Line, Lock, Options, s8, Topology} from "../../topology/core";
 import { echartsObjs, register as registerChart } from "../../topology/chart-diagram";
 import { register as registerBiciComp } from "../../topology/bici-diagram";
 import { message, Modal, Tabs, Tooltip, ConfigProvider } from "antd";
@@ -206,12 +206,14 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     (selected.node.property.dataColors || []).map((item) => {
       if (item.checked) {
         let lineColor = [];
-        lineColor[0] = Math.abs(
-          (item.top - selected.node.property.dataMin) /
-            (selected.node.property.dataMax - selected.node.property.dataMin)
-        );
-        lineColor[1] = item.color;
-        lineColors.push(lineColor);
+        if((item.top - selected.node.property.dataMin)>=0){
+          lineColor[0] = Math.abs(
+              (item.top - selected.node.property.dataMin) /
+              (selected.node.property.dataMax - selected.node.property.dataMin)
+          );
+          lineColor[1] = item.color;
+          lineColors.push(lineColor);
+        }
       }
     });
     if (lineColors.length == 0) {
@@ -585,6 +587,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           nodes: null,
           // locked: Lock.None
         });
+
         setIsLoadCanvas(true);
         //=================解决新建组件添加到画布纵坐标不显示的问题
        if(data.name=='echarts' && data.property.echartsType=="timeLine"){
@@ -603,6 +606,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
              );
            }else if(item.name=='echarts' && item.property.echartsType=="gauge"){
              handleGaugeOption(undefined)
+             // 更新图表数据
+             echartsObjs[item.id].chart.setOption(
+                 JSON.parse(JSON.stringify(item.data.echarts.option), reviver)
+             );
            }
          })
        }

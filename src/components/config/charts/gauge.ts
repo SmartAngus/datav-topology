@@ -37,12 +37,12 @@ export function getGaugeOption(
     }
     const lineColors = opt?.lineColors || [
         //数组第一个属性是颜色所占line百分比
-        [0.4, defaultLineColors[0]],
-        [0.6, defaultLineColors[1]],
-        [1, defaultLineColors[2]],
+        [0.4, "#f0f0f0"],
+        [0.6, "#f0f0f0"],
+        [1, "#f0f0f0"],
     ];
     if(lineColors[lineColors.length-1][0]<1){
-        lineColors.push([1, '#f56c6c'])
+        lineColors.push([1, "#f0f0f0"])
     }
     lineColors.sort((a,b)=>{
         return a[0]-b[0]

@@ -128,12 +128,22 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
   });
 
   useEffect(() => {
+    let temp = {
+      ...btnColor
+    }
     if (data.node.font.fontStyle !== 'normal') {
-      setBtnColor({ ...btnColor, italicBtn: '#1890ff',color:"#222" });
+      temp={
+        ...temp,
+        italicBtn: '#1890ff'
+      }
     }
     if (data.node.font.fontWeight !== 'normal') {
-      setBtnColor({ ...btnColor, boldBtn: '#1890ff',color:"#222" });
+      temp={
+        ...temp,
+        boldBtn: '#1890ff'
+      }
     }
+    setBtnColor(temp);
     // 设置基本表单
     form.setFieldsValue({
       x: Math.round(x),

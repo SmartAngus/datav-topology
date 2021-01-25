@@ -25,7 +25,7 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
 }) => {
   const [form] = Form.useForm();
 
-  const { lineWidth, dash, strokeStyle, name, fromArrow, toArrow } =
+  const { lineWidth, dash, strokeStyle, name, fromArrow, toArrow,type } =
     data?.line || {};
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
       fromArrow,
       toArrow,
     });
-  }, [form]);
+  }, [lineWidth, dash, name, toArrow, fromArrow, strokeStyle,type,data.line.data]);
 
   /**
    * 渲染位置和大小的表单
@@ -58,8 +58,12 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
           <Col span={24}>
             <Form.Item name="name" label="线条类型">
               <Select style={{ width: '95%' }}>
-                <Option value="curve">贝塞尔曲线</Option>
-                <Option value="polyline">折线</Option>
+                {name!=='line'?
+                    <React.Fragment>
+                    <Option value="curve">贝塞尔曲线</Option>
+                    <Option value="polyline">折线</Option>
+                    </React.Fragment>
+                    :''}
                 <Option value="line">直线</Option>
               </Select>
             </Form.Item>
@@ -114,7 +118,7 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
         </Row>
       </Form>
     );
-  }, [lineWidth, dash, name, toArrow, fromArrow, strokeStyle]);
+  }, [lineWidth, dash, name, toArrow, fromArrow, strokeStyle,type,data.line.data]);
 
   return (
     <div className="rightArea">
