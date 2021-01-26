@@ -25,7 +25,7 @@ const Layout = ({ uploaConfig, industrialLibrary }) => {
   });
   const [selectedItem, setSelectedItem] = useState(null);
   const contextMenuRef = useRef();
-  const divHeight = document.body.clientHeight-134;
+  const divHeight = document.body.clientHeight-170;
   useEffect(()=>{
 
   },[])

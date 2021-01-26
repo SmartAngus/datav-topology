@@ -839,7 +839,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       />
     </div>
   );
-  const divHeight = document.body.clientHeight-170;
+  const divHeight = document.body.clientHeight-200;
   return (
     <ConfigProvider prefixCls="antdv4">
       <div id="editLayout" ref={layoutRef}>

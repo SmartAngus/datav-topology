@@ -88,6 +88,11 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
     canvas.closeSocket();
     if (websocketConf !== undefined) {
       canvas.openSocket(`${websocketConf.url}`);
+      // canvas.socket.socket.addEventListener("message", function(event) {
+      //   var data = event.data;
+      //   console.log("onmessage==",data)
+      //   // 处理数据
+      // });
     }
     if (canvas != undefined && canvas.socket != undefined) {
       canvas.socket.socket.onopen = () => {
@@ -412,6 +417,9 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
     </ConfigProvider>
   );
 };
+
+
+
 
 // @ts-ignore
 export default Preview;

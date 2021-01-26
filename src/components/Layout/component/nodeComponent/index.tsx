@@ -1986,7 +1986,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
     );
   }, [property, data?.node, showSelectDataPoint, refreshProperty]);
 
-  const divHeight = document.body.clientHeight-170;
+  const divHeight = document.body.clientHeight-200;
 
   return (
     <div className={styles.rightArea}  style={{overflow:'hidden'}}>
