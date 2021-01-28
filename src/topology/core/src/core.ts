@@ -2522,8 +2522,8 @@ export class Topology {
     }
 
     scaleContainer(scale: number){
-        let x=(scale*this.canvasPos.width-this.canvasPos.width)*0.412;
-        let y=(scale*this.canvasPos.height-this.canvasPos.height)*0.412;
+        let x=(scale*this.canvasPos.width-scale*this.canvasPos.width)/2;
+        let y=(scale*this.canvasPos.height-scale*this.canvasPos.height)/2;
         const containerStyle= {
             transformOrigin: `center center`,
             transform: `translate(${x}px,${y}px) scale(${scale})`

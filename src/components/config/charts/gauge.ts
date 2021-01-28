@@ -50,7 +50,7 @@ export function getGaugeOption(
     let showTitle = true;
     let unit;
     let title;
-    let chartTitleColor="#f56c6c";
+    let chartTitleColor="#333333";
     let marks=10;
     let showMarks=true;
     if (opt) {

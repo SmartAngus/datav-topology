@@ -58,7 +58,7 @@ const LineCanvasProps: React.FC<ICanvasProps> = ({
           <Col span={24}>
             <Form.Item name="name" label="线条类型">
               <Select style={{ width: '95%' }}>
-                {name!=='line'?
+                {data?.line?.data?.type!=='myLine'?
                     <React.Fragment>
                     <Option value="curve">贝塞尔曲线</Option>
                     <Option value="polyline">折线</Option>

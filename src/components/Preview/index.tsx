@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import { ConfigProvider } from 'antd';
 import { Node, Topology } from '../../topology/core';
 import { roundFun } from '../utils/cacl';
 import { formatTimer, getNodeType } from '../utils/Property2NodeProps';
 import echarts from 'echarts/lib/echarts';
+import * as _ from 'lodash';
+
 
 import {
   echartsObjs,
@@ -31,6 +33,8 @@ export class PreviewProps {
 }
 // echartsObjs[node.id].chart
 const Preview = ({ data, websocketConf }: PreviewProps) => {
+  let websocketData=null;
+  let websocket_data_list=[]
   useEffect(() => {
     const canvasOptions = {
       rotateCursor: '/rotate.cur',
@@ -51,6 +55,26 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       canvas.closeSocket();
     };
   }, [data]);
+
+  useEffect(()=>{
+    let interVal=0;
+    let dataLen=websocket_data_list.length;
+    const interval = setInterval(()=>{// 每一秒区监听
+      interVal++;
+
+      if(interVal%100==0){// 10秒倾下数据
+        // 如果10秒之后的数据没变，说明websocket停止推送数据了
+        if(websocket_data_list.length==dataLen){
+
+        }
+        websocket_data_list = []
+      }
+      stopCompData(canvas.data.pens, interVal)
+    },1000)
+    return ()=>{
+      clearInterval(interval)
+    }
+  },[])
 
   /**
    * 注册图形库
@@ -84,15 +108,80 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
     }
   };
 
+  // 停止数据推送时更新图表
+  const stopCompData=(pens,intval)=>{
+    (pens || []).map((node) => {
+      // 循环遍历
+      if(node.name=="combine"){
+        stopCompData(node.children,intval);
+      }else if (node.property?.dataPointParam?.qtDataList?.length > 0) {
+        if (node.name == 'echarts'){// echart图表组件
+          if(websocketData&&intval%2==0){
+
+            const theChart = node.property.echartsType;
+            switch (theChart){
+              case "timeLine":
+                const dataRows = node.property.dataPointSelectedRows;
+
+                break
+              case 'gauge':
+
+                break;
+              default:
+                break
+            }
+          }
+        }else {
+          const dataRow = node.property.dataPointSelectedRows[0];
+          if(websocketData&&dataRow&&intval%2==0){// 每2秒检测一次
+            const nodeType=node.name;
+            const hasData=_.findIndex(websocket_data_list,item=>{
+              if(item){
+                return item.id==dataRow.id;
+              }else{
+                return false;
+              }
+            });
+            switch (nodeType){
+              case "biciVarer":
+                  if(hasData<0){ // 没有数据
+                    node.text="00:00:00"
+                    canvas.updateProps(false,[node])
+                  }
+                break;
+              case "biciMeasure":
+                if(hasData<0){
+                  node.property.value = node.property.dataMin;
+                  canvas.updateProps(false,[node]);
+                }
+                break;
+              case "biciCard":
+                if(hasData<0) {
+                  node.children[0].text = '0.00';
+                  canvas.updateProps(false, [node]);
+                }
+                break;
+              case "biciPilot":
+                if(hasData<0) {
+                  node.strokeStyle = node.property.color;
+                  if (node.property.showText) {
+                    node.text = node.property.text;
+                  }
+                }
+                break;
+              default:
+                break;
+            }
+          }
+        }
+      }
+    });
+  }
+
   const initWebsocketData = () => {
     canvas.closeSocket();
     if (websocketConf !== undefined) {
       canvas.openSocket(`${websocketConf.url}`);
-      // canvas.socket.socket.addEventListener("message", function(event) {
-      //   var data = event.data;
-      //   console.log("onmessage==",data)
-      //   // 处理数据
-      // });
     }
     if (canvas != undefined && canvas.socket != undefined) {
       canvas.socket.socket.onopen = () => {
@@ -104,7 +193,8 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         }
       };
       canvas.socket.socket.onmessage = (data) => {
-        // console.log("onmessage==",data)
+        websocketData=JSON.parse(data.data);
+        websocket_data_list.push(websocketData);
         if (canvas.data && canvas.data.pens.length > 0) {
           // 有数据，去遍历有websocket的组件，并订阅
           if (canvas.socket != undefined) {
@@ -113,6 +203,8 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           }
         }
       };
+      canvas.socket.socket.onclose=(e)=>{
+      }
     }
     //canvas.data.pens
     updateTimerCom(canvas.data.pens);
@@ -176,9 +268,6 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             }
             break;
           case 'timeLine':
-            node.property.dataPointSelectedRows.sort((a,b)=>{
-              return a.intervalTime-b.intervalTime
-            })
             let selectedRows = node.property.dataPointSelectedRows;
 
             const timesxAix=node.data.echarts.option.dataset.source[0];
@@ -189,7 +278,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                   if(timesxAix.length>defaultTimelineShowData){
                     timesxAix.splice(1,1)
                   }
-                  node.data.echarts.option = getTimeLineOption(node, null, r, timesxAix);
+                  node.data.echarts.option = getTimeLineOption(node, null, r, timesxAix,true);
                 }else{
                   node.data.echarts.option = getTimeLineOption(node, null, r);
                 }

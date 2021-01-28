@@ -83,7 +83,7 @@ moment.locale('zh-cn', {
         doy: 4  // The week that contains Jan 4th is the first week of the year.
     }
 })
-export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,timesxAix?:any[]) {
+export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,timesxAix?:any[],firstLine=false) {
     let datasetSource=[];
     let source0:(string|number)[]=[null]
     let lineColors = _.cloneDeep(defaultLineColors)
@@ -192,17 +192,26 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
     datasetSource.unshift(source0);
 
     if(socketData){
-        const rowIndex=_.findIndex(node.property.dataPointSelectedRows,(row:any)=>{return row.id==socketData.id})
-
-        if(rowIndex!=-1){
+        const rowIndex=_.findIndex(node.property.dataPointSelectedRows,(row:any)=>{return row.id==socketData.id});
+        if(node.data.echarts.option.dataset.source){
+            datasetSource=node.data.echarts.option.dataset.source;
+        }
+        (node.property.dataPointSelectedRows||[]).map((row,index)=>{
             if(node.data.echarts.option.dataset.source){
                 datasetSource=node.data.echarts.option.dataset.source;
             }
-            datasetSource[rowIndex+1].push(getFixed(socketData.value,node.property.dataDot));
-            if(datasetSource[rowIndex+1].length>defaultTimelineShowData){
-                datasetSource[rowIndex+1].splice(1,1)
+            if(socketData.id==row.id){
+                datasetSource[index+1].push(getFixed(socketData.value,node.property.dataDot));
+                if(datasetSource[index+1].length>defaultTimelineShowData){
+                    datasetSource[index+1].splice(1,1)
+                }
+            }else if(datasetSource[index+1]&&firstLine){
+                datasetSource[index+1].push(datasetSource[index+1][datasetSource[index+1].length-1]);
+                if(datasetSource[index+1].length>defaultTimelineShowData){
+                    datasetSource[index+1].splice(1,1)
+                }
             }
-        }
+        })
     }
 
 

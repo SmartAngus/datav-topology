@@ -69,6 +69,8 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   });
   const [wsAddress, setWsAddress] = useState(websocketConf.url);
 
+  const [preBgImageName,setPreBgImageName]=useState("预设背景")
+
   useEffect(() => {
     // 回显数值
     const w = data.canvas.width;
@@ -155,17 +157,32 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
   };
 
   // 设置背景图片
-  const selectedBgImg = (url: string) => {
+  const selectedBgImg = (url: string,item=undefined) => {
     if (data.data['bkImage'] && data.data['bkImage'] === url) {
       // 再次点击，取消图片
       canvas.clearBkImg();
       data.data['bkImage'] = undefined;
-      onChangeBkImage && onChangeBkImage('');
+      onChangeBkImage && onChangeBkImage('预设背景');
+      setPreBgImageName("预设背景")
+      form.setFieldsValue({
+        bgVal:"预设背景"
+      })
     } else {
       // 修改背景图片前，需要先canvas.clearBkImg清空旧图片
       canvas.clearBkImg();
       data.data['bkImage'] = url;
       onChangeBkImage && onChangeBkImage(url);
+      if(item){
+        setPreBgImageName("预设背景"+item.key)
+        form.setFieldsValue({
+          bgVal:"预设背景"+item.key
+        })
+      }else{
+        setPreBgImageName("预设背景")
+        form.setFieldsValue({
+          bgVal:"预设背景"
+        })
+      }
     }
     setPopoverVisible({ ...popoverVisible, bgSelect: false });
     canvas.render();
@@ -282,7 +299,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
               border: '1px solid #096DD9',
               boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.06)',
             }}
-            onClick={() => selectedBgImg(item.img)}
+            onClick={() => selectedBgImg(item.img,item)}
           >
             <img
               src={item.img}
@@ -370,7 +387,7 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
             }
             getPopupContainer={() => document.querySelector('#editLayout')}
           >
-            <Form.Item name="bgVal" initialValue="预设背景">
+            <Form.Item name="bgVal" initialValue={preBgImageName}>
               <Input readOnly suffix={<DownOutlined />} />
             </Form.Item>
           </Popover>

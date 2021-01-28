@@ -96,7 +96,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     hideInput: false,
     disableEmptyLine: false,
     disableScale: false,
-    minScale: 0.2,
+    minScale: 0.3,
     maxScale: 3.1,
     color: "#096DD9",
     hoverColor: "#096DD9",
@@ -186,10 +186,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     if (custom) {
       let data = node;
       // 解决拖动新建组件添加到页面会删除相同组件的bug
-      data.id=s8();
-      event.dataTransfer.setData("Topology", JSON.stringify(data, replacer));
+      data.id=s8();// Topology
+      event.dataTransfer.setData("Text", JSON.stringify(data, replacer));
     } else {
-      event.dataTransfer.setData("Topology", JSON.stringify(node.data, replacer));
+      event.dataTransfer.setData("Text", JSON.stringify(node.data, replacer));
     }
   };
   const handleGaugeOption = (values) => {
@@ -296,6 +296,10 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
             !isNaN(parseInt(value["limit.top"])) ? value["limit.top"] : ""
           }`
         : "";
+    }
+    console.log("card==",value)
+    if(value["limit.top"]<value["limit.bottom"]){
+      selected.node.children[1].text='';
     }
     if ("limit.top" in value) {
       // 下限不能高于上限

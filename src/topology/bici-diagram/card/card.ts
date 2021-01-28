@@ -54,9 +54,9 @@ export function simpleCard(ctx: CanvasRenderingContext2D, node: Node) {
   //ctx.lineTo(node.rect.ex, height);
 
   const linear = ctx.createLinearGradient(
-      node.rect.x+node.rect.width/2,
+      node.rect.x,
       node.rect.y,
-      node.rect.x+node.rect.width/2,
+      node.rect.ex+node.rect.width/2,
       node.rect.ey+node.rect.height);
   // const linear = ctx.createRadialGradient(
   //     node.rect.x+node.rect.width/2,
@@ -67,8 +67,8 @@ export function simpleCard(ctx: CanvasRenderingContext2D, node: Node) {
   //     100);
   const {fillStyle}=node;
   if(fillStyle){
-    linear.addColorStop(0,fillStyle);
-    linear.addColorStop(1,'white');
+    linear.addColorStop(0,'white');
+    linear.addColorStop(1,fillStyle);
     ctx.fillStyle=linear;
     ctx.strokeStyle=fillStyle;
   }

@@ -387,8 +387,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
     const nodeType = getNodeType(data.node);
     if (property && property.dataPointSelectedRows) {
       if (nodeType == 'timeLine') {
+
         // 最多可绑定十个数据点
         selectedRows = selectedRows.slice(0, 10);
+        selectedRows=selectedRows.sort((a,b)=>{
+          return a.intervalTime-b.intervalTime
+        })
         if (data.node.property.dataPointSelectedRows.length <= 10) {
           data.node.property.dataPointSelectedRows = selectedRows;
           selectedRows.map((row, index) => {
@@ -657,12 +661,12 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
       <Panel header="字符" key="font">
         <Form form={form} onValuesChange={handleValuesChange}>
           <Row>
-            <Col span={10}>
-              <Form.Item name="color" label="颜色" labelCol={{ span: 10 }}>
+            <Col span={14}>
+              <Form.Item name="color" label="颜色字号" labelCol={{ span: 14 }} labelAlign="left">
                 <ColorPicker />
               </Form.Item>
             </Col>
-            <Col span={14}>
+            <Col span={10}>
               <Form.Item name="fontSize" >
                 <InputNumber min={0} style={{width:"100%"}}/>
               </Form.Item>
@@ -927,6 +931,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               type="dashed"
               onClick={() => addDataPoint()}
               icon={<PlusOutlined />}
+              style={{color:"#096DD9"}}
             >
               添加数据点
             </Button>
@@ -2012,23 +2017,33 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
             </div>
           </TabPane>
           <TabPane tab="&nbsp;&nbsp;&nbsp;&nbsp;数&nbsp;&nbsp;据&nbsp;&nbsp;&nbsp;&nbsp;" key="2" style={{ margin: 0 }}>
-            <Collapse defaultActiveKey={['2']}
-                      expandIconPosition="right"
-                      ghost={false} bordered={false}>
-              {/*<Panel header="本身数据" key="1">*/}
-              {/*  {renderDataForm}*/}
-              {/*</Panel>*/}
-              {(data.node.name == 'biciVarer' ||
-                data.node.name == 'echarts' ||
-                data.node.name == 'biciCard' ||
-                data.node.name == 'biciPilot'||
-                data.node.name == 'biciMeasure'
-              ) && (
-                <Panel header="自定义数据" key="2">
-                  {renderExtraDataForm}
-                </Panel>
-              )}
-            </Collapse>
+            <Row style={{margin:"0 15px"}}>
+              <Col span={24}>
+                {(data.node.name == 'biciVarer' ||
+                    data.node.name == 'echarts' ||
+                    data.node.name == 'biciCard' ||
+                    data.node.name == 'biciPilot'||
+                    data.node.name == 'biciMeasure'
+                ) && renderExtraDataForm}
+              </Col>
+            </Row>
+            {/*<Collapse defaultActiveKey={['2']}*/}
+            {/*          expandIconPosition="right"*/}
+            {/*          ghost={false} bordered={false}>*/}
+            {/*  /!*<Panel header="本身数据" key="1">*!/*/}
+            {/*  /!*  {renderDataForm}*!/*/}
+            {/*  /!*</Panel>*!/*/}
+            {/*  {(data.node.name == 'biciVarer' ||*/}
+            {/*    data.node.name == 'echarts' ||*/}
+            {/*    data.node.name == 'biciCard' ||*/}
+            {/*    data.node.name == 'biciPilot'||*/}
+            {/*    data.node.name == 'biciMeasure'*/}
+            {/*  ) && (*/}
+            {/*    <Panel header="自定义数据" key="2">*/}
+            {/*      {renderExtraDataForm}*/}
+            {/*    </Panel>*/}
+            {/*  )}*/}
+            {/*</Collapse>*/}
           </TabPane>
         </Tabs>
       )}
