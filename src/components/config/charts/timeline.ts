@@ -192,7 +192,6 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
     datasetSource.unshift(source0);
 
     if(socketData){
-        const rowIndex=_.findIndex(node.property.dataPointSelectedRows,(row:any)=>{return row.id==socketData.id});
         if(node.data.echarts.option.dataset.source){
             datasetSource=node.data.echarts.option.dataset.source;
         }
@@ -206,10 +205,13 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
                     datasetSource[index+1].splice(1,1)
                 }
             }else if(datasetSource[index+1]&&firstLine){
-                datasetSource[index+1].push(datasetSource[index+1][datasetSource[index+1].length-1]);
+                if(row.intervalTime>1){
+                    datasetSource[index+1].push(datasetSource[index+1][datasetSource[index+1].length-1]);
+                }
                 if(datasetSource[index+1].length>defaultTimelineShowData){
                     datasetSource[index+1].splice(1,1)
                 }
+
             }
         })
     }

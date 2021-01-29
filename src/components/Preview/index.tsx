@@ -241,6 +241,9 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 name: node.property.chartTitle,
               };
               cd.value = roundFun(r.value, node.property.dataDot);
+              if(r.value==undefined){
+                cd.value=node.property.dataMin
+              }
               node.data.echarts.option.series[0].data[0] = cd;
               updateChartNode(node);
             } else {
@@ -254,8 +257,6 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             const timesxAix=node.data.echarts.option.dataset.source[0];
             (selectedRows || []).map((row,index) => {
               if (row.id == r.id) {
-                if(r.value==undefined){
-                }
                 if(index==0){
                   timesxAix.push(moment(parseInt(r.time/1000+"")*1000).format("LTS"))
                   if(timesxAix.length>defaultTimelineShowData){
@@ -265,7 +266,6 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 }else{
                   node.data.echarts.option = getTimeLineOption(node, null, r);
                 }
-
               }
             });
             updateChartNode(node);
@@ -306,6 +306,11 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             node.text != r.value &&
             node.property.dataPointParam.qtDataList[0].id == r.id
           ) {
+            if(r.value==undefined){
+              node.text="00:00:00"
+              canvas.updateProps(false,[node])
+              return;
+            }
             if (!isNaN(Number(r.value))) {
               // 数值型
               const n = node.property.dataDot;
@@ -324,12 +329,18 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         }else if(node.name === 'biciMeasure'){
           if (node.property.dataPointSelectedRows[0]?.id == r.id) {
             node.property.value = r.value;
+            if(r.value==undefined){
+              node.property.value = node.property.dataMin;
+            }
             canvas.updateProps(false);
           }
         } else if (node.name === 'biciCard') {
           if (node.property.dataPointParam.qtDataList[0].id == r.id) {
             const n = node.property.dataDot;
-            const val = roundFun(parseFloat(r.value), n);
+            let val = roundFun(parseFloat(r.value), n);
+            if(r.value==undefined){
+              val="0.00"
+            }
             node.children[0].text = val;
             const bottom = node.property.limit.bottom;
             const top = node.property.limit.top;
@@ -376,6 +387,9 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           ) {
             let flag = false;
             node.property.val = r.value;
+            if(r.value==undefined){
+              node.property.val=0;
+            }
             if (node.property.lightRange) {
               for (const item of node.property.lightRange) {
                 if (node.property.stateType === 'single') {

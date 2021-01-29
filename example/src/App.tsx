@@ -13,7 +13,7 @@ import DataBindModal from "./FilterDataPoint";
 import {industry_List} from "./common/config";
 
 const { confirm } = Modal;
-const token = '41RRG3Sw769ihHUvPADHg6';
+const token = '1Q6mQXB7zU9PQRTs16KVoM';
 
 const testId = 'e2e697e719194b188c1bfe5b0dcb0604';
 

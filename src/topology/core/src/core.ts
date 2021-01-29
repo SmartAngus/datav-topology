@@ -238,7 +238,9 @@ export class Topology {
                 return;
             }
             try {
-                const json = event.dataTransfer.getData('Topology') || event.dataTransfer.getData('text');
+                // const json = event.dataTransfer.getData('Topology') || event.dataTransfer.getData('text');
+                const json = event.dataTransfer.getData('text');
+
                 if (!json) return;
                 const obj = JSON.parse(json);
                 event.preventDefault();

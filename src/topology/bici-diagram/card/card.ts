@@ -67,7 +67,6 @@ export function simpleCard(ctx: CanvasRenderingContext2D, node: Node) {
   //     100);
   const {fillStyle}=node;
   if(fillStyle){
-    hexToRgb(fillStyle)
     linear.addColorStop(0,getLightColor(fillStyle,0.5));
     linear.addColorStop(1,fillStyle);
     ctx.fillStyle=linear;
@@ -90,7 +89,7 @@ function hexToRgb(str) {
     for (var i = 0; i < 3; i++) hxs[i] = parseInt(hxs[i], 16);
     return hxs;
   }else if(r2.test(str)){
-    const r3 = /[0-9]{1,3}/g;
+    const r3 = /[0-9a-fA-F]{1,3}/g;
     let rgbas=str.match(r3);
     rgbas.pop();
     rgbas = rgbas.map(item=>{
