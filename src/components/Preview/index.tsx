@@ -35,6 +35,7 @@ export class PreviewProps {
 const Preview = ({ data, websocketConf }: PreviewProps) => {
   let websocketData=null;
   let websocket_data_list=[]
+
   useEffect(() => {
     const canvasOptions = {
       rotateCursor: '/rotate.cur',
@@ -49,32 +50,12 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       data.locked = 1;
       canvas.open(data);
     }
-    // console.log('canvas', canvas);
     initWebsocketData();
     return () => {
       canvas.closeSocket();
     };
   }, [data]);
 
-  useEffect(()=>{
-    let interVal=0;
-    let dataLen=websocket_data_list.length;
-    const interval = setInterval(()=>{// 每一秒区监听
-      interVal++;
-
-      if(interVal%100==0){// 10秒倾下数据
-        // 如果10秒之后的数据没变，说明websocket停止推送数据了
-        if(websocket_data_list.length==dataLen){
-
-        }
-        websocket_data_list = []
-      }
-      stopCompData(canvas.data.pens, interVal)
-    },1000)
-    return ()=>{
-      clearInterval(interval)
-    }
-  },[])
 
   /**
    * 注册图形库
@@ -133,7 +114,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           }
         }else {
           const dataRow = node.property.dataPointSelectedRows[0];
-          if(websocketData&&dataRow&&intval%2==0){// 每2秒检测一次
+          if(dataRow&&intval%2==0){// 每2秒检测一次
             const nodeType=node.name;
             const hasData=_.findIndex(websocket_data_list,item=>{
               if(item){
@@ -273,6 +254,8 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             const timesxAix=node.data.echarts.option.dataset.source[0];
             (selectedRows || []).map((row,index) => {
               if (row.id == r.id) {
+                if(r.value==undefined){
+                }
                 if(index==0){
                   timesxAix.push(moment(parseInt(r.time/1000+"")*1000).format("LTS"))
                   if(timesxAix.length>defaultTimelineShowData){

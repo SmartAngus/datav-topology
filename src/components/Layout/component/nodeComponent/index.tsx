@@ -399,6 +399,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
             const q = {
               id: selectedRows[index][dataPointPropsMap.id],
               type: selectedRows[index][dataPointPropsMap.type],
+              intervalTime:selectedRows[index][dataPointPropsMap.intervalTime]
             };
             data.node.property.dataPointParam.qtDataList[index] = q;
           });
@@ -427,7 +428,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
         data.node.property.dataPointSelectedRows = selectedRows;
         data.node.property.dataPointParam.qtDataList[0] = {
           id: selectedData.id,
-          type: selectedData.dataType || selectedData.type,
+          type: selectedData.dataType,
+          intervalTime:selectedData.intervalTime
         };
         setDataPointSelectedRows(selectedRows);
       }

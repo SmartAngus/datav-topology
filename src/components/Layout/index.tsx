@@ -187,9 +187,9 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       let data = node;
       // 解决拖动新建组件添加到页面会删除相同组件的bug
       data.id=s8();// Topology
-      event.dataTransfer.setData("Text", JSON.stringify(data, replacer));
+      event.dataTransfer.setData("text", JSON.stringify(data, replacer));
     } else {
-      event.dataTransfer.setData("Text", JSON.stringify(node.data, replacer));
+      event.dataTransfer.setData("text", JSON.stringify(node.data, replacer));
     }
   };
   const handleGaugeOption = (values) => {
@@ -297,7 +297,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           }`
         : "";
     }
-    console.log("card==",value)
     if(value["limit.top"]<value["limit.bottom"]){
       selected.node.children[1].text='';
     }

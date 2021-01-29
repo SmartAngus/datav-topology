@@ -23,10 +23,9 @@ import CustomIcon from '../../../config/iconConfig';
 import { dynamicWebSocketData } from '../../../common/DynamicWebSocketData';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { calcCanvas } from '../../../utils/cacl';
+import * as _ from 'lodash';
 
-const { TabPane } = Tabs;
 const { Panel } = Collapse;
-const { TextArea } = Input;
 const panelSizeObj = {
   '16:9': ['1920*1080', '1680*1050', '1600*900', '1366*768'],
   '4:3': ['1024*768', '800*600'],
@@ -82,6 +81,14 @@ const BackgroundCanvasProps: React.FC<ICanvasProps> = ({
       isUploadBgImg = !props.preInstallBgImages
         .map((item) => item.img)
         .includes(data.data.bkImage);
+      const index = _.findIndex(props.preInstallBgImages,(item:any)=>item.img==data.data.bkImage);
+      console.log("index==",index,props.preInstallBgImages,data.data.bkImage)
+      if(index>=0){
+        setPreBgImageName("预设背景"+(index+1));
+        form.setFieldsValue({
+          bgVal:"预设背景"+(index+1)
+        })
+      }
     }
     const sizeValText = Object.values(panelSizeObj).flat().includes(`${w}*${h}`)
       ? `预设·${w}*${h}`
