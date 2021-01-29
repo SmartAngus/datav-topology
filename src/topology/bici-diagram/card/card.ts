@@ -91,7 +91,6 @@ function hexToRgb(str) {
   }else if(r2.test(str)){
     const r3 = /[0-9a-fA-F]{1,3}/g;
     let rgbas=str.match(r3);
-    rgbas.pop();
     rgbas = rgbas.map(item=>{
       return parseInt(item);
     });

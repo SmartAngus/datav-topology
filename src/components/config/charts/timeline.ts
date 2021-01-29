@@ -208,7 +208,7 @@ export function getTimeLineOption(node?:Node,changeValues?:any,socketData?:any,t
                 if(row.intervalTime>1){
                     datasetSource[index+1].push(datasetSource[index+1][datasetSource[index+1].length-1]);
                 }
-                if(datasetSource[index+1].length>defaultTimelineShowData){
+                if(datasetSource[index+1].length>(defaultTimelineShowData+1)){
                     datasetSource[index+1].splice(1,1)
                 }
 

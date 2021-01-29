@@ -88,7 +88,7 @@ export function roundFun(value: any, n: any) {
 
 export function getFixed(num,fix):string {
   if(typeof num!=='number'){
-    return num;
+    return "";
   }
   let sh=Math.round(num*Math.pow(10, fix))/Math.pow(10, fix);
   let numStr = sh.toString()
