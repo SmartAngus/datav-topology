@@ -78,7 +78,7 @@ export function simpleCard(ctx: CanvasRenderingContext2D, node: Node) {
 }
 //hex颜色转rgb颜色
 function hexToRgb(str) {
-  const r = /^\#?[0-9A-F]{6}$/;
+  const r = /^\#?[0-9a-fA-F]{6}$/;
   const r2 = /^(rgb|rgba)/g;
   //test方法检查在字符串中是否存在一个模式，如果存在则返回true，否则返回false
   if (r.test(str)){
