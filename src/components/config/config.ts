@@ -777,6 +777,29 @@ export const Tools = [
           },
           property: {
             echartsType: 'circleAndPie',
+            props: {
+              iframe:"abcd"
+            },
+            form:{
+              style:[{
+                group:'标题字符',
+                formItems:[
+                  { name: ['title'], value: 'Ant Design' },
+                  { name: ['titleShow'], value: '#ccc000' },
+                  { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
+                  { name: ['titleFontColor'], value: "#333333" },
+                  { name: ['titleFontSize'], value: 14 },
+                  { name: ['titleFontBold'], value: 200 },
+                  { name: ['titleFontItalic'], value: "normal" },
+                  { name: ['titleFontBaseline'], value: "underline" },
+                  { name: ['titlePosition'], value: "left" },
+                ]
+              },{
+                group:'形状',
+                formItems:[{ name: ['chartShape'], value: 'pie' }]
+              }],
+              data:[]
+            }
           },
         },
       },

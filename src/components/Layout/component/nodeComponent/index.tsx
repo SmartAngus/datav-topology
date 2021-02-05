@@ -2036,7 +2036,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                 {data?.node.name === 'biciMeasure' && renderMeter}
                 {property?.echartsType === 'timeLine' && renderLineGraph}
                 {property?.echartsType === 'gauge' && renderGauge}
-                {name==='webPage'&&dynamicForm}
+                {(name==='webPage'||property?.echartsType=='circleAndPie')&&dynamicForm}
               </Collapse>
             </div>
           </TabPane>

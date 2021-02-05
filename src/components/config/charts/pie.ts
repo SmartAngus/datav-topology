@@ -12,12 +12,12 @@ export function getPieOption() {
             bottom: 'bottom',
         },
         dataset: [{
-            dimensions:['xdata', '2012', '2013', '2014', '2015'],
-            source: [
-                ['Matcha Latte', 41.1, 30.4, 65.1, 53.3],
-                ['Milk Tea', 86.5, 92.1, 85.7, 83.1],
-                ['Cheese Cocoa', 24.1, 67.2, 79.5, 86.4]
-            ],
+            "dimensions": ["xdata", "2020-09"],
+            "source": [
+                ["补强板", 99.899],
+                ["电梯导轨", 1457.332],
+                ["扁钢", 1768.992]
+            ]
         }],
         series: [{
             type: 'pie',
