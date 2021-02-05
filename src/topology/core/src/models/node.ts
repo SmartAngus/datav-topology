@@ -99,6 +99,7 @@ export class Node extends Pen {
   // 自定义属性
   property:any;
 
+
   constructor(json: any, noChild = false) {
     super(json);
 
@@ -193,6 +194,7 @@ export class Node extends Pen {
     this.video = json.video;
     this.play = json.play;
     this.nextPlay = json.nextPlay;
+
 
     // if (json.elementLoaded !== undefined) {
     //   this.elementId = null;

@@ -1,7 +1,11 @@
 import {getTimeLineOption} from "./charts/timeline";
 import {getGaugeOption} from "./charts/gauge"
 import {defaultLineColors} from "../data/defines";
-import {Point} from "../../topology/core/src/models";
+import {getGroupBarOption} from "./charts/groupbar";
+import {getHorizontalBarOption} from "./charts/horizontalbar";
+import {getBarOption} from "./charts/bar";
+import {getPieOption} from "./charts/pie";
+import {getStackBarOption} from "./charts/stackbar";
 
 export const Tools = [
   {
@@ -27,6 +31,29 @@ export const Tools = [
           borderRadius: 0,
           fillStyle: '#F0F0F0',
           name: 'rectangle',
+        },
+      },
+      {
+        name: '视频',
+        icon: 'iconjuxing',
+        data: {
+          text: '',
+          rect: {
+            width: 200,
+            height: 200,
+          },
+          font: {
+            fontSize: 14,
+            fontFamily: '"Microsoft YaHei"',
+          },
+          paddingLeft: 10,
+          paddingRight: 10,
+          paddingTop: 10,
+          paddingBottom: 10,
+          borderRadius: 0,
+          fillStyle: '#F0F0F0',
+          name: 'rectangle',
+          iframe:'http://localhost:5000/newCockpit/JTdCJTIyaXNTaGFyZSUyMiUzQWZhbHNlJTJDJTIyaWQlMjIlM0ElMjIxNTEyZjg3MGZjZjc0NjI0YTM2NDVlZGEwY2Q5MGZmMCUyMiU3RA=='
         },
       },
       {
@@ -654,6 +681,106 @@ export const Tools = [
       //   },
       // },
       {
+        name: '分组柱状图',
+        icon: 'iconzhuzhuangtu1',
+        data: {
+          text: '分组柱状图',
+          rect: {
+            width: 350,
+            height: 200,
+          },
+          name: 'echarts',
+          data: {
+            echarts: {
+              option: getGroupBarOption()
+            },
+          },
+          property: {
+            echartsType: 'groupBar',
+          },
+        },
+      },
+      {
+        name: '柱状图',
+        icon: 'iconzhuzhuangtu1',
+        data: {
+          text: '柱状图',
+          rect: {
+            width: 350,
+            height: 200,
+          },
+          name: 'echarts',
+          data: {
+            echarts: {
+              option: getBarOption()
+            },
+          },
+          property: {
+            echartsType: 'verticalBar',
+          },
+        },
+      },
+      {
+        name: '堆叠柱状图',
+        icon: 'iconzhuzhuangtu1',
+        data: {
+          text: '堆叠柱状图',
+          rect: {
+            width: 350,
+            height: 200,
+          },
+          name: 'echarts',
+          data: {
+            echarts: {
+              option: getStackBarOption()
+            },
+          },
+          property: {
+            echartsType: 'stackBar',
+          },
+        },
+      },
+      {
+        name: '条形图',
+        icon: 'iconzhuzhuangtu1',
+        data: {
+          text: '条形图',
+          rect: {
+            width: 350,
+            height: 400,
+          },
+          name: 'echarts',
+          data: {
+            echarts: {
+              option: getHorizontalBarOption()
+            },
+          },
+          property: {
+            echartsType: 'horizontalBar',
+          },
+        },
+      },
+      {
+        name: '饼状图',
+        icon: 'iconzhuzhuangtu1',
+        data: {
+          text: '饼状图',
+          rect: {
+            width: 400,
+            height: 300,
+          },
+          name: 'echarts',
+          data: {
+            echarts: {
+              option: getPieOption()
+            },
+          },
+          property: {
+            echartsType: 'circleAndPie',
+          },
+        },
+      },
+      {
         name: '仪表盘',
         icon: 'iconyibiaopan',
         data: {
@@ -849,39 +976,133 @@ export const Tools = [
             lineColors: [],
           }
         },
-      },
-      // {
-      //   elementRendered: false,
-      //   name: '饼状图',
-      //   icon: 'iconjiliangqi',
-      //   data: {
-      //     text: '',
-      //     rect: {
-      //       width: 100,
-      //       height: 250,
-      //     },
-      //     name: 'echarts',
-      //     strokeStyle: 'rgba(0,0,0,0)',
-      //     elementRendered: false,
-      //     hideRotateCP: true,
-      //     hideInput: true,
-      //     data: {
-      //       echarts: {
-      //         option: pieOption(),
-      //       },
-      //     },
-      //     property: {
-      //       echartsType: 'pie',
-      //       dataMethod: 'point',
-      //       dataPointSelectedRows: [],
-      //       dataDot: 1,
-      //       dataPointParam: {
-      //         qtDataList: [],
-      //         subscribe: true,
-      //       },
-      //     }
-      //   }
-      // }
+      }
     ],
+  },
+  {
+    group: 'react组件',
+    children: [
+      {
+        text: '按钮',
+        icon: 'icon-rectangle',
+        name: 'button',
+        data: {
+          autoRect: true,
+          strokeStyle: '#fff',
+          rect: {
+            x: 100,
+            y: 200,
+            width: 100,
+            height: 200
+          },
+          name: 'button',
+          data: {
+            props: {
+              type: 'primary',
+              children: '查询'
+            }
+          }
+        }
+      },
+      {
+        text: '日期组件',
+        icon: 'icon-diamond',
+        name: 'datePicker',
+        data: {
+          strokeStyle: '#fff',
+          rect: {
+            x: 100,
+            y: 200,
+            width: 300,
+            height: 200
+          },
+          name: 'datePicker',
+          data: {
+            props: {}
+          }
+        }
+      },
+      {
+        text: '结果页',
+        icon: 'icon-pentagon',
+        name: 'result',
+        data: {
+          strokeStyle: '#fff',
+          rect: {
+            x: 100,
+            y: 200,
+            width: 200,
+            height: 200
+          },
+          name: 'result',
+          data: {
+            props: {
+              status: '403',
+              title: '403',
+              subTitle: 'Sorry, you are not authorized to access this page.'
+            }
+          }
+        }
+      },
+      {
+        text: '表格',
+        icon: 'icon-triangle',
+        name: 'table',
+        data: {
+          strokeStyle: '#fff',
+          rect: {
+            x: 100,
+            y: 200,
+            width: 600,
+            height: 400
+          },
+          name: 'table',
+          data: {
+            props: {
+              columns: [],
+              dataSource: []
+            }
+          }
+        }
+      },
+      {
+        text: '网页',
+        icon: 'icon-triangle',
+        name: 'webPage',
+        data: {
+          strokeStyle: '#fff',
+          rect: {
+            x: 100,
+            y: 200,
+            width: 350,
+            height: 200
+          },
+          name: 'webPage',
+          elementRendered:false,
+          data:{},
+          property: {
+            props: {
+              iframe:"abcd"
+            },
+            form:{
+              style:[{
+                group:'路径配置',
+                formItems:[
+                  { name: ['username'], value: 'Ant Design' },
+                  { name: ['fontStyle'], value: '#ccc000' },
+                  { name: ['refreshRate'], value: 10 },
+                  { name: ['refreshRateCheck'], value: true },
+                  { name: ['iframe'], value: 'http://www.baidu.com' },
+                ]
+              },{
+                group:'其他设置',
+                formItems:[{ name: ['color'], value: '#ccc' }]
+              }],
+              data:[]
+            }
+          }
+        }
+      }
+    ]
   },
 ];

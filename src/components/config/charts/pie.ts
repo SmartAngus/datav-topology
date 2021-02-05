@@ -1,78 +1,51 @@
-import moment from "moment";
-
-var now = new Date(1997, 9, 3);
-var oneDay = 24 * 3600 * 1000;
-var value = Math.random() * 1000;
-function randomData() {
-
-    now = new Date(+now + oneDay);
-    value = value + Math.random() * 21 - 10;
-    return {
-        name: now.toString(),
-        value: [
-            [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'),
-            Math.round(value)
-        ]
-    };
-}
-export function pieOption(dat?:any[]) {
-    var data = [];
-
-
-    if(dat){
-        data=dat
-    }
-
+export function getPieOption() {
     const option = {
-        title: {
-            text: '动态数据 + 时间坐标轴'
+        grid: { //图表的位置
+            top: '10%',
+            left: '2%',
+            right: '2%',
+            bottom: '10%',
+            containLabel: true
         },
-        tooltip: {
-            trigger: 'axis',
-            formatter: function (params) {
-                params = params[0];
-                var date = new Date(params.name);
-                return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
-            },
-            axisPointer: {
-                animation: false
-            }
+        legend: {
+            orient: 'horizontal',
+            bottom: 'bottom',
         },
-        xAxis: {
-            type: 'time',
-            // minInterval: 5*1000,
-            // splitNumber:5,
-            splitLine: {
-                show: false
-            },
-            axisLabel:{
-                formatter: function (value, index) {
-                    // 格式化成月/日，只在第一个刻度显示年份
-                    return moment(value).format('LTS') + '';
-                }
-            },
-            axisLine:{
-                symbolOffset:-50
-            }
-        },
-        yAxis: {
-            type: 'value',
-            boundaryGap: [0, '100%'],
-            splitLine: {
-                show: false
-            },
-        },
-        animationDuration: function (idx) {
-            // 越往后的数据时长越大
-            return idx * 100;
-        },
+        dataset: [{
+            dimensions:['xdata', '2012', '2013', '2014', '2015'],
+            source: [
+                ['Matcha Latte', 41.1, 30.4, 65.1, 53.3],
+                ['Milk Tea', 86.5, 92.1, 85.7, 83.1],
+                ['Cheese Cocoa', 24.1, 67.2, 79.5, 86.4]
+            ],
+        }],
         series: [{
-            name: '模拟数据',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            smooth:true,
-            data: data
+            type: 'pie',
+            radius: ['50%', '70%'],
+            center: ['50%', '25%'],
+            selectedOffset:30,
+            label:{
+                edgeDistance:'25%',
+                alignTo:'labelLine',
+
+            }
+        }],
+
+
+        // Optional. Only for responsive layout:图表响应式
+        media: [{
+            query: { minAspectRatio: 1 },
+            option: {
+                series: [
+                    { center: ['50%', '50%'] },
+                ]
+            }
+        }, {
+            option: {
+                series: [
+                    { center: ['50%', '50%'] },
+                ]
+            }
         }]
     };
 

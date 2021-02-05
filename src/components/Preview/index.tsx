@@ -13,7 +13,6 @@ import {
 } from '../../topology/chart-diagram';
 import { replacer, reviver } from '../utils/serializing';
 import { register as registerBiciComp } from '../../topology/bici-diagram';
-import {pieOption} from "../config/charts/pie";
 import moment from "moment";
 import 'antd/dist/antd.less';
 import styles from './index.module.scss'
@@ -271,27 +270,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             updateChartNode(node);
             break;
           case 'pie':
-            (node.property.dataPointSelectedRows || []).map((row) => {
-              if (row.id == r.id) {
-                if (timedata.length >20) {
-                  timedata.shift()
-                }
-                timedata.push({
-                  name:moment(r.time),
-                  value:[r.time,parseInt(r.value)]
-                })
 
-                // if(timedata.length<9){
-                //   for(let i=0;i<9-timedata.length;i++){
-                //     timedata.unshift(undefined)
-                //   }
-                // }
-                node.data.echarts.option = pieOption(timedata);
-                updateChartNode(node);
-
-
-              }
-            });
             break;
           default:
         }

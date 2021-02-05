@@ -115,14 +115,14 @@ export function getGaugeOption(
                 },
                 axisTick: {            // 坐标轴小标记
                     show:showMarks,
-                    length: 27,        // 属性length控制线长
+                    length: 6,        // 属性length控制线长
                     lineStyle: {       // 属性lineStyle控制线条样式
                         color: 'auto'
                     }
                 },
                 splitLine: {           // 分隔线
                     show:showMarks,
-                    length: 30,         // 属性length控制线长
+                    length: 10,         // 属性length控制线长
                     lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
                         color: 'auto'
                     }

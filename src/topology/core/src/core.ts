@@ -594,7 +594,6 @@ export class Topology {
         // if (this.data.scale !== 1) {
         //     node.scale(this.data.scale);
         // }
-
         if (node.autoRect) {
           const ctx = this.canvas.canvas.getContext('2d');
           const rect = calcTextRect(ctx, node);
@@ -2346,6 +2345,20 @@ export class Topology {
         const i = this.findIndex(pen, pens);
         if (i > -1) {
             pens.unshift(pens[i]);
+            // if((pens[i] as Node).elementId){
+            //     const nodeElement = document.getElementById((pens[i] as Node).elementId);
+            //     const nodeParent = nodeElement.parentNode;
+            //     let nodeElements = pens.filter((currentValue:Node, index,arr)=>{
+            //         return currentValue.elementId!=undefined;
+            //     });
+            //     const elements=(nodeElements||[]).map((item:Node,index,array)=>{
+            //         return document.getElementById(item.elementId)
+            //     });
+            //     if(elements.length>1){
+            //         nodeParent.removeChild(nodeElement);
+            //         nodeParent.insertBefore(nodeElement,elements[0])
+            //     }
+            // }
             pens.splice(i + 1, 1);
         } else {
             const parent = getParent(pens, pen);

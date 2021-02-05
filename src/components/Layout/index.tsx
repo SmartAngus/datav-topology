@@ -7,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import ReactDOM from 'react-dom';
 import {Line, Lock, Options, s8, Topology} from "../../topology/core";
 import { echartsObjs, register as registerChart } from "../../topology/chart-diagram";
 import { register as registerBiciComp } from "../../topology/bici-diagram";
@@ -31,7 +32,9 @@ import moment from "moment";
 import { getGaugeOption } from "../config/charts/gauge";
 import { getTimeLineOption } from "../config/charts/timeline";
 
-import "antd/dist/antd.less";
+import {register as registerReactNode} from '../common/ReactTable'
+import {FieldData} from "../common/CustomizedDynamicForm";
+import {reactNodesData} from '../common/ReactTable/drawReactNode'
 
 const { confirm } = Modal;
 const { TabPane } = Tabs;
@@ -180,6 +183,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
   const canvasRegister = () => {
     registerChart();
     registerBiciComp();
+    registerReactNode();
   };
 
   const onDrag = (event, node, custom = false) => {
@@ -557,6 +561,22 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     [selected]
   );
 
+  const handleCustomizedDynamicFormChange=(group:string,fields:FieldData[])=>{
+    const g=_.findIndex(selected.node.property.form.style,(item:any)=>item.group==group);
+    selected.node.property.form.style[g].formItems=fields;
+    (fields||[]).forEach(field=>{
+      for(let key in selected.node.property.props){
+        if(field.name[0]==key){
+          selected.node.property.props[key]=field.value;
+          break;
+        }
+      }
+    })
+    selected.node.elementRendered=false;
+    canvas.updateProps(true,[selected.node]);
+    setIsSave(false);
+  }
+
   /**
    * 监听画布上元素的事件
    * @params {string} event - 事件名称
@@ -564,7 +584,6 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
    */
 
   const onMessage = (event: string, data: any) => {
-    const node = data;
     switch (event) {
       case "resize":
         break;
@@ -680,8 +699,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           )
         );
         // 重新绘制图表
-        if (node.name == "echarts") {
-          const chart = echartsObjs[node.id].chart;
+        if (data.name == "echarts") {
+          const chart = echartsObjs[data.id].chart;
           chart.setOption(data.data.echarts.option, true);
         }
         break;
@@ -714,6 +733,8 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     }
   };
 
+
+
   /**
    * 画布右侧配置区域
    */
@@ -729,6 +750,7 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           onAddDataPoint={props.onAddDataPoint}
           ref={nodeRef}
           dataPointPropsMap={props.dataPointPropsMap}
+          onCustomizedDynamicFormChange={handleCustomizedDynamicFormChange}
         />
       ), // 渲染Node节点类型的组件
       line: selected && (

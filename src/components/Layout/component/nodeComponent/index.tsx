@@ -45,6 +45,7 @@ import { reviver } from '../../../utils/serializing';
 import { eraseOverlapIntervals } from '../../../utils/cacl';
 import {DataPointPropsMap, defaultLineColors, Node} from '../../../data/defines';
 import {getTimeLineOption} from "../../../config/charts/timeline";
+import CustomizedDynamicForm, {FieldData, FormFieldGroup} from '../../../common/CustomizedDynamicForm';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -79,6 +80,7 @@ interface ICanvasProps extends FormProps {
   onEventValueChange: any;
   setIsSave?: (isSave: boolean) => void;
   onAddDataPoint?:(node:Node,disableSource:string[],selectedRowKeys:string[])=>void;
+  onCustomizedDynamicFormChange?:(group:string,fields:FieldData[])=>void;
   ref?:any;
   dataPointPropsMap:DataPointPropsMap
 }
@@ -89,7 +91,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
   onPropertyFormValueChange,
   setIsSave,
   onAddDataPoint,
-  dataPointPropsMap
+  dataPointPropsMap,
+  onCustomizedDynamicFormChange
 },ref) => {
   const [form] = Form.useForm();
   const [propertyForm] = Form.useForm();
@@ -1993,6 +1996,24 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
     );
   }, [property, data?.node, showSelectDataPoint, refreshProperty]);
 
+
+  // 动态渲染style表单
+  const dynamicForm=useMemo(()=>{
+    return (
+        <CustomizedDynamicForm
+            formStyle={data?.node.property?.form?.style}
+            onChange={(group,fields) => {
+              onCustomizedDynamicFormChange&&onCustomizedDynamicFormChange(group,fields)
+              setRefreshProperty(!refreshProperty);
+            }}
+        />
+    )
+  },[data?.node?.id,refreshProperty])
+
+
+
+
+
   const divHeight = document.body.clientHeight-200;
 
   return (
@@ -2015,6 +2036,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                 {data?.node.name === 'biciMeasure' && renderMeter}
                 {property?.echartsType === 'timeLine' && renderLineGraph}
                 {property?.echartsType === 'gauge' && renderGauge}
+                {name==='webPage'&&dynamicForm}
               </Collapse>
             </div>
           </TabPane>
