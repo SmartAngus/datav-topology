@@ -3,6 +3,9 @@ import {defaultLineColors} from "../../data/defines";
 export function getBarOption(){
     const option = {
         color: defaultLineColors,
+        title:{
+            text:'流浪来源统计图'
+        },
         legend: {
             top: '4%',
             right: '4%',
@@ -14,10 +17,10 @@ export function getBarOption(){
             },
         },
         grid: { //图表的位置
-            top: '10%',
-            left: '2%',
-            right: '2%',
-            bottom: '10%',
+            top: '20%',
+            left: '6%',
+            right: '6%',
+            bottom: '6%',
             containLabel: true
         },
         dataset: [{

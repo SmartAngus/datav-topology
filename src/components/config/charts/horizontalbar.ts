@@ -2,10 +2,13 @@ import {defaultLineColors, defaultTimelineShowData} from "../../data/defines";
 
 export function getHorizontalBarOption(){
     const option = {
+        title:{
+            text:"中国历代gdp"
+        },
         grid: { //图表的位置
             top: '10%',
-            left: '2%',
-            right: '2%',
+            left: '10%',
+            right: '10%',
             bottom: '10%',
             containLabel: true
         },
@@ -46,6 +49,11 @@ export function getHorizontalBarOption(){
                 realtimeSort: true,
                 seriesLayoutBy: 'column',
                 datasetIndex: 1,
+                label: {
+                    show: true,
+                    position: 'right',
+                    valueAnimation: true
+                },
                 encode: {
                     // Map the "amount" column to X axis.
                     x: '2013',

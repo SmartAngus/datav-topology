@@ -96,7 +96,7 @@ export class Line extends Pen {
         this.lineJoin = json.lineJoin;
       }
     } else {
-      this.name = 'curve';
+      this.name = 'polyline';
       this.fromArrow = 'triangleSolid';
     }
 

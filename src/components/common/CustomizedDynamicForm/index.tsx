@@ -4,6 +4,7 @@ import {Node} from "../../../topology/core/src/models";
 import * as _ from 'lodash';
 import ColorPicker from "../ColorPicker/ColorPicker";
 import CustomIcon from "../../config/iconConfig";
+import CheckboxGroup from "../CheckboxGroup";
 const { Panel } = Collapse;
 const { TextArea } = Input;
 const {Option}=Select;
@@ -148,6 +149,7 @@ const CustomizedDynamicForm: React.FC<CustomizedFormProps> = ({ onChange, formSt
                                                     <Form.Item
                                                         name="titleShow"
                                                         label="标题"
+                                                        valuePropName="checked"
                                                     >
                                                         <Checkbox/>
                                                     </Form.Item>
@@ -234,25 +236,21 @@ const CustomizedDynamicForm: React.FC<CustomizedFormProps> = ({ onChange, formSt
                                 {
                                     hasField(item.formItems,'titlePosition')?(
                                         <React.Fragment>
-                                        <Row justify="space-around" style={{ borderBottom: '1px solid #d9d9d9' }}>
-                                            <Col>
-                                                <Form.Item label="" name="titlePosition">
+                                        <Row>
+                                            <Col span={24}>
+                                                <Form.Item label="样式对齐" name="titlePosition" labelCol={{span:6}}>
                                                     <Radio.Group>
-                                                        <Radio.Button value="left">Horizontal</Radio.Button>
-                                                        <Radio.Button value="center">Vertical</Radio.Button>
-                                                        <Radio.Button value="right">Inline</Radio.Button>
+                                                        <Radio.Button value="left"><CustomIcon type="iconleft"/></Radio.Button>
+                                                        <Radio.Button value="center"><CustomIcon type="iconjuzhongduiqi"/></Radio.Button>
+                                                        <Radio.Button value="right"><CustomIcon type="iconyouduiqi2"/></Radio.Button>
                                                     </Radio.Group>
                                                 </Form.Item>
                                             </Col>
                                         </Row>
-                                        <Row justify="space-around" style={{ borderBottom: '1px solid #d9d9d9' }}>
-                                            <Col>
-                                                <Form.Item label="" name="titlePosition">
-                                                    <Checkbox.Group>
-                                                    <Checkbox value="left">Horizontal</Checkbox>
-                                                    <Checkbox value="center">Vertical</Checkbox>
-                                                    <Checkbox value="right">Inline</Checkbox>
-                                                    </Checkbox.Group>
+                                        <Row>
+                                            <Col span={24} offset={6}>
+                                                <Form.Item label="" name="titleFontStyle">
+                                                    <CheckboxGroup/>
                                                 </Form.Item>
                                             </Col>
                                         </Row>
@@ -260,6 +258,43 @@ const CustomizedDynamicForm: React.FC<CustomizedFormProps> = ({ onChange, formSt
                                     ):''
                                 }
 
+                                {
+                                    hasField(item.formItems,'chartShape')?(
+                                        <Row>
+                                            <Col>
+                                                <Form.Item
+                                                    name="chartShape"
+                                                    label="饼/环图"
+                                                >
+                                                    <Radio.Group>
+                                                        <Radio value="pie">饼状图</Radio>
+                                                        <Radio value="circle">环状图</Radio>
+                                                    </Radio.Group>
+                                                </Form.Item>
+                                            </Col>
+                                        </Row>
+                                    ):''
+                                }
+                                {
+                                    hasField(item.formItems,'chartBkColor')?(
+                                        <Row>
+                                            <Col>
+                                                <Form.Item
+                                                    name="chartBkColorChecked"
+                                                    label="背景颜色"
+                                                    valuePropName="checked"
+                                                >
+                                                    <Checkbox/>
+                                                </Form.Item>
+                                            </Col>
+                                            <Col>
+                                                <Form.Item name="chartBkColor">
+                                                    <ColorPicker/>
+                                                </Form.Item>
+                                            </Col>
+                                        </Row>
+                                    ):''
+                                }
                                 </Form>
                             </Panel>
                         )

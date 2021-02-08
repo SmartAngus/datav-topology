@@ -7,6 +7,7 @@ import {getBarOption} from "./charts/bar";
 import {getPieOption} from "./charts/pie";
 import {getStackBarOption} from "./charts/stackbar";
 
+
 export const Tools = [
   {
     group: '通用组件',
@@ -684,7 +685,7 @@ export const Tools = [
         name: '分组柱状图',
         icon: 'iconzhuzhuangtu1',
         data: {
-          text: '分组柱状图',
+          text: '',
           rect: {
             width: 350,
             height: 200,
@@ -697,6 +698,36 @@ export const Tools = [
           },
           property: {
             echartsType: 'groupBar',
+            dataMethod:'restful',
+            dataFormat:'aaaaa',
+            dataUrl:'http://www.baidu.com',
+            pullRate: 10,
+            dataDot:2,
+            props: {
+              iframe:"abcd"
+            },
+            form:{
+              style:[{
+                group:'标题字符',
+                formItems:[
+                  { name: ['title'], value: 'Ant Design' },
+                  { name: ['titleShow'], value: true },
+                  { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
+                  { name: ['titleFontColor'], value: "#333333" },
+                  { name: ['titleFontSize'], value: 14 },
+                  { name: ['titleFontBold'], value: 200 },
+                  { name: ['titleFontItalic'], value: "normal" },
+                  { name: ['titleFontBaseline'], value: "underline" },
+                  { name: ['titlePosition'], value: "left" },
+                  { name: ['titleFontStyle'], value: [
+                      {name:"bold",value:200,checked:false,icon:'iconjiacu'},
+                      {name:"italic",value:"italic",checked:true,icon:'iconzu'},
+                      {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
+                    ]},
+                ]
+              }],
+              data:[]
+            }
           },
         },
       },
@@ -704,7 +735,7 @@ export const Tools = [
         name: '柱状图',
         icon: 'iconzhuzhuangtu1',
         data: {
-          text: '柱状图',
+          text: '',
           rect: {
             width: 350,
             height: 200,
@@ -717,6 +748,36 @@ export const Tools = [
           },
           property: {
             echartsType: 'verticalBar',
+            dataMethod:'restful',
+            dataFormat:'aaaaa',
+            dataUrl:'http://www.baidu.com',
+            pullRate: 10,
+            dataDot:2,
+            props: {
+              iframe:"abcd"
+            },
+            form:{
+              style:[{
+                group:'标题字符',
+                formItems:[
+                  { name: ['title'], value: 'Ant Design' },
+                  { name: ['titleShow'], value: true },
+                  { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
+                  { name: ['titleFontColor'], value: "#333333" },
+                  { name: ['titleFontSize'], value: 14 },
+                  { name: ['titleFontBold'], value: 200 },
+                  { name: ['titleFontItalic'], value: "normal" },
+                  { name: ['titleFontBaseline'], value: "underline" },
+                  { name: ['titlePosition'], value: "left" },
+                  { name: ['titleFontStyle'], value: [
+                      {name:"bold",value:200,checked:false,icon:'iconjiacu'},
+                      {name:"italic",value:"italic",checked:true,icon:'iconzu'},
+                      {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
+                    ]},
+                ]
+              }],
+              data:[]
+            }
           },
         },
       },
@@ -724,7 +785,7 @@ export const Tools = [
         name: '堆叠柱状图',
         icon: 'iconzhuzhuangtu1',
         data: {
-          text: '堆叠柱状图',
+          text: '',
           rect: {
             width: 350,
             height: 200,
@@ -737,6 +798,36 @@ export const Tools = [
           },
           property: {
             echartsType: 'stackBar',
+            dataMethod:'restful',
+            dataFormat:'aaaaa',
+            dataUrl:'http://www.baidu.com',
+            pullRate: 10,
+            dataDot:2,
+            props: {
+              iframe:"abcd"
+            },
+            form:{
+              style:[{
+                group:'标题字符',
+                formItems:[
+                  { name: ['title'], value: 'Ant Design' },
+                  { name: ['titleShow'], value: true },
+                  { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
+                  { name: ['titleFontColor'], value: "#333333" },
+                  { name: ['titleFontSize'], value: 14 },
+                  { name: ['titleFontBold'], value: 200 },
+                  { name: ['titleFontItalic'], value: "normal" },
+                  { name: ['titleFontBaseline'], value: "underline" },
+                  { name: ['titlePosition'], value: "left" },
+                  { name: ['titleFontStyle'], value: [
+                      {name:"bold",value:200,checked:false,icon:'iconjiacu'},
+                      {name:"italic",value:"italic",checked:true,icon:'iconzu'},
+                      {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
+                    ]},
+                ]
+              }],
+              data:[]
+            }
           },
         },
       },
@@ -744,10 +835,10 @@ export const Tools = [
         name: '条形图',
         icon: 'iconzhuzhuangtu1',
         data: {
-          text: '条形图',
+          text: '',
           rect: {
-            width: 350,
-            height: 400,
+            width: 450,
+            height: 250,
           },
           name: 'echarts',
           data: {
@@ -757,6 +848,36 @@ export const Tools = [
           },
           property: {
             echartsType: 'horizontalBar',
+            dataMethod:'restful',
+            dataFormat:'aaaaa',
+            dataUrl:'http://www.baidu.com',
+            pullRate: 10,
+            dataDot:2,
+            props: {
+              iframe:"abcd"
+            },
+            form:{
+              style:[{
+                group:'标题字符',
+                formItems:[
+                  { name: ['title'], value: 'Ant Design' },
+                  { name: ['titleShow'], value: true },
+                  { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
+                  { name: ['titleFontColor'], value: "#333333" },
+                  { name: ['titleFontSize'], value: 14 },
+                  { name: ['titleFontBold'], value: 200 },
+                  { name: ['titleFontItalic'], value: "normal" },
+                  { name: ['titleFontBaseline'], value: "underline" },
+                  { name: ['titlePosition'], value: "left" },
+                  { name: ['titleFontStyle'], value: [
+                      {name:"bold",value:200,checked:false,icon:'iconjiacu'},
+                      {name:"italic",value:"italic",checked:true,icon:'iconzu'},
+                      {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
+                    ]},
+                ]
+              }],
+              data:[]
+            }
           },
         },
       },
@@ -764,7 +885,7 @@ export const Tools = [
         name: '饼状图',
         icon: 'iconzhuzhuangtu1',
         data: {
-          text: '饼状图',
+          text: '',
           rect: {
             width: 400,
             height: 300,
@@ -777,6 +898,11 @@ export const Tools = [
           },
           property: {
             echartsType: 'circleAndPie',
+            dataMethod:'restful',
+            dataFormat:'aaaaa',
+            dataUrl:'http://www.baidu.com',
+            pullRate: 10,
+            dataDot:2,
             props: {
               iframe:"abcd"
             },
@@ -785,7 +911,7 @@ export const Tools = [
                 group:'标题字符',
                 formItems:[
                   { name: ['title'], value: 'Ant Design' },
-                  { name: ['titleShow'], value: '#ccc000' },
+                  { name: ['titleShow'], value: true },
                   { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
                   { name: ['titleFontColor'], value: "#333333" },
                   { name: ['titleFontSize'], value: 14 },
@@ -793,12 +919,26 @@ export const Tools = [
                   { name: ['titleFontItalic'], value: "normal" },
                   { name: ['titleFontBaseline'], value: "underline" },
                   { name: ['titlePosition'], value: "left" },
+                  { name: ['titleFontStyle'], value: [
+                      {name:"bold",value:200,checked:false,icon:'iconjiacu'},
+                      {name:"italic",value:"italic",checked:true,icon:'iconzu'},
+                      {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
+                    ]},
                 ]
               },{
-                group:'形状',
-                formItems:[{ name: ['chartShape'], value: 'pie' }]
+                group:'图表设置',
+                formItems:[
+                  { name: ['chartShape'], value: 'pie' },
+                  { name: ['chartBkColor'], value: '#ccc' },
+                  { name: ['chartBkColorChecked'], value: true },
+                ]
               }],
-              data:[]
+              data:[{
+                group:"绑定数据",
+                forItems:[
+                  { name:['dataMethod'],value:"restful" },
+                ]
+              }]
             }
           },
         },

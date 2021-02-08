@@ -18,6 +18,7 @@ import 'antd/dist/antd.less';
 import styles from './index.module.scss'
 import {getTimeLineOption} from "../config/charts/timeline";
 import {defaultTimelineShowData} from "../data/defines";
+import {clientParam, handleRequestError} from "../data/api";
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -34,6 +35,7 @@ export class PreviewProps {
 const Preview = ({ data, websocketConf }: PreviewProps) => {
   let websocketData=null;
   let websocket_data_list=[]
+  let userInterval=[];
 
   useEffect(() => {
     const canvasOptions = {
@@ -50,8 +52,12 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       canvas.open(data);
     }
     initWebsocketData();
+    initRestfullData();
     return () => {
       canvas.closeSocket();
+      userInterval.forEach(item=>{
+        clearInterval(item)
+      })
     };
   }, [data]);
 
@@ -156,6 +162,51 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         }
       }
     });
+  }
+  /**
+   * 初始话数据接口更新数据
+   */
+  const initRestfullData = ()=>{
+    if (canvas.data && canvas.data.pens.length > 0) {
+      // 有数据，去遍历有websocket的组件，并订阅
+      canvas.data.pens.forEach(node=>{
+        console.log("node",node)
+        // 如果是图表组件，下面就需要判断具体的是那种图表组件
+        if(node.property){
+          if(node.property.dataMethod=="restful"){
+            if(node.property.pullRate){
+              const interval = setInterval(async ()=>{
+                const res = await requestData(node);
+                console.log("res==",res)
+
+              },node.property.pullRate*1000)
+              userInterval.push(interval);
+            }
+          }
+        }
+      })
+    }
+  }
+  const requestData=(node)=>{
+    return new Promise((resolve,reject)=>{
+      clientParam(window["API_URL"]).request({
+        url:'/user',
+        method:'post',
+        headers: {
+          token: window["token"],
+          'Content-Type': 'application/json',
+        },
+        data: {
+          firstName: 'Fred'
+        },
+      }).then(res=>{
+        console.log(res)
+        resolve({b:2})
+      }).catch((error)=>{
+        handleRequestError(error);
+        resolve({a:1});
+      });
+    })
   }
 
   const initWebsocketData = () => {
@@ -270,6 +321,9 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             updateChartNode(node);
             break;
           case 'pie':
+
+            break;
+          case "circleAndPie":
 
             break;
           default:

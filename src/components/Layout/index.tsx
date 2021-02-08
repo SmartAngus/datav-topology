@@ -35,6 +35,11 @@ import { getTimeLineOption } from "../config/charts/timeline";
 import {register as registerReactNode} from '../common/ReactTable'
 import {FieldData} from "../common/CustomizedDynamicForm";
 import {reactNodesData} from '../common/ReactTable/drawReactNode'
+import {getPieOptionByChangeProp} from "../config/charts/pie";
+import {getStackBarOption} from "../config/charts/stackbar";
+import {getBarOption} from "../config/charts/bar";
+import {getGroupBarOption} from "../config/charts/groupbar";
+import {getHorizontalBarOption} from "../config/charts/horizontalbar";
 
 const { confirm } = Modal;
 const { TabPane } = Tabs;
@@ -571,8 +576,21 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
           break;
         }
       }
+      selected.node.property.props[field.name[0]]=field.value;
     })
     selected.node.elementRendered=false;
+    console.log(selected.node.property)
+    if(selected.node.property.echartsType=='circleAndPie'){
+      selected.node.data.echarts.option= getPieOptionByChangeProp(selected.node,null)
+    }else if(selected.node.property.echartsType=='stackBar'){
+      selected.node.data.echarts.option=getStackBarOption(selected.node,null);
+    }else if(selected.node.property.echartsType=='verticalBar'){
+      selected.node.data.echarts.option=getBarOption()
+    }else if(selected.node.property.echartsType=='groupBar'){
+      selected.node.data.echarts.option=getGroupBarOption();
+    }else if(selected.node.property.echartsType=='horizontalBar'){
+      selected.node.data.echarts.option=getHorizontalBarOption();
+    }
     canvas.updateProps(true,[selected.node]);
     setIsSave(false);
   }

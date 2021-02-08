@@ -49,6 +49,7 @@ import CustomizedDynamicForm, {FieldData, FormFieldGroup} from '../../../common/
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
+const { TextArea } = Input;
 const { Option } = Select;
 // 对齐方式 key 对齐方式 val 图标名称
 const alignObj = {
@@ -260,6 +261,9 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
         markChecked: property.markChecked,
         chartTitleColor:property.chartTitleColor,
         chartTitleColorChecked:property.chartTitleColorChecked,
+        pullRate:property.pullRate,
+        dataFormat:property.dataFormat,
+        dataUrl:property.dataUrl,
         'checked-0': property.dataColors && property.dataColors[0]?.checked,
         'color-0': property.dataColors && property.dataColors[0]?.color,
         'top-0': property.dataColors && property.dataColors[0]?.top,
@@ -916,7 +920,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
   const renderExtraDataForm = useMemo(() => {
     return (
       <Form form={propertyForm} onValuesChange={handlePropertyValuesChange}>
-        <Col>
+        <Row>
+          <Col span={24}>
           <Form.Item
             name="dataMethod"
             label="关联方式"
@@ -925,12 +930,36 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               placeholder="选择"
               onChange={handlePropertyDataMethodChange}
               allowClear={false}
-              disabled
             >
-              <Option value="point">绑定数据点</Option>
+              <Option value="point">绑定数据</Option>
               <Option value="restful">接口传入</Option>
             </Select>
           </Form.Item>
+          </Col>
+          <Col span={24}>
+          <Form.Item name="dataFormat" label="报文格式">
+            <TextArea
+                placeholder="请输入网页地址"
+                autoSize={{ minRows: 2, maxRows: 6 }}
+            />
+          </Form.Item>
+          </Col>
+          <Col span={24}>
+          <Form.Item name="dataUrl" label="接口地址">
+            <Input/>
+          </Form.Item>
+          </Col>
+          <Col span={16}>
+          <Form.Item name="pullRate" label="拉取频率">
+            <InputNumber min={0} max={1000}/>
+          </Form.Item>
+          </Col>
+          <Col  span={8}>
+          <Form.Item>
+            秒/次
+          </Form.Item>
+          </Col>
+          <Col span={24}>
           <Form.Item label="数据点">
             <Button
               type="dashed"
@@ -941,8 +970,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               添加数据点
             </Button>
           </Form.Item>
+          </Col>
           {(property?.dataPointSelectedRows || []).map((item, index) => {
             return (
+          <Col span={24}>
               <Form.Item
                 label={`数据点${index + 1}`}
                 key={index}
@@ -958,12 +989,15 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                 </Popconfirm>
 
               </Form.Item>
+          </Col>
             );
           })}
+          <Col span={24}>
           <Form.Item name="dataDot" label="显示精度">
             <InputNumber min={0} max={5} />
           </Form.Item>
-        </Col>
+          </Col>
+        </Row>
       </Form>
     );
   }, [data?.node, propertyForm, dataPointSelectedRows]);
@@ -2022,7 +2056,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
       {!data.multi && (
         <Tabs defaultActiveKey="1" centered>
           <TabPane tab="&nbsp;&nbsp;&nbsp;&nbsp;外&nbsp;&nbsp;观&nbsp;&nbsp;&nbsp;&nbsp;" key="1" style={{ margin: 0 }}>
-            <div style={{height:divHeight,overflow:"auto"}}>
+            <div style={{height:divHeight,overflowX:"hidden"}}>
               <Collapse defaultActiveKey={['pos', 'lineInfo', 'lineStyle','info','style']}
                         expandIconPosition="right"
                         ghost={false} bordered={false}>
@@ -2036,7 +2070,13 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                 {data?.node.name === 'biciMeasure' && renderMeter}
                 {property?.echartsType === 'timeLine' && renderLineGraph}
                 {property?.echartsType === 'gauge' && renderGauge}
-                {(name==='webPage'||property?.echartsType=='circleAndPie')&&dynamicForm}
+                {(name==='webPage'||
+                    property?.echartsType=='circleAndPie'||
+                    property?.echartsType=='stackBar'||
+                    property?.echartsType=='horizontalBar'||
+                    property?.echartsType=='verticalBar'||
+                    property?.echartsType=='groupBar'
+                )&&dynamicForm}
               </Collapse>
             </div>
           </TabPane>

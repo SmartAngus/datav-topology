@@ -1,7 +1,27 @@
 export function getGroupBarOption(){
     const option = {
-        legend: {},
         tooltip: {},
+        title:{
+            text:'月库存变化图'
+        },
+        legend: {
+            orient: 'vertical',
+            right: 'right',
+            top: 'middle',
+            itemWidth: 17,
+            itemHeight: 12,
+            textStyle: {
+                color: '#333333',
+                fontSize: 14
+            },
+        },
+        grid: { //图表的位置
+            top: '20%',
+            left: '2%',
+            right: '20%',
+            bottom: '10%',
+            containLabel: true
+        },
         dataset: [{
             dimensions:['product', '2012', '2013', '2014', '2015'],
             source: [
