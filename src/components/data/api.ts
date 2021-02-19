@@ -1,7 +1,7 @@
 import axios from 'axios'
-const timeout=2000000;
-const maxContentLength=200000000;
-const withCredentials = false
+export const timeout=2000000;
+export const maxContentLength=200000000;
+export const withCredentials = false
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {

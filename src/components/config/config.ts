@@ -152,6 +152,119 @@ export const Tools = [
         },
       },
       {
+        name: '数据统计',
+        icon: 'iconshujukapian',
+        data: {
+          text: '',
+          hideInput: true,
+          hideRotateCP: true,
+          rect: {
+            width: 120,
+            height: 70,
+          },
+          paddingTop: 0,
+          font: {
+            fontFamily: '"Microsoft YaHei"',
+            color: '#fff',
+            fontSize: 14,
+            fontWeight: 400,
+          },
+          fillStyle: '#6236FF',
+          strokeStyle: '#222',
+          lineWidth: 0,
+          name: 'biciText',
+          children: [
+            {
+              text: '150T',
+              name: 'text',
+              hideInput: true,
+              hideAnchor: true,
+              hideRotateCP: true,
+              paddingLeft: 10,
+              paddingRight: 10,
+              paddingTop: '50%',
+              paddingBottom: 10,
+              rectInParent: {
+                x: 0,
+                y: 0,
+                width: '100%',
+                height: '50%',
+              },
+              font: {
+                fontFamily: 'Arial',
+                color: '#fff',
+                textAlign: 'center',
+                fontSize: 24,
+                textBaseline: 'middle',
+                fontWight: 400,
+              },
+            },
+            {
+              text: '产量',
+              name: 'text',
+              hideInput: true,
+              hideAnchor: true,
+              hideRotateCP: true,
+              paddingLeft: 10,
+              paddingRight: 10,
+              paddingTop: '50%',
+              paddingBottom: 10,
+              rectInParent: {
+                x: 0,
+                y: '50%',
+                width: '100%',
+                height: '50%',
+              },
+              font: {
+                fontFamily: 'Arial',
+                color: '#fff',
+                fontSize: 14,
+                fontWight: 400,
+                textAlign: 'center',
+                textBaseline: 'middle',
+              },
+            },
+          ],
+          property: {
+            dataMethod:'restful',
+            dataFormat:'aaaaa',
+            dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
+            pullRate: 10,
+            dataDot:2,
+            props: {
+              iframe:"abcd"
+            },
+            form:{
+              style:[{
+                group:'标题字符',
+                formItems:[
+                  { name: ['title'], value: 'Ant Design' },
+                  { name: ['titleShow'], value: true },
+                  { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
+                  { name: ['titleFontColor'], value: "#333333" },
+                  { name: ['titleFontSize'], value: 14 },
+                  { name: ['titleFontBold'], value: 200 },
+                  { name: ['titleFontItalic'], value: "normal" },
+                  { name: ['titleFontBaseline'], value: "underline" },
+                  { name: ['titlePosition'], value: "left" },
+                  { name: ['titleFontStyle'], value: [
+                      {name:"bold",value:200,checked:false,icon:'iconjiacu'},
+                      {name:"italic",value:"italic",checked:true,icon:'iconzu'},
+                      {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
+                    ]},
+                ]
+              }],
+              data:[{
+                group:"绑定数据",
+                forItems:[
+                  { name:['dataMethod'],value:"restful" },
+                ]
+              }]
+            }
+          },
+        },
+      },
+      {
         name: '数据卡片',
         icon: 'iconshujukapian',
         data: {
@@ -535,152 +648,6 @@ export const Tools = [
   {
     group: '图表控件',
     children: [
-      // {
-      //   name: '柱状图',
-      //   icon: 'icon-bar-chart',
-      //   data: {
-      //     text: '柱状图',
-      //     rect: {
-      //       width: 300,
-      //       height: 200,
-      //     },
-      //     name: 'echarts',
-      //     data: {
-      //       echarts: {
-      //         option: {
-      //           legend: {},
-      //           tooltip: {},
-      //           dataset: {
-      //             dimensions: ['product', '2015', '2016', '2017'],
-      //             source: [
-      //               {
-      //                 product: 'Matcha Latte',
-      //                 '2015': 43.3,
-      //                 '2016': 85.8,
-      //                 '2017': 93.7,
-      //               },
-      //               {
-      //                 product: 'Milk Tea',
-      //                 '2015': 83.1,
-      //                 '2016': 73.4,
-      //                 '2017': 55.1,
-      //               },
-      //               {
-      //                 product: 'Cheese Cocoa',
-      //                 '2015': 86.4,
-      //                 '2016': 65.2,
-      //                 '2017': 82.5,
-      //               },
-      //               {
-      //                 product: 'Walnut Brownie',
-      //                 '2015': 72.4,
-      //                 '2016': 53.9,
-      //                 '2017': 39.1,
-      //               },
-      //             ],
-      //           },
-      //           xAxis: { type: 'category' },
-      //           yAxis: {},
-      //           series: [{ type: 'bar' }, { type: 'bar' }, { type: 'bar' }],
-      //         }, // end echarts option
-      //       },
-      //       property: {
-      //         echartsType: 'bar',
-      //         dataMethod: 'aa',
-      //         dataDot: 1,
-      //         dataPointParam: {
-      //           qtDataList: [
-      //             {
-      //               id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
-      //               type: 1,
-      //             },
-      //           ],
-      //           subscribe: true,
-      //         },
-      //       },
-      //     },
-      //   },
-      // },
-      // {
-      //   name: '饼图',
-      //   icon: 'icon-pie-chart',
-      //   data: {
-      //     text: '饼图',
-      //     rect: {
-      //       width: 200,
-      //       height: 200,
-      //     },
-      //     name: 'echarts',
-      //     data: {
-      //       echarts: {
-      //         option: {
-      //           tooltip: {
-      //             trigger: 'item',
-      //             formatter: '{a} <br/>{b}: {c} ({d}%)',
-      //           },
-      //           legend: {
-      //             orient: 'vertical',
-      //             x: 'left',
-      //             data: [
-      //               '直接访问',
-      //               '邮件营销',
-      //               '联盟广告',
-      //               '视频广告',
-      //               '搜索引擎',
-      //             ],
-      //           },
-      //           series: [
-      //             {
-      //               name: '访问来源',
-      //               type: 'pie',
-      //               radius: ['50%', '70%'],
-      //               avoidLabelOverlap: false,
-      //               label: {
-      //                 normal: {
-      //                   show: false,
-      //                   position: 'center',
-      //                 },
-      //                 emphasis: {
-      //                   show: true,
-      //                   textStyle: {
-      //                     fontSize: '30',
-      //                     fontWeight: 'bold',
-      //                   },
-      //                 },
-      //               },
-      //               labelLine: {
-      //                 normal: {
-      //                   show: false,
-      //                 },
-      //               },
-      //               data: [
-      //                 { value: 335, name: '直接访问' },
-      //                 { value: 310, name: '邮件营销' },
-      //                 { value: 234, name: '联盟广告' },
-      //                 { value: 135, name: '视频广告' },
-      //                 { value: 1548, name: '搜索引擎' },
-      //               ],
-      //             },
-      //           ],
-      //         },
-      //       },
-      //       property: {
-      //         echartsType: 'pie',
-      //         dataMethod: 'aa',
-      //         dataDot: 1,
-      //         dataPointParam: {
-      //           qtDataList: [
-      //             {
-      //               id: '14040d68efd3401c9fd977c8e7f9bce8', // id 为数据点id
-      //               type: 1,
-      //             },
-      //           ],
-      //           subscribe: true,
-      //         },
-      //       },
-      //     },
-      //   },
-      // },
       {
         name: '分组柱状图',
         icon: 'iconzhuzhuangtu1',
@@ -700,7 +667,7 @@ export const Tools = [
             echartsType: 'groupBar',
             dataMethod:'restful',
             dataFormat:'aaaaa',
-            dataUrl:'http://www.baidu.com',
+            dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
             pullRate: 10,
             dataDot:2,
             props: {
@@ -750,7 +717,7 @@ export const Tools = [
             echartsType: 'verticalBar',
             dataMethod:'restful',
             dataFormat:'aaaaa',
-            dataUrl:'http://www.baidu.com',
+            dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
             pullRate: 10,
             dataDot:2,
             props: {
@@ -800,7 +767,7 @@ export const Tools = [
             echartsType: 'stackBar',
             dataMethod:'restful',
             dataFormat:'aaaaa',
-            dataUrl:'http://www.baidu.com',
+            dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
             pullRate: 10,
             dataDot:2,
             props: {
@@ -850,7 +817,7 @@ export const Tools = [
             echartsType: 'horizontalBar',
             dataMethod:'restful',
             dataFormat:'aaaaa',
-            dataUrl:'http://www.baidu.com',
+            dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
             pullRate: 10,
             dataDot:2,
             props: {
@@ -900,7 +867,7 @@ export const Tools = [
             echartsType: 'circleAndPie',
             dataMethod:'restful',
             dataFormat:'aaaaa',
-            dataUrl:'http://www.baidu.com',
+            dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
             pullRate: 10,
             dataDot:2,
             props: {

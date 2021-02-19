@@ -1,6 +1,29 @@
 import {defaultLineColors, defaultTimelineShowData} from "../../data/defines";
 
-export function getHorizontalBarOption(){
+export function getHorizontalBarOption(node:any=null,resData:any=null){
+    let dimensions=["xdata", "2020-09"]
+    let source=[
+        ["补强板", 99.899],
+        ["电梯导轨", 1457.332],
+        ["扁钢", 1768.992]
+    ]
+    let series={
+        type: 'bar',
+        encode: { x: 'xdata', y: dimensions[1] },
+        datasetIndex: 1,
+    }
+    let config={ dimension: dimensions[1], order: 'desc' }
+    let encode={
+        // Map the "amount" column to X axis.
+        x: dimensions[1],
+        // Map the "product" column to Y axis
+        y: 'xdata'
+    }
+    if(resData){
+        dimensions=resData["dimensions"]
+        source=resData["source"]
+        series.encode.y=dimensions[1]
+    }
     const option = {
         title:{
             text:"中国历代gdp"
@@ -13,19 +36,13 @@ export function getHorizontalBarOption(){
             containLabel: true
         },
         dataset: [{
-            dimensions:['xdata', '2012', '2013', '2014', '2015'],
-            source: [
-                ['Matcha Latte', 41.1, 30.4, 65.1, 53.3],
-                ['Milk Tea', 86.5, 92.1, 85.7, 83.1],
-                ['Cheese Cocoa1', 24.1, 67.2, 79.5, 86.4],
-                ['Cheese Cocoa2', 24.1, 167.2, 79.5, 86.4],
-                ['Cheese Cocoa3', 24.1, 267.2, 79.5, 86.4]
-            ]
+            dimensions:dimensions,
+            source: source
         },
         {
             transform: {
                 type: 'sort',
-                config: { dimension: '2013', order: 'desc' }
+                config: config
             }
         }],
         xAxis: {name: ''},
@@ -54,12 +71,7 @@ export function getHorizontalBarOption(){
                     position: 'right',
                     valueAnimation: true
                 },
-                encode: {
-                    // Map the "amount" column to X axis.
-                    x: '2013',
-                    // Map the "product" column to Y axis
-                    y: 'xdata'
-                }
+                encode: encode
             }
         ]
     };

@@ -1,6 +1,22 @@
 import {defaultLineColors} from "../../data/defines";
 
-export function getBarOption(){
+export function getBarOption(node:any=null,resData:any=null){
+    let dimensions=["xdata", "2020-09"]
+    let source=[
+        ["补强板", 99.899],
+        ["电梯导轨", 1457.332],
+        ["扁钢", 1768.992]
+    ]
+    let series={
+        type: 'bar',
+        encode: { x: 'xdata', y: '2020-09' },
+        datasetIndex: 1,
+    }
+    if(resData){
+        dimensions=resData["dimensions"]
+        source=resData["source"]
+        series.encode.y=dimensions[1]
+    }
     const option = {
         color: defaultLineColors,
         title:{
@@ -24,16 +40,12 @@ export function getBarOption(){
             containLabel: true
         },
         dataset: [{
-            "dimensions": ["xdata", "2020-09"],
-            "source": [
-                ["补强板", 99.899],
-                ["电梯导轨", 1457.332],
-                ["扁钢", 1768.992]
-            ]
+            "dimensions": dimensions,
+            "source": source
         }, {
             transform: {
                 type: 'sort',
-                config: { dimension: '2020-09', order: 'asc' }
+                config: { dimension: dimensions[1], order: 'asc' }
             }
         }],
         xAxis: {
@@ -41,11 +53,7 @@ export function getBarOption(){
             axisLabel: { interval: 0, rotate: 30 },
         },
         yAxis: {},
-        series: {
-            type: 'bar',
-            encode: { x: 'xdata', y: '2020-09' },
-            datasetIndex: 1,
-        }
+        series: series
     };
     return option;
 }

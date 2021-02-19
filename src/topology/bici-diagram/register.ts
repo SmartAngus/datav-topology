@@ -4,6 +4,7 @@ import {biciVarer,biciVarerIconRect,biciVarerTextRect} from './varer'
 import {simpleCard,simpleCardIconRect,simpleCardTextRect} from './card'
 import {biciPilotIconRect,biciPilotTextRect,biciPilot} from './pilot'
 import {biciMeasure, biciMeasureIconRect, biciMeasureTextRect} from "./measure";
+import {simpleText, simpleTextIconRect, simpleTextTextRect} from "./text";
 
 // name - node名称.
 // drawFn - node渲染函数。上面的myShape
@@ -26,4 +27,5 @@ export function register() {
   registerNode("biciCard",simpleCard,null,simpleCardIconRect,simpleCardTextRect,true)
   registerNode("biciPilot",biciPilot,null,biciPilotIconRect,biciPilotTextRect,true)
   registerNode("biciMeasure",biciMeasure,null,biciMeasureIconRect,biciMeasureTextRect,true)
+  registerNode("biciText",simpleText,null,simpleTextIconRect,simpleTextTextRect,true)
 }

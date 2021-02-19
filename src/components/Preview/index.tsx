@@ -18,7 +18,8 @@ import 'antd/dist/antd.less';
 import styles from './index.module.scss'
 import {getTimeLineOption} from "../config/charts/timeline";
 import {defaultTimelineShowData} from "../data/defines";
-import {clientParam, handleRequestError} from "../data/api";
+import {clientParam, handleRequestError, maxContentLength, timeout, withCredentials} from "../data/api";
+import axios from "axios";
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -178,7 +179,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
               const interval = setInterval(async ()=>{
                 const res = await requestData(node);
                 console.log("res==",res)
-
+                mapRestDataToChart(node,res)
               },node.property.pullRate*1000)
               userInterval.push(interval);
             }
@@ -187,10 +188,99 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       })
     }
   }
+  /**
+   * rest请求的数据更新到图表上
+   * @param node
+   * @param res
+   * 统计组件数据格式：
+   * {
+    "code": 1000,
+    "msg": "success",
+    "data": {
+        text:"产量",
+        value:"1024",
+        unit:"t"
+    }
+}
+图表数据格式：
+   {
+    "code": 1000,
+    "msg": "success",
+    "data": {
+        "dimensions": [
+            "xdata",
+            "2020-09"
+        ],
+        "source": [
+            [
+                "补强板",
+                99.899
+            ],
+            [
+                "电梯导轨",
+                1457.332
+            ],
+            [
+                "扁钢",
+                1768.992
+            ]
+        ]
+    }
+}
+   */
+  const mapRestDataToChart=(node: any, res: any)=>{
+    if(res.front_error){// 请求出错，不做处理
+      return;
+    }
+    let resTmp=null;
+    if(typeof res=='string'){// 如果请求结果是字符串，尝试解析成对象
+      resTmp=JSON.parse(res)
+    }else{
+      resTmp=res;
+    }
+    if(resTmp){
+      if(
+          resTmp.hasOwnProperty("text") ||
+          resTmp.hasOwnProperty("value")||
+          resTmp.hasOwnProperty("unit"))
+      {// 说明是统计组件的数据
+        const nodeType = node.name;
+        switch (nodeType) {
+          case "biciText":
+            node.children[0].text=resTmp["value"]+resTmp["unit"]
+            node.children[1].text=resTmp["text"]
+            canvas.updateProps(false,[node])
+            break;
+        }
+      }else if(resTmp.hasOwnProperty("dimensions")||
+          resTmp.hasOwnProperty("source"))
+      {// 是图表组件的数据
+        const nodeType = node.property.echartsType
+        switch (nodeType) {
+          case 'groupBar':
+            break;
+          case 'verticalBar':
+            break;
+          case 'stackBar':
+            break;
+          case 'horizontalBar':
+            break;
+          case 'circleAndPie':
+            break;
+          case 'timeLine':
+            break;
+        }
+      }
+    }else{
+
+    }
+  }
   const requestData=(node)=>{
     return new Promise((resolve,reject)=>{
-      clientParam(window["API_URL"]).request({
-        url:'/user',
+      var myURL = new URL(node.property.dataUrl)
+      const ajax = axios.create({baseURL: `${myURL.origin}/`, timeout, maxContentLength,withCredentials})
+      ajax.request({
+        url:myURL.pathname,
         method:'post',
         headers: {
           token: window["token"],
@@ -200,11 +290,15 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           firstName: 'Fred'
         },
       }).then(res=>{
-        console.log(res)
-        resolve({b:2})
+        console.log(res.data.code)
+        if(res&&res.data.code==1000){
+          resolve(res.data.data)
+        }else{
+          resolve({front_error:2})
+        }
       }).catch((error)=>{
         handleRequestError(error);
-        resolve({a:1});
+        resolve({front_error:1});
       });
     })
   }

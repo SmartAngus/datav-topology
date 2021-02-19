@@ -231,12 +231,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
       const btnSize =
         width / 2 <= 15 ? 'small' : width / 2 <= 20 ? 'middle' : 'large';
       setPilotBtnSize(btnSize);
-    } else if (data.node.name == 'echarts'||data.node.name == 'biciMeasure') {
+    } else if (data.node.name == 'echarts'||data.node.name == 'biciMeasure'||data.node.name == 'biciText') {
       let lineRangedefaultColor = defaultLineColors.map((color) => {
         return {
           lineGraphRangeColor: color,
           lineGraphRangeCheck:true
-
         };
       });
 
@@ -2070,7 +2069,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                 {data?.node.name === 'biciMeasure' && renderMeter}
                 {property?.echartsType === 'timeLine' && renderLineGraph}
                 {property?.echartsType === 'gauge' && renderGauge}
-                {(name==='webPage'||
+                {(name==='webPage'|| name=="biciText"||
                     property?.echartsType=='circleAndPie'||
                     property?.echartsType=='stackBar'||
                     property?.echartsType=='horizontalBar'||
@@ -2087,7 +2086,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                     data.node.name == 'echarts' ||
                     data.node.name == 'biciCard' ||
                     data.node.name == 'biciPilot'||
-                    data.node.name == 'biciMeasure'
+                    data.node.name == 'biciMeasure'||
+                    data.node.name == 'biciText'
                 ) && renderExtraDataForm}
               </Col>
             </Row>
