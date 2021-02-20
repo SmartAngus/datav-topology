@@ -171,7 +171,6 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
     if (canvas.data && canvas.data.pens.length > 0) {
       // 有数据，去遍历有websocket的组件，并订阅
       canvas.data.pens.forEach(async node=>{
-        console.log("node",node)
         // 如果是图表组件，下面就需要判断具体的是那种图表组件
         if(node.property){
           if(node.property.dataMethod=="restful"){
@@ -281,10 +280,11 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
   const requestData=(node)=>{
     return new Promise((resolve,reject)=>{
       var myURL = new URL(node.property.dataUrl)
-      const ajax = axios.create({baseURL: `${myURL.origin}/`, timeout, maxContentLength,withCredentials})
+      // const ajax = axios.create({baseURL: `${myURL.origin}/`, timeout, maxContentLength,withCredentials})
+      const ajax = axios.create({baseURL: `http://qt.test.bicisims.com`, timeout, maxContentLength,withCredentials})
       ajax.request({
-        url:myURL.pathname,
-        method:'post',
+        url:'/api/applications/externalInterface/externalDropDown',//myURL.pathname
+        method:'get',
         headers: {
           token: window["token"],
           'Content-Type': 'application/json',

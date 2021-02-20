@@ -595,10 +595,26 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
       if(group=='副标题'){
         child = selected.node.children[1];
       }
-      child.font.fontSize=selected.node.property.props["titleFontSize"]
-      child.font.color=selected.node.property.props["titleFontColor"]
-      child.font.fontFamily=selected.node.property.props["titleFontFamily"]
-      child.font.textAlign=selected.node.property.props["titlePosition"]
+      child.font.fontSize=selected.node.property.props["titleFontSize"];
+      child.font.color=selected.node.property.props["titleFontColor"];
+      child.font.fontFamily=selected.node.property.props["titleFontFamily"];
+      child.font.textAlign=selected.node.property.props["titlePosition"];
+      (selected.node.property.props.titleFontStyle||[]).forEach(item=>{
+        if(item.name=='bold'){
+          if(item.checked){
+            child.font.fontWeight=item.value
+          }else{
+            child.font.fontWeight='normal'
+          }
+        }
+        if(item.name=='italic'){
+          if(item.checked){
+            child.font.fontStyle=item.value
+          }else{
+            child.font.fontStyle='normal'
+          }
+        }
+      });
     }
     canvas.updateProps(true,[selected.node]);
     setIsSave(false);

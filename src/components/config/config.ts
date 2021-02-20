@@ -234,7 +234,8 @@ export const Tools = [
                 textAlign: 'center',
                 fontSize: 24,
                 textBaseline: 'middle',
-                fontWight: 400,
+                fontWeight: 100,
+                fontStyle:'italic'
               },
             },
             {
@@ -257,7 +258,7 @@ export const Tools = [
                 fontFamily: 'Arial',
                 color: '#333333',
                 fontSize: 14,
-                fontWight: 800,
+                fontWeight: 800,
                 textAlign: 'center',
                 textBaseline: 'middle',
               },
@@ -361,7 +362,7 @@ export const Tools = [
                 textAlign: 'center',
                 fontSize: 42,
                 textBaseline: 'middle',
-                fontWight: 400,
+                fontWeight: 400,
               },
             },
             {
@@ -384,7 +385,7 @@ export const Tools = [
                 fontFamily: 'Arial',
                 color: '#fff',
                 fontSize: 14,
-                fontWight: 400,
+                fontWeight: 400,
                 textAlign: 'center',
                 textBaseline: 'middle',
               },

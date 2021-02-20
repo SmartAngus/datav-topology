@@ -953,7 +953,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               </Col>
               <Col span={16}>
                 <Form.Item name="pullRate" label="拉取频率">
-                  <InputNumber min={0} max={1000}/>
+                  <InputNumber min={0} max={100000}/>
                 </Form.Item>
               </Col>
               <Col  span={8}>
