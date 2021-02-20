@@ -19,10 +19,59 @@ export function getGroupBarOption(node:any=null,resData:any=null){
             series.push({type: 'bar',seriesLayoutBy:'column'})
         }
     }
+    let chartBackgroundColor;
+    let title="堆叠图";
+    let titleShow=true;
+    let font:any={};
+    let titlePosition='left';
+    // 组件属性改变
+    if(node){
+        console.log("node==",node)
+        title=node.property.props.title;
+        titleShow=node.property.props.titleShow;
+        if(node.property.props.chartBkColor!=''&&node.property.props.chartBkColorChecked==true){
+            chartBackgroundColor=node.property.props.chartBkColor;
+        }else{
+            chartBackgroundColor='transparent'
+        }
+        (node.property.props.titleFontStyle||[]).forEach(item=>{
+            if(item.name=='bold'){
+                if(item.checked){
+                    font.fontWeight=item.value
+                }else{
+                    font.fontWeight='normal'
+                }
+            }
+            if(item.name=='italic'){
+                if(item.checked){
+                    font.fontStyle=item.value
+                }else{
+                    font.fontStyle='normal'
+                }
+            }
+        })
+        titlePosition = node.property.props.titlePosition;
+        if(node.property.props.titleFontColor){
+            font.color=node.property.props.titleFontColor;
+        }
+        if(node.property.props.titleFontFamily){
+            font.fontFamily=node.property.props.titleFontFamily;
+        }
+        if(node.property.props.titleFontSize){
+            font.fontSize=node.property.props.titleFontSize;
+        }
+    }
     const option = {
         tooltip: {},
         title:{
-            text:'月库存变化图'
+            text: titleShow?title:'',
+            left: titlePosition,
+            textStyle:{
+                ...font,
+                rich:{
+
+                }
+            }
         },
         legend: {
             orient: 'vertical',

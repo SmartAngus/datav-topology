@@ -239,16 +239,16 @@ const CustomizedDynamicForm: React.FC<CustomizedFormProps> = ({ onChange, formSt
                                         <Row>
                                             <Col span={24}>
                                                 <Form.Item label="样式对齐" name="titlePosition" labelCol={{span:6}}>
-                                                    <Radio.Group>
-                                                        <Radio.Button value="left"><CustomIcon type="iconleft"/></Radio.Button>
-                                                        <Radio.Button value="center"><CustomIcon type="iconjuzhongduiqi"/></Radio.Button>
-                                                        <Radio.Button value="right"><CustomIcon type="iconyouduiqi2"/></Radio.Button>
+                                                    <Radio.Group style={{width:"100%"}}>
+                                                        <Radio.Button style={{width:"33%",textAlign:"center"}} value="left"><CustomIcon type="iconleft"/></Radio.Button>
+                                                        <Radio.Button style={{width:"33%",textAlign:"center"}} value="center"><CustomIcon type="iconjuzhongduiqi"/></Radio.Button>
+                                                        <Radio.Button style={{width:"33%",textAlign:"center"}} value="right"><CustomIcon type="iconyouduiqi2"/></Radio.Button>
                                                     </Radio.Group>
                                                 </Form.Item>
                                             </Col>
                                         </Row>
                                         <Row>
-                                            <Col span={24} offset={6}>
+                                            <Col span={18} offset={6}>
                                                 <Form.Item label="" name="titleFontStyle">
                                                     <CheckboxGroup/>
                                                 </Form.Item>

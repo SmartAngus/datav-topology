@@ -32,7 +32,7 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = (props: CheckboxGroupProps) 
                                    onClick={(e)=>handleChange(e,item)}
                                    value={item.value}/>
                         </span>
-                        <span><CustomIcon type={item.icon} /></span>
+                        <span style={{width:50}}><CustomIcon type={item.icon} /></span>
                     </label>
                 )
             })}

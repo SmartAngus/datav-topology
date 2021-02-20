@@ -7,6 +7,44 @@ import {getBarOption} from "./charts/bar";
 import {getPieOption} from "./charts/pie";
 import {getStackBarOption} from "./charts/stackbar";
 
+const TONGJI_DATA=`
+{
+    "code": 1000,
+    "msg": "success",
+    "data": {
+        text:"产量",
+        value:"1024",
+        unit:"t"
+    }
+}
+`;
+const CHART_DATA=`
+{
+    "code": 1000,
+    "msg": "success",
+    "data": {
+        "dimensions": [
+            "xdata",
+            "2020-09"
+        ],
+        "source": [
+            [
+                "补强板",
+                99.899
+            ],
+            [
+                "电梯导轨",
+                1457.332
+            ],
+            [
+                "扁钢",
+                1768.992
+            ]
+        ]
+    }
+}
+`;
+
 
 export const Tools = [
   {
@@ -192,7 +230,7 @@ export const Tools = [
               },
               font: {
                 fontFamily: 'Arial',
-                color: '#fff',
+                color: '#333333',
                 textAlign: 'center',
                 fontSize: 24,
                 textBaseline: 'middle',
@@ -217,9 +255,9 @@ export const Tools = [
               },
               font: {
                 fontFamily: 'Arial',
-                color: '#fff',
+                color: '#333333',
                 fontSize: 14,
-                fontWight: 400,
+                fontWight: 800,
                 textAlign: 'center',
                 textBaseline: 'middle',
               },
@@ -227,7 +265,7 @@ export const Tools = [
           ],
           property: {
             dataMethod:'restful',
-            dataFormat:'aaaaa',
+            dataFormat:TONGJI_DATA,
             dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
             pullRate: 10,
             dataDot:2,
@@ -238,19 +276,33 @@ export const Tools = [
               style:[{
                 group:'标题字符',
                 formItems:[
-                  { name: ['title'], value: 'Ant Design' },
-                  { name: ['titleShow'], value: true },
-                  { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
+                  { name: ['titleFontFamily'], value: 'Arial' },
                   { name: ['titleFontColor'], value: "#333333" },
-                  { name: ['titleFontSize'], value: 14 },
-                  { name: ['titleFontBold'], value: 200 },
+                  { name: ['titleFontSize'], value: 24 },
+                  { name: ['titleFontBold'], value: 800 },
                   { name: ['titleFontItalic'], value: "normal" },
                   { name: ['titleFontBaseline'], value: "underline" },
-                  { name: ['titlePosition'], value: "left" },
+                  { name: ['titlePosition'], value: "center" },
                   { name: ['titleFontStyle'], value: [
-                      {name:"bold",value:200,checked:false,icon:'iconjiacu'},
-                      {name:"italic",value:"italic",checked:true,icon:'iconzu'},
-                      {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
+                      {name:"bold",value: 800,checked:false,icon:'iconjiacu'},
+                      {name:"italic",value:"italic",checked:false,icon:'iconzu'},
+                      // {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
+                    ]},
+                ]
+              },{
+                group:'副标题',
+                formItems:[
+                  { name: ['titleFontFamily'], value: 'Arial' },
+                  { name: ['titleFontColor'], value: "#333333" },
+                  { name: ['titleFontSize'], value: 14 },
+                  { name: ['titleFontBold'], value: 800 },
+                  { name: ['titleFontItalic'], value: "normal" },
+                  { name: ['titleFontBaseline'], value: "underline" },
+                  { name: ['titlePosition'], value: "center" },
+                  { name: ['titleFontStyle'], value: [
+                      {name:"bold",value: 800,checked:false,icon:'iconjiacu'},
+                      {name:"italic",value:"italic",checked:false,icon:'iconzu'},
+                      // {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
                     ]},
                 ]
               }],
@@ -666,7 +718,7 @@ export const Tools = [
           property: {
             echartsType: 'groupBar',
             dataMethod:'restful',
-            dataFormat:'aaaaa',
+            dataFormat:CHART_DATA,
             dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
             pullRate: 10,
             dataDot:2,
@@ -682,14 +734,14 @@ export const Tools = [
                   { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
                   { name: ['titleFontColor'], value: "#333333" },
                   { name: ['titleFontSize'], value: 14 },
-                  { name: ['titleFontBold'], value: 200 },
+                  { name: ['titleFontBold'], value: 800 },
                   { name: ['titleFontItalic'], value: "normal" },
                   { name: ['titleFontBaseline'], value: "underline" },
                   { name: ['titlePosition'], value: "left" },
                   { name: ['titleFontStyle'], value: [
-                      {name:"bold",value:200,checked:false,icon:'iconjiacu'},
-                      {name:"italic",value:"italic",checked:true,icon:'iconzu'},
-                      {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
+                      {name:"bold",value: 800,checked:false,icon:'iconjiacu'},
+                      {name:"italic",value:"italic",checked:false,icon:'iconzu'},
+                      // {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
                     ]},
                 ]
               }],
@@ -716,7 +768,7 @@ export const Tools = [
           property: {
             echartsType: 'verticalBar',
             dataMethod:'restful',
-            dataFormat:'aaaaa',
+            dataFormat:CHART_DATA,
             dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
             pullRate: 10,
             dataDot:2,
@@ -732,14 +784,14 @@ export const Tools = [
                   { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
                   { name: ['titleFontColor'], value: "#333333" },
                   { name: ['titleFontSize'], value: 14 },
-                  { name: ['titleFontBold'], value: 200 },
+                  { name: ['titleFontBold'], value: 800 },
                   { name: ['titleFontItalic'], value: "normal" },
                   { name: ['titleFontBaseline'], value: "underline" },
                   { name: ['titlePosition'], value: "left" },
                   { name: ['titleFontStyle'], value: [
-                      {name:"bold",value:200,checked:false,icon:'iconjiacu'},
-                      {name:"italic",value:"italic",checked:true,icon:'iconzu'},
-                      {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
+                      {name:"bold",value: 800,checked:false,icon:'iconjiacu'},
+                      {name:"italic",value:"italic",checked:false,icon:'iconzu'},
+                      // {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
                     ]},
                 ]
               }],
@@ -766,7 +818,7 @@ export const Tools = [
           property: {
             echartsType: 'stackBar',
             dataMethod:'restful',
-            dataFormat:'aaaaa',
+            dataFormat:CHART_DATA,
             dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
             pullRate: 10,
             dataDot:2,
@@ -782,14 +834,14 @@ export const Tools = [
                   { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
                   { name: ['titleFontColor'], value: "#333333" },
                   { name: ['titleFontSize'], value: 14 },
-                  { name: ['titleFontBold'], value: 200 },
+                  { name: ['titleFontBold'], value: 800 },
                   { name: ['titleFontItalic'], value: "normal" },
                   { name: ['titleFontBaseline'], value: "underline" },
                   { name: ['titlePosition'], value: "left" },
                   { name: ['titleFontStyle'], value: [
-                      {name:"bold",value:200,checked:false,icon:'iconjiacu'},
-                      {name:"italic",value:"italic",checked:true,icon:'iconzu'},
-                      {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
+                      {name:"bold",value: 800,checked:false,icon:'iconjiacu'},
+                      {name:"italic",value:"italic",checked:false,icon:'iconzu'},
+                      // {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
                     ]},
                 ]
               }],
@@ -816,7 +868,7 @@ export const Tools = [
           property: {
             echartsType: 'horizontalBar',
             dataMethod:'restful',
-            dataFormat:'aaaaa',
+            dataFormat:CHART_DATA,
             dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
             pullRate: 10,
             dataDot:2,
@@ -832,14 +884,14 @@ export const Tools = [
                   { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
                   { name: ['titleFontColor'], value: "#333333" },
                   { name: ['titleFontSize'], value: 14 },
-                  { name: ['titleFontBold'], value: 200 },
+                  { name: ['titleFontBold'], value: 800 },
                   { name: ['titleFontItalic'], value: "normal" },
                   { name: ['titleFontBaseline'], value: "underline" },
                   { name: ['titlePosition'], value: "left" },
                   { name: ['titleFontStyle'], value: [
-                      {name:"bold",value:200,checked:false,icon:'iconjiacu'},
-                      {name:"italic",value:"italic",checked:true,icon:'iconzu'},
-                      {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
+                      {name:"bold",value: 800,checked:false,icon:'iconjiacu'},
+                      {name:"italic",value:"italic",checked:false,icon:'iconzu'},
+                      // {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
                     ]},
                 ]
               }],
@@ -866,7 +918,7 @@ export const Tools = [
           property: {
             echartsType: 'circleAndPie',
             dataMethod:'restful',
-            dataFormat:'aaaaa',
+            dataFormat:CHART_DATA,
             dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
             pullRate: 10,
             dataDot:2,
@@ -882,14 +934,14 @@ export const Tools = [
                   { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
                   { name: ['titleFontColor'], value: "#333333" },
                   { name: ['titleFontSize'], value: 14 },
-                  { name: ['titleFontBold'], value: 200 },
+                  { name: ['titleFontBold'], value: 800 },
                   { name: ['titleFontItalic'], value: "normal" },
                   { name: ['titleFontBaseline'], value: "underline" },
                   { name: ['titlePosition'], value: "left" },
                   { name: ['titleFontStyle'], value: [
-                      {name:"bold",value:200,checked:false,icon:'iconjiacu'},
-                      {name:"italic",value:"italic",checked:true,icon:'iconzu'},
-                      {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
+                      {name:"bold",value: 800,checked:false,icon:'iconjiacu'},
+                      {name:"italic",value:"italic",checked:false,icon:'iconzu'},
+                      // {name:"baseline",value:"baseline",checked:false,icon:'iconjiacu'}
                     ]},
                 ]
               },{

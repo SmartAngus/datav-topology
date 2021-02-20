@@ -167,10 +167,10 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
   /**
    * 初始话数据接口更新数据
    */
-  const initRestfullData = ()=>{
+  const initRestfullData =  ()=>{
     if (canvas.data && canvas.data.pens.length > 0) {
       // 有数据，去遍历有websocket的组件，并订阅
-      canvas.data.pens.forEach(node=>{
+      canvas.data.pens.forEach(async node=>{
         console.log("node",node)
         // 如果是图表组件，下面就需要判断具体的是那种图表组件
         if(node.property){
@@ -182,6 +182,9 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
                 mapRestDataToChart(node,res)
               },node.property.pullRate*1000)
               userInterval.push(interval);
+            }else{
+              const res = await requestData(node);
+              mapRestDataToChart(node,res)
             }
           }
         }

@@ -68,15 +68,19 @@ export function getPieOptionByChangeProp(node:any,form:any) {
     let titleShow=node.property.props.titleShow;
     let font:any={};
     (node.property.props.titleFontStyle||[]).forEach(item=>{
-        if(item.checked&&item.name=='bold'){
-            font.fontWeight=item.value
-        }else{
-            font.fontWeight=undefined
+        if(item.name=='bold'){
+            if(item.checked){
+                font.fontWeight=item.value
+            }else{
+                font.fontWeight='normal'
+            }
         }
-        if(item.checked&&item.name=='italic'){
-            font.fontStyle=item.value
-        }else{
-            font.fontStyle=undefined
+        if(item.name=='italic'){
+            if(item.checked){
+                font.fontStyle=item.value
+            }else{
+                font.fontStyle='normal'
+            }
         }
     })
     const option = {

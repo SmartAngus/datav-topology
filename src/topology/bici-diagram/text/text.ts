@@ -66,14 +66,15 @@ export function simpleText(ctx: CanvasRenderingContext2D, node: Node) {
   //     node.rect.y+node.rect.height/2,
   //     100);
   const {fillStyle}=node;
-  if(fillStyle){
-    linear.addColorStop(0,getLightColor(fillStyle,0.5));
-    linear.addColorStop(1,fillStyle);
-    ctx.fillStyle=linear;
-    ctx.strokeStyle=fillStyle;
-  }
+  // if(fillStyle){
+  //   linear.addColorStop(0,getLightColor(fillStyle,0.5));
+  //   linear.addColorStop(1,fillStyle);
+  //   ctx.fillStyle=linear;
+  //   ctx.strokeStyle=fillStyle;
+  // }
+  ctx.strokeStyle="transparent";
   ctx.lineWidth=0;
-  (node.fillStyle || node.bkType) && ctx.fill();
+  // (node.fillStyle || node.bkType) && ctx.fill();
   ctx.stroke();
 }
 //hex颜色转rgb颜色

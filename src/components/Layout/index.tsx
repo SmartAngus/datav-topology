@@ -585,11 +585,20 @@ export const EditorLayout = React.forwardRef((props: DataVEditorProps, ref) => {
     }else if(selected.node.property.echartsType=='stackBar'){
       selected.node.data.echarts.option=getStackBarOption(selected.node,null);
     }else if(selected.node.property.echartsType=='verticalBar'){
-      selected.node.data.echarts.option=getBarOption()
+      selected.node.data.echarts.option=getBarOption(selected.node,null)
     }else if(selected.node.property.echartsType=='groupBar'){
-      selected.node.data.echarts.option=getGroupBarOption();
+      selected.node.data.echarts.option=getGroupBarOption(selected.node,null);
     }else if(selected.node.property.echartsType=='horizontalBar'){
-      selected.node.data.echarts.option=getHorizontalBarOption();
+      selected.node.data.echarts.option=getHorizontalBarOption(selected.node,null);
+    }else if(selected.node.name=='biciText'){
+      let child=selected.node.children[0];
+      if(group=='副标题'){
+        child = selected.node.children[1];
+      }
+      child.font.fontSize=selected.node.property.props["titleFontSize"]
+      child.font.color=selected.node.property.props["titleFontColor"]
+      child.font.fontFamily=selected.node.property.props["titleFontFamily"]
+      child.font.textAlign=selected.node.property.props["titlePosition"]
     }
     canvas.updateProps(true,[selected.node]);
     setIsSave(false);

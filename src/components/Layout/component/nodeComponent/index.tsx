@@ -929,47 +929,54 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               placeholder="选择"
               onChange={handlePropertyDataMethodChange}
               allowClear={false}
+              disabled
             >
-              <Option value="point">绑定数据</Option>
+              <Option value="point">数据点</Option>
               <Option value="restful">接口传入</Option>
             </Select>
           </Form.Item>
           </Col>
-          <Col span={24}>
-          <Form.Item name="dataFormat" label="报文格式">
-            <TextArea
-                placeholder="请输入网页地址"
-                autoSize={{ minRows: 2, maxRows: 6 }}
-            />
-          </Form.Item>
-          </Col>
-          <Col span={24}>
-          <Form.Item name="dataUrl" label="接口地址">
-            <Input/>
-          </Form.Item>
-          </Col>
-          <Col span={16}>
-          <Form.Item name="pullRate" label="拉取频率">
-            <InputNumber min={0} max={1000}/>
-          </Form.Item>
-          </Col>
-          <Col  span={8}>
-          <Form.Item>
-            秒/次
-          </Form.Item>
-          </Col>
-          <Col span={24}>
-          <Form.Item label="数据点">
-            <Button
-              type="dashed"
-              onClick={() => addDataPoint()}
-              icon={<PlusOutlined />}
-              style={{color:"#096DD9"}}
-            >
-              添加数据点
-            </Button>
-          </Form.Item>
-          </Col>
+          {
+            property.dataMethod=='restful'?<React.Fragment>
+              <Col span={24}>
+                <Form.Item name="dataFormat" label="报文格式">
+                  <TextArea
+                      placeholder="请输入网页地址"
+                      autoSize={{ minRows: 2, maxRows: 10 }}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item name="dataUrl" label="接口地址">
+                  <Input/>
+                </Form.Item>
+              </Col>
+              <Col span={16}>
+                <Form.Item name="pullRate" label="拉取频率">
+                  <InputNumber min={0} max={1000}/>
+                </Form.Item>
+              </Col>
+              <Col  span={8}>
+                <Form.Item>
+                  秒/次
+                </Form.Item>
+              </Col>
+            </React.Fragment>:''
+          }
+          {
+            property.dataMethod=='point'?<Col span={24}>
+              <Form.Item label="数据点">
+                <Button
+                    type="dashed"
+                    onClick={() => addDataPoint()}
+                    icon={<PlusOutlined />}
+                    style={{color:"#096DD9"}}
+                >
+                  添加数据点
+                </Button>
+              </Form.Item>
+            </Col>:''
+          }
           {(property?.dataPointSelectedRows || []).map((item, index) => {
             return (
           <Col span={24}>
