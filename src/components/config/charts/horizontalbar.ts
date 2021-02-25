@@ -23,7 +23,10 @@ export function getHorizontalBarOption(node:any=null,resData:any=null){
         dimensions=resData["dimensions"]
         source=resData["source"]
         series.encode.y=dimensions[1]
+        config.dimension=dimensions[1]
+        encode.x=dimensions[1]
     }
+
     let chartBackgroundColor;
     let title="中国历代gdp";
     let titleShow=true;

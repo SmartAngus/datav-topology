@@ -53,7 +53,8 @@ export function getPieOption() {
 
     return option;
 }
-export function getPieOptionByChangeProp(node:any,form:any) {
+export function getPieOptionByChangeProp(node:any,resData:any) {
+
     let chartShape:any='70%';
     if(node.property.props.chartShape=="circle"){
         chartShape=["50%","70%"]
@@ -83,6 +84,19 @@ export function getPieOptionByChangeProp(node:any,form:any) {
             }
         }
     })
+    /****后端数据***/
+    let dimensions=["xdata", "2020-09"]
+    let source=[
+        ["补强板", 99.899],
+        ["电梯导轨", 1457.332],
+        ["扁钢", 1768.992]
+    ]
+
+    // 后端数据
+    if(resData){
+        dimensions=resData["dimensions"]
+        source=resData["source"]
+    }
     const option = {
         backgroundColor:chartBackgroundColor,
         title:{
@@ -107,12 +121,8 @@ export function getPieOptionByChangeProp(node:any,form:any) {
             bottom: 'bottom',
         },
         dataset: [{
-            "dimensions": ["xdata", "2020-09"],
-            "source": [
-                ["补强板", 99.899],
-                ["电梯导轨", 1457.332],
-                ["扁钢", 1768.992]
-            ]
+            "dimensions": dimensions,
+            "source": source
         }],
         series: [{
             type: 'pie',

@@ -20,6 +20,12 @@ import {getTimeLineOption} from "../config/charts/timeline";
 import {defaultTimelineShowData} from "../data/defines";
 import {clientParam, handleRequestError, maxContentLength, timeout, withCredentials} from "../data/api";
 import axios from "axios";
+import JSEncrypt from 'jsencrypt';
+import {getBarOption} from "../config/charts/bar";
+import {getGroupBarOption} from "../config/charts/groupbar";
+import {getStackBarOption} from "../config/charts/stackbar";
+import {getHorizontalBarOption} from "../config/charts/horizontalbar";
+import {getPieOptionByChangeProp} from "../config/charts/pie";
 let canvas;
 let x, y;
 export class PreviewProps {
@@ -32,11 +38,16 @@ export class PreviewProps {
     url: string;
   };
 }
+// 基于 jsencrypt 的 RSA 验证私匙
+export const privateKey =
+    'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCvJGaiiS3oLK9QXgm1jpzKe3g4jKRu0zXWqjaazh9NW13vdMcu3ctKT2+GqV9I7FMBgP69p9LX1hOXoSmagYB5Qku1Vrjx03mjnhcYaCleJzv7vksb8Rsx/Dd8pRCVoYvjsgawYB+oxnvlHKvk7d/XuHCOY02Tod21KpsBQ6Z9AwIDAQAB';
+
 // echartsObjs[node.id].chart
 const Preview = ({ data, websocketConf }: PreviewProps) => {
   let websocketData=null;
   let websocket_data_list=[]
   let userInterval=[];
+  let interfaceToken='';
 
   useEffect(() => {
     const canvasOptions = {
@@ -174,22 +185,44 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         // 如果是图表组件，下面就需要判断具体的是那种图表组件
         if(node.property){
           if(node.property.dataMethod=="restful"){
+            // 第一次请求数据
+            loginAndFetchData(node)
+            // 对于有轮训需求的数据设置轮训
             if(node.property.pullRate){
               const interval = setInterval(async ()=>{
-                const res = await requestData(node);
-                console.log("res==",res)
-                mapRestDataToChart(node,res)
+                // const res = await requestData(node);
+
+                // Promise.all([loginSZGC(),requestData(node)]).then((res)=>{
+                //   console.log("promiseall==",res)
+                //   mapRestDataToChart(node,res[1])
+                // })
+                loginAndFetchData(node)
               },node.property.pullRate*1000)
               userInterval.push(interval);
-            }else{
-              const res = await requestData(node);
-              mapRestDataToChart(node,res)
             }
           }
         }
       })
     }
   }
+  /**
+   * 登陆并获取数据
+   * @param node
+   */
+  const loginAndFetchData=(node)=>{
+    if(!interfaceToken){
+      loginSZGC().then(res=>{
+        requestData(node).then(data=>{
+          mapRestDataToChart(node,data)
+        })
+      })
+    }else{
+      requestData(node).then(data=>{
+        mapRestDataToChart(node,data)
+      })
+    }
+  }
+
   /**
    * rest请求的数据更新到图表上
    * @param node
@@ -260,33 +293,43 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         const nodeType = node.property.echartsType
         switch (nodeType) {
           case 'groupBar':
+            node.data.echarts.option=getGroupBarOption(node,res);
             break;
           case 'verticalBar':
+            node.data.echarts.option=getBarOption(node,res)
             break;
           case 'stackBar':
+            node.data.echarts.option=getStackBarOption(node,res);
             break;
           case 'horizontalBar':
+            node.data.echarts.option=getHorizontalBarOption(node,res);
             break;
           case 'circleAndPie':
+            node.data.echarts.option= getPieOptionByChangeProp(node,res)
             break;
           case 'timeLine':
             break;
         }
+        updateChartNode(node)
       }
     }else{
 
     }
   }
+  /**
+   * 请求接口数据
+   * @param node
+   */
   const requestData=(node)=>{
     return new Promise((resolve,reject)=>{
       var myURL = new URL(node.property.dataUrl)
-      // const ajax = axios.create({baseURL: `${myURL.origin}/`, timeout, maxContentLength,withCredentials})
-      const ajax = axios.create({baseURL: `http://qt.test.bicisims.com`, timeout, maxContentLength,withCredentials})
+      const ajax = axios.create({baseURL: `${myURL.origin}/`, timeout, maxContentLength,withCredentials})
+      // const ajax = axios.create({baseURL: `http://qt.test.bicisims.com`, timeout, maxContentLength,withCredentials})
       ajax.request({
-        url:'/api/applications/externalInterface/externalDropDown',//myURL.pathname
+        url:myURL.pathname,//myURL.pathname
         method:'get',
         headers: {
-          token: window["token"],
+          token: interfaceToken,
           'Content-Type': 'application/json',
         },
         data: {
@@ -296,6 +339,40 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         console.log(res.data.code)
         if(res&&res.data.code==1000){
           resolve(res.data.data)
+        }else{
+          resolve({front_error:2})
+        }
+      }).catch((error)=>{
+        handleRequestError(error);
+        resolve({front_error:1});
+      });
+    })
+  }
+  const tranRSA = (params) => {
+    const jsencrypt = new JSEncrypt();
+    jsencrypt.setPublicKey(privateKey);
+    return jsencrypt.encrypt(params);
+  };
+  // 登陆华夏数字钢厂
+  const loginSZGC=()=>{
+    return new Promise((resolve,reject)=>{
+      const ajax = axios.create({baseURL: 'http://119.3.132.63:10110', timeout, maxContentLength,withCredentials})
+      ajax.request({
+        url:'/api/system/user/login',//myURL.pathname
+        method:'post',
+        headers: {
+          token: window["token"],
+          'Content-Type': 'application/json',
+        },
+        data: {
+          account: 'admin',
+          password:tranRSA("123456")
+        },
+      }).then(res=>{
+        console.log("loginSZGC",res.data.code)
+        if(res&&res.data.code==1000){
+          resolve(res.data.data)
+          interfaceToken=res.data.data;
         }else{
           resolve({front_error:2})
         }
@@ -566,7 +643,8 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
     // 更新图表数据
     node.elementRendered = false;
     echartsObjs[node.id].chart.setOption(
-      JSON.parse(JSON.stringify(node.data.echarts.option, replacer), reviver)
+      JSON.parse(JSON.stringify(node.data.echarts.option, replacer), reviver),
+        true
     );
     echartsObjs[node.id].chart.resize();
     node.elementRendered = true;

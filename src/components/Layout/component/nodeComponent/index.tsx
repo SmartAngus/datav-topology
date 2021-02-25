@@ -937,7 +937,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
           </Form.Item>
           </Col>
           {
-            property.dataMethod=='restful'?<React.Fragment>
+            property?.dataMethod=='restful'?<React.Fragment>
               <Col span={24}>
                 <Form.Item name="dataFormat" label="报文格式">
                   <TextArea
@@ -948,7 +948,10 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
               </Col>
               <Col span={24}>
                 <Form.Item name="dataUrl" label="接口地址">
-                  <Input/>
+                  <TextArea
+                      placeholder="请输入网页地址"
+                      autoSize={{ minRows: 2, maxRows: 10 }}
+                  />
                 </Form.Item>
               </Col>
               <Col span={16}>
@@ -964,7 +967,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
             </React.Fragment>:''
           }
           {
-            property.dataMethod=='point'?<Col span={24}>
+            property?.dataMethod=='point'?<Col span={24}>
               <Form.Item label="数据点">
                 <Button
                     type="dashed"
