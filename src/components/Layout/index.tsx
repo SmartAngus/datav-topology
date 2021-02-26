@@ -32,9 +32,9 @@ import moment from "moment";
 import { getGaugeOption } from "../config/charts/gauge";
 import { getTimeLineOption } from "../config/charts/timeline";
 
-import {register as registerReactNode} from '../common/ReactTable'
+import {register as registerReactNode} from '../common/RegCustomUIComp'
 import {FieldData} from "../common/CustomizedDynamicForm";
-import {reactNodesData} from '../common/ReactTable/drawReactNode'
+import {reactNodesData} from '../common/RegCustomUIComp/drawReactNode'
 import {getPieOptionByChangeProp} from "../config/charts/pie";
 import {getStackBarOption} from "../config/charts/stackbar";
 import {getBarOption} from "../config/charts/bar";

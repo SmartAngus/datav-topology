@@ -231,7 +231,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
       const btnSize =
         width / 2 <= 15 ? 'small' : width / 2 <= 20 ? 'middle' : 'large';
       setPilotBtnSize(btnSize);
-    } else if (data.node.name == 'echarts'||data.node.name == 'biciMeasure'||data.node.name == 'biciText') {
+    } else if (data.node.name == 'echarts'||
+        data.node.name == 'biciMeasure'||
+        data.node.name == 'biciText'||
+        data.node.name == 'productQueue'||
+        data.node.name === 'biciCard2') {
       let lineRangedefaultColor = defaultLineColors.map((color) => {
         return {
           lineGraphRangeColor: color,
@@ -2095,9 +2099,11 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                 {(data.node.name == 'biciVarer' ||
                     data.node.name == 'echarts' ||
                     data.node.name == 'biciCard' ||
+                    data.node.name == 'biciCard2' ||
                     data.node.name == 'biciPilot'||
                     data.node.name == 'biciMeasure'||
-                    data.node.name == 'biciText'
+                    data.node.name == 'biciText' ||
+                    data.node.name == 'productQueue'
                 ) && renderExtraDataForm}
               </Col>
             </Row>

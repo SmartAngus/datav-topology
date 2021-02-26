@@ -18,9 +18,8 @@ import 'antd/dist/antd.less';
 import styles from './index.module.scss'
 import {getTimeLineOption} from "../config/charts/timeline";
 import {defaultTimelineShowData} from "../data/defines";
-import {clientParam, handleRequestError, maxContentLength, timeout, withCredentials} from "../data/api";
+import {clientParam, handleRequestError, loginSZGC, maxContentLength, timeout, withCredentials} from "../data/api";
 import axios from "axios";
-import JSEncrypt from 'jsencrypt';
 import {getBarOption} from "../config/charts/bar";
 import {getGroupBarOption} from "../config/charts/groupbar";
 import {getStackBarOption} from "../config/charts/stackbar";
@@ -38,9 +37,6 @@ export class PreviewProps {
     url: string;
   };
 }
-// 基于 jsencrypt 的 RSA 验证私匙
-export const privateKey =
-    'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCvJGaiiS3oLK9QXgm1jpzKe3g4jKRu0zXWqjaazh9NW13vdMcu3ctKT2+GqV9I7FMBgP69p9LX1hOXoSmagYB5Qku1Vrjx03mjnhcYaCleJzv7vksb8Rsx/Dd8pRCVoYvjsgawYB+oxnvlHKvk7d/XuHCOY02Tod21KpsBQ6Z9AwIDAQAB';
 
 // echartsObjs[node.id].chart
 const Preview = ({ data, websocketConf }: PreviewProps) => {
@@ -211,7 +207,8 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
    */
   const loginAndFetchData=(node)=>{
     if(!interfaceToken){
-      loginSZGC().then(res=>{
+      loginSZGC().then((res:string)=>{
+        interfaceToken=res;
         requestData(node).then(data=>{
           mapRestDataToChart(node,data)
         })
@@ -339,40 +336,6 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
         console.log(res.data.code)
         if(res&&res.data.code==1000){
           resolve(res.data.data)
-        }else{
-          resolve({front_error:2})
-        }
-      }).catch((error)=>{
-        handleRequestError(error);
-        resolve({front_error:1});
-      });
-    })
-  }
-  const tranRSA = (params) => {
-    const jsencrypt = new JSEncrypt();
-    jsencrypt.setPublicKey(privateKey);
-    return jsencrypt.encrypt(params);
-  };
-  // 登陆华夏数字钢厂
-  const loginSZGC=()=>{
-    return new Promise((resolve,reject)=>{
-      const ajax = axios.create({baseURL: 'http://119.3.132.63:10110', timeout, maxContentLength,withCredentials})
-      ajax.request({
-        url:'/api/system/user/login',//myURL.pathname
-        method:'post',
-        headers: {
-          token: window["token"],
-          'Content-Type': 'application/json',
-        },
-        data: {
-          account: 'admin',
-          password:tranRSA("123456")
-        },
-      }).then(res=>{
-        console.log("loginSZGC",res.data.code)
-        if(res&&res.data.code==1000){
-          resolve(res.data.data)
-          interfaceToken=res.data.data;
         }else{
           resolve({front_error:2})
         }

@@ -18,14 +18,14 @@ const drawReactNode = (ReactComponent) => (ctx, node) => {
         node.elementId = s8();
     }
 
+
     // 节点的elementLoaded用于判断第三方图形库是否第一次加载，是否需要初始化
     // 这是一个辅助变量，用户自己赋值使用或不用
-    if (!node.elementLoaded) {
+    if (!node.elementLoaded&&!document.getElementById(node.elementId)) {
         // 创建一个div容器
         reactNodesData[node.id] = {
             div: createDiv(node)
         };
-        node.elementLoaded = true;
         document.body.appendChild(reactNodesData[node.id].div);
         // 添加当前节点到div层，否则无法显示
         node.addToDiv();
@@ -36,10 +36,8 @@ const drawReactNode = (ReactComponent) => (ctx, node) => {
                 reactNodesData[node.id].div
             );
         }
-
-        node.elementRendered = false;
+        node.elementRendered = true;
     }
-
 
     // 节点的elementRendered用于判断第三方图形库是否需要重绘
     // 绘画引擎需要重绘节点时，会把此属性设置为false

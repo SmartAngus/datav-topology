@@ -1,4 +1,6 @@
 import axios from 'axios'
+import JSEncrypt from 'jsencrypt';
+import {privateKey} from "./defines";
 export const timeout=2000000;
 export const maxContentLength=200000000;
 export const withCredentials = false
@@ -79,5 +81,39 @@ export function fetchPerceptualPointList(params) {
       token: window["token"],
       'Content-Type': 'application/json',
     }
+  })
+}
+
+export const tranRSA = (params) => {
+  const jsencrypt = new JSEncrypt();
+  jsencrypt.setPublicKey(privateKey);
+  return jsencrypt.encrypt(params);
+};
+// 登陆华夏数字钢厂
+export const loginSZGC=()=>{
+  return new Promise((resolve,reject)=>{
+    const ajax = axios.create({baseURL: 'http://119.3.132.63:10110', timeout, maxContentLength,withCredentials})
+    ajax.request({
+      url:'/api/system/user/login',//myURL.pathname
+      method:'post',
+      headers: {
+        token: window["token"],
+        'Content-Type': 'application/json',
+      },
+      data: {
+        account: 'admin',
+        password:tranRSA("123456")
+      },
+    }).then(res=>{
+      console.log("loginSZGC",res.data.code)
+      if(res&&res.data.code==1000){
+        resolve(res.data.data)
+      }else{
+        resolve({front_error:2})
+      }
+    }).catch((error)=>{
+      handleRequestError(error);
+      resolve({front_error:1});
+    });
   })
 }

@@ -25,6 +25,7 @@ export function register() {
   registerNode("biciTimer",biciTimer,null,biciTimerIconRect,biciTimerTextRect,true)
   registerNode("biciVarer",biciVarer,null,biciVarerIconRect,biciVarerTextRect,true)
   registerNode("biciCard",simpleCard,null,simpleCardIconRect,simpleCardTextRect,true)
+  registerNode("biciCard2",simpleCard,null,simpleCardIconRect,simpleCardTextRect,true)
   registerNode("biciPilot",biciPilot,null,biciPilotIconRect,biciPilotTextRect,true)
   registerNode("biciMeasure",biciMeasure,null,biciMeasureIconRect,biciMeasureTextRect,true)
   registerNode("biciText",simpleText,null,simpleTextIconRect,simpleTextTextRect,true)

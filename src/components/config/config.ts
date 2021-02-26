@@ -432,6 +432,118 @@ export const Tools = [
         },
       },
       {
+        name: '数据卡片2',
+        icon: 'iconshujukapian',
+        data: {
+          text: '',
+          hideInput: true,
+          hideRotateCP: true,
+          rect: {
+            width: 200,
+            height: 40,
+          },
+          paddingTop: 10,
+          paddingBottom: 10,
+          font: {
+            fontFamily: '"Microsoft YaHei"',
+            color: '#fff',
+            fontSize: 14,
+            fontWeight: 400,
+          },
+          fillStyle: '#6236FF',
+          strokeStyle: '#222',
+          lineWidth: 0,
+          name: 'biciCard2',
+          children: [
+            {
+              text: '正在生产',
+              name: 'text',
+              hideInput: true,
+              hideAnchor: true,
+              hideRotateCP: true,
+              paddingLeft: 10,
+              paddingRight: 10,
+              paddingTop: 10,
+              paddingBottom: 10,
+              rectInParent: {
+                x: 0,
+                y: 0,
+                width: '35%',
+                height: '100%',
+              },
+              font: {
+                fontFamily: 'Arial',
+                color: '#fff',
+                textAlign: 'center',
+                fontSize: 14,
+                textBaseline: 'middle',
+                fontWeight: 400,
+              },
+            },
+            {
+              text: '数字钢厂产品名称',
+              name: 'text',
+              hideInput: true,
+              hideAnchor: true,
+              hideRotateCP: true,
+              paddingLeft: 10,
+              paddingRight: 10,
+              paddingTop: 10,
+              paddingBottom: 10,
+              rectInParent: {
+                x: '35%',
+                y: 0,
+                width: '35%',
+                height: '100%',
+              },
+              font: {
+                fontFamily: 'Arial',
+                color: '#fff',
+                fontSize: 14,
+                fontWeight: 400,
+                textAlign: 'center',
+                textBaseline: 'middle',
+              },
+            },
+            {
+              text: '1234567',
+              name: 'text',
+              hideInput: true,
+              hideAnchor: true,
+              hideRotateCP: true,
+              paddingLeft: 10,
+              paddingRight: 10,
+              paddingTop: 10,
+              paddingBottom: 10,
+              rectInParent: {
+                x: '70%',
+                y: 0,
+                width: '30%',
+                height: '100%',
+              },
+              font: {
+                fontFamily: 'Arial',
+                color: '#fff',
+                fontSize: 14,
+                fontWeight: 400,
+                textAlign: 'center',
+                textBaseline: 'middle',
+              },
+            }
+          ],
+          property: {
+            dataMethod: 'restful',
+            dataDot: 2,
+            dataFormat:TONGJI_DATA,
+            dataUrl:'http://hxszgc.test.bicisims.com/api/statistic/creditBalance/currentProduceTicket',
+            pullRate: 10,
+            props: {
+              iframe:"abcd"
+            },
+          }
+        },
+      },
+      {
         name: '指示灯',
         icon: 'iconzhishideng',
         data: {
@@ -711,6 +823,8 @@ export const Tools = [
             height: 200,
           },
           name: 'echarts',
+          strokeStyle: 'rgba(0,0,0,0)',
+          elementRendered: true,
           data: {
             echarts: {
               option: getGroupBarOption()
@@ -761,6 +875,8 @@ export const Tools = [
             height: 200,
           },
           name: 'echarts',
+          strokeStyle: 'rgba(0,0,0,0)',
+          elementRendered: true,
           data: {
             echarts: {
               option: getBarOption()
@@ -811,6 +927,8 @@ export const Tools = [
             height: 200,
           },
           name: 'echarts',
+          strokeStyle: 'rgba(0,0,0,0)',
+          elementRendered: true,
           data: {
             echarts: {
               option: getStackBarOption()
@@ -861,6 +979,8 @@ export const Tools = [
             height: 250,
           },
           name: 'echarts',
+          strokeStyle: 'rgba(0,0,0,0)',
+          elementRendered: true,
           data: {
             echarts: {
               option: getHorizontalBarOption()
@@ -911,6 +1031,8 @@ export const Tools = [
             height: 300,
           },
           name: 'echarts',
+          strokeStyle: 'rgba(0,0,0,0)',
+          elementRendered: true,
           data: {
             echarts: {
               option: getPieOption()
@@ -1266,6 +1388,51 @@ export const Tools = [
           property: {
             props: {
               iframe:"abcd"
+            },
+            form:{
+              style:[{
+                group:'路径配置',
+                formItems:[
+                  { name: ['username'], value: 'Ant Design' },
+                  { name: ['fontStyle'], value: '#ccc000' },
+                  { name: ['refreshRate'], value: 10 },
+                  { name: ['refreshRateCheck'], value: true },
+                  { name: ['iframe'], value: 'http://www.baidu.com' },
+                ]
+              },{
+                group:'其他设置',
+                formItems:[{ name: ['color'], value: '#ccc' }]
+              }],
+              data:[]
+            }
+          }
+        }
+      },
+      {
+        text: '产品生产队列',
+        icon: 'icon-triangle',
+        name: 'productQueue',
+        data: {
+          rect: {
+            x: 100,
+            y: 200,
+            width: 600,
+            height: 200
+          },
+          name: 'productQueue',
+          strokeStyle: 'rgba(0,0,0,0)',
+          elementRendered: true,
+          data:{},
+          property: {
+            dataMethod:'restful',
+            dataFormat:CHART_DATA,
+            dataUrl:'http://hxszgc.test.bicisims.com/api/statistic/creditBalance/produceTicketList',
+            pullRate: 10,
+            dataDot:2,
+            props: {
+              iframe:"abcd",
+              dataUrl:'http://hxszgc.test.bicisims.com/api/statistic/creditBalance/produceTicketList',
+              pullRate: 10,
             },
             form:{
               style:[{
