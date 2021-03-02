@@ -56,10 +56,10 @@ const ProductQueue = (props:ProductQueueProps)=>{
     }
     return (
         <div className="product-queue">
-            <div className="header">
-                <span className="left">产品生产队列</span>
-                <span className="right">当前生产&nbsp;&nbsp;&nbsp;&nbsp;550车间</span>
-            </div>
+            {/*<div className="header">*/}
+            {/*    <span className="left">产品生产队列</span>*/}
+            {/*    <span className="right">当前生产&nbsp;&nbsp;&nbsp;&nbsp;550车间</span>*/}
+            {/*</div>*/}
             <ul>
                 {
                     data.map((item,index)=>{

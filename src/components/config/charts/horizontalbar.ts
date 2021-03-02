@@ -97,8 +97,12 @@ export function getHorizontalBarOption(node:any=null,resData:any=null){
                 config: config
             }
         }],
-        xAxis: {name: ''},
-        yAxis: {type: 'category',inverse: true},
+        xAxis: {name: '',axisLabel:{
+                color:font.color,
+            }},
+        yAxis: {type: 'category',inverse: true,axisLabel:{
+                color:font.color,
+            }},
         visualMap: {
             show:false,
             orient: 'horizontal',

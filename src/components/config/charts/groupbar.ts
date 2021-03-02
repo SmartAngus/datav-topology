@@ -80,7 +80,7 @@ export function getGroupBarOption(node:any=null,resData:any=null){
             itemWidth: 17,
             itemHeight: 12,
             textStyle: {
-                color: '#333333',
+                color: font.color,
                 fontSize: 14
             },
         },
@@ -96,9 +96,18 @@ export function getGroupBarOption(node:any=null,resData:any=null){
             source: source,
         }],
         // 声明一个 X 轴，类目轴（category）。默认情况下，类目轴对应到 dataset 第一列。
-        xAxis: {type: 'category'},
+        xAxis: {
+            type: 'category',
+            axisLabel:{
+                color:font.color,
+            }
+        },
         // 声明一个 Y 轴，数值轴。
-        yAxis: {},
+        yAxis: {
+            axisLabel:{
+                color:font.color,
+            }
+        },
         // 声明多个 bar 系列，默认情况下，每个系列会自动对应到 dataset 的每一列。
         series: series
     }

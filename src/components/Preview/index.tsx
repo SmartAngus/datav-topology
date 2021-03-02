@@ -63,6 +63,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
     initRestfullData();
     return () => {
       canvas.closeSocket();
+      canvas.destroy();
       userInterval.forEach(item=>{
         clearInterval(item)
       })
@@ -281,6 +282,12 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           case "biciText":
             node.children[0].text=resTmp["value"]+resTmp["unit"]
             node.children[1].text=resTmp["text"]
+            canvas.updateProps(false,[node])
+            break;
+          case "biciCard2":
+            node.children[0].text=resTmp["text"]
+            node.children[1].text=resTmp["unit"]
+            node.children[2].text=resTmp["value"]
             canvas.updateProps(false,[node])
             break;
         }
@@ -597,6 +604,15 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             }
             canvas.updateProps(false);
           }
+        }else if(node.name=='rectangle'){
+          console.log("图标组件")
+          if(r.value){
+            node.text=r.value+"℃"
+          }else{
+            node.text="暂无数据"
+          }
+
+          canvas.updateProps(false);
         }
       }
     });

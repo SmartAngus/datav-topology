@@ -102,6 +102,7 @@
     "bici-transformers": "^0.19.7",
     "cash-dom": "^8.1.0",
     "echarts": "^4.9.0",
+    "echarts-for-react": "^3.0.1",
     "file-saver": "^2.0.2",
     "html2canvas": "^1.0.0-rc.7",
     "jsencrypt": "3.0.0-rc.1",

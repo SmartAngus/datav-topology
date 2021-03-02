@@ -55,9 +55,9 @@ export function getPieOption() {
 }
 export function getPieOptionByChangeProp(node:any,resData:any) {
 
-    let chartShape:any='70%';
+    let chartShape:any='50%';
     if(node.property.props.chartShape=="circle"){
-        chartShape=["50%","70%"]
+        chartShape=["30%","50%"]
     }
     let chartBackgroundColor;
     if(node.property.props.chartBkColor!=''&&node.property.props.chartBkColorChecked==true){
@@ -84,6 +84,16 @@ export function getPieOptionByChangeProp(node:any,resData:any) {
             }
         }
     })
+    if(node.property.props.titleFontColor){
+        font.color=node.property.props.titleFontColor;
+    }
+    if(node.property.props.titleFontFamily){
+        font.fontFamily=node.property.props.titleFontFamily;
+    }
+    if(node.property.props.titleFontSize){
+        font.fontSize=node.property.props.titleFontSize;
+    }
+
     /****后端数据***/
     let dimensions=["xdata", "2020-09"]
     let source=[
@@ -119,6 +129,10 @@ export function getPieOptionByChangeProp(node:any,resData:any) {
         legend: {
             orient: 'horizontal',
             bottom: 'bottom',
+            textStyle: {
+                color:font.color,
+                fontSize: 12
+            }
         },
         dataset: [{
             "dimensions": dimensions,
@@ -132,6 +146,7 @@ export function getPieOptionByChangeProp(node:any,resData:any) {
             label:{
                 edgeDistance:'auto',
                 alignTo:'labelLine',
+                color:font.color,
                 formatter:function(param){
                     return param.value[0]+'\n'+param.value[1]
                 }

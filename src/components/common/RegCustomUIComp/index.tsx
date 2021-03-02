@@ -3,6 +3,8 @@ import { Modal, Tabs, Button, DatePicker, Result, Table } from 'antd';
 import drawReactNode from './drawReactNode';
 import WebPage from "../WebPage";
 import ProductQueue from "../../customMade/ProductQueue";
+import PDMonthReport from "../../customMade/PDMonthReport";
+import PieChart from "../../customMade/LiquidFill";
 
 
 
@@ -13,4 +15,8 @@ export function register() {
     registerNode('table', drawReactNode(Table), null, null, null);
     registerNode('webPage', drawReactNode(WebPage), null, null, null);
     registerNode('productQueue', drawReactNode(ProductQueue), null, null, null);
+    registerNode('pdMonthReport', drawReactNode(PDMonthReport), null, null, null);
+    registerNode('pieChart', drawReactNode(PieChart), null, null, null);
+
+
 }

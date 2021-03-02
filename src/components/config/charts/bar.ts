@@ -78,7 +78,7 @@ export function getBarOption(node:any=null,resData:any=null){
             itemWidth: 17,
             itemHeight: 12,
             textStyle: {
-                color: '#ADD6FF',
+                color: font.color,
                 fontSize: 10
             },
         },
@@ -100,9 +100,13 @@ export function getBarOption(node:any=null,resData:any=null){
         }],
         xAxis: {
             type: 'category',
-            axisLabel: { interval: 0, rotate: 30 },
+            axisLabel: { interval: 0, rotate: 30,color:font.color, },
         },
-        yAxis: {},
+        yAxis: {
+            axisLabel:{
+                color:font.color,
+            }
+        },
         series: series
     };
     return option;

@@ -6,6 +6,7 @@ import {getHorizontalBarOption} from "./charts/horizontalbar";
 import {getBarOption} from "./charts/bar";
 import {getPieOption} from "./charts/pie";
 import {getStackBarOption} from "./charts/stackbar";
+import {getLiquidFillOption} from "./charts/liquidFill";
 
 const TONGJI_DATA=`
 {
@@ -44,6 +45,7 @@ const CHART_DATA=`
     }
 }
 `;
+const DATA_BASE_API="http://hxszgc.test.bicisims.com/api/statistic"
 
 
 export const Tools = [
@@ -450,7 +452,7 @@ export const Tools = [
             fontSize: 14,
             fontWeight: 400,
           },
-          fillStyle: '#6236FF',
+          fillStyle: '',
           strokeStyle: '#222',
           lineWidth: 0,
           name: 'biciCard2',
@@ -541,6 +543,39 @@ export const Tools = [
               iframe:"abcd"
             },
           }
+        },
+      },
+      {
+        name: '图标文本',
+        icon: 'iconjuxing',
+        data: {
+          text: '暂无数据',
+          rect: {
+            width: 112,
+            height: 40,
+          },
+          font: {
+            fontSize: 14,
+            fontFamily: '"Microsoft YaHei"',
+          },
+          paddingLeft: 10,
+          paddingRight: 10,
+          paddingTop: 10,
+          paddingBottom: 10,
+          borderRadius: 4,
+          fillStyle: '#F0F0F0',
+          name: 'rectangle',
+          // image:'https://bici-qt.oss-cn-hangzhou.aliyuncs.com/industry/化工/2021/01/2ffed161677c449bb882cdba47c55f67诱导循环结晶器.png',
+          imageWidth:20,
+          property: {
+            dataMethod: 'point',
+            dataDot: 2,
+            dataPointSelectedRows: [],
+            dataPointParam: {
+              qtDataList: [],
+              subscribe: true,
+            },
+          },
         },
       },
       {
@@ -1042,7 +1077,7 @@ export const Tools = [
             echartsType: 'circleAndPie',
             dataMethod:'restful',
             dataFormat:CHART_DATA,
-            dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
+            dataUrl:'http://hxszgc.test.bicisims.com/api/statistic/creditBalance/productReceiveMonthQtChart',
             pullRate: 10,
             dataDot:2,
             props: {
@@ -1281,113 +1316,187 @@ export const Tools = [
             lineColors: [],
           }
         },
+      },
+      {
+        name: '水位图',
+        icon: 'iconzhuzhuangtu1',
+        data: {
+          text: '',
+          rect: {
+            width: 50,
+            height: 50,
+          },
+          name: 'echarts',
+          strokeStyle: 'rgba(0,0,0,0)',
+          elementRendered: true,
+          data: {
+            echarts: {
+              option: getLiquidFillOption()
+            },
+          },
+          property: {
+            echartsType: 'liquidFill',
+            dataMethod: 'point',
+            dataDot: 1,
+            dataPointSelectedRows: [],
+            dataPointParam: {
+              qtDataList: [],
+              subscribe: true,
+            },
+          },
+        },
       }
     ],
   },
   {
     group: 'react组件',
     children: [
+      // {
+      //   text: '按钮',
+      //   icon: 'icon-rectangle',
+      //   name: 'button',
+      //   data: {
+      //     autoRect: true,
+      //     strokeStyle: '#fff',
+      //     rect: {
+      //       x: 100,
+      //       y: 200,
+      //       width: 100,
+      //       height: 200
+      //     },
+      //     name: 'button',
+      //     data: {
+      //       props: {
+      //         type: 'primary',
+      //         children: '查询'
+      //       }
+      //     }
+      //   }
+      // },
+      // {
+      //   text: '日期组件',
+      //   icon: 'icon-diamond',
+      //   name: 'datePicker',
+      //   data: {
+      //     strokeStyle: '#fff',
+      //     rect: {
+      //       x: 100,
+      //       y: 200,
+      //       width: 300,
+      //       height: 200
+      //     },
+      //     name: 'datePicker',
+      //     data: {
+      //       props: {}
+      //     }
+      //   }
+      // },
+      // {
+      //   text: '结果页',
+      //   icon: 'icon-pentagon',
+      //   name: 'result',
+      //   data: {
+      //     strokeStyle: '#fff',
+      //     rect: {
+      //       x: 100,
+      //       y: 200,
+      //       width: 200,
+      //       height: 200
+      //     },
+      //     name: 'result',
+      //     data: {
+      //       props: {
+      //         status: '403',
+      //         title: '403',
+      //         subTitle: 'Sorry, you are not authorized to access this page.'
+      //       }
+      //     }
+      //   }
+      // },
+      // {
+      //   text: '表格',
+      //   icon: 'icon-triangle',
+      //   name: 'table',
+      //   data: {
+      //     strokeStyle: '#fff',
+      //     rect: {
+      //       x: 100,
+      //       y: 200,
+      //       width: 600,
+      //       height: 400
+      //     },
+      //     name: 'table',
+      //     data: {
+      //       props: {
+      //         columns: [],
+      //         dataSource: []
+      //       }
+      //     }
+      //   }
+      // },
+      // {
+      //   text: '网页',
+      //   icon: 'icon-triangle',
+      //   name: 'webPage',
+      //   data: {
+      //     strokeStyle: '#fff',
+      //     rect: {
+      //       x: 100,
+      //       y: 200,
+      //       width: 350,
+      //       height: 200
+      //     },
+      //     name: 'webPage',
+      //     elementRendered:false,
+      //     data:{},
+      //     property: {
+      //       props: {
+      //         iframe:"abcd"
+      //       },
+      //       form:{
+      //         style:[{
+      //           group:'路径配置',
+      //           formItems:[
+      //             { name: ['username'], value: 'Ant Design' },
+      //             { name: ['fontStyle'], value: '#ccc000' },
+      //             { name: ['refreshRate'], value: 10 },
+      //             { name: ['refreshRateCheck'], value: true },
+      //             { name: ['iframe'], value: 'http://www.baidu.com' },
+      //           ]
+      //         },{
+      //           group:'其他设置',
+      //           formItems:[{ name: ['color'], value: '#ccc' }]
+      //         }],
+      //         data:[]
+      //       }
+      //     }
+      //   }
+      // },
       {
-        text: '按钮',
-        icon: 'icon-rectangle',
-        name: 'button',
+        text: '产品生产队列',
+        icon: 'iconyibiaopan',
+        name: '产品生产队列',
         data: {
-          autoRect: true,
-          strokeStyle: '#fff',
-          rect: {
-            x: 100,
-            y: 200,
-            width: 100,
-            height: 200
-          },
-          name: 'button',
-          data: {
-            props: {
-              type: 'primary',
-              children: '查询'
-            }
-          }
-        }
-      },
-      {
-        text: '日期组件',
-        icon: 'icon-diamond',
-        name: 'datePicker',
-        data: {
-          strokeStyle: '#fff',
-          rect: {
-            x: 100,
-            y: 200,
-            width: 300,
-            height: 200
-          },
-          name: 'datePicker',
-          data: {
-            props: {}
-          }
-        }
-      },
-      {
-        text: '结果页',
-        icon: 'icon-pentagon',
-        name: 'result',
-        data: {
-          strokeStyle: '#fff',
-          rect: {
-            x: 100,
-            y: 200,
-            width: 200,
-            height: 200
-          },
-          name: 'result',
-          data: {
-            props: {
-              status: '403',
-              title: '403',
-              subTitle: 'Sorry, you are not authorized to access this page.'
-            }
-          }
-        }
-      },
-      {
-        text: '表格',
-        icon: 'icon-triangle',
-        name: 'table',
-        data: {
-          strokeStyle: '#fff',
           rect: {
             x: 100,
             y: 200,
             width: 600,
-            height: 400
-          },
-          name: 'table',
-          data: {
-            props: {
-              columns: [],
-              dataSource: []
-            }
-          }
-        }
-      },
-      {
-        text: '网页',
-        icon: 'icon-triangle',
-        name: 'webPage',
-        data: {
-          strokeStyle: '#fff',
-          rect: {
-            x: 100,
-            y: 200,
-            width: 350,
             height: 200
           },
-          name: 'webPage',
-          elementRendered:false,
+          name: 'productQueue',
+          strokeStyle: 'rgba(0,0,0,0)',
+          elementRendered: true,
           data:{},
           property: {
+            dataMethod:'restful',
+            dataFormat:CHART_DATA,
+            dataUrl:DATA_BASE_API+'/creditBalance/produceTicketList',
+            pullRate: 10,
+            dataDot:2,
             props: {
-              iframe:"abcd"
+              iframe:"abcd",
+              dataUrl:DATA_BASE_API+'/creditBalance/produceTicketList',
+              pullRate: 10,
             },
             form:{
               style:[{
@@ -1409,29 +1518,29 @@ export const Tools = [
         }
       },
       {
-        text: '产品生产队列',
-        icon: 'icon-triangle',
-        name: 'productQueue',
+        text: '胚锭月报表',
+        icon: 'iconyibiaopan',
+        name: '胚锭月报表',
         data: {
           rect: {
             x: 100,
             y: 200,
-            width: 600,
-            height: 200
+            width: 400,
+            height: 140
           },
-          name: 'productQueue',
+          name: 'pdMonthReport',
           strokeStyle: 'rgba(0,0,0,0)',
           elementRendered: true,
           data:{},
           property: {
             dataMethod:'restful',
             dataFormat:CHART_DATA,
-            dataUrl:'http://hxszgc.test.bicisims.com/api/statistic/creditBalance/produceTicketList',
+            dataUrl:DATA_BASE_API+'/creditBalance/goodsReceiveAll',
             pullRate: 10,
             dataDot:2,
             props: {
               iframe:"abcd",
-              dataUrl:'http://hxszgc.test.bicisims.com/api/statistic/creditBalance/produceTicketList',
+              dataUrl:DATA_BASE_API+'/creditBalance/goodsReceiveAll',
               pullRate: 10,
             },
             form:{

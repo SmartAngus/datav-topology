@@ -21,14 +21,16 @@ const drawReactNode = (ReactComponent) => (ctx, node) => {
 
     // 节点的elementLoaded用于判断第三方图形库是否第一次加载，是否需要初始化
     // 这是一个辅助变量，用户自己赋值使用或不用
-    if (!node.elementLoaded&&!document.getElementById(node.elementId)) {
-        // 创建一个div容器
-        reactNodesData[node.id] = {
-            div: createDiv(node)
-        };
-        document.body.appendChild(reactNodesData[node.id].div);
-        // 添加当前节点到div层，否则无法显示
-        node.addToDiv();
+    if (!node.elementLoaded) {
+        if(!document.getElementById(node.elementId)){
+            // 创建一个div容器
+            reactNodesData[node.id] = {
+                div: createDiv(node)
+            };
+            document.body.appendChild(reactNodesData[node.id].div);
+            // 添加当前节点到div层，否则无法显示
+            node.addToDiv();
+        }
         // 初始化 react 组件
         if(node && node.property && node.property.props) {
             reactNodesData[node.id].component = ReactDOM.render(

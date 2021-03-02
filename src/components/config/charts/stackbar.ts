@@ -98,7 +98,7 @@ export function getStackBarOption(node?:any,resData?:any){
             itemWidth: 17,
             itemHeight: 30,
             textStyle: {
-                color: '#333333',
+                color: font.color,
                 fontSize: 14
             },
         },

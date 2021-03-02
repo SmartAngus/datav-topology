@@ -2103,7 +2103,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                     data.node.name == 'biciPilot'||
                     data.node.name == 'biciMeasure'||
                     data.node.name == 'biciText' ||
-                    data.node.name == 'productQueue'
+                    data.node.name == 'productQueue'||
+                    data.node.name == 'rectangle'
                 ) && renderExtraDataForm}
               </Col>
             </Row>
