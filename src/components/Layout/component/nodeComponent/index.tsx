@@ -234,6 +234,7 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
     } else if (data.node.name == 'echarts'||
         data.node.name == 'biciMeasure'||
         data.node.name == 'biciText'||
+        data.node.name == 'pdMonthReport'||
         data.node.name == 'productQueue'||
         data.node.name === 'biciCard2') {
       let lineRangedefaultColor = defaultLineColors.map((color) => {
@@ -2104,7 +2105,8 @@ const NodeCanvasProps: React.FC<ICanvasProps> = React.forwardRef(({
                     data.node.name == 'biciMeasure'||
                     data.node.name == 'biciText' ||
                     data.node.name == 'productQueue'||
-                    data.node.name == 'rectangle'
+                    data.node.name == 'rectangle'||
+                    data.node.name == 'pdMonthReport'
                 ) && renderExtraDataForm}
               </Col>
             </Row>

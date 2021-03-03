@@ -32,7 +32,7 @@ export function getLiquidFillOption(node=null,resData=null){
                 name: names[0],
                 label:{
                     show:true,
-                    position:'inside',
+                    position:'center',
                     fontSize:14,
                     color:'#ffffff'
                 },
@@ -40,7 +40,7 @@ export function getLiquidFillOption(node=null,resData=null){
                     normal: {
                         color: colors[0]
                     }
-                }
+                },
             }, {
                 value: 10,
                 name: names[1],

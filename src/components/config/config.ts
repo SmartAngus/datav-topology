@@ -45,6 +45,12 @@ const CHART_DATA=`
     }
 }
 `;
+const PEIDING_DATA=`
+{"code":1000,"msg":"success","data":[{"text":"上月结存","value":4308.501,"unit":"t"},{"text":"其他收入","value":248.783,"unit":"t"},{"text":"本月收入","value":1051.36,"unit":"t"},{"text":"月末结存","value":4295.129,"unit":"t"},{"text":"其他支出","value":0,"unit":"t"},{"text":"销售","value":0,"unit":"t"},{"text":"转生产","value":869.403,"unit":"t"}]}
+`;
+const TICKET_LIST_DATA=`
+{"code":1000,"msg":"success","data":[{"id":"747c93a6f8ce27dd7ac69e728dbcdb62","dataStatus":null,"createTime":"2021-02-26T02:42:51.000+0000","createUserId":"b6a1a336144546f3aa9f185601eba29f","createUsername":"admin","updateTime":null,"updateUserId":null,"updateUsername":null,"productionPlanId":"f9480667eb1aff59d30227834a9e0e92","ticketNo":"210144","productionBatchNo":"00052","materialFurnaceNo":"ololol,olpolpol","status":2,"startTime":"2021-02-26T02:42:53.000+0000","enterFurnaceNo":null,"enterSteelType":1,"enterSteelStartTime":null,"enterSteelEndTime":null,"outSteelType":1,"outSteelStartTime":null,"outSteelEndTime":null,"orderNum":9999,"remark":"1","color":"85,82,160","taskTime":null,"qtTaskId":null,"planNo":"P210207","workshopId":"ca2f3bdb-7257-11ea-8c8f-7cd48lop","workshopCode":"SCCJ_01","workshopName":"500车间","productId":"03d5e942986d44a4a48422d43cca7c33","productName":"数字钢厂产品名称","standardId":"66589695ef8b49f5baf42eeff8320396","standardName":"数字钢厂产品规格","steelId":"40df825fe390e6cc25689e6a1509f3b1","steelName":"数字钢厂钢号","countTotal":null,"weightTotal":null,"planStatus":2,"materialDetailDtoList":null,"addMaterialDetailDtoMap":null,"rollingCountTotal":null,"rollingCountEnterTotal":null,"stoveBackDtoList":null,"rollBackDtoList":null,"notRollingGoodsNum":null,"innerStoveCount":null,"outSteelCount":null,"enterProcessDetailAndGoodsInfoList":null,"enterType":null,"planTime":"2021-02-18T16:00:00.000+0000","productionPlan":null,"productWeight":null,"productCount":null,"rollWasteCount":null,"rollWasteWeight":null},{"id":"bf3216dcd32184d587bc0fc79bfd3992","dataStatus":null,"createTime":"2021-02-25T08:28:47.000+0000","createUserId":"b6a1a336144546f3aa9f185601eba29f","createUsername":"admin","updateTime":null,"updateUserId":null,"updateUsername":null,"productionPlanId":"f9480667eb1aff59d30227834a9e0e92","ticketNo":"210132-1","productionBatchNo":"00040-1","materialFurnaceNo":"915915,225225","status":2,"startTime":"2021-02-25T01:16:05.000+0000","enterFurnaceNo":"T000463","enterSteelType":3,"enterSteelStartTime":"2021-02-25T08:18:44.000+0000","enterSteelEndTime":"2021-02-25T08:21:14.000+0000","outSteelType":1,"outSteelStartTime":null,"outSteelEndTime":null,"orderNum":9999,"remark":"","color":"77,97,142","taskTime":null,"qtTaskId":null,"planNo":"P210207","workshopId":"ca2f3bdb-7257-11ea-8c8f-7cd48lop","workshopCode":"SCCJ_01","workshopName":"500车间","productId":"03d5e942986d44a4a48422d43cca7c33","productName":"数字钢厂产品名称","standardId":"66589695ef8b49f5baf42eeff8320396","standardName":"数字钢厂产品规格","steelId":"40df825fe390e6cc25689e6a1509f3b1","steelName":"数字钢厂钢号","countTotal":null,"weightTotal":null,"planStatus":2,"materialDetailDtoList":null,"addMaterialDetailDtoMap":null,"rollingCountTotal":null,"rollingCountEnterTotal":null,"stoveBackDtoList":null,"rollBackDtoList":null,"notRollingGoodsNum":null,"innerStoveCount":null,"outSteelCount":null,"enterProcessDetailAndGoodsInfoList":null,"enterType":null,"planTime":"2021-02-18T16:00:00.000+0000","productionPlan":null,"productWeight":null,"productCount":null,"rollWasteCount":null,"rollWasteWeight":null},{"id":"927df1710467a0b396f018fa9cec6e80","dataStatus":null,"createTime":"2021-02-25T02:32:40.000+0000","createUserId":"b6a1a336144546f3aa9f185601eba29f","createUsername":"admin","updateTime":null,"updateUserId":null,"updateUsername":null,"productionPlanId":"90e3cb9e5da6b9e7392c609da54b94b4","ticketNo":"210133","productionBatchNo":"00041","materialFurnaceNo":"915915,225225","status":1,"startTime":null,"enterFurnaceNo":null,"enterSteelType":1,"enterSteelStartTime":null,"enterSteelEndTime":null,"outSteelType":1,"outSteelStartTime":null,"outSteelEndTime":null,"orderNum":9999,"remark":"","color":"132,235,141","taskTime":null,"qtTaskId":null,"planNo":"P210214","workshopId":"ca2f3bdb-7257-11ea-8c8f-7cd48lop","workshopCode":"SCCJ_01","workshopName":"500车间","productId":"5f2a9ba8e83e429d8a7d5d124ff7c5b4","productName":"轮辋钢","standardId":"39049db7230840ffbd8a805cd82837a9","standardName":"5.50F","steelId":"0c1199a32b6dae70ff4bc447a4bf3f81","steelName":"42CrMo","countTotal":null,"weightTotal":null,"planStatus":2,"materialDetailDtoList":null,"addMaterialDetailDtoMap":null,"rollingCountTotal":null,"rollingCountEnterTotal":null,"stoveBackDtoList":null,"rollBackDtoList":null,"notRollingGoodsNum":null,"innerStoveCount":null,"outSteelCount":null,"enterProcessDetailAndGoodsInfoList":null,"enterType":null,"planTime":"2021-02-23T16:00:00.000+0000","productionPlan":null,"productWeight":null,"productCount":null,"rollWasteCount":null,"rollWasteWeight":null}]}
+`;
 const DATA_BASE_API="http://hxszgc.test.bicisims.com/api/statistic"
 
 
@@ -537,7 +543,7 @@ export const Tools = [
             dataMethod: 'restful',
             dataDot: 2,
             dataFormat:TONGJI_DATA,
-            dataUrl:'http://hxszgc.test.bicisims.com/api/statistic/creditBalance/currentProduceTicket',
+            dataUrl:DATA_BASE_API+'/creditBalance/currentProduceTicket',
             pullRate: 10,
             props: {
               iframe:"abcd"
@@ -869,7 +875,7 @@ export const Tools = [
             echartsType: 'groupBar',
             dataMethod:'restful',
             dataFormat:CHART_DATA,
-            dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
+            dataUrl:DATA_BASE_API+'/creditBalance/storageGoodsReportQtMonth',
             pullRate: 10,
             dataDot:2,
             props: {
@@ -879,7 +885,7 @@ export const Tools = [
               style:[{
                 group:'标题字符',
                 formItems:[
-                  { name: ['title'], value: 'Ant Design' },
+                  { name: ['title'], value: '分组柱状图' },
                   { name: ['titleShow'], value: true },
                   { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
                   { name: ['titleFontColor'], value: "#333333" },
@@ -973,7 +979,7 @@ export const Tools = [
             echartsType: 'stackBar',
             dataMethod:'restful',
             dataFormat:CHART_DATA,
-            dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
+            dataUrl:DATA_BASE_API+'/creditBalance/storageGoodsReportQtMonth',
             pullRate: 10,
             dataDot:2,
             props: {
@@ -983,7 +989,7 @@ export const Tools = [
               style:[{
                 group:'标题字符',
                 formItems:[
-                  { name: ['title'], value: 'Ant Design' },
+                  { name: ['title'], value: '堆叠柱状图' },
                   { name: ['titleShow'], value: true },
                   { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
                   { name: ['titleFontColor'], value: "#333333" },
@@ -1035,7 +1041,7 @@ export const Tools = [
               style:[{
                 group:'标题字符',
                 formItems:[
-                  { name: ['title'], value: 'Ant Design' },
+                  { name: ['title'], value: '条形图' },
                   { name: ['titleShow'], value: true },
                   { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
                   { name: ['titleFontColor'], value: "#333333" },
@@ -1077,7 +1083,7 @@ export const Tools = [
             echartsType: 'circleAndPie',
             dataMethod:'restful',
             dataFormat:CHART_DATA,
-            dataUrl:'http://hxszgc.test.bicisims.com/api/statistic/creditBalance/productReceiveMonthQtChart',
+            dataUrl:DATA_BASE_API+'/creditBalance/productReceiveMonthQtChart',
             pullRate: 10,
             dataDot:2,
             props: {
@@ -1087,7 +1093,7 @@ export const Tools = [
               style:[{
                 group:'标题字符',
                 formItems:[
-                  { name: ['title'], value: 'Ant Design' },
+                  { name: ['title'], value: '饼/环状图' },
                   { name: ['titleShow'], value: true },
                   { name: ['titleFontFamily'], value: '"Microsoft YaHei"' },
                   { name: ['titleFontColor'], value: "#333333" },
@@ -1489,7 +1495,7 @@ export const Tools = [
           data:{},
           property: {
             dataMethod:'restful',
-            dataFormat:CHART_DATA,
+            dataFormat:TICKET_LIST_DATA,
             dataUrl:DATA_BASE_API+'/creditBalance/produceTicketList',
             pullRate: 10,
             dataDot:2,
@@ -1502,7 +1508,7 @@ export const Tools = [
               style:[{
                 group:'路径配置',
                 formItems:[
-                  { name: ['username'], value: 'Ant Design' },
+                  { name: ['username'], value: '产品生产队列' },
                   { name: ['fontStyle'], value: '#ccc000' },
                   { name: ['refreshRate'], value: 10 },
                   { name: ['refreshRateCheck'], value: true },
@@ -1518,9 +1524,9 @@ export const Tools = [
         }
       },
       {
-        text: '胚锭月报表',
+        text: '坯锭月报表',
         icon: 'iconyibiaopan',
-        name: '胚锭月报表',
+        name: '坯锭月报表',
         data: {
           rect: {
             x: 100,
@@ -1534,7 +1540,7 @@ export const Tools = [
           data:{},
           property: {
             dataMethod:'restful',
-            dataFormat:CHART_DATA,
+            dataFormat:PEIDING_DATA,
             dataUrl:DATA_BASE_API+'/creditBalance/goodsReceiveAll',
             pullRate: 10,
             dataDot:2,
@@ -1547,7 +1553,7 @@ export const Tools = [
               style:[{
                 group:'路径配置',
                 formItems:[
-                  { name: ['username'], value: 'Ant Design' },
+                  { name: ['username'], value: '坯锭月报表' },
                   { name: ['fontStyle'], value: '#ccc000' },
                   { name: ['refreshRate'], value: 10 },
                   { name: ['refreshRateCheck'], value: true },

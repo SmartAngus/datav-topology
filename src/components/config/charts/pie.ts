@@ -21,7 +21,7 @@ export function getPieOption() {
         }],
         series: [{
             type: 'pie',
-            radius: ['50%', '70%'],
+            radius: ['50%'],
             center: ['50%', '25%'],
             selectedOffset:30,
             label:{

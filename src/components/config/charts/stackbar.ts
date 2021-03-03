@@ -52,18 +52,14 @@ export function getStackBarOption(node?:any,resData?:any){
      *
      *
      * *******/
-    let dimensions=['xdata', '750车间', '740车间', '哈哈哈车间', '呵呵呵车间']
+    let dimensions=['xdata', '750车间', '740车间']
     let source=[
-        ['202001', 41.1, 30.4, 65.1, 53.3],
-        ['202002', 86.5, 92.1, 85.7, 83.1],
-        ['202003', 24.1, 67.2, 79.5, 86.4],
-        ['202004', 24.1, 67.2, 79.5, 86.4],
-        ['202005', 24.1, 67.2, 79.5, 86.4],
-        ['202006', 24.1, 67.2, 79.5, 86.4],
+        ['202001', 41.1, 30.4],
+        ['202002', 86.5, 92.1],
+        ['202003', 24.1, 67.2],
+        ['202004', 24.1, 67.2],
     ]
     let series=[
-        {type: 'bar', stack: 'sum', barWidth: '20%',barGap:"20%"},
-        {type: 'bar', stack: 'sum', barWidth: '20%',barGap:"20%"},
         {type: 'bar', stack: 'sum', barWidth: '20%',barGap:"20%"},
         {type: 'bar', stack: 'sum', barWidth: '20%',barGap:"20%"},
     ]
@@ -97,6 +93,7 @@ export function getStackBarOption(node?:any,resData?:any){
             top: 'middle',
             itemWidth: 17,
             itemHeight: 30,
+            icon:'circle',
             textStyle: {
                 color: font.color,
                 fontSize: 14

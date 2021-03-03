@@ -340,7 +340,6 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
           firstName: 'Fred'
         },
       }).then(res=>{
-        console.log(res.data.code)
         if(res&&res.data.code==1000){
           resolve(res.data.data)
         }else{
@@ -605,13 +604,11 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
             canvas.updateProps(false);
           }
         }else if(node.name=='rectangle'){
-          console.log("图标组件")
           if(r.value){
             node.text=r.value+"℃"
           }else{
             node.text="暂无数据"
           }
-
           canvas.updateProps(false);
         }
       }
