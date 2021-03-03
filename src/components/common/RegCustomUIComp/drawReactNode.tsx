@@ -4,6 +4,7 @@ import { s8, createDiv, rectangle } from '../../../topology/core';
 // 存放原生dom节点
 export const reactNodesData = {};
 
+
 const drawReactNode = (ReactComponent) => (ctx, node) => {
     // 绘制一个底图，类似于占位符。
     rectangle(ctx, node);
@@ -32,13 +33,13 @@ const drawReactNode = (ReactComponent) => (ctx, node) => {
             node.addToDiv();
         }
         // 初始化 react 组件
-        if(node && node.property && node.property.props) {
+        if(node && node.property) {
             reactNodesData[node.id].component = ReactDOM.render(
-                <ModalContainer el={reactNodesData[node.id].div} children={<ReactComponent {...node.property.props} />}/>,
+                <ReactComponent {...node.property.props} />,
                 reactNodesData[node.id].div
             );
         }
-        node.elementRendered = true;
+        node.elementRendered = false;
     }
 
     // 节点的elementRendered用于判断第三方图形库是否需要重绘

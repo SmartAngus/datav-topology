@@ -11,6 +11,9 @@ import {
   echartsObjs,
   register as registerChart,
 } from '../../topology/chart-diagram';
+import {
+  register as reactNodesData
+} from '../common/RegCustomUIComp'
 import { replacer, reviver } from '../utils/serializing';
 import { register as registerBiciComp } from '../../topology/bici-diagram';
 import moment from "moment";
@@ -77,6 +80,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
   const canvasRegister = () => {
     registerChart();
     registerBiciComp();
+    reactNodesData();
   };
 
   // 数据卡片颜色根据数据变化

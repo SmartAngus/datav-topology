@@ -13,12 +13,10 @@ const ProductQueue = (props:ProductQueueProps)=>{
     const {dataUrl}=props;
     const [data,setData]=useState([])
     let interfaceToken='';
-    console.log("productQueue==",dataUrl)
     useEffect(()=>{
         loginSZGC().then((res:string)=>{
             interfaceToken=res;
             fetchData().then((data:any[])=>{
-                console.log("data==",data)
                 setData(data)
             })
         })
