@@ -92,7 +92,7 @@ export const tranRSA = (params) => {
 // 登陆华夏数字钢厂
 export const loginSZGC=()=>{
   return new Promise((resolve,reject)=>{
-    const ajax = axios.create({baseURL: 'http://119.3.132.63:10110', timeout, maxContentLength,withCredentials})
+    const ajax = axios.create({baseURL: 'http://hxszgc.bicisims.com', timeout, maxContentLength,withCredentials})
     ajax.request({
       url:'/api/system/user/login',//myURL.pathname
       method:'post',

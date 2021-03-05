@@ -63,15 +63,15 @@ const PDMonthReport=(props:PDMonthReportProp)=>{
                     firstName: 'Fred'
                 },
             }).then(res=>{
-                console.log(res.data.code)
+                console.log(res.data)
                 if(res&&res.data.code==1000){
                     resolve(res.data.data)
                 }else{
-                    resolve({front_error:2})
+                    reject("请求错误")
                 }
             }).catch((error)=>{
                 handleRequestError(error);
-                resolve({front_error:1});
+                reject("请求错误")
             });
         })
     }

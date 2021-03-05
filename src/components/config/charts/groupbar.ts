@@ -1,3 +1,5 @@
+import {defaultChartColors} from "../../data/defines";
+
 export function getGroupBarOption(node:any=null,resData:any=null){
     let dimensions=['product', '2012', '2013', '2014', '2015']
     let source=[
@@ -62,6 +64,7 @@ export function getGroupBarOption(node:any=null,resData:any=null){
         }
     }
     const option = {
+        color: defaultChartColors,
         tooltip: {},
         title:{
             text: titleShow?title:'',

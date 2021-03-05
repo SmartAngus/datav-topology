@@ -1,5 +1,8 @@
+import {defaultChartColors} from "../../data/defines";
+
 export function getPieOption() {
     const option = {
+        color:defaultChartColors,
         grid: { //图表的位置
             top: '10%',
             left: '2%',
@@ -108,6 +111,7 @@ export function getPieOptionByChangeProp(node:any,resData:any) {
         source=resData["source"]
     }
     const option = {
+        color:defaultChartColors,
         backgroundColor:chartBackgroundColor,
         title:{
             text:titleShow?title:'',

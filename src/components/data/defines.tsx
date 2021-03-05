@@ -281,6 +281,19 @@ export const defaultLineColors=[
   "#766863",
   "#FA6400"
 ]
+export const defaultChartColors=[
+  "#157EFB",
+  "#F7B500",
+  "#1EC622",
+  "#E63C5F",
+  "#44D7B6",
+  "#6236FF",
+  "#673D3D",
+  "#71A3CB",
+  "#766863",
+  "#FA6400"
+]
+
 // 实时曲线显示多少个时刻点
 export const defaultTimelineShowData=30;
 

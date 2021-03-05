@@ -1,4 +1,4 @@
-import {defaultLineColors} from "../../data/defines";
+import {defaultChartColors} from "../../data/defines";
 
 export function getBarOption(node:any=null,resData:any=null){
     let dimensions=["xdata", "2020-09"]
@@ -25,7 +25,6 @@ export function getBarOption(node:any=null,resData:any=null){
     let titlePosition='left';
     // 组件属性改变
     if(node){
-        console.log("node==",node)
         title=node.property.props.title;
         titleShow=node.property.props.titleShow;
         if(node.property.props.chartBkColor!=''&&node.property.props.chartBkColorChecked==true){
@@ -61,7 +60,7 @@ export function getBarOption(node:any=null,resData:any=null){
         }
     }
     const option = {
-        color: defaultLineColors,
+        color: defaultChartColors,
         title:{
             text: titleShow?title:'',
             left: titlePosition,

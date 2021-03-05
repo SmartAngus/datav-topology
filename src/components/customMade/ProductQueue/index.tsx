@@ -12,7 +12,17 @@ interface ProductQueueProps{
 const ProductQueue = (props:ProductQueueProps)=>{
     const {dataUrl}=props;
     const [data,setData]=useState([])
+    const scrollRef=React.useRef();
     let interfaceToken='';
+    // 设置滚动
+    useEffect(()=>{
+        const intv=setInterval(()=>{
+            (scrollRef.current as any).scrollBy(1,0);
+        },100)
+        return ()=>{
+            clearInterval(intv)
+        }
+    },[])
     useEffect(()=>{
         loginSZGC().then((res:string)=>{
             interfaceToken=res;
@@ -40,39 +50,45 @@ const ProductQueue = (props:ProductQueueProps)=>{
                     firstName: 'Fred'
                 },
             }).then(res=>{
-                console.log(res.data.code)
+                console.log(res.data)
                 if(res&&res.data.code==1000){
                     resolve(res.data.data)
                 }else{
-                    resolve({front_error:2})
+                    reject("请求错误")
                 }
             }).catch((error)=>{
                 handleRequestError(error);
-                resolve({front_error:1});
+                reject("请求错误")
             });
         })
     }
     return (
         <div className="product-queue">
-            {/*<div className="header">*/}
-            {/*    <span className="left">产品生产队列</span>*/}
-            {/*    <span className="right">当前生产&nbsp;&nbsp;&nbsp;&nbsp;550车间</span>*/}
-            {/*</div>*/}
-            <ul>
-                {
-                    data.map((item,index)=>{
-                        return (
-                            <li key={index}>
+            <div className="header">
+                <span className="left"></span>
+                <span className="right">当前生产&nbsp;&nbsp;&nbsp;&nbsp;{data[0]?.workshopName}</span>
+            </div>
+            <div className="outer-container">
+                <div className="inner-container" ref={scrollRef}>
+                    <div className="element">
+                        <ul>
+                            {
+                                (data||[]).map((item,index)=>{
+                                    return (
+                                        <li key={index}>
                                 <span className="title">
                                     <p>{item.productName}</p>
                                     <p>{item.ticketNo}</p>
                                 </span>
-                                <span className="order">排位：{index+1}</span>
-                            </li>
-                        )
-                    })
-                }
-            </ul>
+                                            <span className="order">排位：{index+1}</span>
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

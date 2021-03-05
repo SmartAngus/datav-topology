@@ -63,7 +63,7 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
       canvas.open(data);
     }
     initWebsocketData();
-    initRestfullData();
+    initRestfullData(canvas.data.pens);
     return () => {
       canvas.closeSocket();
       canvas.destroy();
@@ -179,12 +179,14 @@ const Preview = ({ data, websocketConf }: PreviewProps) => {
   /**
    * 初始话数据接口更新数据
    */
-  const initRestfullData =  ()=>{
-    if (canvas.data && canvas.data.pens.length > 0) {
+  const initRestfullData =  (pens)=>{
+    if (pens.length > 0) {
       // 有数据，去遍历有websocket的组件，并订阅
-      canvas.data.pens.forEach(async node=>{
+      pens.forEach(async node=>{
         // 如果是图表组件，下面就需要判断具体的是那种图表组件
-        if(node.property){
+        if(node.name=='combine'){
+          initRestfullData(node.children)
+        }else if(node.property){
           if(node.property.dataMethod=="restful"){
             // 第一次请求数据
             loginAndFetchData(node)

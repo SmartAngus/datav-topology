@@ -1,4 +1,4 @@
-import {defaultLineColors} from "../../data/defines";
+import {defaultChartColors, defaultLineColors} from "../../data/defines";
 
 export function getStackBarOption(node?:any,resData?:any){
 
@@ -73,7 +73,7 @@ export function getStackBarOption(node?:any,resData?:any){
     }
     const option = {
         backgroundColor:chartBackgroundColor,
-        color: defaultLineColors,
+        color: defaultChartColors,
         tooltip: {
             trigger: 'axis',
         },

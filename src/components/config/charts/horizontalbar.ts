@@ -1,5 +1,4 @@
-import {defaultLineColors, defaultTimelineShowData} from "../../data/defines";
-
+import {defaultChartColors, defaultTimelineShowData} from "../../data/defines";
 export function getHorizontalBarOption(node:any=null,resData:any=null){
     let dimensions=["xdata", "2020-09"]
     let source=[
@@ -70,6 +69,7 @@ export function getHorizontalBarOption(node:any=null,resData:any=null){
         }
     }
     const option = {
+        color:defaultChartColors,
         title:{
             text: titleShow?title:'',
             left: titlePosition,
@@ -113,7 +113,7 @@ export function getHorizontalBarOption(node:any=null,resData:any=null){
             // Map the score column to color
             dimension: 1,
             inRange: {
-                color: defaultLineColors
+                color: defaultChartColors
             }
         },
         series: [

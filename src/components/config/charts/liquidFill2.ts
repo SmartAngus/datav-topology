@@ -1,7 +1,7 @@
-export function getLiquidFillOption(node=null,resData=null){
+export function getLiquidFillOption2(node=null,resData=null){
     const  colors=[
         "#98a4b9",
-        "#1EC622",
+        "#E02020",
         "#9ec2ff",
         "#c4daff",
         "#c8cbd2",
@@ -10,7 +10,7 @@ export function getLiquidFillOption(node=null,resData=null){
         "#778398",
         "#ffc0a9",
         "#ff9898"];
-    const names=['65%']
+    const names=['90%']
     const option = {
         legend: {
             show:false,
@@ -43,7 +43,7 @@ export function getLiquidFillOption(node=null,resData=null){
                     }
                 },
             }, {
-                value: 10,
+                value: 90,
                 name: names[1],
 
                 itemStyle: {

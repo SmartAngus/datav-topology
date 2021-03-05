@@ -7,6 +7,7 @@ import {getBarOption} from "./charts/bar";
 import {getPieOption} from "./charts/pie";
 import {getStackBarOption} from "./charts/stackbar";
 import {getLiquidFillOption} from "./charts/liquidFill";
+import {getLiquidFillOption2} from "./charts/liquidFill2";
 
 const TONGJI_DATA=`
 {
@@ -275,8 +276,8 @@ export const Tools = [
           property: {
             dataMethod:'restful',
             dataFormat:TONGJI_DATA,
-            dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
-            pullRate: 10,
+            dataUrl:DATA_BASE_API+'/creditBalance/productReceiveMonthQtTitleWeight',
+            pullRate: 120,
             dataDot:2,
             props: {
               iframe:"abcd"
@@ -459,7 +460,7 @@ export const Tools = [
             fontWeight: 400,
           },
           fillStyle: '',
-          strokeStyle: '#222',
+          strokeStyle: 'rgba(0,0,0,0)',
           lineWidth: 0,
           name: 'biciCard2',
           children: [
@@ -544,7 +545,7 @@ export const Tools = [
             dataDot: 2,
             dataFormat:TONGJI_DATA,
             dataUrl:DATA_BASE_API+'/creditBalance/currentProduceTicket',
-            pullRate: 10,
+            pullRate: 120,
             props: {
               iframe:"abcd"
             },
@@ -876,7 +877,7 @@ export const Tools = [
             dataMethod:'restful',
             dataFormat:CHART_DATA,
             dataUrl:DATA_BASE_API+'/creditBalance/storageGoodsReportQtMonth',
-            pullRate: 10,
+            pullRate: 120,
             dataDot:2,
             props: {
               iframe:"abcd"
@@ -928,7 +929,7 @@ export const Tools = [
             dataMethod:'restful',
             dataFormat:CHART_DATA,
             dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
-            pullRate: 10,
+            pullRate: 120,
             dataDot:2,
             props: {
               iframe:"abcd"
@@ -980,7 +981,7 @@ export const Tools = [
             dataMethod:'restful',
             dataFormat:CHART_DATA,
             dataUrl:DATA_BASE_API+'/creditBalance/storageGoodsReportQtMonth',
-            pullRate: 10,
+            pullRate: 120,
             dataDot:2,
             props: {
               iframe:"abcd"
@@ -1032,7 +1033,7 @@ export const Tools = [
             dataMethod:'restful',
             dataFormat:CHART_DATA,
             dataUrl:'http://qt.test.bicisims.com/api/applications/customComponent/list',
-            pullRate: 10,
+            pullRate: 120,
             dataDot:2,
             props: {
               iframe:"abcd"
@@ -1084,7 +1085,7 @@ export const Tools = [
             dataMethod:'restful',
             dataFormat:CHART_DATA,
             dataUrl:DATA_BASE_API+'/creditBalance/productReceiveMonthQtChart',
-            pullRate: 10,
+            pullRate: 120,
             dataDot:2,
             props: {
               iframe:"abcd"
@@ -1351,6 +1352,35 @@ export const Tools = [
             },
           },
         },
+      },
+      {
+        name: '水位图2',
+        icon: 'iconzhuzhuangtu1',
+        data: {
+          text: '',
+          rect: {
+            width: 50,
+            height: 50,
+          },
+          name: 'echarts',
+          strokeStyle: 'rgba(0,0,0,0)',
+          elementRendered: true,
+          data: {
+            echarts: {
+              option: getLiquidFillOption2()
+            },
+          },
+          property: {
+            echartsType: 'liquidFill',
+            dataMethod: 'point',
+            dataDot: 1,
+            dataPointSelectedRows: [],
+            dataPointParam: {
+              qtDataList: [],
+              subscribe: true,
+            },
+          },
+        },
       }
     ],
   },
@@ -1497,12 +1527,12 @@ export const Tools = [
             dataMethod:'restful',
             dataFormat:TICKET_LIST_DATA,
             dataUrl:DATA_BASE_API+'/creditBalance/produceTicketList',
-            pullRate: 10,
+            pullRate: 120,
             dataDot:2,
             props: {
               iframe:"abcd",
               dataUrl:DATA_BASE_API+'/creditBalance/produceTicketList',
-              pullRate: 10,
+              pullRate: 120,
             },
             form:{
               style:[{
@@ -1542,12 +1572,12 @@ export const Tools = [
             dataMethod:'restful',
             dataFormat:PEIDING_DATA,
             dataUrl:DATA_BASE_API+'/creditBalance/goodsReceiveAll',
-            pullRate: 10,
+            pullRate: 120,
             dataDot:2,
             props: {
               iframe:"abcd",
               dataUrl:DATA_BASE_API+'/creditBalance/goodsReceiveAll',
-              pullRate: 10,
+              pullRate: 120,
             },
             form:{
               style:[{
