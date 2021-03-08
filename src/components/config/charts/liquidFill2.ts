@@ -33,7 +33,7 @@ export function getLiquidFillOption2(node=null,resData=null){
                 label:{
                     show:true,
                     position:'center',
-                    fontSize:12,
+                    fontSize:18,
                     color:'#ffffff',
                     fontWeight:800,
                 },
